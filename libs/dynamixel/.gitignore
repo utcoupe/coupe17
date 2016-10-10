@@ -1,0 +1,5 @@
+lib
+src_lib/dxl_hal.o
+src_lib/dynamixel.o
+src_lib/libdxl.a
+src_lib/libusb2ax.so

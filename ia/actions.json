@@ -1,0 +1,213 @@
+{
+	"__comment": "\nAdd durations, priority\nAdd actions without objects",
+	"actions":{
+		"faire_les_claps_1":{
+			"type": "clap",
+			"owner": "pr",
+			"objectname": "clap__1",
+			"startpoints": [{
+				"x": 140,
+				"y": 140,
+				"a": 3.1416
+			}],
+			"sens": "osef",
+			"priority": 18,
+			"dependency": "",
+			"duration": 1,
+			"orders":[{
+				"name": "clap_1",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"faire_les_claps_3":{
+			"type": "clap",
+			"owner": "pr",
+			"objectname": "clap__3",
+			"startpoints": [{
+				"x": 730,
+				"y": 140,
+				"a": 3.1416
+			}],
+			"sens": "osef",
+			"priority": 17,
+			"dependency": "",
+			"duration": 1,
+			"orders":[{
+				"name": "clap_3",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"prendre_gobelet_et_2_plots_front_left":{
+			"type": "gobelet",
+			"owner": "pr",
+			"objectname": "gobelet__front_left",
+			"startpoints": [
+			{
+				"x": 450,
+				"y": 350,
+				"a": 0
+			}],
+			"sens": "arriere",
+			"priority": 19,
+			"dependency": "",
+			"dependencyRobotContent": {
+				"gobelet": false,
+				"subPlot": 2,
+				"invPlot": 0
+				},
+			"duration": 1,
+			"orders":[{
+				"name": "prendre_gobelet_et_2_plots_front",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"prendre_plot_middle_left1":{
+			"type": "plot",
+			"owner": "pr",
+			"objectname": "plot__middle_left1",
+			"startpoints": [],
+			"sens": "avant",
+			"priority": 21, 
+			"dependency": "",
+			"dependencyRobotContent": {
+				"subPlot": 3,
+				"invPlot": 0
+				},
+			"duration": 1,
+			"orders":[{
+				"name": "prendre_plot",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"prendre_plot_middle_left2":{
+			"type": "plot",
+			"owner": "pr",
+			"objectname": "plot__middle_left2",
+			"startpoints": [],
+			"sens": "avant",
+			"priority": 20, 
+			"dependency": "",
+			"dependencyRobotContent": {
+				"subPlot": 3,
+				"invPlot": 0
+				},
+			"duration": 1,
+			"orders":[{
+				"name": "prendre_plot",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"pousser_plot_middle_left3":{
+			"type": "plot",
+			"owner": "pr",
+			"objectname": "plot__middle_left3",
+			"startpoints": [],
+			"sens": "avant",
+			"priority": 21,  
+			"dependency": "",
+			"dependencyRobotContent": {
+				"subPlot": 3,
+				"invPlot": 0
+				},
+			"duration": 1,
+			"orders":[{
+				"name": "pousser_plot",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"deposer_pile_gobelet_gauche":{
+			"type": "depot_pile",
+			"owner": "pr",
+			"objectname": "pile__left",
+			"startpoints": [{
+					"x": 700,
+					"y": 1000,
+					"a": 3.1416
+				}],
+			"sens": "avant",
+			"priority": 14,
+			"dependency": "",
+			"dependencyRobotContent": {
+				"invPlot": 1
+				},
+			"duration": 1,
+			"orders":[{
+				"name": "deposer_pile_et_gobelet",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"prendre_plot_rear_left":{
+			"type": "plot",
+			"owner": "pr",
+			"objectname": "plot__rear_left",
+			"startpoints": [{
+				"x": 650,
+				"y": 1450,
+				"a": 0
+			}],
+			"sens": "avant",
+			"priority": 13,
+			"dependency": "deposer_pile_gobelet_gauche",
+			"dependencyRobotContent": {
+				"subPlot": 3
+				},
+			"duration": 1,
+			"orders":[{
+				"name": "prendre_plot_rear_left_calage",
+				"params": {}
+			}],
+			"kill": null
+		},
+		"prendre_2_plots_stairs_left":{
+			"type": "plot",
+			"owner": "pr",
+			"objectname": "plot__stairs_left2",
+			"startpoints": [{
+				"x": 705,
+				"y": 1640,
+				"a": 0
+			}],
+			"sens": "avant",
+			"priority": 12,
+			"dependency": "prendre_plot_rear_left",
+			"dependencyRobotContent": {
+				"subPlot": 2
+				},
+			"duration": 2,
+				"orders":[{
+				"name": "prendre_2_plots_stairs",
+				"params": {}
+			}],
+			"kill": null
+		},
+		"deposer_pile_gauche_2":{
+			"type": "depot_pile",
+			"owner": "pr",
+			"objectname": "pile__left2",
+			"startpoints": [{
+				"x": 700,
+				"y": 1000,
+				"a": -1.5708
+			}],
+			"sens": "avant",
+			"priority": 9,
+			"dependency": "deposer_pile_gobelet_gauche",
+			"dependencyRobotContent": {
+				"invPlot": 1
+				},
+			"duration": 1,
+			"orders":[{
+				"name": "deposer_pile_left_2",
+				"params": {}
+				}],
+			"kill": null
+		}
+	}
+}

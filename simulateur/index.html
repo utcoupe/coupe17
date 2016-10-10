@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html"; charset="utf-8" />
+        <title>3D</title>
+        <style type = "text/css">
+            #container{
+                position: absolute;
+                top : 50;
+                left :0;
+                right :0;
+                bottom :0;
+                z-index :5;
+                height: 75%;
+            }
+            body{
+                margin: 0;
+                padding : 0;
+                overflow : hidden;
+                font-family: Monospace;
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+
+
+
+      <!--  <script src="https://ajax.googleapis.com/ajax/libs/threejs/r69/three.min.js"></script>-->
+
+        <div id="container"></div>
+
+        <form name="formulaire">
+            <p>   
+                <input type="radio" id="selectRobot" name="selectRobot" value="1" style="width:25px;height:25px" checked>Robot principal gauche
+                <input type="radio" name="selectRobot" id="selectRobot" value="2" style="width:25px;height:25px">Robot secondaire gauche
+                <input type="radio" name="selectRobot" id="selectRobot" value="4" style="width:25px;height:25px">Robot secondaire droite
+                <input type="radio" name="selectRobot" id="selectRobot" value="3" style="width:25px;height:25px">Robot principal droite
+            </p>
+
+            <p>
+                <table>
+                <tr>
+                    <td></td>
+                    <td><input type="button" value="Avancer" onClick="commande('avancer')"></td>
+                    <td></td>
+                    <td>     </td>
+                    <td></td>
+                    <td><input type="button" value="Prendre" onClick="commande('prendreObjet')"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td> <input type="button" value="Gauche" onClick="commande('tournerGauche')"></td>
+                    <td> <input type="button" value="Reculer" onClick="commande('reculer')"></td>
+                    <td> <input type="button" value="Droite" onClick="commande('tournerDroite')"></td>
+                    <td>     ..............   </td>
+                    <td> <input type="button" value="Popcorn" onClick="commande('prendrePopcorn')"> </td>
+                    <td> <input type="button" value="Deposer" onClick="commande('deposerObjet')"></td>
+                    <td> <input type="button" value="Fermer" onClick="commande('fermerClapet')"></td>
+                </tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td> <input type="button" value="Tapis   " onClick="commande('deroulerTapis')"></td>
+                    <td></td>
+                <tr>
+                </table>
+            </p>
+        </form>
+
+        <script src="js/three.min.js"></script>
+        <script src="js/OrbitControls.js"></script>
+        <script src="js/ColladaLoader.js"></script>
+        <script src="js/loader.js"></script>
+        <script src="clapets.js"></script>
+        <script src="distributeurs.js"></script>
+        <script src="pieds.js"></script>
+        <script src="gobelets.js"></script>
+        <script src="ampoules.js"></script>
+        <script src="robots.js"></script>
+        <script src="main.js"></script>
+
+    </body>
+
+</html>

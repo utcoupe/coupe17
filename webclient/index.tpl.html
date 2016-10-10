@@ -1,0 +1,58 @@
+<div ng-controller="IndexCtrl">
+	<!-- <ul>
+		<li ng-repeat="(name, launched) in utcoupe">
+			<span class="utcoupe" ng-class="{launched: launched}" >{{ name }}</span>
+			<button type="button" class="btn" ng-hide="launched" ng-click="launch(name)">Lancer</button> 
+			<button type="button" class="btn" ng-show="launched" ng-click="stop(name)">Arrêter</button> 
+			<br /><br />
+		</li>
+	</ul>
+	<p>Color: <span style="color:{{ our_color }}">{{ our_color }}</span> ; Changer pour 
+	<button class="btn" ng-show="our_color=='yellow'" ng-click="our_color='green'">Green</button>
+	<button class="btn" ng-show="our_color=='green'" ng-click="our_color='yellow'">Yellow</button>
+	</p> -->
+	<li>
+		<span class="utcoupe" ng-class="{launched: utcoupe.ia}" >IA</span>
+		<button type="button" class="btn" ng-hide="utcoupe.ia" ng-click="launch('ia')">Lancer</button> 
+		<button type="button" class="btn" ng-show="utcoupe.ia" ng-click="stop('ia')">Arrêter</button> <br/>
+		<span class="legend">Color:</span>
+		<span style="color:{{ our_color }};" class="config" >{{ our_color }}</span>
+		<button class="btn" ng-show="our_color=='yellow'" ng-click="our_color='green'">Green</button>
+		<button class="btn" ng-show="our_color=='green'" ng-click="our_color='yellow'">Yellow</button>
+		<br />
+		<span class="legend">Erobots:</span> <span class="config" >{{ nb_erobots }}</span>
+		<button class="btn" ng-show="nb_erobots==1" ng-click="nb_erobots=2">2</button>
+		<button class="btn" ng-show="nb_erobots==2" ng-click="nb_erobots=1">1</button>
+		<br />
+		<div ng-show="nb_erobots>=1" >
+			<span class="legend">Diamètre EGR:</span> <span class="config" >{{ EGR_d }}mm</span>
+			<input type="text" ng-model="EGR_d" />
+		</div>
+		<div ng-show="nb_erobots>=2" >
+			<span class="legend">Diamètre EPR:</span> <span class="config" >{{ EPR_d }}mm</span>
+			<input type="text" ng-model="EPR_d" />
+		</div>
+
+		<br /><br />
+	</li>
+	<li>
+		<span class="utcoupe" ng-class="{launched: utcoupe.gr}" >GR</span>
+		<button type="button" class="btn" ng-hide="utcoupe.gr" ng-click="launch('gr')">Lancer</button> 
+		<button type="button" class="btn" ng-show="utcoupe.gr" ng-click="stop('gr')">Arrêter</button> 
+		<!-- /!\ Met du temps à cause du sudo /!\ -->
+		<br /><br />
+	</li>
+	<li>
+		<span class="utcoupe" ng-class="{launched: utcoupe.pr}" >PR</span>
+		<button type="button" class="btn" ng-hide="utcoupe.pr" ng-click="launch('pr')">Lancer</button> 
+		<button type="button" class="btn" ng-show="utcoupe.pr" ng-click="stop('pr')">Arrêter</button> 
+		<br /><br />
+	</li>
+	<li>
+		<span class="utcoupe" ng-class="{launched: utcoupe.hokuyo}" >Hokuyo</span>
+		<button type="button" class="btn" ng-hide="utcoupe.hokuyo" ng-click="launch('hokuyo')">Lancer</button> 
+		<button type="button" class="btn" ng-show="utcoupe.hokuyo" ng-click="stop('hokuyo')">Arrêter</button> 
+		<br /><br />
+	</li>
+	<div ng-include="'pages/logger/logger.tpl.html'"></div>
+</div>

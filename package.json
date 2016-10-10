@@ -1,0 +1,39 @@
+{
+  "name": "UTCoupe",
+  "version": "0.1.0",
+  "description": "Participation à la Coupe de France de Robotique",
+  "main": "UTCoupe/utcoupe.html",
+  "dependencies": {
+    "ansi-to-html": "^0.3.0",
+    "byline": "^4.2.1",
+    "express": "~4.12.3",
+    "ffi": "^1.3.0",
+    "gaussian": "^1.0.0",
+    "johnny-five": "~0.8.33",
+    "keypress": "^0.2.1",
+    "log4js": "~0.6.22",
+    "serialport": "~1.4.9",
+    "socket.io": "~1.2.1",
+    "socket.io-client": "~1.2.1",
+    "byline": "~4.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "nw"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/utcoupe/coupe15"
+  },
+  "author": "Alexis Schad",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/utcoupe/coupe15/issues"
+  },
+  "window": {
+    "width": 500,
+    "height": 500,
+    "toolbar": false,
+    "frame": true
+  }
+}

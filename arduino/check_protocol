@@ -1,0 +1,38 @@
+#!/usr/bin/python
+
+orders = []
+used_chars = ''
+ret = 0
+in_vars = 0
+
+f = open('protocol.h')
+for l in f:
+    if in_vars and l[0:7] == "#define":
+        o = l.split()[1:];
+        if o[1][0] != "'" or o[1][2] != "'":
+            print("Order '"+o[0]+"' seem incorrectly defined. Expected : #define ORDER 'x'")
+            ret= 1
+            continue
+        else:
+            o[1] = o[1][1]
+
+        if len(o[1]) == 1:
+            orders.append(o)
+        else:
+            print("Order '"+o[0]+"' seem to be defined with more than 1 char")
+            ret = 1
+
+    elif "BEGIN_ORDERS" in l:
+        in_vars = 1
+    elif "END_ORDERS" in l:
+        in_vars = 0
+
+print("Protocol orders :")
+for o in orders:
+    print(o[0]+" : "+o[1])
+    if o[1] in used_chars:
+        print("!!! Order '"+o[0]+"' uses a code already in use")
+        ret = 1
+    used_chars += o[1]
+
+exit(ret);
