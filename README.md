@@ -1,8 +1,30 @@
-Code source des robots d'UTCoupe 2015
+Code source des robots d'UTCoupe 2017
 =======
 
-Participation à la Coupe de France de Robotique 2015 dont le thème est : Robomovies
+### Configurer l'environnement de développement
 
-Structure :
+Installer tous les logiciels requis (compilation, installation, etc.) :
+```
+sudo apt install git build-essential python nodejs npm nodejs-legacy
+```
 
-![alt tag](https://raw.githubusercontent.com/utcoupe/coupe15/master/UTCoupe.png)
+Une fois dans le dossier, pour installer les dépendances JavaScript :
+```
+npm install
+```
+
+### Lancer le projet
+
+Pour lancer le serveur de communication par websocket :
+```
+npm run utcoupe
+```
+
+Pour lancer un serveur statique pour héberger le webclient :
+```
+npm run serve
+```
+
+Ensuite, aller sur l'adresse affiché par cette dernière commande et le webclient devrait être lancé.
+
+/!\ Vérifiez que le webclientarrive à se connecter au serveur dans l'onglet Réseau /!\ Si ce n'est pas le cas, l'adresse du serveur est sans doute erronée : modifier le fichier `config.js` à la racine du projet.

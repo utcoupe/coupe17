@@ -20,7 +20,6 @@ module.exports = (function () {
 			this.ip = "127.0.0.1";
 		}
 		this.ip_port = this.ip+':'+this.server_port;
-		this.webclient_url = this.ip+'/webclient/webclient.html';
 
 		// Create the server
 		this.server = require('socket.io')();
@@ -131,7 +130,6 @@ module.exports = (function () {
 
 		this.server.listen(this.server_port);
 		logger.info("Server started at "+this.ip_port);
-		logger.info("Webclient: "+this.webclient_url);
 	}
 
 	Server.prototype.sendNetwork = function(){
