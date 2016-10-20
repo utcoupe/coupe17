@@ -2,7 +2,7 @@ SocketWebclient = (function () {
 	"use strict";
 
 	function SocketWebclient() {
-		this.server_host = window.location.host+':3128';
+		this.server_host = window.location.hostname+':3128';
 		this.socket = null;
 		this.callbacks = {};
 		this.type = this.getDeviceType();

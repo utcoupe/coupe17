@@ -4,22 +4,22 @@
   "description": "Participation à la Coupe de France de Robotique",
   "main": "UTCoupe/utcoupe.html",
   "dependencies": {
-    "ansi-to-html": "^0.3.0",
-    "byline": "^4.2.1",
-    "express": "~4.12.3",
-    "ffi": "^1.3.0",
-    "gaussian": "^1.0.0",
-    "johnny-five": "~0.8.33",
+    "ansi-to-html": "^0.4.2",
+    "byline": "^5.0.0",
+    "ffi": "^2.1.0",
+    "gaussian": "^1.1.0",
+    "http-server": "^0.9.0",
+    "johnny-five": "^0.10.3",
     "keypress": "^0.2.1",
-    "log4js": "~0.6.22",
-    "serialport": "~1.4.9",
-    "socket.io": "~1.2.1",
-    "socket.io-client": "~1.2.1",
-    "byline": "~4.2.1"
+    "log4js": "^0.6.38",
+    "serialport": "^4.0.3",
+    "socket.io": "^1.5.0",
+    "socket.io-client": "^1.5.0"
   },
   "devDependencies": {},
   "scripts": {
-    "start": "nw"
+    "utcoupe": "node utcoupe/utcoupe.js",
+    "serve": "http-server"
   },
   "repository": {
     "type": "git",
