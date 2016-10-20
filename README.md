@@ -16,7 +16,7 @@ npm install
 Il faut aussi compiler le pathfinding pour l'IA :
 ```
 cd pathfinding/
-cmake CMakeLists.txt
+cmake CMakeLists.txt && make
 cd ../
 ```
 
