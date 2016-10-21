@@ -84,11 +84,7 @@ module.exports = (function () {
 		// Returns true if dist1 is smaller than dist2
 		// i.e. object 1 is closer than object 2
 
-		if(dist1 < dist2){
-			return true;
-		} else {
-			return false;
-		}
+		return (dist1 < dist2);
 	};
 
 	Data.prototype.getDistance = function (pos1, pos2){
