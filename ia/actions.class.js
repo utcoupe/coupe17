@@ -103,9 +103,9 @@ module.exports = (function () {
 	Actions.prototype.exists = function (action_name){
 		if (!this.todo[action_name]){
 			if (!this.killed[action_name] && !this.done[action_name] && !this.done[action_name])
-				logger.warn("Action named '"+"' doesn't exist");
+				logger.warn("Action named '"+ action_name +"' doesn't exist");
 			else
-				logger.warn("Action named '"+"' already killed in progress or done !");
+				logger.warn("Action named '"+ action_name +"' already killed in progress or done !");
 			return false;
 		} else {
 			return true;
