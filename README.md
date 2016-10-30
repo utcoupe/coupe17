@@ -5,12 +5,19 @@ Code source des robots d'UTCoupe 2017
 
 Installer tous les logiciels requis (compilation, installation, etc.) :
 ```
-sudo apt install git build-essential python nodejs npm nodejs-legacy
+sudo apt install git build-essential python nodejs npm nodejs-legacy cmake libboost-dev
 ```
 
 Une fois dans le dossier, pour installer les dépendances JavaScript :
 ```
 npm install
+```
+
+Il faut aussi compiler le pathfinding pour l'IA :
+```
+cd pathfinding/
+cmake CMakeLists.txt && make
+cd ../
 ```
 
 ### Lancer le projet
@@ -27,4 +34,4 @@ npm run serve
 
 Ensuite, aller sur l'adresse affiché par cette dernière commande et le webclient devrait être lancé.
 
-/!\ Vérifiez que le webclientarrive à se connecter au serveur dans l'onglet Réseau /!\ Si ce n'est pas le cas, l'adresse du serveur est sans doute erronée : modifier le fichier `config.js` à la racine du projet.
+/!\ Vérifiez que le webclient arrive à se connecter au serveur dans l'onglet Réseau /!\ Si ce n'est pas le cas, l'adresse du serveur est sans doute erronée : modifier le fichier `config.js` à la racine du projet.
