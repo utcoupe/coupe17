@@ -1,7 +1,6 @@
 module.exports = (function () {
 	var logger = require('log4js').getLogger('gr.acts');
 	var serialPort = require("serialport");
-	var SerialPort = serialPort.SerialPort;
 	var fifo = new (require('../shared/fifo.class.js'))();
 
 	var servos = null;

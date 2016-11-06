@@ -1,7 +1,6 @@
 module.exports = (function () {
 	var logger = require('log4js').getLogger('pr.acts');
 	var serialPort = require("serialport");
-	var SerialPort = serialPort.SerialPort;
 	var spawn = require('child_process').spawn;
 	var fifo = new (require('../shared/fifo.class.js'))();
 
