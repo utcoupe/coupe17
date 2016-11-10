@@ -1,3 +1,8 @@
+/**
+ * @file Base server file
+ * @author UTCoupe
+ */
+
 module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
@@ -7,6 +12,11 @@ module.exports = (function () {
 	var convert = new Convert({newLine: true});
 	var spawn = require('child_process').spawn;
 
+	/**
+	 * Starts a server on the port specified. Default port: 3128
+	 * 
+	 * @param server_port integer
+	 */
 	function Server(server_port) {
 		this.server_port = server_port || 3128;
 		
