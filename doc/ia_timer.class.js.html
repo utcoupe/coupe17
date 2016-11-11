@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ia/ia - Documentation</title>
+    <title>ia/timer.class.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,158 +27,81 @@
 
 <div id="main">
     
-    <h1 class="page-title">ia/ia</h1>
+    <h1 class="page-title">ia/timer.class.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Timer Module
+ * 
+ * @module ia/timer
+ * @see {@link ia/timer.Timer}
+ */
 
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">IA Module</div>
-        
+module.exports = (function () {
+	"use strict";
 
-        
-            
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ia_ia.class.js.html">ia/ia.class.js</a>, <a href="ia_ia.class.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="ia_ia.Ia.html">ia/ia.Ia</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
+	/**
+	 * Timer Constructor
+	 * 
+	 * @exports ia/timer.Timer
+	 * @constructor
+	 * @param {Object} ia
+	 */
+	function Timer(ia) {
+		/** t0 */
+		this.t0 = null;
+		/** Match started */
+		this.match_started = false;
+		/** IA */
+		this.ia = ia;
+	}
+	/**
+	 * Start timer
+	 */
+	Timer.prototype.start = function() {
+		this.t0 = Date.now();
+		this.match_started = true; // le match commence
+		setTimeout(function() {
+			logger.fatal("TIME OVER");
+			this.ia.stop();
+		}.bind(this), 89000);
+	};
 
 
+	/**
+	 * Get Timer. Permet d'obtenir le temps écoulé en ms
+	 */
+	Timer.prototype.get = function () {
+		if (this.match_started)
+			return Date.now() - this.t0;
+		else
+			return 0;
+	};
+	/**
+	 * Status
+	 */
+	Timer.prototype.status = function () {
+		if (this.match_started) {
+			return "Match started";
+		}
+		else {
+			return "Wainting for jack";
+		}
+	};
 
+	return Timer;
+})();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-    
-    </div>
-
-    
-
-    
-        <h3 class="subsection-title">Requires</h3>
-
-        <ul>
-            <li><a href="module-server_socket_client.html">module:server/socket_client</a></li>
-        
-            <li><a href="module-config.html">module:config</a></li>
-        
-            <li><a href="module-ia_timer.html">module:ia/timer</a></li>
-        
-            <li><a href="module-ia_pathfinding.html">module:ia/pathfinding</a></li>
-        
-            <li><a href="module-ia_data.html">module:ia/data</a></li>
-        
-            <li><a href="module-ia_actions.html">module:ia/actions</a></li>
-        
-            <li>module:ia/gr</li>
-        
-            <li>module:ia/pr</li>
-        
-            <li>module:export_simulator</li>
-        </ul>
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+</code></pre>
+        </article>
+    </section>
 
 
 
