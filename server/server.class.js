@@ -1,8 +1,7 @@
 /**
- * @file Base server file
- * @author UTCoupe
+ * Server module
+ * @module server/server
  */
-
 module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
@@ -15,7 +14,9 @@ module.exports = (function () {
 	/**
 	 * Starts a server on the port specified. Default port: 3128
 	 * 
-	 * @param server_port integer
+	 * @exports server/server.Server
+	 * @constructor
+	 * @param {int} server_port
 	 */
 	function Server(server_port) {
 		this.server_port = server_port || 3128;
@@ -31,7 +32,11 @@ module.exports = (function () {
 		}
 		this.ip_port = this.ip+':'+this.server_port;
 
-		// Create the server
+		/**
+		 * Create the server
+		 * 
+		 * @requires socket.io
+		 */
 		this.server = require('socket.io')();
 
 		// Create the network default object
@@ -142,6 +147,9 @@ module.exports = (function () {
 		logger.info("Server started at "+this.ip_port);
 	}
 
+	/**
+	 * sendNetwork
+	 */
 	Server.prototype.sendNetwork = function(){
 		// logger.info("Message sent to webclient !");
 		// logger.info(this.network);
@@ -155,6 +163,9 @@ module.exports = (function () {
 			});
 	}
 
+	/**
+	 * launch
+	 */
 	Server.prototype.launch = function(params) {
 		var prog = params.prog;
 		if(!this.utcoupe[prog]) {
@@ -237,6 +248,9 @@ module.exports = (function () {
 		this.sendUTCoupe();
 	}
 
+	/**
+	 * stop
+	 */
 	Server.prototype.stop = function(prog) {
 		if (prog == "pr") {
 			this.progs[prog] = spawn('ssh', ['igep', 'pkill', 'node']);
@@ -250,6 +264,10 @@ module.exports = (function () {
 		}
 		this.sendUTCoupe();
 	}
+
+	/**
+	 * sendUTCoupe
+	 */
 	Server.prototype.sendUTCoupe = function(prog) {
 		this.server.to('webclient').emit('order', {
 			to: 'webclient',
