@@ -10,7 +10,7 @@
  * @requires module:ia/actions
  * @requires module:ia/gr
  * @requires module:ia/pr
- * @requires module:export_simulator
+ * @requires module:ia/export_simulator
  * @see {@link ia/ia.Ia}
  */
 
