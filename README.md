@@ -36,17 +36,19 @@ Ensuite, aller sur l'adresse affiché par cette dernière commande et le webclie
 
 /!\ Vérifiez que le webclient arrive à se connecter au serveur dans l'onglet Réseau /!\ Si ce n'est pas le cas, l'adresse du serveur est sans doute erronée : modifier le fichier `config.js` à la racine du projet.
 
-### Installer et utiliser JSDoc
+### Utiliser JSDoc
 
 JSDoc s'installe via npm.
-Pour l'installer en global sur la machine :
+Pour l'installer en local sur la machine :
 ```
-npm install -g jsdoc
+npm install
 ```
 
 Pour générer la documentation du code :
 ```
-jsdoc -c conf_jsdoc.json
+npm run generate-docs
 ```
 
-La documentation officielle est disponible [ici](http://usejsdoc.org)
+La documentation se trouve au format HTML/JS dans le dossier doc.
+
+La documentation officielle de JSDoc est disponible [ici](http://usejsdoc.org).
