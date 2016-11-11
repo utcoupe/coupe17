@@ -16,7 +16,9 @@
     "socket.io": "^1.5.0",
     "socket.io-client": "^1.5.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "jsdoc": "^3.4.3"
+  },
   "scripts": {
     "utcoupe": "node utcoupe/utcoupe.js",
     "serve": "http-server"
