@@ -1,6 +1,7 @@
 /**
  * Server module
  * @module server/server
+ * @see {@link server/server.Server}
  */
 module.exports = (function () {
 	"use strict";
@@ -16,9 +17,12 @@ module.exports = (function () {
 	 * 
 	 * @exports server/server.Server
 	 * @constructor
-	 * @param {int} server_port
+	 * @param {int} [server_port=3128] Server port
 	 */
 	function Server(server_port) {
+		/**
+		 * Server Port
+		 */
 		this.server_port = server_port || 3128;
 		
 		// Get server IP address
@@ -34,8 +38,6 @@ module.exports = (function () {
 
 		/**
 		 * Create the server
-		 * 
-		 * @requires socket.io
 		 */
 		this.server = require('socket.io')();
 

@@ -2,10 +2,11 @@
  * Main application
  * 
  * @module utcoupe/utcoupe
+ * @requires module:server/server
  */
 (function () {
 	/**
-	 * @requires module:server/server
+	 * Server
 	 */
 	var Server = require('../server/server.class.js');
 

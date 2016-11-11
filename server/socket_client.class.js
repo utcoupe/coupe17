@@ -1,5 +1,8 @@
 /**
+ * Socket Client
+ * 
  * @module server/socket_client
+ * @see {@link server/socket_client.SocketClient}
  */
 
 module.exports = (function () {
@@ -12,17 +15,17 @@ module.exports = (function () {
 	 * 
 	 * @exports server/server.SocketClient
 	 * @constructor
-	 * @param params
+	 * @param {Object} params
+	 * @param {string} [params.server_ip=127.0.0.1:3128] Server IPv4 and port
+	 * @param params.type Type of client
 	 */
 	function SocketClient(params) {
 		/**
-		 * Server ip : gived by params, default = '127.0.0.1:3128'
+		 * Server IP
 		 */
 		this.server_ip = params.server_ip || '127.0.0.1:3128';
 		/**
 		 * client
-		 * 
-		 * @requires socket.io-client
 		 */
 		this.client = require('socket.io-client')('http://'+this.server_ip);
 		/**
@@ -31,7 +34,7 @@ module.exports = (function () {
 		this.callbacks = {};
 
 		if(!!params.type)
-			/** Type of socket */
+			/** Type of client */
 			this.type = params.type;
 		else
 			logger.error("Missing client type.");
@@ -90,11 +93,11 @@ module.exports = (function () {
 		this.callbacks.order = callback;
 	};
 	/**
-	 * send
+	 * Send parameters
 	 * 
 	 * @param {string} to
 	 * @param {string} name
-	 * @param params
+	 * @param {Object} params
 	 */
 	SocketClient.prototype.send = function (to, name, params) {
 		// logger.debug('send %s to %s', name, to);

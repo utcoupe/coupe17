@@ -1,3 +1,10 @@
+/**
+ * Pathfinding module
+ * 
+ * @module ia/pathfinding
+ * @see {@link ia/pathfinding.Pathfinding}
+ */
+
 module.exports = (function () {
 	"use strict";
 
@@ -12,7 +19,15 @@ module.exports = (function () {
 	var Child_process = require('child_process');
 	var Byline = require('byline');
 
+	/**
+	 * Pathfinding constructor
+	 * 
+	 * @exports ia/pathfinding.Pathfinding
+	 * @constructor
+	 * @param {Ia} ia
+	 */
 	function Pathfinding(ia) {
+		/** Ia */
 		this.ia = ia;
 		var fifo = [];
 
@@ -59,13 +74,25 @@ module.exports = (function () {
 			logger.error("stderr :"+data.toString());
 		});
 
-
+		/**
+		 * Vector Multiply
+		 * 
+		 * @param {Object} arr
+		 * @param {int} ratio
+		 */
 		function vecMultiply(arr, ratio){
 			return arr.map(function(val){
 				return Math.round(val*ratio);
 			});
 		}
 
+		/**
+		 * Send a Query
+		 * 
+		 * @param start
+		 * @param end
+		 * @param cb
+		 */
 		this.sendQuery = function(start, end, cb){
 			fifo.push(cb || true);
 
@@ -75,6 +102,11 @@ module.exports = (function () {
 			logger.info("Sending:"+str);
 		};
 
+		/**
+		 * Send Dynamic
+		 * 
+		 * @param {Object} objects
+		 */
 		this.sendDynamic = function(objects){
 			//X0, Y0, R0, ...
 			var str = ["D"].concat(objects.reduce(function(acc, obj){
@@ -84,6 +116,11 @@ module.exports = (function () {
 			instance.stdin.write(str);
 		}
 
+		/**
+		 * Parse data
+		 * 
+		 * @param {Object} data
+		 */
 		function parse (data) {
 			// X0; Y0; ... Xn; Yn
 			var ret = null;
@@ -104,6 +141,13 @@ module.exports = (function () {
 
 	}
 
+	/**
+	 * Get Path
+	 * 
+	 * @param start
+	 * @param end
+	 * @param callback
+	 */
 	Pathfinding.prototype.getPath = function (start, end, callback) {
 		this.ia.pathfinding.updateMap();
 		this.timeout_getpath = setTimeout(function() {
@@ -125,12 +169,23 @@ module.exports = (function () {
 		}.bind(this));
 	};
 
+	/**
+	 * Borne
+	 * 
+	 * @param {int} x
+	 * @param {int} min
+	 * @param {int} max
+	 */
 	function borne(x, min, max) {
 		return x > max ? max : x < min ? min : x;
 	}
 	
-	//[ [x, y, r], ... ]
+	/**
+	 * Update Map
+	 */
 	Pathfinding.prototype.updateMap = function () {
+		//[ [x, y, r], ... ]
+
 		// var objects = [];
 		// objects.push();
 		var objects = [{
