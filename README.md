@@ -35,3 +35,18 @@ npm run serve
 Ensuite, aller sur l'adresse affiché par cette dernière commande et le webclient devrait être lancé.
 
 /!\ Vérifiez que le webclient arrive à se connecter au serveur dans l'onglet Réseau /!\ Si ce n'est pas le cas, l'adresse du serveur est sans doute erronée : modifier le fichier `config.js` à la racine du projet.
+
+### Installer et utiliser JSDoc
+
+JSDoc s'installe via npm.
+Pour l'installer en global sur la machine :
+```
+npm install -g jsdoc
+```
+
+Pour générer la documentation du code :
+```
+jsdoc -c conf_jsdoc.json
+```
+
+La documentation officielle est disponible [ici](http://usejsdoc.org)
