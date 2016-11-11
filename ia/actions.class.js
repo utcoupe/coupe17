@@ -1,16 +1,37 @@
+/**
+ * Actions Module
+ * 
+ * @module ia/actions
+ * @see {@link ia/actions.Actions}
+ */
+
 module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('ia.actions');
+	/**
+	 * Actions Constructor
+	 * 
+	 * @exports ia/actions.Actions
+	 * @constructor
+	 * @param ia
+	 */
 	function Actions(ia) {
+		/** IA */
 		this.ia = ia;
+		/** Team color */
 		this.color = ia.color;
 
+		/** done */
 		this.done = {};
+		/** Tasks to do*/
 		this.todo = {};
+		/** Tasks in progress */
 		this.inprogress = null;
+		/** killed */
 		this.killed = {};
 
+		/** Valid id do action */
 		this.valid_id_do_action = -1;
 
 		this.todo = this.importActions(ia.data);
@@ -18,8 +39,16 @@ module.exports = (function () {
 
 	var __dist_startpoints_plot = 120;
 	var __nb_startpoints_plot = 16;
+	/**
+	 * Convert Angle
+	 * 
+	 * @param {int} a Angle
+	 */
 	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
 
+	/**
+	 * Collision
+	 */
 	Actions.prototype.collision = function() {
 		if(this.inprogress !== null) {
 			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -34,6 +63,11 @@ module.exports = (function () {
 		}
 	}
 
+	/**
+	 * Import Actions from data
+	 * 
+	 * @param {Object} data
+	 */
 	Actions.prototype.importActions = function (data) {
 		var req;
 
@@ -76,6 +110,13 @@ module.exports = (function () {
 		return actions;
 	};
 
+	/**
+	 * Parse Order
+	 * 
+	 * @param {string} from Sender
+	 * @param {string} name Name of the action
+	 * @param {Object} params Parameters of the action
+	 */
 	Actions.prototype.parseOrder = function (from, name, params) {
 		switch(name) {
 			case 'actions.action_finished':
@@ -92,6 +133,11 @@ module.exports = (function () {
 	};
 
 
+	/**
+	 * Kill an action
+	 * 
+	 * @param {string} action_name
+	 */
 	Actions.prototype.kill = function (action_name){
 		// If action doesn't exist
 		if (!!action_name && this.exists(action_name)){
@@ -100,6 +146,11 @@ module.exports = (function () {
 		}
 	};
 
+	/**
+	 * Return true if the action exists
+	 * 
+	 * @param {string} action_name
+	 */
 	Actions.prototype.exists = function (action_name){
 		if (!this.todo[action_name]){
 			if (!this.killed[action_name] && !this.done[action_name] && !this.done[action_name])
@@ -112,21 +163,53 @@ module.exports = (function () {
 		}
 	};
 
+	/**
+	 * Return true if the action is done
+	 * 
+	 * @param {string} action_name
+	 */
 	Actions.prototype.isDone = function (action_name){
 		return !action_name || this.done.hasOwnProperty(action_name);
 	};
 
+	/**
+	 * Return the distance between two points
+	 * 
+	 * @param {Object} A
+	 * @param {int} A.x
+	 * @param {int} A.y
+	 * @param {Object} B.x
+	 * @param {object} B.y
+	 */
 	function norm2Points(A, B) {
 		return Math.sqrt(Math.pow(A.x-B.x, 2) + Math.pow(A.y-B.y, 2));
 	}
+	/**
+	 * Return the distance between a position and the position of the current action
+	 * 
+	 * @param {Object} pos
+	 * @param {int} pos.x
+	 * @param {int} pos.y
+	 * @param {string} an Action name
+	 */
 	Actions.prototype.getNormAction = function(pos, an) {
 		return norm2Points(pos, this.todo[an].object.pos);
 	};
 	
+	/**
+	 * Get priority Action
+	 * 
+	 * @param {string} an Action name
+	 */
 	Actions.prototype.getPriorityAction = function(an) {
 		return this.todo[an].object.status == "lost" ? -1000 : this.todo[an].priority;
 	};
 	
+	/**
+	 * Return true id is doable
+	 * 
+	 * @param {Object} action
+	 */
 	Actions.prototype.isDoable = function(action) {
 		// Verifies some things about the action
 
@@ -163,6 +246,11 @@ module.exports = (function () {
 		return true;
 	};
 	
+	/**
+	 * Do next Action
+	 * 
+	 * @param callback
+	 */
 	Actions.prototype.doNextAction = function(callback) {
 		this.valid_id_do_action++;
 		var actions_todo = [];
@@ -188,6 +276,14 @@ module.exports = (function () {
 		this.pathDoAction(callback, actions_todo, this.valid_id_do_action);
 	};
 
+	/**
+	 * Return nearest Startpoint
+	 * 
+	 * @param {Object} pos
+	 * @param {int} pos.x
+	 * @param {int} pos.y
+	 * @param {Object} startpoints
+	 */
 	Actions.prototype.getNearestStartpoint = function(pos, startpoints) {
 		var min_dist = Infinity;
 		var nearest = null;
@@ -204,6 +300,13 @@ module.exports = (function () {
 		return nearest;
 	};
 
+	/**
+	 * Find the path to the action
+	 * 
+	 * @param callback
+	 * @param {Object} actions
+	 * @param {int} id
+	 */
 	Actions.prototype.pathDoAction = function(callback, actions, id) {
 		if(id != this.valid_id_do_action) {
 			logger.Debug('id different');
@@ -231,6 +334,16 @@ module.exports = (function () {
 		}
 	};
 
+	/**
+	 * Do Action
+	 * 
+	 * @param callback
+	 * @param {Object} action
+	 * @param {Object} startpoint
+	 * @param {int} startpoint.x
+	 * @param {int} startpoint.y
+	 * @param {int} id
+	 */
 	Actions.prototype.doAction = function (callback, action, startpoint, id) {
 		if(id != this.valid_id_do_action)
 			return;
@@ -274,6 +387,9 @@ module.exports = (function () {
 		// console.log(this.done);
 	};
 
+	/**
+	 * Action Finished
+	 */
 	Actions.prototype.actionFinished = function () {
 		if(this.inprogress !== null) {
 			this.done[this.inprogress.name] = this.inprogress;
