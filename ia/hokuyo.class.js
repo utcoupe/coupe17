@@ -1,3 +1,10 @@
+/**
+ * Hokuyo module
+ * 
+ * @module ia/hokuyo
+ * @see ia/hokuyo.Hokuyo
+ */
+
 module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
@@ -14,15 +21,32 @@ module.exports = (function () {
 	var MAX_SPD = 1;
 	var timeout;
 
+	/**
+	 * Hokuyo Constructor
+	 * 
+	 * @exports ia/hokuyo.Hokuyo
+	 * @constructor
+	 * @param {Object} ia IA
+	 * @param {Object} [params] Parameters
+	 */
 	function Hokuyo(ia, params) {
+		/** Parameters */
 		this.params = params || {};
+		/** Number of hokuyo */
 		this.nb_hokuyo = 0;
+		/** IA */
 		this.ia = ia;
-		this.lastNow = 0; // dernier timestamp où on a update (changé à la fin de l'update)
+		/** Dernier timestamp où on a update (changé à la fin de l'update) */
+		this.lastNow = 0;
+		/** Match Started */
 		this.matchStarted = false;
-		this.nb_lost = 0; // nb d'itération depuis laquelle on a perdu un robot
+		/** nb d'itération depuis laquelle on a perdu un robot */
+		this.nb_lost = 0;
 	}
 
+	/**
+	 * Starts the hokuyo
+	 */
 	Hokuyo.prototype.start = function () {
 		this.matchStarted = true;
 
@@ -31,24 +55,57 @@ module.exports = (function () {
 		timeout = setTimeout(function() {this.timedOut(); }.bind(this) , LOST_TIMEOUT*1000);
 	};
 
+	/**
+	 * Stops the Hokuyo
+	 */
 	Hokuyo.prototype.stop = function () {
 		this.matchStarted = false;
 		this.ia.client.send("hokuyo", "stop", {});
 		clearTimeout(timeout);
 	};
 
+	/**
+	 * Timed out
+	 */
 	Hokuyo.prototype.timedOut = function() {
 		this.mayday("Hokuyo timed out");
 	};
 
+	/**
+	 * Return the distance between two points
+	 * 
+	 * @param {Object} spot1
+	 * @param {int} spot1.x
+	 * @param {int} spot1.y
+	 * @param {Object} spot2
+	 * @param {int} spot2.x
+	 * @param {int} spot2.y
+	 */
 	Hokuyo.prototype.getDistance = function (spot1, spot2) {
 		return Math.sqrt(Math.pow(spot1.x - spot2.x, 2) + Math.pow(spot1.y - spot2.y, 2));
 	};
 
+	/**
+	 * Return true if the position is on the stair
+	 * 
+	 * @param {Object} spot
+	 * @param {int} spot.x
+	 * @param {int} spot.y
+	 */
 	Hokuyo.prototype.isOnTheStairs = function (spot){
 		return (spot.x>967) && (spot.x < 2033) && (spot.y > 2000-580);
 	};
 
+	/**
+	 * Return Matching coefficient
+	 * 
+	 * @param {Object} spot
+	 * @param {int} spot.x
+	 * @param {int} spot.y
+	 * @param {Object} eRobot
+	 * @param {int} dt
+	 * @param status
+	 */
 	Hokuyo.prototype.getMatchingCoef = function (spot, eRobot, dt, status){
 		var estimatedPos = {
 			x: eRobot.pos.x + eRobot.speed.x*dt,
@@ -62,6 +119,11 @@ module.exports = (function () {
 		return distance;
 	};
 
+	/**
+	 * Remove our robot from the detected points
+	 * 
+	 * @param {Object} dots
+	 */
 	Hokuyo.prototype.deleteOurRobots = function (dots){
 		var pr_dist = this.getDistance({x: 0, y:0}, {x: 3000, y:2000});
 		var pr_i = -1;
@@ -124,6 +186,13 @@ module.exports = (function () {
 		// logger.debug(dots);
 	};
 
+	/**
+	 * Returns Best Matching Coefficient
+	 * 
+	 * @param {Object} dots
+	 * @param {Object} robots
+	 * @param {int} now
+	 */
 	Hokuyo.prototype.getBestMatchingCoef = function(dots, robots, now) {
 		// Return the couple of ennemy robot and dot that matches the best
 
@@ -337,6 +406,11 @@ module.exports = (function () {
 
 	};
 
+	/**
+	 * Detects Collision
+	 * 
+	 * @param {Object} dots
+	 */
 	Hokuyo.prototype.detectCollision = function(dots) {
 		var collision = false;
 		var pf = this.ia.pr.path;
@@ -443,6 +517,11 @@ module.exports = (function () {
 	// 	}
 	// };
 
+	/**
+	 * Updates number of robots
+	 * 
+	 * @param {int} nb Number of robots
+	 */
 	Hokuyo.prototype.updateNumberOfRobots = function (nb) {
 		switch (nb){
 			case 0:
@@ -462,6 +541,11 @@ module.exports = (function () {
 		}
 	};
 
+	/**
+	 * May Day
+	 * 
+	 * @param {string} reason
+	 */
 	Hokuyo.prototype.mayday = function(reason) {
 		logger.error("Mayday called, the given reason is :");
 		logger.error(reason);
@@ -469,6 +553,13 @@ module.exports = (function () {
 		// XXX ? -> en fait on bloque peut-être pas ! : si le robot s'est vautré, c'est son soucis
 	};
 
+	/**
+	 * Parse Order
+	 * 
+	 * @param {string} from
+	 * @param {string} name
+	 * @param {Object} params
+	 */
 	Hokuyo.prototype.parseOrder = function (from, name, params) {
 		var orderName = name.split('.')[1];
 		switch (orderName){
@@ -483,6 +574,9 @@ module.exports = (function () {
 		}
 	};
 
+	/**
+	 * Return true if the number of Hokuyo isn't equal to 0
+	 */
 	Hokuyo.prototype.isOk = function () {
 		if (this.nb_hokuyo === 0)
 			return false;
