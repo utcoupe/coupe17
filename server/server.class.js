@@ -1,6 +1,7 @@
 /**
  * Server module
  * @module server/server
+ * @requires module:ia/main
  * @see {@link server/server.Server}
  */
 module.exports = (function () {
@@ -21,7 +22,7 @@ module.exports = (function () {
 	 */
 	function Server(server_port) {
 		/**
-		 * Server Port
+		 * @type {int}
 		 */
 		this.server_port = server_port || 3128;
 		
@@ -29,19 +30,25 @@ module.exports = (function () {
 		var os = require('os');
 		var networkInterfaces = os.networkInterfaces();
 		try {
+			/** @type {string} */
 			this.ip = networkInterfaces["eth0"][0].address || networkInterfaces["Wi-Fi"][0].address || "127.0.0.1";
 		}
 		catch(e) {
 			this.ip = "127.0.0.1";
 		}
+		/** @type {string} */
 		this.ip_port = this.ip+':'+this.server_port;
 
 		/**
 		 * Create the server
+		 * @type {Object}
 		 */
 		this.server = require('socket.io')();
 
-		// Create the network default object
+		/** 
+		 * Create the network default object
+		 * @type {Object}
+		 * */
 		this.network = {
 			server: {
 				name: "Server",
@@ -150,7 +157,7 @@ module.exports = (function () {
 	}
 
 	/**
-	 * sendNetwork
+	 * Send Network
 	 */
 	Server.prototype.sendNetwork = function(){
 		// logger.info("Message sent to webclient !");
@@ -166,7 +173,7 @@ module.exports = (function () {
 	}
 
 	/**
-	 * launch
+	 * Launch the robot
 	 */
 	Server.prototype.launch = function(params) {
 		var prog = params.prog;
@@ -251,7 +258,9 @@ module.exports = (function () {
 	}
 
 	/**
-	 * stop
+	 * Stops all
+	 * 
+	 * @param {string} prog
 	 */
 	Server.prototype.stop = function(prog) {
 		if (prog == "pr") {
@@ -269,6 +278,8 @@ module.exports = (function () {
 
 	/**
 	 * sendUTCoupe
+	 * 
+	 * @param {string} prog
 	 */
 	Server.prototype.sendUTCoupe = function(prog) {
 		this.server.to('webclient').emit('order', {
