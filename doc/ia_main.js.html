@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ia/timer - Documentation</title>
+    <title>ia/main.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,136 +27,43 @@
 
 <div id="main">
     
-    <h1 class="page-title">ia/timer</h1>
+    <h1 class="page-title">ia/main.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Main module
+ * 
+ * @module ia/main
+ * @requires ia/ia
+ */
 
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">Timer Module</div>
-        
+(function () {
+	"use strict";
 
-        
-            
+	// Modules nodejs
+	var log4js = require('log4js');
+	var logger = log4js.getLogger('ia.ia');
 
+	var color = process.argv[2];
+	if(!color) color = null;
+	var nb_erobots = process.argv[3];
+	if(!nb_erobots) nb_erobots = null;
+	var EGR_d = process.argv[4];
+	if(!EGR_d) EGR_d = null;
+	var EPR_d = process.argv[5];
+	if(!EPR_d) EPR_d = null;
 
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ia_timer.class.js.html">ia/timer.class.js</a>, <a href="ia_timer.class.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="ia_timer.Timer.html">ia/timer.Timer</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+	var ia = new (require('./ia.class.js'))(color, nb_erobots, EGR_d, EPR_d);
+})();</code></pre>
+        </article>
+    </section>
 
 
 
