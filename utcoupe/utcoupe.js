@@ -7,6 +7,7 @@
 (function () {
 	/**
 	 * Server
+	 * @type {server/server.Server}
 	 */
 	var Server = require('../server/server.class.js');
 
