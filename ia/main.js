@@ -1,3 +1,10 @@
+/**
+ * Main module
+ * 
+ * @module ia/main
+ * @requires ia/ia
+ */
+
 (function () {
 	"use strict";
 
