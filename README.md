@@ -46,7 +46,7 @@ npm install
 
 Pour générer la documentation du code :
 ```
-npm run generate-docs
+npm run doc
 ```
 
 La documentation se trouve au format HTML/JS dans le dossier doc.
