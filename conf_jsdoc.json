@@ -4,7 +4,7 @@
         "dictionaries": ["jsdoc","closure"]
     },
     "source": {
-        "include": ["utcoupe", "server", "config.js", "ia"],
+        "include": ["utcoupe", "server", "config.js", "ia", "clients/gr", "clients/pr"],
         "includePattern": ".+\\.js(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_"
     },

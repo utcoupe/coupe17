@@ -1,3 +1,13 @@
+/**
+ * Main module
+ * 
+ * @module clients/gr/main
+ * @requires server/socket_client
+ * @requires config
+ * @requires clients/gr/actuators
+ * @requires clients/gr/detect
+ */
+
 (function () {
 	"use strict";
 	// Requires
@@ -8,17 +18,21 @@
 
 	var SocketClient = require('../../server/socket_client.class.js');
 	var server = require('../../config.js').server;
+	/** @type {server/socket_client.SocketClient} */
 	var client = new SocketClient({
 		server_ip: server,
 		type: "gr"
 	});
 
+	/** @type {Object} */
 	var lastStatus = {
 		"status": "waiting"
 	};
 	sendChildren(lastStatus);
 
+	/** @type {clients/gr/actuators.Acts} */
 	var acts = new (require('./actuators.class.js'))(client, sendChildren);
+	/** @type {clients/gr/detect.Detect} */
 	var detect = null; // new (require('./detect.class.js'))(devicesDetected);
 
 	var queue = [];
@@ -51,6 +65,9 @@
 		}
 	});
 
+	/**
+	 * Starts the GR
+	 */
 	function start(){
 		logger.info("Starting  :)");
 		sendChildren({
@@ -60,6 +77,9 @@
 		detect = new (require('./detect.class.js'))(devicesDetected);
 	}
 
+	/**
+	 * Stops the robot
+	 */
 	function stop(){
 		acts.quit();
 
@@ -70,6 +90,11 @@
 		});
 	}
 
+	/**
+	 * Devices detected
+	 * 
+	 * @param {Object} struct
+	 */
 	function devicesDetected(struct){
 		// Verify content
 		if (!struct.servos)
@@ -84,13 +109,20 @@
 		sendChildren(acts.getStatus());
 	}
 
-	// Sends status to server
+	/**
+	 * Sends status to server
+	 * 
+	 * @param {Object} status
+	 */
 	function sendChildren(status){
 		lastStatus = status;
 
 		client.send("server", "server.childrenUpdate", lastStatus);
 	}
 
+	/**
+	 * Looks if everything is Ok
+	 */
 	function isOk(){
 		if(lastStatus.status != "waiting")
 			lastStatus = acts.getStatus();
@@ -99,7 +131,13 @@
 		client.send("server", "server.childrenUpdate", lastStatus);
 	}
 
-	// Push the order (enfiler)
+	/**
+	 * Push the order (enfiler)
+	 * 
+	 * @param {string} f from
+	 * @param {string} n name
+	 * @param {Object} p parameters
+	 */
 	function addOrder2Queue(f, n, p){
 		if(queue.length < 50) {
 			// Adds the order to the queue
@@ -114,7 +152,9 @@
 		}
 	}
 
-	// Execute order
+	/**
+	 * Execute order
+	 */
 	function executeNextOrder(){
 		if ((queue.length > 0) && (!orderInProgress)){
 			var order = queue.shift();
@@ -127,6 +167,9 @@
 		}
 	}
 
+	/**
+	 * Launch the next order
+	 */
 	function actionFinished(){
 		logger.info(orderInProgress + " just finished !");
 
@@ -134,6 +177,11 @@
 		executeNextOrder();
 	}
 
+	/**
+	 * Tries to exit
+	 * 
+	 * @todo do something when app is closing
+	 */
 	function quit () {
 		logger.info("Please wait while exiting...");
 		// acts.quit();

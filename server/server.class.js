@@ -60,12 +60,14 @@ module.exports = (function () {
 			pr: {},
 			gr: {}
 		};
+		/** @type {Object} */
 		this.utcoupe = {
 			'ia': false,
 			'pr': false,
 			'gr': false,
 			'hokuyo': false
 		};
+		 /** @type {Object} */
 		this.progs = {
 			'ia': null,
 			'pr': null,

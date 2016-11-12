@@ -13,15 +13,16 @@ module.exports = (function () {
 	/**
 	 * Create a socket for the clients
 	 * 
-	 * @exports server/server.SocketClient
+	 * @exports server/socket_client.SocketClient
 	 * @constructor
 	 * @param {Object} params
 	 * @param {string} [params.server_ip=127.0.0.1:3128] Server IPv4 and port
-	 * @param params.type Type of client
+	 * @param {string} params.type Type of client
 	 */
 	function SocketClient(params) {
 		/**
 		 * Server IP
+		 * @type {string}
 		 */
 		this.server_ip = params.server_ip || '127.0.0.1:3128';
 		/**

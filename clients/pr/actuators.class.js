@@ -1,29 +1,58 @@
+/**
+ * Actuators module
+ * 
+ * @module clients/pr/actuators
+ * @requires clients/shared/fifo
+ * @see {@link clients/pr/actuators.Acts}
+ */
+
 module.exports = (function () {
 	var logger = require('log4js').getLogger('pr.acts');
 	var serialPort = require("serialport");
 	var SerialPort = serialPort.SerialPort;
 	var spawn = require('child_process').spawn;
+	/** @type {clients/shared/fifo.Fifo} */
 	var fifo = new (require('../shared/fifo.class.js'))();
 
 	var others = null;
 	var asserv = null;
 	var ax12 = null;
 	var date = new Date();
+	/** @type {int} */
 	var lastSendStatus =  date.getTime();
 
+	/**
+	 * Acts Constructor
+	 * 
+	 * @exports clients/pr/actuators.Acts
+	 * @constructor
+	 * @param {Object} client
+	 * @param {Object} sendChildren
+	 */
 	function Acts(client, sendChildren) {
+		/** @type {Object} */
 		this.client = client;
+		/** @type {Object} */
 		this.sendChildren = sendChildren;
 		this.start();
+		/** @type {int} */
 		this.nb_plots = 0;
+		/** @type {boolean} */
 		this.new_has_ball = false;
+		/** @type {boolean} */
 		this.has_gobelet = false;
 	}
 
+	/**
+	 * Starts (nothing ?)
+	 */
 	Acts.prototype.start = function(){
 		
 	};
 
+	/**
+	 * Cleans all
+	 */
 	Acts.prototype.clean = function(){
 		fifo.clean();  // A priori déjà vide
 		asserv.clean();
@@ -32,6 +61,11 @@ module.exports = (function () {
 		others.ouvrirBloqueurGrand();
 	};
 
+	/**
+	 * Connect to
+	 * 
+	 * @param {Object} struct
+	 */
 	Acts.prototype.connectTo = function(struct){
 		if (!struct.others) {
 			logger.fatal("Lancement de others pr en mode simu !");
@@ -75,6 +109,9 @@ module.exports = (function () {
 		}, 1000);
 	};
 
+	/**
+	 * Send status
+	 */
 	Acts.prototype.sendStatus = function() {
 		if(lastSendStatus <  date.getTime()-1000){
 			this.sendChildren(this.getStatus);
@@ -82,6 +119,9 @@ module.exports = (function () {
 		}
 	};
 
+	/**
+	 * Get Status
+	 */
 	Acts.prototype.getStatus = function(){
 		var data = {
 			"status": "",
@@ -108,11 +148,17 @@ module.exports = (function () {
 		return data;
 	};
 
+	/**
+	 * Quit
+	 */
 	Acts.prototype.quit = function(){
 		if (ax12 && ax12.ready)
 			ax12.disconnect();
 	};
 
+	/**
+	 * fake
+	 */
 	function fake() {}
 	Acts.prototype.delay = function(ms, callback){
 		fifo.newOrder(function() {
@@ -124,6 +170,12 @@ module.exports = (function () {
 		}, 'delay');
 	}
 
+	/**
+	 * Prendre plot
+	 * 
+	 * @param {Object} [callback]
+	 * @param {int} [monter]
+	 */
 	Acts.prototype.prendre_plot = function(callback, monter){
 		if(callback === undefined) {
 			callback = function() {};
@@ -193,6 +245,11 @@ module.exports = (function () {
 		that.nb_plots++;
 	}
 
+	/**
+	 * Pousser plot
+	 * 
+	 * @param {Object} [callback]
+	 */
 	Acts.prototype.pousser_plot = function(callback){
 		if(callback === undefined) {
 			callback = function() {};
@@ -202,6 +259,11 @@ module.exports = (function () {
 		asserv.goxy(1100, 250, "arriere", callback);
 	}
 
+	/**
+	 * Prendre plot
+	 * 
+	 * @param {Object} [callback]
+	 */
 	Acts.prototype.prendre_plot2 = function(callback){
 		if(callback === undefined) {
 			callback = function() {};
@@ -228,6 +290,11 @@ module.exports = (function () {
 		that.nb_plots++;
 	}
 
+	/**
+	 * Monter plot 2
+	 * 
+	 * @param {Object} [callback]
+	 */
 	Acts.prototype.monter_plot2 = function(callback){
 		if(callback === undefined) {
 			callback = function() {};
@@ -252,13 +319,20 @@ module.exports = (function () {
 			others.descendreAscenseur();
 		}
 	}
-
-	// Order switch
+ 
+	/**
+	 * Order switch
+	 * 
+	 * @param {string} from
+	 * @param {string} name
+	 * @param {Object} params
+	 * @param {Object} callback
+	 */
 	Acts.prototype.orderHandler = function (from, name, params, callback) {
 		// logger.info("Just received an order `" + name + "` from " + from + " with params :");
 		// logger.info(params);
 		var that = this;
-		// TODO : add a callback parameter to all functions (and call it)
+		/** @todo : add a callback parameter to all functions (and call it) */
 		switch (name){
 			// others
 			case "placer":
