@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ia/gr.class.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ia_actions.Actions.html">Actions</a><ul class='methods'><li data-type='method'><a href="ia_actions.Actions.html#actionFinished">actionFinished</a></li><li data-type='method'><a href="ia_actions.Actions.html#collision">collision</a></li><li data-type='method'><a href="ia_actions.Actions.html#doAction">doAction</a></li><li data-type='method'><a href="ia_actions.Actions.html#doNextAction">doNextAction</a></li><li data-type='method'><a href="ia_actions.Actions.html#exists">exists</a></li><li data-type='method'><a href="ia_actions.Actions.html#getNearestStartpoint">getNearestStartpoint</a></li><li data-type='method'><a href="ia_actions.Actions.html#getNormAction">getNormAction</a></li><li data-type='method'><a href="ia_actions.Actions.html#getPriorityAction">getPriorityAction</a></li><li data-type='method'><a href="ia_actions.Actions.html#importActions">importActions</a></li><li data-type='method'><a href="ia_actions.Actions.html#isDoable">isDoable</a></li><li data-type='method'><a href="ia_actions.Actions.html#isDone">isDone</a></li><li data-type='method'><a href="ia_actions.Actions.html#kill">kill</a></li><li data-type='method'><a href="ia_actions.Actions.html#parseOrder">parseOrder</a></li><li data-type='method'><a href="ia_actions.Actions.html#pathDoAction">pathDoAction</a></li></ul></li><li><a href="ia_data.Data.html">Data</a><ul class='methods'><li data-type='method'><a href="ia_data.Data.html#getDistance">getDistance</a></li><li data-type='method'><a href="ia_data.Data.html#getObjectRef">getObjectRef</a></li><li data-type='method'><a href="ia_data.Data.html#importObjects">importObjects</a></li><li data-type='method'><a href="ia_data.Data.html#isCloser">isCloser</a></li><li data-type='method'><a href="ia_data.Data.html#parseOrder">parseOrder</a></li><li data-type='method'><a href="ia_data.Data.html#theEnnemyWentThere">theEnnemyWentThere</a></li></ul></li><li><a href="ia_export_simulator.ExportSimulator.html">ExportSimulator</a><ul class='methods'><li data-type='method'><a href="ia_export_simulator.ExportSimulator.html#orderToSimu">orderToSimu</a></li><li data-type='method'><a href="ia_export_simulator.ExportSimulator.html#start">start</a></li><li data-type='method'><a href="ia_export_simulator.ExportSimulator.html#stop">stop</a></li></ul></li><li><a href="ia_gr.Gr.html">Gr</a><ul class='methods'><li data-type='method'><a href="ia_gr.Gr.html#onCollision">onCollision</a></li><li data-type='method'><a href="ia_gr.Gr.html#parseOrder">parseOrder</a></li><li data-type='method'><a href="ia_gr.Gr.html#sendOrders">sendOrders</a></li><li data-type='method'><a href="ia_gr.Gr.html#sendPos">sendPos</a></li><li data-type='method'><a href="ia_gr.Gr.html#start">start</a></li><li data-type='method'><a href="ia_gr.Gr.html#stop">stop</a></li></ul></li><li><a href="ia_ia.Ia.html">Ia</a><ul class='methods'><li data-type='method'><a href="ia_ia.Ia.html#jack">jack</a></li><li data-type='method'><a href="ia_ia.Ia.html#stop">stop</a></li></ul></li><li><a href="ia_pathfinding.Pathfinding.html">Pathfinding</a><ul class='methods'><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#getPath">getPath</a></li><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#sendDynamic">sendDynamic</a></li><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#sendQuery">sendQuery</a></li><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#updateMap">updateMap</a></li><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#~parse">parse</a></li><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#~vecMultiply">vecMultiply</a></li></ul></li><li><a href="ia_timer.Timer.html">Timer</a><ul class='methods'><li data-type='method'><a href="ia_timer.Timer.html#get">get</a></li><li data-type='method'><a href="ia_timer.Timer.html#start">start</a></li><li data-type='method'><a href="ia_timer.Timer.html#status">status</a></li></ul></li><li><a href="server_server.Server.html">Server</a><ul class='methods'><li data-type='method'><a href="server_server.Server.html#launch">launch</a></li><li data-type='method'><a href="server_server.Server.html#sendNetwork">sendNetwork</a></li><li data-type='method'><a href="server_server.Server.html#sendUTCoupe">sendUTCoupe</a></li><li data-type='method'><a href="server_server.Server.html#stop">stop</a></li></ul></li><li><a href="server_server.SocketClient.html">SocketClient</a><ul class='methods'><li data-type='method'><a href="server_server.SocketClient.html#connect">connect</a></li><li data-type='method'><a href="server_server.SocketClient.html#errorServerNotFound">errorServerNotFound</a></li><li data-type='method'><a href="server_server.SocketClient.html#errorServerTimeout">errorServerTimeout</a></li><li data-type='method'><a href="server_server.SocketClient.html#order">order</a></li><li data-type='method'><a href="server_server.SocketClient.html#send">send</a></li><li data-type='method'><a href="server_server.SocketClient.html#throwError">throwError</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-config.html">config</a></li><li><a href="module-ia_actions.html">ia/actions</a></li><li><a href="module-ia_data.html">ia/data</a></li><li><a href="module-ia_export_simulator.html">ia/export_simulator</a></li><li><a href="module-ia_gr.html">ia/gr</a></li><li><a href="module-ia_ia.html">ia/ia</a></li><li><a href="module-ia_pathfinding.html">ia/pathfinding</a></li><li><a href="module-ia_pr.html">ia/pr</a></li><li><a href="module-ia_timer.html">ia/timer</a></li><li><a href="module-server_server.html">server/server</a></li><li><a href="module-server_socket_client.html">server/socket_client</a></li><li><a href="module-utcoupe_utcoupe.html">utcoupe/utcoupe</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">ia/gr.class.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Grand Robot Module
+ * 
+ * @module ia/gr
+ * @see {@link ia/gr.Gr}
+ */
+
+module.exports = (function () {
+	"use strict";
+	var log4js = require('log4js');
+	var logger = log4js.getLogger('ia.gr');
+
+	/**
+	 * Gr Constructor
+	 * 
+	 * @exports ia/gr.Gr
+	 * @constructor
+	 * @param {Object} ia
+	 * @param {string} color
+	 */
+	function Gr(ia, color) {
+		/** IA */
+		this.ia = ia;
+		/** Position */
+		this.pos = require('./gr.'+color+'.json')['pos'];
+		this.pos.color = color;
+		/** Size of the robot */
+		this.size = {
+			l: 290,
+			L: 290,
+			d: 420
+		};
+		/** Orders */
+		this.orders = require('./gr.'+color+'.json')['script'];
+		// logger.debug(this.orders);
+		/** Path */
+		this.path = null;
+	}
+
+	/**
+	 * Start
+	 */
+	Gr.prototype.start = function () {
+		this.sendOrders();
+	};
+
+	/**
+	 * Stop
+	 */
+	Gr.prototype.stop = function() {
+		logger.debug('stop GR');
+		this.ia.client.send('gr', 'stop');
+	}
+
+	/**
+	 * Send position
+	 */
+	Gr.prototype.sendPos = function () {
+		this.ia.client.send("gr", "setpos", this.pos);
+	};
+
+	/**
+	 * Parse Order
+	 * 
+	 * @param {string} from
+	 * @param {string} name
+	 * @param {Object} params
+	 */
+	Gr.prototype.parseOrder = function (from, name, params) {
+		switch(name) {
+			case 'gr.pos':
+				this.pos.x = params.x;
+				this.pos.y = params.y;
+				this.pos.a = params.a;
+			break;
+			case 'gr.getpos':
+				this.sendPos();
+			break;
+			default:
+				logger.warn('Ordre inconnu dans ia.gr: '+name);
+		}
+	};
+
+	/**
+	 * Send Orders
+	 */
+	Gr.prototype.sendOrders = function () {
+		for(var i in this.orders) {
+			this.ia.client.send("gr", this.orders[i].name, this.orders[i].data);
+		}
+	};
+
+	/**
+	 * On Collision : TODO send order STOP
+	 */
+	Gr.prototype.onCollision = function () {
+		logger.warn("Collision du gros robot");
+		// TODO send order STOP
+	};
+
+
+	
+	return Gr;
+})();
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Nov 11 2016 17:47:36 GMT+0100 (CET) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

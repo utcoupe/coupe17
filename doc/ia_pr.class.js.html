@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ia/pr.class.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ia_actions.Actions.html">Actions</a><ul class='methods'><li data-type='method'><a href="ia_actions.Actions.html#actionFinished">actionFinished</a></li><li data-type='method'><a href="ia_actions.Actions.html#collision">collision</a></li><li data-type='method'><a href="ia_actions.Actions.html#doAction">doAction</a></li><li data-type='method'><a href="ia_actions.Actions.html#doNextAction">doNextAction</a></li><li data-type='method'><a href="ia_actions.Actions.html#exists">exists</a></li><li data-type='method'><a href="ia_actions.Actions.html#getNearestStartpoint">getNearestStartpoint</a></li><li data-type='method'><a href="ia_actions.Actions.html#getNormAction">getNormAction</a></li><li data-type='method'><a href="ia_actions.Actions.html#getPriorityAction">getPriorityAction</a></li><li data-type='method'><a href="ia_actions.Actions.html#importActions">importActions</a></li><li data-type='method'><a href="ia_actions.Actions.html#isDoable">isDoable</a></li><li data-type='method'><a href="ia_actions.Actions.html#isDone">isDone</a></li><li data-type='method'><a href="ia_actions.Actions.html#kill">kill</a></li><li data-type='method'><a href="ia_actions.Actions.html#parseOrder">parseOrder</a></li><li data-type='method'><a href="ia_actions.Actions.html#pathDoAction">pathDoAction</a></li></ul></li><li><a href="ia_data.Data.html">Data</a><ul class='methods'><li data-type='method'><a href="ia_data.Data.html#getDistance">getDistance</a></li><li data-type='method'><a href="ia_data.Data.html#getObjectRef">getObjectRef</a></li><li data-type='method'><a href="ia_data.Data.html#importObjects">importObjects</a></li><li data-type='method'><a href="ia_data.Data.html#isCloser">isCloser</a></li><li data-type='method'><a href="ia_data.Data.html#parseOrder">parseOrder</a></li><li data-type='method'><a href="ia_data.Data.html#theEnnemyWentThere">theEnnemyWentThere</a></li></ul></li><li><a href="ia_export_simulator.ExportSimulator.html">ExportSimulator</a><ul class='methods'><li data-type='method'><a href="ia_export_simulator.ExportSimulator.html#orderToSimu">orderToSimu</a></li><li data-type='method'><a href="ia_export_simulator.ExportSimulator.html#start">start</a></li><li data-type='method'><a href="ia_export_simulator.ExportSimulator.html#stop">stop</a></li></ul></li><li><a href="ia_gr.Gr.html">Gr</a><ul class='methods'><li data-type='method'><a href="ia_gr.Gr.html#onCollision">onCollision</a></li><li data-type='method'><a href="ia_gr.Gr.html#parseOrder">parseOrder</a></li><li data-type='method'><a href="ia_gr.Gr.html#sendOrders">sendOrders</a></li><li data-type='method'><a href="ia_gr.Gr.html#sendPos">sendPos</a></li><li data-type='method'><a href="ia_gr.Gr.html#start">start</a></li><li data-type='method'><a href="ia_gr.Gr.html#stop">stop</a></li></ul></li><li><a href="ia_ia.Ia.html">Ia</a><ul class='methods'><li data-type='method'><a href="ia_ia.Ia.html#jack">jack</a></li><li data-type='method'><a href="ia_ia.Ia.html#stop">stop</a></li></ul></li><li><a href="ia_pathfinding.Pathfinding.html">Pathfinding</a><ul class='methods'><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#getPath">getPath</a></li><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#sendDynamic">sendDynamic</a></li><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#sendQuery">sendQuery</a></li><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#updateMap">updateMap</a></li><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#~parse">parse</a></li><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#~vecMultiply">vecMultiply</a></li></ul></li><li><a href="ia_timer.Timer.html">Timer</a><ul class='methods'><li data-type='method'><a href="ia_timer.Timer.html#get">get</a></li><li data-type='method'><a href="ia_timer.Timer.html#start">start</a></li><li data-type='method'><a href="ia_timer.Timer.html#status">status</a></li></ul></li><li><a href="server_server.Server.html">Server</a><ul class='methods'><li data-type='method'><a href="server_server.Server.html#launch">launch</a></li><li data-type='method'><a href="server_server.Server.html#sendNetwork">sendNetwork</a></li><li data-type='method'><a href="server_server.Server.html#sendUTCoupe">sendUTCoupe</a></li><li data-type='method'><a href="server_server.Server.html#stop">stop</a></li></ul></li><li><a href="server_server.SocketClient.html">SocketClient</a><ul class='methods'><li data-type='method'><a href="server_server.SocketClient.html#connect">connect</a></li><li data-type='method'><a href="server_server.SocketClient.html#errorServerNotFound">errorServerNotFound</a></li><li data-type='method'><a href="server_server.SocketClient.html#errorServerTimeout">errorServerTimeout</a></li><li data-type='method'><a href="server_server.SocketClient.html#order">order</a></li><li data-type='method'><a href="server_server.SocketClient.html#send">send</a></li><li data-type='method'><a href="server_server.SocketClient.html#throwError">throwError</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-config.html">config</a></li><li><a href="module-ia_actions.html">ia/actions</a></li><li><a href="module-ia_data.html">ia/data</a></li><li><a href="module-ia_export_simulator.html">ia/export_simulator</a></li><li><a href="module-ia_gr.html">ia/gr</a></li><li><a href="module-ia_ia.html">ia/ia</a></li><li><a href="module-ia_pathfinding.html">ia/pathfinding</a></li><li><a href="module-ia_pr.html">ia/pr</a></li><li><a href="module-ia_timer.html">ia/timer</a></li><li><a href="module-server_server.html">server/server</a></li><li><a href="module-server_socket_client.html">server/socket_client</a></li><li><a href="module-utcoupe_utcoupe.html">utcoupe/utcoupe</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">ia/pr.class.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Petit Robot Module
+ * 
+ * @module ia/pr
+ * @see {@Link ia/pr.Pr}
+ */
+
+module.exports = (function () {
+	"use strict";
+	var logger = require('log4js').getLogger('ia.pr');
+	var GR_OFFSET = 110;
+	var PR_GR_COEF = 1;
+
+	/**
+	 * Pr Constructor
+	 * 
+	 * @param {Object} ia
+	 * @param {string} color Team color
+	 */
+	function Pr(ia, color) {
+		/** IA */
+		this.ia = ia;
+		/** Position */
+		this.pos = { // if we are yellow, default, left side of the table
+			x: 0,
+			y: 0,
+			a: 0
+		};
+		/** Size of the robot */
+		this.size = {
+			l: 170,
+			L: 220,
+			d: 280
+		};
+		/** Current action */
+		this.current_action = null;
+		//this.path = null;
+		/** Path */
+		this.path = [];
+		/** Content */
+		this.content = {
+			nb_plots: 0,
+			gobelet:false
+		};
+		/** We have hats on the top */
+		this.we_have_hats = false;
+		/** Team color */
+		this.color = color;
+	}
+
+	/**
+	 * Loop
+	 */
+	Pr.prototype.loop = function () {
+		logger.debug('loop');
+		this.ia.actions.doNextAction(function() {
+			this.loop();
+		}.bind(this));
+	};
+
+	/**
+	 * Collision
+	 */
+	Pr.prototype.collision = function() {
+		if(this.path.length === 0) { // Utile quand on clique nous même sur le bouton dans le simu
+			logger.warn("Normalement impossible, collision sur un path vide ?");
+			//return;
+		}
+
+		logger.info('collision');
+		this.path = [];
+		this.ia.client.send('pr', "collision");
+		this.ia.actions.collision();
+		this.loop();
+	}
+	/**
+	 * Stop
+	 */
+	Pr.prototype.stop = function() {
+		this.ia.client.send('pr', 'stop');
+	}
+
+	/**
+	 * Place
+	 */
+	Pr.prototype.place = function () {
+		// logger.debug('place');
+		this.sendInitialPos();
+		this.ia.client.send('pr', 'placer');
+	};
+
+	/**
+	 * Start
+	 */
+	Pr.prototype.start = function () {
+		this.ia.client.send("pr", "ouvrir_ax12");
+		this.loop();
+	};
+
+	/**
+	 * Send initial position
+	 */
+	Pr.prototype.sendInitialPos = function () {
+		this.ia.client.send("pr", "setpos", {
+			x: 142,
+			y: 1000,
+			a: 0,
+			color: this.color
+		});
+	};
+
+	/**
+	 * Borne
+	 * 
+	 * @param {int} x
+	 * @param {int} min
+	 * @param {int} max
+	 */
+	function borne(x, min, max) {
+		return x > max ? max : x &lt; min ? min : x;
+	}
+
+	/**
+	 * Parse Order
+	 * 
+	 * @param {string} from
+	 * @param {string} name
+	 * @param {Object} params
+	 */
+	Pr.prototype.parseOrder = function (from, name, params) {
+		switch(name) {
+			case 'pr.collision':
+				this.collision();
+			break;
+			// Asserv
+			case 'pr.pos':
+				params.x = borne(params.x, 0, 3000);
+				params.y = borne(params.y, 0, 2000);
+				this.pos = params;
+			break;
+			case 'pr.getpos':
+				this.sendInitialPos();
+			break;
+			case 'pr.placer':
+				this.place();
+			break;
+			case 'pr.plot++':
+				this.content.nb_plots += 1;
+			break;
+			case 'pr.plot0':
+				this.content.nb_plots = 0;
+			break;
+			case 'pr.gobelet1':
+				this.content.gobelet = true;
+			break;
+			case 'pr.gobelet0':
+				this.content.gobelet = false;
+			break;
+			case 'pr.hok':
+				this.updatePos(params);
+			break;
+			default:
+				logger.warn('Ordre inconnu dans ia.pr: '+name);
+		}
+	};
+
+	/** (mm) between 2 iterations on a segment to detect colision */
+	var SEGMENT_DELTA_D = 30;
+
+	/**
+	 * Return the distance between two spots
+	 * 
+	 * @param {Object} spot1
+	 * @param {int} spot1.x
+	 * @param {int} spot1.y
+	 * @param {Object} spot2
+	 * @param {int} spot2.x
+	 * @param {int} spot2.y
+	 */
+	Pr.prototype.getDistance = function (spot1, spot2) {
+		return Math.sqrt(Math.pow(spot1.x - spot2.x, 2) + Math.pow(spot1.y - spot2.y, 2));
+	};
+
+	/**
+	 * Detect Collision
+	 * 
+	 * @param {Objects} dots
+	 */
+	Pr.prototype.detectCollision = function(dots) {
+		var collision = false;
+		var pf = this.path;
+		var minDist;
+		// for each path segment
+		var complete_path = [this.pos].concat(this.path);
+		for (var i = 0; i &lt; complete_path.length-1 &amp;&amp; !collision; (i++) ) {
+			var segment = [complete_path[i], complete_path[i+1]]; // so segment[0][0] is the x value of the beginning of the segment
+			var segLength = this.getDistance({x:segment[0].x , y:segment[0].y }, {x:segment[1].x , y:segment[1].y });
+			var nthX = (segment[1].x-segment[0].x)*SEGMENT_DELTA_D/segLength; // segment X axis length nth 
+			var nthY = (segment[1].y-segment[0].y)*SEGMENT_DELTA_D/segLength;
+
+			// for each X cm of the segment
+			for (var j = 0; (j*SEGMENT_DELTA_D) &lt; segLength &amp;&amp; !collision; (j++)) {
+
+				var segPoint = {
+					x: segment[0].x + nthX*j,
+					y: segment[0].y + nthY*j
+				};
+
+				// distance to each estimated position of the ennemi robots
+				minDist = 10000;//this.getDistance(dots[0], segPoint);
+
+				for(var k = 0; k &lt; dots.length; k++) {
+					var tmp = this.getDistance(dots[k], segPoint);
+					if (tmp &lt; minDist) {
+						minDist = tmp;
+					}
+				}
+				// if (ebots.length == 2) {
+				// 	var tmp = this.getDistance(ebots[1], segPoint);
+				// 	if (tmp &lt; minDist) {
+				// 		minDist = tmp;
+				// 	}
+				// }
+
+				// if one of the dist &lt; security diameter, there will be a collision
+				if (minDist &lt; 450) {
+					collision = true;
+				}
+				
+			}
+		}
+
+		if (collision) {
+			this.collision();
+		}
+	}
+
+	/**
+	 * Update position
+	 * 
+	 * @param {Object} dots
+	 */
+	Pr.prototype.updatePos = function(dots) {
+		if(this.ia.timer.match_started) {
+
+			// Invert if green
+			if(this.color == "green") {
+				dots = dots.map(function(val) {
+					return [val[0], 2000-val[1]];
+				});
+			}
+
+			// Delete our robots
+			for(var i in dots) {
+				if(this.norm(dots[i][0], dots[i][1], this.pos.x, this.pos.y) &lt; 150 ||
+					this.norm(dots[i][0], dots[i][1], this.ia.gr.pos.x, this.ia.gr.pos.y) &lt; 150)
+				dots.splice(i, 1);
+			}
+
+			// Check path
+			this.detectCollision(dots);
+
+			// Update data
+			this.ia.data.dots = dots.map(function(val) {
+				return {
+					pos: {
+						x: val[0],
+						y: val[1],
+					},
+					d: 320
+				}
+			});
+			if (dots.length > 0) {
+				this.ia.data.erobot[0].pos= {
+					x: dots[0][0],
+					y: dots[0][1]
+				};
+
+				if (dots.length > 1) {
+					this.ia.data.erobot[1].pos= {
+						x: dots[1][0],
+						y: dots[1][1]
+					};
+				};
+			};
+
+			// logger.fatal(dots);
+			// logger.fatal(this.pos);
+			// logger.fatal(this.ia.data.erobot);
+		}
+	};
+
+	/**
+	 * Distance between two points
+	 * 
+	 * @param {int} Ax
+	 * @param {int} AY
+	 * @param {int} Bx
+	 * @param {int} BY
+	 */
+	Pr.prototype.norm = function(Ax, Ay, Bx, By) {
+		return Math.sqrt(Math.pow(Ax-Bx, 2) + Math.pow(Ay-By, 2));
+	}
+	
+	return Pr;
+})();
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Nov 11 2016 17:47:36 GMT+0100 (CET) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
