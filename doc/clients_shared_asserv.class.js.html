@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ia/data.class.js - Documentation</title>
+    <title>clients/shared/asserv.class.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">ia/data.class.js</h1>
+    <h1 class="page-title">clients/shared/asserv.class.js</h1>
     
 
     
@@ -38,194 +38,718 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Data Module
+ * Asserv module
  * 
- * @module ia/data
- * @see {@link ia/data.Data}
+ * @module clients/shared/asserv
+ * @requires module:clients/shared/defineParser
+ * @see {@link clients/shared/asserv.Asserv}
  */
 
 module.exports = (function () {
-	"use strict";
-	var log4js = require('log4js');
-	var logger = log4js.getLogger('ia.data');
+	var logger = require('log4js').getLogger('asserv');
+	var COMMANDS = require('./defineParser.js')('./arduino/asserv/protocol.h');
+	var DETECT_SERIAL_TIMEOUT = 100; //ms, -1 to disable
+
+	// function Asserv(sp, client) {
+	// 	this.client = client;
+	// 	this.getPos();
+	// 	this.sp = sp;
+	// 	this.pos = {};
+	// 	this.sentCommands = {};
+	// 	this.currentId = 0;
+	// }
 
 	/**
-	 * Data Constructor
+	 * Asserv Constructor
 	 * 
-	 * @exports ia/data.Data
+	 * @exports clients/shared/asserv.Asserv
 	 * @constructor
-	 * @param {Object} ia
-	 * @param {int} nb_erobots Number of robots in a team
-	 * @param EGR_d
-	 * @param EPR_d 
+	 * @param {Object} sp
+	 * @param {Object} client
+	 * @param {Object} who
+	 * @param {Object} sendStatus
+	 * @param {clients/shared/asserv.Asserv} fifo
 	 */
-	function Data(ia, nb_erobots, EGR_d, EPR_d) {
-		/** balle */
-		this.balle = [];
-		/** chargeur */
-		this.chargeur = [];
-		/** clap */
-		this.clap = [];
-		/** plot */
-		this.plot = [];
-		/** erobot */
-		this.erobot = [];
-		/** gobelet */
-		this.gobelet = [];
-		/** pile */
-		this.pile = {};
-		/** dynamic */
-		this.dynamic = []; //used for laid stacks
-		/** depot */
-		this.depot = [];
-		/** nb_erobot */
-		this.nb_erobots = nb_erobots;
+	function Asserv(sp, client, who, sendStatus, fifo) {
+		/** @type {boolean} */
+		this.ready = true;
+		/** @type {Object} */
+		this.sendStatus = sendStatus;
+		/** @type {Object} */
+		this.sp = sp;
+		/** @type {Object} */
+		this.client = client;
+		/** @type {Object} */
+		this.pos = {};
+		/** @type {Object} */
+		this.who = who;
+		/** @type {int} */
+		this.currentId = 0;
+		/** @type {string} */
+		this.color = "yellow";
+		/** @type {clients/shared/asserv.Asserv} */
+		this.fifo = fifo;
 
-		/** dots */
-		this.dots = [];
+		this.sp.on("data", function(data){
+			if(this.ready === false){
+				this.ready = true;
+				this.sendStatus();
+			}
+			this.parseCommand(data.toString());
+		}.bind(this));
+		this.sp.on("error", function(data){
+			this.ready = false;
+			this.sendStatus();
+			logger.debug("error", data.toString());
+		}.bind(this));
+		this.sp.on("close", function(data){
+			this.ready = false;
+			this.sendStatus();
+			logger.error("Serial port close");
+		}.bind(this));
 
-		this.importObjects();
-		
-		this.erobot = [{ // big robot on position 0
-				name: "gr",
-				pos:{
-					x:3200,
-					y:1000
-				},
-				speed:{ // in mm/sec
-					x:0,
-					y:0,
-				},
-				lastUpdate: 0, // time in ms from the beining of the match
-				d: EGR_d || 320,
-				status: "lost"
-			},{ // small robot on position 1
-				name: "pr",
-				pos:{
-					x:3500,
-					y:1000
-				},
-				speed:{
-					x:0,
-					y:0
-				},
-				lastUpdate: 0,
-				d: EPR_d || 200,
-				status: "lost"
-			}];
+		setTimeout(function() {
+			this.getPos();
+		}.bind(this), 2000);
+	}
+	/**
+	 * Convert color x
+	 * 
+	 * @param {int} x
+	 */
+	Asserv.prototype.convertColorX = function(x) {
+		if(this.color == "yellow") {
+			return x;
+		} else {
+			return 3000-x;
+		}
+	}
+	/**
+	 * Convert color y
+	 * 
+	 * @param {int} y
+	 */
+	Asserv.prototype.convertColorY = function(y) {
+		if(this.color == "yellow") {
+			return y;
+		} else {
+			return y;
+		}
+	}
+	/**
+	 * Convert color Angle
+	 * 
+	 * @param {int} a
+	 */
+	Asserv.prototype.convertColorA = function(a) {
+		if(this.color == "yellow") {
+			return convertA(a);
+		} else {
+			return convertA(Math.PI - a);
+		}
 	}
 
 	/**
-	 * Import the Objects
-	 */
-	Data.prototype.importObjects = function () {
-		var ret = require('./objects.json');
-
-		this.balle = ret.balle;
-		this.chargeur = ret.chargeur;
-		this.clap = ret.clap;
-		this.plot = ret.plot;
-		this.gobelet = ret.gobelet;
-		this.pile = ret.pile;
-		this.depot = ret.depot;
-		return ret;
-	};
-
-	/**
-	 * Return Object Reference
+	 * Convert Angle
 	 * 
-	 * @param {string} name
+	 * @param {int} a
 	 */
-	Data.prototype.getObjectRef = function(name) {
-		// Retourne une référence vers l'objet name
-		// 		name étant de la forme &lt;type>__&lt;nom>
-		// Permet d'avoir une référence vers l'objet dans une action
-
-		var actName = name.split("__");
-		if (actName.length != 2){
-			logger.warn("Le nom '"+name+"' n'est pas un nom d'objet correct.");
-			return null;
-		}
-
-		if (!this[actName[0]][actName[1]]){
-			logger.warn("L'objet "+actName[0]+" de type "+actName[1]+" est inconnu.");
-			return null;
-		}
-
-		return this[actName[0]][actName[1]];
-	};
-
+	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
 	/**
-	 * Returns true if dist1 is smaller than dist2 
+	 * Set Angle
 	 * 
-	 * @param {int} dist1
-	 * @param {int} dist2
+	 * @param {int} a
 	 */
-	Data.prototype.isCloser = function (dist1, dist2){
-		return (dist1 &lt; dist2);
-	};
-
+	Asserv.prototype.setA = function(a) {
+		// logger.debug(a, convertA(a));
+		this.pos.a = convertA(a);
+	}
 	/**
-	 * Return the distance between two positions
-	 * 
-	 * @param {Object} pos1
-	 * @param {int} pos1.x
-	 * @param {int} pos1.y
-	 * @param {Object} pos2
-	 * @param {int} pos2.x
-	 * @param {int} pos2.y
-	 */
-	Data.prototype.getDistance = function (pos1, pos2){
-		return Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
-	};
-
-	/**
-	 * Takes a position and the ennemy robot # to put everything in its surroundings (~ 1.1 * radius) as "lost"
+	 * Position ?
 	 * 
 	 * @param {Object} pos
-	 * @param {int} e_robot_id
 	 */
-	Data.prototype.theEnnemyWentThere = function (pos, e_robot_id){
-		Object.keys(this.plot).forEach(function(c) {
-			if ((this.getDistance(pos, this.plot[c].pos) &lt; 0.55*this.erobot[e_robot_id].d) &amp;&amp; (this.plot[c].status != "lost")) {
-				logger.info("Le plot " + c + " est marqué lost");
-				this.plot[c].status = "lost";
+	Asserv.prototype.Pos = function(pos) {
+		this.pos.x = pos.x;
+		this.pos.y = pos.y;
+		this.setA(pos.a);
+	}
+	/**
+	 * Sets Position
+	 * 
+	 * @param {Object} pos
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.setPos = function(pos, callback) {
+		logger.debug(pos);
+		if(pos.color !== undefined)
+			this.color = pos.color;
+		this.sendCommand(COMMANDS.SET_POS, [
+			parseInt(this.convertColorX(pos.x)),
+			parseInt(this.convertColorY(pos.y)),
+			myWriteFloat(this.convertColorA(pos.a))
+		], false, callback);
+	}
+	/**
+	 * Gets Potition
+	 * 
+	 * @param {Object} pos
+	 */
+	Asserv.prototype.getPos = function(pos) {
+		this.client.send('ia', this.who+'.getpos');
+	}
+	/**
+	 * Sends Position
+	 */
+	Asserv.prototype.sendPos = function() {
+		this.client.send('ia', this.who+'.pos', this.pos);
+	}
+
+	/**
+	 * Set position calage
+	 * 
+	 * @param {Object} pos
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.setPosCalage = function(pos, callback) {
+		this.sendCommand(COMMANDS.SET_POS, [
+			parseInt(this.convertColorX(pos.x)),
+			parseInt(this.convertColorY(pos.y)),
+			myWriteFloat(this.convertColorA(pos.a))
+		], false, function() {
+			callback();
+			this.fifo.orderFinished();
+		}.bind(this), true);
+	}
+
+	/**
+	 * Calage X
+	 * 
+	 * @param {int} x
+	 * @param {int} a Angle
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.calageX = function(x, a, callback) {
+		if(callback === undefined)
+			callback = function(){};
+		this.fifo.newOrder(function() {
+			this.setPosCalage({x: x, y: this.pos.y, a: a}, callback);
+		}.bind(this), 'calageX');
+
+	}
+	/**
+	 * Calage Y
+	 * 
+	 * @param {int} y
+	 * @param {int} a Angle
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.calageY = function(y, a, callback) {
+		if(callback === undefined)
+			callback = function(){};
+		this.fifo.newOrder(function() {
+			this.setPosCalage({x: this.pos.x, y: y, a: a}, callback, true);
+		}.bind(this), 'calageY');
+	}
+
+	// For float
+	/**
+	 * My write float
+	 * 
+	 * @param {float} f
+	 */
+	function myWriteFloat(f){ return Math.round(f*COMMANDS.FLOAT_PRECISION); }
+	/**
+	 * My Parse float
+	 * 
+	 * @param {float} f
+	 */
+	function myParseFloat(f){ return parseInt(f)/COMMANDS.FLOAT_PRECISION;  }
+
+
+	/**
+	 * Parse Command
+	 * 
+	 * @param {string} data
+	 */
+	Asserv.prototype.parseCommand = function(data){
+		// logger.debug(data);
+		var datas = data.split(';');
+		var cmd = datas.shift();//, id = datas.shift();
+		if(cmd == COMMANDS.AUTO_SEND &amp;&amp; datas.length >= 4) { // periodic position update
+			var lastFinishedId = parseInt(datas.shift()); // TODO
+			this.Pos({
+				x: this.convertColorX(parseInt(datas.shift())),
+				y: this.convertColorY(parseInt(datas.shift())),
+				a: this.convertColorA(myParseFloat(datas.shift()))
+			});
+
+			
+			this.sendPos();
+
+			// logger.debug(lastFinishedId);
+			if(this.currentId != lastFinishedId) {
+				// logger.fatal('finish id', lastFinishedId);
+				this.currentId = lastFinishedId;
+				var use_fifo = this.use_fifo;
+				this.use_fifo = true;
+				this.callback();
+				if(use_fifo)
+					this.fifo.orderFinished();
 			}
-		}.bind(this));
-		var min_dist = Infinity;
-		Object.keys(this.gobelet).forEach(function(g) {
-			if ((this.getDistance(pos, this.gobelet[g].pos) &lt; 0.55*this.erobot[e_robot_id].d) &amp;&amp; (this.gobelet[g].status != "lost")) {
-				logger.info("Le gobelet" + g + " est marqué lost");
-				this.gobelet[g].status = "lost";
+		} else if(cmd == this.order_sent) {
+			this.order_sent = '';
+			// logger.debug('finish', datas.shift());
+			if(!this.wait_for_id) {
+				var use_fifo = this.use_fifo;
+				this.use_fifo = true;
+				this.callback();
+				if(use_fifo)
+					this.fifo.orderFinished();
 			}
-		}.bind(this));
+		} else if (cmd == COMMANDS.JACK) {
+			logger.info("JACK !");
+			this.client.send("ia", "ia.jack");
+		} else {
+			// logger.warn(datas);
+			logger.warn("Command return from Arduino to unknown cmd="+cmd);
+		}
+	}
+	/**
+	 * Sends Command
+	 * 
+	 * @param {string} cmd
+	 * @param {string} args
+	 * @param {int} wait_for_id
+	 * @param {Object} [callback]
+	 * @param {boolean} no_fifo
+	 */
+	Asserv.prototype.sendCommand = function(cmd, args, wait_for_id, callback, no_fifo){
+		function nextOrder() {
+			if(callback === undefined)
+				callback = function(){};
+			this.callback = callback;
+			args = args || [];
+			this.order_sent = cmd;
+			this.wait_for_id = wait_for_id;
+			logger.debug([cmd,this.currentId+1].concat(args).join(";")+"\n");
+			this.sp.write([cmd,this.currentId+1].concat(args).join(";")+"\n");
+		}
+
+		this.use_fifo = !no_fifo;
+
+		if(this.use_fifo) {
+			this.fifo.newOrder(nextOrder.bind(this), 'sendCommandAsserv('+cmd+':'+args+')');
+		} else {
+			nextOrder.call(this);
+		}
+	}
+
+	/**
+	 * Set Vitesse
+	 * 
+	 * @param {int} v Speed
+	 * @param {float} r Rotation
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.setVitesse = function(v, r, callback) {
+		// logger.debug(myWriteFloat(r));
+		this.sendCommand(COMMANDS.SPDMAX, [
+			parseInt(v),
+			myWriteFloat(r)
+		], false, callback);
 	};
 
 	/**
-	 * Parse Order
+	 * Speed ?
 	 * 
-	 * @param {string} from
-	 * @param {string} name
-	 * @param {Object} param
+	 * @param {int} l
+	 * @param {int} a Angle
+	 * @param {int} ms
+	 * @param {Object} callback
 	 */
-	Data.prototype.parseOrder = function(from, name, param){
-		switch(name){
-			case "data.add_dynamic" :
-				if(!!param.pos &amp;&amp; !!param.pos.x &amp;&amp; !!param.pos.y &amp;&amp; !!param.d){
-					this.dynamic.push(param);
-					logger.info("added dynamic from :"+from+" params:"+JSON.stringify(param));
-				}else{
-					logger.error("invalid dynamic from :"+from+" params:"+JSON.stringify(param));
-				}				
-			break;
-			default: logger.error("Unknown order name:"+name+" from:"+from);
-		}
+	Asserv.prototype.speed = function(l, a, ms, callback) {
+		// logger.debug(myWriteFloat(r));
+		this.sendCommand(COMMANDS.SPD, [
+			parseInt(l),
+			parseInt(a),
+			parseInt(ms)
+		], true, callback);
 	};
 
-	var data = new Data();
-	
-	return Data;
+	/**
+	 * Set Acceleration
+	 * 
+	 * @param {int} acc
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.setAcc = function(acc,callback) {
+		// logger.debug(myWriteFloat(r));
+		this.sendCommand(COMMANDS.ACCMAX, [
+			parseInt(acc)
+		], false, callback);
+	};
+
+	/**
+	 * Clean
+	 * 
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.clean = function(callback){
+		this.sendCommand(COMMANDS.CLEANG, false, callback);
+	};
+
+	/**
+	 * Pulse Width Modulation
+	 * 
+	 * @param {int} left
+	 * @param {int} right
+	 * @param {int} ms
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.pwm = function(left, right, ms, callback) {
+		this.sendCommand(COMMANDS.PWM, [
+			parseInt(left),
+			parseInt(right),
+			parseInt(ms)
+		], true, callback);
+		
+	};
+
+	/**
+	 * Go X Y
+	 * 
+	 * @param {int} x
+	 * @param {int} y
+	 * @param {string} sens
+	 * @param {Object} callback
+	 * @param {boolean} no_fifo
+	 */
+	Asserv.prototype.goxy = function(x, y, sens, callback, no_fifo){
+		if(sens == "avant") sens = 1;
+		else if(sens == "arriere") sens = -1;
+		else sens = 0;
+		
+		this.sendCommand(COMMANDS.GOTO, [
+			parseInt(this.convertColorX(x)),
+			parseInt(this.convertColorY(y)),
+			sens
+		], true, callback, no_fifo);
+	};
+	/**
+	 * Go Angle
+	 * 
+	 * @param {int} a
+	 * @param {Object} callback
+	 * @param {boolean} no_fifo
+	 */
+	Asserv.prototype.goa = function(a, callback, no_fifo){
+		// this.clean();
+		this.sendCommand(COMMANDS.ROT, [
+			myWriteFloat(this.convertColorA(a))
+		], true, callback, no_fifo);
+	};
+
+	/**
+	 * Set P I D
+	 * @param {float} p
+	 * @param {float} i
+	 * @param {float} d
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.setPid = function(p, i, d, callback){
+		// this.clean();
+		this.sendCommand(COMMANDS.PIDALL, [
+			myWriteFloat(p),
+			myWriteFloat(i),
+			myWriteFloat(d)
+		],false, callback);
+	};
+
+	// Asserv.prototype.gotoPath = function(callback, path){
+	// 	this.clean();
+	// 	if(instanceof path !=== "Array") path = path.path; // not sure about Path class right now
+	// 	path.forEach(function(item));
+	// };
+
+	return Asserv;
 })();
+
+/*
+
+module.exports = (function () {
+	var logger = require('log4js').getLogger('asserv');
+	var COMMANDS = require('./defineParser.js')('./arduino/asserv/protocol.h');
+	var DETECT_SERIAL_TIMEOUT = 100; //ms, -1 to disable
+
+	// function Asserv(sp, client) {
+	// 	this.client = client;
+	// 	this.getPos();
+	// 	this.sp = sp;
+	// 	this.pos = {};
+	// 	this.sentCommands = {};
+	// 	this.currentId = 0;
+	// }
+
+	function Asserv(sp, client, who, sendStatus, fifo) {
+		this.ready = true;
+		this.sendStatus = sendStatus;
+		this.sp = sp;
+		this.client = client;
+		this.pos = {};
+		this.who = who;
+		this.currentId = 0;
+		this.color = "yellow";
+		this.fifo = fifo;
+
+		this.data_sent = {};
+
+		this.sp.on("data", function(data){
+			if(this.ready === false){
+				this.ready = true;
+				this.sendStatus();
+			}
+			this.parseCommand(data.toString());
+		}.bind(this));
+		this.sp.on("error", function(data){
+			this.ready = false;
+			this.sendStatus();
+			logger.debug("error", data.toString());
+		}.bind(this));
+		this.sp.on("close", function(data){
+			this.ready = false;
+			this.sendStatus();
+			logger.debug(data.toString());
+		}.bind(this));
+
+		setTimeout(function() {
+			this.getPos();
+		}.bind(this), 2000);
+	}
+	Asserv.prototype.convertColorX = function(x) {
+		if(this.color == "yellow") {
+			return x;
+		} else {
+			return 3000-x;
+		}
+	}
+	Asserv.prototype.convertColorY = function(y) {
+		if(this.color == "yellow") {
+			return y;
+		} else {
+			return y;
+		}
+	}
+	Asserv.prototype.convertColorA = function(a) {
+		if(this.color == "yellow") {
+			return convertA(a);
+		} else {
+			return convertA(Math.PI - a);
+		}
+	}
+
+	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
+	Asserv.prototype.setA = function(a) {
+		// logger.debug(a, convertA(a));
+		this.pos.a = convertA(a);
+	}
+	Asserv.prototype.Pos = function(pos) {
+		this.pos.x = pos.x;
+		this.pos.y = pos.y;
+		this.setA(pos.a);
+	}
+	Asserv.prototype.setPos = function(pos, callback) {
+		if(pos.color !== undefined)
+			this.color = pos.color;
+		this.sendCommand(COMMANDS.SET_POS, [
+			parseInt(this.convertColorX(pos.x)),
+			parseInt(this.convertColorY(pos.y)),
+			myWriteFloat(this.convertColorA(pos.a))
+		], false, callback);
+	}
+	Asserv.prototype.getPos = function(pos) {
+		this.client.send('ia', this.who+'.getpos');
+	}
+	Asserv.prototype.sendPos = function() {
+		this.client.send('ia', this.who+'.pos', this.pos);
+	}
+
+	Asserv.prototype.setPosCalage = function(pos, callback) {
+		this.sendCommand(COMMANDS.SET_POS, [
+			parseInt(this.convertColorX(pos.x)),
+			parseInt(this.convertColorY(pos.y)),
+			myWriteFloat(this.convertColorA(pos.a))
+		], false, function() {
+			callback();
+			this.fifo.orderFinished();
+		}.bind(this), true);
+	}
+
+	Asserv.prototype.calageX = function(x, a, callback) {
+		if(callback === undefined)
+			callback = function(){};
+		this.fifo.newOrder(function() {
+			this.setPosCalage({x: x, y: this.pos.y, a: a}, callback);
+		}.bind(this), 'calageX');
+
+	}
+	Asserv.prototype.calageY = function(y, a, callback) {
+		if(callback === undefined)
+			callback = function(){};
+		this.fifo.newOrder(function() {
+			this.setPosCalage({x: this.pos.x, y: y, a: a}, callback, true);
+		}.bind(this), 'calageY');
+	}
+
+	// For float
+	function myWriteFloat(f){ return Math.round(f*COMMANDS.FLOAT_PRECISION); }
+	function myParseFloat(f){ return parseInt(f)/COMMANDS.FLOAT_PRECISION;  }
+
+
+	Asserv.prototype.parseCommand = function(data){
+		// logger.debug(data);
+		var datas = data.split(';');
+		var cmd = datas.shift();//, id = datas.shift();
+		var id = parseInt(datas.shift());
+		if(cmd == COMMANDS.AUTO_SEND &amp;&amp; datas.length >= 4) { // periodic position update
+			this.Pos({
+				x: this.convertColorX(parseInt(datas.shift())),
+				y: this.convertColorY(parseInt(datas.shift())),
+				a: this.convertColorA(myParseFloat(datas.shift()))
+			});
+
+			
+			this.sendPos();
+
+			// logger.debug(lastFinishedId);
+			if(this.data_sent[id] !== undefined) {
+				// logger.fatal('finish id', lastFinishedId);
+				// this.currentId = lastFinishedId;
+				this.data_sent[id].callback();
+				if(this.data_sent[id].use_fifo)
+					this.fifo.orderFinished();
+				// else
+				// 	this.use_fifo = this.old_use_fifo;
+				delete this.data_sent[id];
+			}
+		} else if(this.data_sent[id] !== undefined &amp;&amp; this.data_sent[id].cmd == cmd) {
+			// this.order_sent = '';
+			// logger.debug('finish', datas.shift());
+			if(!this.data_sent[id].wait_for_id) {
+				this.data_sent[id].callback();
+				if(this.data_sent[id].use_fifo)
+					this.fifo.orderFinished();
+				delete this.data_sent[id];
+				// else
+				// 	this.use_fifo = this.old_use_fifo;
+			}
+		} else if (cmd == COMMANDS.JACK) {
+			logger.info("JACK !");
+			this.client.send("ia", "ia.jack");
+		} else {
+			// logger.warn(datas);
+			logger.warn("Command return from Arduino to unknown cmd="+cmd);
+		}
+	}
+	Asserv.prototype.sendCommand = function(cmd, args, wait_for_id, callback, no_fifo){
+		if(callback === undefined)
+			callback = function(){};
+
+		this.currentId += 1;
+		var id = this.currentId.toString();
+		args = args || [];
+
+		function nextOrder() {
+			this.sp.write([cmd,id].concat(args).join(";")+"\n");
+		}
+		this.data_sent[id] = {
+			callback: callback,
+			cmd: cmd,
+			wait_for_id: wait_for_id,
+			use_fifo: !no_fifo
+		};
+
+		if(!no_fifo) {
+			this.fifo.newOrder(nextOrder.bind(this), 'sendCommandAsserv('+cmd+':'+args+')');
+		} else {
+			nextOrder.call(this);
+		}
+	}
+
+	Asserv.prototype.setVitesse = function(v, r, callback) {
+		// logger.debug(myWriteFloat(r));
+		this.sendCommand(COMMANDS.SPDMAX, [
+			parseInt(v),
+			myWriteFloat(r)
+		], false, callback);
+	};
+
+	Asserv.prototype.speed = function(l, a, ms, callback) {
+		// logger.debug(myWriteFloat(r));
+		this.sendCommand(COMMANDS.SPD, [
+			parseInt(l),
+			parseInt(a),
+			parseInt(ms)
+		], true, callback);
+	};
+
+	Asserv.prototype.setAcc = function(acc,callback) {
+		// logger.debug(myWriteFloat(r));
+		this.sendCommand(COMMANDS.ACCMAX, [
+			parseInt(acc)
+		], false, callback);
+	};
+
+	Asserv.prototype.clean = function(callback){
+		this.sendCommand(COMMANDS.CLEANG, false, callback);
+	};
+
+	Asserv.prototype.pwm = function(left, right, ms, callback) {
+		this.sendCommand(COMMANDS.PWM, [
+			parseInt(left),
+			parseInt(right),
+			parseInt(ms)
+		], true, callback);
+		
+	};
+
+	Asserv.prototype.goxy = function(x, y, sens, callback, no_fifo){
+		if(sens == "avant") sens = 1;
+		else if(sens == "arriere") sens = -1;
+		else sens = 0;
+		
+		this.sendCommand(COMMANDS.GOTO, [
+			parseInt(this.convertColorX(x)),
+			parseInt(this.convertColorY(y)),
+			sens
+		], true, callback, no_fifo);
+	};
+	Asserv.prototype.goa = function(a, callback, no_fifo){
+		// this.clean();
+		this.sendCommand(COMMANDS.ROT, [
+			myWriteFloat(this.convertColorA(a))
+		], true, callback, no_fifo);
+	};
+
+	Asserv.prototype.setPid = function(p, i, d, callback){
+		// this.clean();
+		this.sendCommand(COMMANDS.PIDALL, [
+			myWriteFloat(p),
+			myWriteFloat(i),
+			myWriteFloat(d)
+		],false, callback);
+	};
+
+	// Asserv.prototype.gotoPath = function(callback, path){
+	// 	this.clean();
+	// 	if(instanceof path !=== "Array") path = path.path; // not sure about Path class right now
+	// 	path.forEach(function(item));
+	// };
+
+	return Asserv;
+})();
+
+*/
 </code></pre>
         </article>
     </section>

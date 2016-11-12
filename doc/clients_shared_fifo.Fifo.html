@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ia/data.class.js - Documentation</title>
+    <title>Fifo - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,208 +27,702 @@
 
 <div id="main">
     
-    <h1 class="page-title">ia/data.class.js</h1>
+    <h1 class="page-title">Fifo</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Data Module
- * 
- * @module ia/data
- * @see {@link ia/data.Data}
- */
+        <h2>
+        Fifo
+        </h2>
+        
+    
+</header>
 
-module.exports = (function () {
-	"use strict";
-	var log4js = require('log4js');
-	var logger = log4js.getLogger('ia.data');
+<article>
+    <div class="container-overview">
+    
+        
 
-	/**
-	 * Data Constructor
-	 * 
-	 * @exports ia/data.Data
-	 * @constructor
-	 * @param {Object} ia
-	 * @param {int} nb_erobots Number of robots in a team
-	 * @param EGR_d
-	 * @param EPR_d 
-	 */
-	function Data(ia, nb_erobots, EGR_d, EPR_d) {
-		/** balle */
-		this.balle = [];
-		/** chargeur */
-		this.chargeur = [];
-		/** clap */
-		this.clap = [];
-		/** plot */
-		this.plot = [];
-		/** erobot */
-		this.erobot = [];
-		/** gobelet */
-		this.gobelet = [];
-		/** pile */
-		this.pile = {};
-		/** dynamic */
-		this.dynamic = []; //used for laid stacks
-		/** depot */
-		this.depot = [];
-		/** nb_erobot */
-		this.nb_erobots = nb_erobots;
+    
 
-		/** dots */
-		this.dots = [];
+    <h4 class="name" id="Fifo"><span class="type-signature"></span>new Fifo<span class="signature">()</span><span class="type-signature"></span></h4>
 
-		this.importObjects();
-		
-		this.erobot = [{ // big robot on position 0
-				name: "gr",
-				pos:{
-					x:3200,
-					y:1000
-				},
-				speed:{ // in mm/sec
-					x:0,
-					y:0,
-				},
-				lastUpdate: 0, // time in ms from the beining of the match
-				d: EGR_d || 320,
-				status: "lost"
-			},{ // small robot on position 1
-				name: "pr",
-				pos:{
-					x:3500,
-					y:1000
-				},
-				speed:{
-					x:0,
-					y:0
-				},
-				lastUpdate: 0,
-				d: EPR_d || 200,
-				status: "lost"
-			}];
-	}
+    
 
-	/**
-	 * Import the Objects
-	 */
-	Data.prototype.importObjects = function () {
-		var ret = require('./objects.json');
 
-		this.balle = ret.balle;
-		this.chargeur = ret.chargeur;
-		this.clap = ret.clap;
-		this.plot = ret.plot;
-		this.gobelet = ret.gobelet;
-		this.pile = ret.pile;
-		this.depot = ret.depot;
-		return ret;
-	};
 
-	/**
-	 * Return Object Reference
-	 * 
-	 * @param {string} name
-	 */
-	Data.prototype.getObjectRef = function(name) {
-		// Retourne une référence vers l'objet name
-		// 		name étant de la forme &lt;type>__&lt;nom>
-		// Permet d'avoir une référence vers l'objet dans une action
 
-		var actName = name.split("__");
-		if (actName.length != 2){
-			logger.warn("Le nom '"+name+"' n'est pas un nom d'objet correct.");
-			return null;
-		}
+<dl class="details">
 
-		if (!this[actName[0]][actName[1]]){
-			logger.warn("L'objet "+actName[0]+" de type "+actName[1]+" est inconnu.");
-			return null;
-		}
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="clients_shared_fifo.class.js.html">clients/shared/fifo.class.js</a>, <a href="clients_shared_fifo.class.js.html#line17">line 17</a>
+    </li></ul></dd>
+    
 
-		return this[actName[0]][actName[1]];
-	};
+    
 
-	/**
-	 * Returns true if dist1 is smaller than dist2 
-	 * 
-	 * @param {int} dist1
-	 * @param {int} dist2
-	 */
-	Data.prototype.isCloser = function (dist1, dist2){
-		return (dist1 &lt; dist2);
-	};
+    
 
-	/**
-	 * Return the distance between two positions
-	 * 
-	 * @param {Object} pos1
-	 * @param {int} pos1.x
-	 * @param {int} pos1.y
-	 * @param {Object} pos2
-	 * @param {int} pos2.x
-	 * @param {int} pos2.y
-	 */
-	Data.prototype.getDistance = function (pos1, pos2){
-		return Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
-	};
+    
 
-	/**
-	 * Takes a position and the ennemy robot # to put everything in its surroundings (~ 1.1 * radius) as "lost"
-	 * 
-	 * @param {Object} pos
-	 * @param {int} e_robot_id
-	 */
-	Data.prototype.theEnnemyWentThere = function (pos, e_robot_id){
-		Object.keys(this.plot).forEach(function(c) {
-			if ((this.getDistance(pos, this.plot[c].pos) &lt; 0.55*this.erobot[e_robot_id].d) &amp;&amp; (this.plot[c].status != "lost")) {
-				logger.info("Le plot " + c + " est marqué lost");
-				this.plot[c].status = "lost";
-			}
-		}.bind(this));
-		var min_dist = Infinity;
-		Object.keys(this.gobelet).forEach(function(g) {
-			if ((this.getDistance(pos, this.gobelet[g].pos) &lt; 0.55*this.erobot[e_robot_id].d) &amp;&amp; (this.gobelet[g].status != "lost")) {
-				logger.info("Le gobelet" + g + " est marqué lost");
-				this.gobelet[g].status = "lost";
-			}
-		}.bind(this));
-	};
+    
 
-	/**
-	 * Parse Order
-	 * 
-	 * @param {string} from
-	 * @param {string} name
-	 * @param {Object} param
-	 */
-	Data.prototype.parseOrder = function(from, name, param){
-		switch(name){
-			case "data.add_dynamic" :
-				if(!!param.pos &amp;&amp; !!param.pos.x &amp;&amp; !!param.pos.y &amp;&amp; !!param.d){
-					this.dynamic.push(param);
-					logger.info("added dynamic from :"+from+" params:"+JSON.stringify(param));
-				}else{
-					logger.error("invalid dynamic from :"+from+" params:"+JSON.stringify(param));
-				}				
-			break;
-			default: logger.error("Unknown order name:"+name+" from:"+from);
-		}
-	};
+    
 
-	var data = new Data();
-	
-	return Data;
-})();
-</code></pre>
-        </article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Fifo Constructor
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="fifo"><span class="type-signature"></span>fifo<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="clients_shared_fifo.class.js.html">clients/shared/fifo.class.js</a>, <a href="clients_shared_fifo.class.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    fifo
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="order_in_progress"><span class="type-signature"></span>order_in_progress<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="clients_shared_fifo.class.js.html">clients/shared/fifo.class.js</a>, <a href="clients_shared_fifo.class.js.html#line28">line 28</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="clean"><span class="type-signature"></span>clean<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="clients_shared_fifo.class.js.html">clients/shared/fifo.class.js</a>, <a href="clients_shared_fifo.class.js.html#line24">line 24</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Clean
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="newOrder"><span class="type-signature"></span>newOrder<span class="signature">(callback, name<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="clients_shared_fifo.class.js.html">clients/shared/fifo.class.js</a>, <a href="clients_shared_fifo.class.js.html#line45">line 45</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    New Order
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="nextOrder"><span class="type-signature"></span>nextOrder<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="clients_shared_fifo.class.js.html">clients/shared/fifo.class.js</a>, <a href="clients_shared_fifo.class.js.html#line55">line 55</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Next Order
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="orderFinished"><span class="type-signature"></span>orderFinished<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="clients_shared_fifo.class.js.html">clients/shared/fifo.class.js</a>, <a href="clients_shared_fifo.class.js.html#line34">line 34</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Order finished
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
