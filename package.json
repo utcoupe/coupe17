@@ -23,7 +23,7 @@
   "scripts": {
     "utcoupe": "node utcoupe/utcoupe.js",
     "serve": "http-server",
-    "generate-docs": "node_modules/.bin/jsdoc -c conf_jsdoc.json"
+    "doc": "node_modules/.bin/jsdoc -c conf_jsdoc.json"
   },
   "repository": {
     "type": "git",
