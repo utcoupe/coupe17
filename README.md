@@ -1,4 +1,4 @@
- jaCode source des robots d'UTCoupe 2017
+ Code source des robots d'UTCoupe 2017
 =======
 
 ### Configurer l'environnement de développement
