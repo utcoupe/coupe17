@@ -1,4 +1,4 @@
-Code source des robots d'UTCoupe 2017
+ jaCode source des robots d'UTCoupe 2017
 =======
 
 ### Configurer l'environnement de développement
@@ -44,7 +44,7 @@ Pour l'installer en local sur la machine :
 npm install
 ```
 
-Pour générer la documentation du code :
+Pour générer la documentation du code javascript :
 ```
 npm run doc
 ```
