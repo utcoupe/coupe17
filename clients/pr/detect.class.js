@@ -1,3 +1,10 @@
+/**
+ * Detect module
+ * 
+ * @module clients/pr/detect
+ * @see {@link clients/pr/detect.Detect}
+ */
+
 module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('pr.detect');
@@ -6,16 +13,28 @@ module.exports = (function () {
 
 	var sp = [];
 
+	/**
+	 * Detect constructor
+	 * 
+	 * @exports clients/pr/detect.Detect
+	 * @constructor
+	 * @param {Object} callback
+	 */
 	function Detect(callback) {
+		/** @type {Object} */
 		this.devicesFound = {
 			asserv: null,
 			others: null,
 			ax12: null
 		};
+		/** @type {Object} */
 		this.callback = callback;
 		this.searchArduinos();
 	}
 
+	/**
+	 * Sends Server port
+	 */
 	Detect.prototype.sendSP = function (){
 		// Close opened ports & detect other devices
 		serialPort.list(function (err, ports) {
@@ -38,6 +57,9 @@ module.exports = (function () {
 		}.bind(this));
 	};
 
+	/**
+	 * Searches Arduino
+	 */
 	Detect.prototype.searchArduinos = function() {
 		// On check tous les ports disponibles
 		serialPort.list(function (err, ports) {

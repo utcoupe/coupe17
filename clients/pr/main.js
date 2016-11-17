@@ -1,3 +1,13 @@
+/**
+ * Main module
+ * 
+ * @module clients/pr/main
+ * @requires server/socket_client
+ * @requires config
+ * @requires clients/pr/actuators
+ * @requires clients/pr/detect
+ */
+
 (function () {
 	"use strict";
 

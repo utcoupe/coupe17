@@ -1,32 +1,56 @@
+/**
+ * Petit Robot Module
+ * 
+ * @module ia/pr
+ * @see {@Link ia/pr.Pr}
+ */
+
 module.exports = (function () {
 	"use strict";
 	var logger = require('log4js').getLogger('ia.pr');
 	var GR_OFFSET = 110;
 	var PR_GR_COEF = 1;
 
+	/**
+	 * Pr Constructor
+	 * 
+	 * @param {Object} ia
+	 * @param {string} color Team color
+	 */
 	function Pr(ia, color) {
+		/** IA */
 		this.ia = ia;
+		/** Position */
 		this.pos = { // if we are yellow, default, left side of the table
 			x: 0,
 			y: 0,
 			a: 0
 		};
+		/** Size of the robot */
 		this.size = {
 			l: 170,
 			L: 220,
 			d: 280
 		};
+		/** Current action */
 		this.current_action = null;
 		//this.path = null;
+		/** Path */
 		this.path = [];
+		/** Content */
 		this.content = {
 			nb_plots: 0,
 			gobelet:false
 		};
+		/** We have hats on the top */
 		this.we_have_hats = false;
+		/** Team color */
 		this.color = color;
 	}
 
+	/**
+	 * Loop
+	 */
 	Pr.prototype.loop = function () {
 		logger.debug('loop');
 		this.ia.actions.doNextAction(function() {
@@ -34,6 +58,9 @@ module.exports = (function () {
 		}.bind(this));
 	};
 
+	/**
+	 * Collision
+	 */
 	Pr.prototype.collision = function() {
 		if(this.path.length === 0) { // Utile quand on clique nous même sur le bouton dans le simu
 			logger.warn("Normalement impossible, collision sur un path vide ?");
@@ -46,21 +73,33 @@ module.exports = (function () {
 		this.ia.actions.collision();
 		this.loop();
 	}
+	/**
+	 * Stop
+	 */
 	Pr.prototype.stop = function() {
 		this.ia.client.send('pr', 'stop');
 	}
 
+	/**
+	 * Place
+	 */
 	Pr.prototype.place = function () {
 		// logger.debug('place');
 		this.sendInitialPos();
 		this.ia.client.send('pr', 'placer');
 	};
 
+	/**
+	 * Start
+	 */
 	Pr.prototype.start = function () {
 		this.ia.client.send("pr", "ouvrir_ax12");
 		this.loop();
 	};
 
+	/**
+	 * Send initial position
+	 */
 	Pr.prototype.sendInitialPos = function () {
 		this.ia.client.send("pr", "setpos", {
 			x: 142,
@@ -70,10 +109,24 @@ module.exports = (function () {
 		});
 	};
 
+	/**
+	 * Borne
+	 * 
+	 * @param {int} x
+	 * @param {int} min
+	 * @param {int} max
+	 */
 	function borne(x, min, max) {
 		return x > max ? max : x < min ? min : x;
 	}
 
+	/**
+	 * Parse Order
+	 * 
+	 * @param {string} from
+	 * @param {string} name
+	 * @param {Object} params
+	 */
 	Pr.prototype.parseOrder = function (from, name, params) {
 		switch(name) {
 			case 'pr.collision':
@@ -111,12 +164,28 @@ module.exports = (function () {
 		}
 	};
 
-	var SEGMENT_DELTA_D = 30; // (mm) between 2 iterations on a segment to detect colision
+	/** (mm) between 2 iterations on a segment to detect colision */
+	var SEGMENT_DELTA_D = 30;
 
+	/**
+	 * Return the distance between two spots
+	 * 
+	 * @param {Object} spot1
+	 * @param {int} spot1.x
+	 * @param {int} spot1.y
+	 * @param {Object} spot2
+	 * @param {int} spot2.x
+	 * @param {int} spot2.y
+	 */
 	Pr.prototype.getDistance = function (spot1, spot2) {
 		return Math.sqrt(Math.pow(spot1.x - spot2.x, 2) + Math.pow(spot1.y - spot2.y, 2));
 	};
 
+	/**
+	 * Detect Collision
+	 * 
+	 * @param {Objects} dots
+	 */
 	Pr.prototype.detectCollision = function(dots) {
 		var collision = false;
 		var pf = this.path;
@@ -166,6 +235,11 @@ module.exports = (function () {
 		}
 	}
 
+	/**
+	 * Update position
+	 * 
+	 * @param {Object} dots
+	 */
 	Pr.prototype.updatePos = function(dots) {
 		if(this.ia.timer.match_started) {
 
@@ -216,6 +290,14 @@ module.exports = (function () {
 		}
 	};
 
+	/**
+	 * Distance between two points
+	 * 
+	 * @param {int} Ax
+	 * @param {int} AY
+	 * @param {int} Bx
+	 * @param {int} BY
+	 */
 	Pr.prototype.norm = function(Ax, Ay, Bx, By) {
 		return Math.sqrt(Math.pow(Ax-Bx, 2) + Math.pow(Ay-By, 2));
 	}

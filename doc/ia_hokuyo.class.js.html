@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ia/hokuyo.class.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="clients_gr_actuators.Acts.html">Acts</a><ul class='methods'><li data-type='method'><a href="clients_gr_actuators.Acts.html#clean">clean</a></li><li data-type='method'><a href="clients_gr_actuators.Acts.html#connectTo">connectTo</a></li><li data-type='method'><a href="clients_gr_actuators.Acts.html#getStatus">getStatus</a></li><li data-type='method'><a href="clients_gr_actuators.Acts.html#orderHandler">orderHandler</a></li><li data-type='method'><a href="clients_gr_actuators.Acts.html#quit">quit</a></li><li data-type='method'><a href="clients_gr_actuators.Acts.html#sendStatus">sendStatus</a></li><li data-type='method'><a href="clients_gr_actuators.Acts.html#start">start</a></li></ul></li><li><a href="clients_gr_detect.Detect.html">Detect</a><ul class='methods'><li data-type='method'><a href="clients_gr_detect.Detect.html#searchArduinos">searchArduinos</a></li><li data-type='method'><a href="clients_gr_detect.Detect.html#sendSP">sendSP</a></li></ul></li><li><a href="clients_gr_servos.Servos.html">Servos</a><ul class='methods'><li data-type='method'><a href="clients_gr_servos.Servos.html#acheter">acheter</a></li><li data-type='method'><a href="clients_gr_servos.Servos.html#connect">connect</a></li><li data-type='method'><a href="clients_gr_servos.Servos.html#vendre">vendre</a></li></ul></li><li><a href="clients_gr_servos-simu.Servos.html">Servos</a><ul class='methods'><li data-type='method'><a href="clients_gr_servos-simu.Servos.html#acheter">acheter</a></li><li data-type='method'><a href="clients_gr_servos-simu.Servos.html#vendre">vendre</a></li></ul></li><li><a href="clients_pr_actuators.Acts.html">Acts</a><ul class='methods'><li data-type='method'><a href="clients_pr_actuators.Acts.html#clean">clean</a></li><li data-type='method'><a href="clients_pr_actuators.Acts.html#connectTo">connectTo</a></li><li data-type='method'><a href="clients_pr_actuators.Acts.html#getStatus">getStatus</a></li><li data-type='method'><a href="clients_pr_actuators.Acts.html#monter_plot2">monter_plot2</a></li><li data-type='method'><a href="clients_pr_actuators.Acts.html#orderHandler">orderHandler</a></li><li data-type='method'><a href="clients_pr_actuators.Acts.html#pousser_plot">pousser_plot</a></li><li data-type='method'><a href="clients_pr_actuators.Acts.html#prendre_plot">prendre_plot</a></li><li data-type='method'><a href="clients_pr_actuators.Acts.html#prendre_plot2">prendre_plot2</a></li><li data-type='method'><a href="clients_pr_actuators.Acts.html#quit">quit</a></li><li data-type='method'><a href="clients_pr_actuators.Acts.html#sendStatus">sendStatus</a></li><li data-type='method'><a href="clients_pr_actuators.Acts.html#start">start</a></li></ul></li><li><a href="clients_pr_ax12-simu.Ax12.html">Ax12</a><ul class='methods'><li data-type='method'><a href="clients_pr_ax12-simu.Ax12.html#callCallback">callCallback</a></li><li data-type='method'><a href="clients_pr_ax12-simu.Ax12.html#disconnect">disconnect</a></li><li data-type='method'><a href="clients_pr_ax12-simu.Ax12.html#fermer">fermer</a></li><li data-type='method'><a href="clients_pr_ax12-simu.Ax12.html#fermerBalle">fermerBalle</a></li><li data-type='method'><a href="clients_pr_ax12-simu.Ax12.html#fermerBalle2">fermerBalle2</a></li><li data-type='method'><a href="clients_pr_ax12-simu.Ax12.html#ouvrir">ouvrir</a></li></ul></li><li><a href="clients_pr_ax12.Ax12.html">Ax12</a><ul class='methods'><li data-type='method'><a href="clients_pr_ax12.Ax12.html#connect">connect</a></li><li data-type='method'><a href="clients_pr_ax12.Ax12.html#degToAx12">degToAx12</a></li><li data-type='method'><a href="clients_pr_ax12.Ax12.html#disconnect">disconnect</a></li><li data-type='method'><a href="clients_pr_ax12.Ax12.html#fermer">fermer</a></li><li data-type='method'><a href="clients_pr_ax12.Ax12.html#fermerBalle">fermerBalle</a></li><li data-type='method'><a href="clients_pr_ax12.Ax12.html#fermerBalle2">fermerBalle2</a></li><li data-type='method'><a href="clients_pr_ax12.Ax12.html#loopAX12">loopAX12</a></li><li data-type='method'><a href="clients_pr_ax12.Ax12.html#ouvrir">ouvrir</a></li></ul></li><li><a href="clients_pr_detect.Detect.html">Detect</a><ul class='methods'><li data-type='method'><a href="clients_pr_detect.Detect.html#searchArduinos">searchArduinos</a></li><li data-type='method'><a href="clients_pr_detect.Detect.html#sendSP">sendSP</a></li></ul></li><li><a href="clients_pr_elevator.Elevator.html">Elevator</a><ul class='methods'><li data-type='method'><a href="clients_pr_elevator.Elevator.html#descendre">descendre</a></li><li data-type='method'><a href="clients_pr_elevator.Elevator.html#disconnect">disconnect</a></li><li data-type='method'><a href="clients_pr_elevator.Elevator.html#monter">monter</a></li><li data-type='method'><a href="clients_pr_elevator.Elevator.html#monterChouilla">monterChouilla</a></li><li data-type='method'><a href="clients_pr_elevator.Elevator.html#parseOrder">parseOrder</a></li><li data-type='method'><a href="clients_pr_elevator.Elevator.html#release">release</a></li><li data-type='method'><a href="clients_pr_elevator.Elevator.html#sendOrder">sendOrder</a></li></ul></li><li><a href="clients_pr_others.Others.html">Others</a><ul class='methods'><li data-type='method'><a href="clients_pr_others.Others.html#descendreAscenseur">descendreAscenseur</a></li><li data-type='method'><a href="clients_pr_others.Others.html#descendreMoyenAscenseur">descendreMoyenAscenseur</a></li><li data-type='method'><a href="clients_pr_others.Others.html#descendreUnPeuAscenseur">descendreUnPeuAscenseur</a></li><li data-type='method'><a href="clients_pr_others.Others.html#fermerBloqueur">fermerBloqueur</a></li><li data-type='method'><a href="clients_pr_others.Others.html#fermerStabilisateur">fermerStabilisateur</a></li><li data-type='method'><a href="clients_pr_others.Others.html#lacherGobelet">lacherGobelet</a></li><li data-type='method'><a href="clients_pr_others.Others.html#monterAscenseur">monterAscenseur</a></li><li data-type='method'><a href="clients_pr_others.Others.html#monterMoyenAscenseur">monterMoyenAscenseur</a></li><li data-type='method'><a href="clients_pr_others.Others.html#monterUnPeuAscenseur">monterUnPeuAscenseur</a></li><li data-type='method'><a href="clients_pr_others.Others.html#ouvrirBloqueurGrand">ouvrirBloqueurGrand</a></li><li data-type='method'><a href="clients_pr_others.Others.html#ouvrirBloqueurMoyen">ouvrirBloqueurMoyen</a></li><li data-type='method'><a href="clients_pr_others.Others.html#ouvrirStabilisateurGrand">ouvrirStabilisateurGrand</a></li><li data-type='method'><a href="clients_pr_others.Others.html#ouvrirStabilisateurMoyen">ouvrirStabilisateurMoyen</a></li><li data-type='method'><a href="clients_pr_others.Others.html#parseCommand">parseCommand</a></li><li data-type='method'><a href="clients_pr_others.Others.html#prendreGobelet">prendreGobelet</a></li><li data-type='method'><a href="clients_pr_others.Others.html#rangerClap">rangerClap</a></li><li data-type='method'><a href="clients_pr_others.Others.html#relacherAscenseur">relacherAscenseur</a></li><li data-type='method'><a href="clients_pr_others.Others.html#sendCommand">sendCommand</a></li><li data-type='method'><a href="clients_pr_others.Others.html#sortirClap">sortirClap</a></li></ul></li><li><a href="clients_pr_others-simu.Others.html">Others</a><ul class='methods'><li data-type='method'><a href="clients_pr_others-simu.Others.html#callCallback">callCallback</a></li><li data-type='method'><a href="clients_pr_others-simu.Others.html#descendreAscenseur">descendreAscenseur</a></li><li data-type='method'><a href="clients_pr_others-simu.Others.html#descendreMoyenAscenseur">descendreMoyenAscenseur</a></li><li data-type='method'><a href="clients_pr_others-simu.Others.html#descendreUnPeuAscenseur">descendreUnPeuAscenseur</a></li><li data-type='method'><a href="clients_pr_others-simu.Others.html#disconnect">disconnect</a></li><li data-type='method'><a href="clients_pr_others-simu.Others.html#fermerBloqueur">fermerBloqueur</a></li><li data-type='method'><a href="clients_pr_others-simu.Others.html#fermerStabilisateur">fermerStabilisateur</a></li><li data-type='method'><a href="clients_pr_others-simu.Others.html#lacherGobelet">lacherGobelet</a></li><li data-type='method'><a href="clients_pr_others-simu.Others.html#monterAscenseur">monterAscenseur</a></li><li data-type='method'><a href="clients_pr_others-simu.Others.html#monterMoyenAscenseur">monterMoyenAscenseur</a></li><li data-type='method'><a href="clients_pr_others-simu.Others.html#monterUnPeuAscenseur">monterUnPeuAscenseur</a></li><li data-type='method'><a href="clients_pr_others-simu.Others.html#ouvrirBloqueurGrand">ouvrirBloqueurGrand</a></li><li data-type='method'><a href="clients_pr_others-simu.Others.html#ouvrirBloqueurMoyen">ouvrirBloqueurMoyen</a></li><li data-type='method'><a href="clients_pr_others-simu.Others.html#ouvrirStabilisateurGrand">ouvrirStabilisateurGrand</a></li><li data-type='method'><a href="clients_pr_others-simu.Others.html#ouvrirStabilisateurMoyen">ouvrirStabilisateurMoyen</a></li><li data-type='method'><a href="clients_pr_others-simu.Others.html#prendreGobelet">prendreGobelet</a></li><li data-type='method'><a href="clients_pr_others-simu.Others.html#rangerClap">rangerClap</a></li><li data-type='method'><a href="clients_pr_others-simu.Others.html#sortirClap">sortirClap</a></li></ul></li><li><a href="clients_shared_asserv.Asserv.html">Asserv</a><ul class='methods'><li data-type='method'><a href="clients_shared_asserv.Asserv.html#calageX">calageX</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#calageY">calageY</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#clean">clean</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#convertColorA">convertColorA</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#convertColorX">convertColorX</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#convertColorY">convertColorY</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#getPos">getPos</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#goa">goa</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#goxy">goxy</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#parseCommand">parseCommand</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#Pos">Pos</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#pwm">pwm</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#sendCommand">sendCommand</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#sendPos">sendPos</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#setA">setA</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#setAcc">setAcc</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#setPid">setPid</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#setPos">setPos</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#setPosCalage">setPosCalage</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#setVitesse">setVitesse</a></li><li data-type='method'><a href="clients_shared_asserv.Asserv.html#speed">speed</a></li></ul></li><li><a href="clients_shared_asserv-simu.Asserv.html">Asserv</a><ul class='methods'><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#avancerPlot">avancerPlot</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#calageX">calageX</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#calageY">calageY</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#clean">clean</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#getPos">getPos</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#goa">goa</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#goxy">goxy</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#newOrder">newOrder</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#Pos">Pos</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#pwm">pwm</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#sendPos">sendPos</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#setA">setA</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#setPid">setPid</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#setPos">setPos</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#setVitesse">setVitesse</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#simu_goa">simu_goa</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#simu_goxy">simu_goxy</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#simu_pwm">simu_pwm</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#simu_speed">simu_speed</a></li><li data-type='method'><a href="clients_shared_asserv-simu.Asserv.html#speed">speed</a></li></ul></li><li><a href="clients_shared_fifo.Fifo.html">Fifo</a><ul class='methods'><li data-type='method'><a href="clients_shared_fifo.Fifo.html#clean">clean</a></li><li data-type='method'><a href="clients_shared_fifo.Fifo.html#newOrder">newOrder</a></li><li data-type='method'><a href="clients_shared_fifo.Fifo.html#nextOrder">nextOrder</a></li><li data-type='method'><a href="clients_shared_fifo.Fifo.html#orderFinished">orderFinished</a></li></ul></li><li><a href="ia_actions.Actions.html">Actions</a><ul class='methods'><li data-type='method'><a href="ia_actions.Actions.html#actionFinished">actionFinished</a></li><li data-type='method'><a href="ia_actions.Actions.html#collision">collision</a></li><li data-type='method'><a href="ia_actions.Actions.html#doAction">doAction</a></li><li data-type='method'><a href="ia_actions.Actions.html#doNextAction">doNextAction</a></li><li data-type='method'><a href="ia_actions.Actions.html#exists">exists</a></li><li data-type='method'><a href="ia_actions.Actions.html#getNearestStartpoint">getNearestStartpoint</a></li><li data-type='method'><a href="ia_actions.Actions.html#getNormAction">getNormAction</a></li><li data-type='method'><a href="ia_actions.Actions.html#getPriorityAction">getPriorityAction</a></li><li data-type='method'><a href="ia_actions.Actions.html#importActions">importActions</a></li><li data-type='method'><a href="ia_actions.Actions.html#isDoable">isDoable</a></li><li data-type='method'><a href="ia_actions.Actions.html#isDone">isDone</a></li><li data-type='method'><a href="ia_actions.Actions.html#kill">kill</a></li><li data-type='method'><a href="ia_actions.Actions.html#parseOrder">parseOrder</a></li><li data-type='method'><a href="ia_actions.Actions.html#pathDoAction">pathDoAction</a></li></ul></li><li><a href="ia_data.Data.html">Data</a><ul class='methods'><li data-type='method'><a href="ia_data.Data.html#getDistance">getDistance</a></li><li data-type='method'><a href="ia_data.Data.html#getObjectRef">getObjectRef</a></li><li data-type='method'><a href="ia_data.Data.html#importObjects">importObjects</a></li><li data-type='method'><a href="ia_data.Data.html#isCloser">isCloser</a></li><li data-type='method'><a href="ia_data.Data.html#parseOrder">parseOrder</a></li><li data-type='method'><a href="ia_data.Data.html#theEnnemyWentThere">theEnnemyWentThere</a></li></ul></li><li><a href="ia_export_simulator.ExportSimulator.html">ExportSimulator</a><ul class='methods'><li data-type='method'><a href="ia_export_simulator.ExportSimulator.html#orderToSimu">orderToSimu</a></li><li data-type='method'><a href="ia_export_simulator.ExportSimulator.html#start">start</a></li><li data-type='method'><a href="ia_export_simulator.ExportSimulator.html#stop">stop</a></li></ul></li><li><a href="ia_gr.Gr.html">Gr</a><ul class='methods'><li data-type='method'><a href="ia_gr.Gr.html#onCollision">onCollision</a></li><li data-type='method'><a href="ia_gr.Gr.html#parseOrder">parseOrder</a></li><li data-type='method'><a href="ia_gr.Gr.html#sendOrders">sendOrders</a></li><li data-type='method'><a href="ia_gr.Gr.html#sendPos">sendPos</a></li><li data-type='method'><a href="ia_gr.Gr.html#start">start</a></li><li data-type='method'><a href="ia_gr.Gr.html#stop">stop</a></li></ul></li><li><a href="ia_hokuyo.Hokuyo.html">Hokuyo</a><ul class='methods'><li data-type='method'><a href="ia_hokuyo.Hokuyo.html#deleteOurRobots">deleteOurRobots</a></li><li data-type='method'><a href="ia_hokuyo.Hokuyo.html#detectCollision">detectCollision</a></li><li data-type='method'><a href="ia_hokuyo.Hokuyo.html#getBestMatchingCoef">getBestMatchingCoef</a></li><li data-type='method'><a href="ia_hokuyo.Hokuyo.html#getDistance">getDistance</a></li><li data-type='method'><a href="ia_hokuyo.Hokuyo.html#getMatchingCoef">getMatchingCoef</a></li><li data-type='method'><a href="ia_hokuyo.Hokuyo.html#isOk">isOk</a></li><li data-type='method'><a href="ia_hokuyo.Hokuyo.html#isOnTheStairs">isOnTheStairs</a></li><li data-type='method'><a href="ia_hokuyo.Hokuyo.html#mayday">mayday</a></li><li data-type='method'><a href="ia_hokuyo.Hokuyo.html#parseOrder">parseOrder</a></li><li data-type='method'><a href="ia_hokuyo.Hokuyo.html#start">start</a></li><li data-type='method'><a href="ia_hokuyo.Hokuyo.html#stop">stop</a></li><li data-type='method'><a href="ia_hokuyo.Hokuyo.html#timedOut">timedOut</a></li><li data-type='method'><a href="ia_hokuyo.Hokuyo.html#updateNumberOfRobots">updateNumberOfRobots</a></li></ul></li><li><a href="ia_ia.Ia.html">Ia</a><ul class='methods'><li data-type='method'><a href="ia_ia.Ia.html#jack">jack</a></li><li data-type='method'><a href="ia_ia.Ia.html#stop">stop</a></li></ul></li><li><a href="ia_pathfinding.Pathfinding.html">Pathfinding</a><ul class='methods'><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#getPath">getPath</a></li><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#sendDynamic">sendDynamic</a></li><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#sendQuery">sendQuery</a></li><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#updateMap">updateMap</a></li><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#~parse">parse</a></li><li data-type='method'><a href="ia_pathfinding.Pathfinding.html#~vecMultiply">vecMultiply</a></li></ul></li><li><a href="ia_timer.Timer.html">Timer</a><ul class='methods'><li data-type='method'><a href="ia_timer.Timer.html#get">get</a></li><li data-type='method'><a href="ia_timer.Timer.html#start">start</a></li><li data-type='method'><a href="ia_timer.Timer.html#status">status</a></li></ul></li><li><a href="server_server.Server.html">Server</a><ul class='methods'><li data-type='method'><a href="server_server.Server.html#launch">launch</a></li><li data-type='method'><a href="server_server.Server.html#sendNetwork">sendNetwork</a></li><li data-type='method'><a href="server_server.Server.html#sendUTCoupe">sendUTCoupe</a></li><li data-type='method'><a href="server_server.Server.html#stop">stop</a></li></ul></li><li><a href="server_socket_client.SocketClient.html">SocketClient</a><ul class='methods'><li data-type='method'><a href="server_socket_client.SocketClient.html#connect">connect</a></li><li data-type='method'><a href="server_socket_client.SocketClient.html#errorServerNotFound">errorServerNotFound</a></li><li data-type='method'><a href="server_socket_client.SocketClient.html#errorServerTimeout">errorServerTimeout</a></li><li data-type='method'><a href="server_socket_client.SocketClient.html#order">order</a></li><li data-type='method'><a href="server_socket_client.SocketClient.html#send">send</a></li><li data-type='method'><a href="server_socket_client.SocketClient.html#throwError">throwError</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-clients_gr_actuators.html">clients/gr/actuators</a></li><li><a href="module-clients_gr_detect.html">clients/gr/detect</a></li><li><a href="module-clients_gr_main.html">clients/gr/main</a></li><li><a href="module-clients_gr_servos.html">clients/gr/servos</a></li><li><a href="module-clients_gr_servos-simu.html">clients/gr/servos-simu</a></li><li><a href="module-clients_pr_actuators.html">clients/pr/actuators</a></li><li><a href="module-clients_pr_ax12.html">clients/pr/ax12</a></li><li><a href="module-clients_pr_ax12-simu.html">clients/pr/ax12-simu</a></li><li><a href="module-clients_pr_detect.html">clients/pr/detect</a></li><li><a href="module-clients_pr_elevator.html">clients/pr/elevator</a></li><li><a href="module-clients_pr_main.html">clients/pr/main</a></li><li><a href="module-clients_pr_others.html">clients/pr/others</a></li><li><a href="module-clients_pr_others-simu.html">clients/pr/others-simu</a></li><li><a href="module-clients_shared_asserv.html">clients/shared/asserv</a></li><li><a href="module-clients_shared_asserv-simu.html">clients/shared/asserv-simu</a></li><li><a href="module-clients_shared_defineParser.html">clients/shared/defineParser</a></li><li><a href="module-clients_shared_fifo.html">clients/shared/fifo</a></li><li><a href="module-config.html">config</a></li><li><a href="module-ia_actions.html">ia/actions</a></li><li><a href="module-ia_data.html">ia/data</a></li><li><a href="module-ia_export_simulator.html">ia/export_simulator</a></li><li><a href="module-ia_gr.html">ia/gr</a></li><li><a href="module-ia_hokuyo.html">ia/hokuyo</a></li><li><a href="module-ia_ia.html">ia/ia</a></li><li><a href="module-ia_main.html">ia/main</a></li><li><a href="module-ia_pathfinding.html">ia/pathfinding</a></li><li><a href="module-ia_pr.html">ia/pr</a></li><li><a href="module-ia_timer.html">ia/timer</a></li><li><a href="module-server_server.html">server/server</a></li><li><a href="module-server_socket_client.html">server/socket_client</a></li><li><a href="module-utcoupe_utcoupe.html">utcoupe/utcoupe</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">ia/hokuyo.class.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Hokuyo module
+ * 
+ * @module ia/hokuyo
+ * @see ia/hokuyo.Hokuyo
+ */
+
+module.exports = (function () {
+	"use strict";
+	var log4js = require('log4js');
+	// var gaussian = require('gaussian');
+	var logger = log4js.getLogger('ia.hokuyo');
+
+	var GR_OFFSET = 110; // (mm) distance between our robot origin and the robot's center
+	var PR_GR_COEF = 1; // security coeff to bind our robots with the dots
+	var SEGMENT_DELTA_D = 30; // (mm) between 2 iterations on a segment to detect colision
+	var DELTA_T = 500; // (ms) in the future : estimation of ennemy robots
+	var DEBUG = false; // mettre à true LE TEMPS DU DEBUG !!!!!
+	var LOST_TIMEOUT = 10;
+	var SECURITY_COEF = 1.1;
+	var MAX_SPD = 1;
+	var timeout;
+
+	/**
+	 * Hokuyo Constructor
+	 * 
+	 * @exports ia/hokuyo.Hokuyo
+	 * @constructor
+	 * @param {Object} ia IA
+	 * @param {Object} [params] Parameters
+	 */
+	function Hokuyo(ia, params) {
+		/** Parameters */
+		this.params = params || {};
+		/** Number of hokuyo */
+		this.nb_hokuyo = 0;
+		/** IA */
+		this.ia = ia;
+		/** Dernier timestamp où on a update (changé à la fin de l'update) */
+		this.lastNow = 0;
+		/** Match Started */
+		this.matchStarted = false;
+		/** nb d'itération depuis laquelle on a perdu un robot */
+		this.nb_lost = 0;
+	}
+
+	/**
+	 * Starts the hokuyo
+	 */
+	Hokuyo.prototype.start = function () {
+		this.matchStarted = true;
+
+		logger.info("La classe hokuyo attend...");
+		this.ia.client.send("hokuyo", "start", {color:this.params.color});
+		timeout = setTimeout(function() {this.timedOut(); }.bind(this) , LOST_TIMEOUT*1000);
+	};
+
+	/**
+	 * Stops the Hokuyo
+	 */
+	Hokuyo.prototype.stop = function () {
+		this.matchStarted = false;
+		this.ia.client.send("hokuyo", "stop", {});
+		clearTimeout(timeout);
+	};
+
+	/**
+	 * Timed out
+	 */
+	Hokuyo.prototype.timedOut = function() {
+		this.mayday("Hokuyo timed out");
+	};
+
+	/**
+	 * Return the distance between two points
+	 * 
+	 * @param {Object} spot1
+	 * @param {int} spot1.x
+	 * @param {int} spot1.y
+	 * @param {Object} spot2
+	 * @param {int} spot2.x
+	 * @param {int} spot2.y
+	 */
+	Hokuyo.prototype.getDistance = function (spot1, spot2) {
+		return Math.sqrt(Math.pow(spot1.x - spot2.x, 2) + Math.pow(spot1.y - spot2.y, 2));
+	};
+
+	/**
+	 * Return true if the position is on the stair
+	 * 
+	 * @param {Object} spot
+	 * @param {int} spot.x
+	 * @param {int} spot.y
+	 */
+	Hokuyo.prototype.isOnTheStairs = function (spot){
+		return (spot.x>967) &amp;&amp; (spot.x &lt; 2033) &amp;&amp; (spot.y > 2000-580);
+	};
+
+	/**
+	 * Return Matching coefficient
+	 * 
+	 * @param {Object} spot
+	 * @param {int} spot.x
+	 * @param {int} spot.y
+	 * @param {Object} eRobot
+	 * @param {int} dt
+	 * @param status
+	 */
+	Hokuyo.prototype.getMatchingCoef = function (spot, eRobot, dt, status){
+		var estimatedPos = {
+			x: eRobot.pos.x + eRobot.speed.x*dt,
+			y: eRobot.pos.y + eRobot.speed.y*dt
+		};
+
+		// var distribution = gaussian(0,eRobot.d);
+		var distance = this.getDistance(spot, estimatedPos);
+		// logger.debug(distance);
+		// return 10*distribution.pdf(distance/10);
+		return distance;
+	};
+
+	/**
+	 * Remove our robot from the detected points
+	 * 
+	 * @param {Object} dots
+	 */
+	Hokuyo.prototype.deleteOurRobots = function (dots){
+		var pr_dist = this.getDistance({x: 0, y:0}, {x: 3000, y:2000});
+		var pr_i = -1;
+		var gr_dist = this.getDistance({x: 0, y:0}, {x: 3000, y:2000});
+		var gr_i = -1;
+
+		var gr_pos_with_offset = {
+			x: this.ia.gr.pos.x + GR_OFFSET*Math.cos(this.ia.gr.pos.a),
+			y: this.ia.gr.pos.y + GR_OFFSET*Math.sin(this.ia.gr.pos.a)
+		};
+
+		// logger.debug("Pos PR");
+		// logger.debug(this.ia.pr.pos);
+		// logger.debug("Pos GR");
+		// logger.debug(gr_pos_with_offset);
+
+		for (var i = 0; i &lt; dots.length; i++) {
+			var pr_temp_dist = this.getDistance(dots[i], this.ia.pr.pos);
+			var gr_temp_dist = this.getDistance(dots[i], gr_pos_with_offset);
+			// logger.debug("Pr le pt :");
+			// logger.debug(dots[i]);
+			// logger.debug(pr_temp_dist);
+			// logger.debug(gr_temp_dist);
+
+
+			if ((pr_dist > pr_temp_dist) &amp;&amp; (pr_temp_dist &lt; this.ia.pr.size.d * PR_GR_COEF)){
+				pr_dist = pr_temp_dist;
+				pr_i = i;
+			}
+
+			if ((gr_dist > gr_temp_dist) &amp;&amp; (gr_temp_dist &lt; this.ia.gr.size.d * PR_GR_COEF)){
+				gr_dist = gr_temp_dist;
+				gr_i = i;
+			}
+		}
+		
+		if (pr_i != -1) {
+			// logger.debug("Deleting PR:");
+			// logger.debug(dots[pr_i]);
+			// logger.debug(this.ia.pr.pos);
+			dots.splice(pr_i,1);
+
+			if (pr_i &lt; gr_i) {
+				gr_i = gr_i -1;
+			}
+		} else {
+			logger.warn("On a pas trouvé le PR parmis les points de l'Hokuyo");
+		}
+
+		if (gr_i != -1) {
+			// logger.debug("Deleting GR:");
+			// logger.debug(dots[gr_i]);
+			// logger.debug(gr_pos_with_offset);
+			// logger.debug(this.getDistance(dots[gr_i], gr_pos_with_offset));
+
+			dots.splice(gr_i,1);
+		} else {
+			logger.warn("On a pas trouvé le GR parmis les points de l'Hokuyo");
+		}
+		// logger.debug(dots);
+	};
+
+	/**
+	 * Returns Best Matching Coefficient
+	 * 
+	 * @param {Object} dots
+	 * @param {Object} robots
+	 * @param {int} now
+	 */
+	Hokuyo.prototype.getBestMatchingCoef = function(dots, robots, now) {
+		// Return the couple of ennemy robot and dot that matches the best
+
+		var matching_coef = [];
+		var best_coef = {
+			value: this.getDistance({x: 0, y:0}, {x: 3000, y:2000}),
+			dot: -1,
+			e_robot: -1
+		};
+
+		for (var d = 0; d &lt; dots.length; d++){
+			// for each real point
+			matching_coef[d] = [];
+			for (var i = 0; i &lt; robots.length; i++) {
+				// we make a matching coefficient
+
+				matching_coef[d][i] = this.getMatchingCoef(dots[d], robots[i], robots[i].lastUpdate - now, robots[i].status);
+
+				if (best_coef.value > matching_coef[d][i]) {
+					best_coef.value = matching_coef[d][i];
+					best_coef.dot = d;
+					best_coef.e_robot = i;
+				}
+			}
+		}
+
+		//logger.debug("Coefficients de matching");
+		//logger.debug(matching_coef);
+
+		return best_coef;
+	};
+
+	Hokuyo.prototype.updatePos = function (dots) {
+		// Invert dots if we are green
+		if (this.ia.color == "green"){
+			for (var i = 0; i &lt; dots.length; i++) {
+				dots[i].x = 3000 - dots[i].x;
+			}
+		}
+
+		if (!this.matchStarted){
+//			logger.debug("Le match n'a pas commencé");
+			return;
+		}
+
+		if (dots.length === 0)
+			logger.warn("On a reçu un message vide (pas de spots dedans)");
+		else {
+
+			clearTimeout(timeout);
+
+			if (dots.length != ((this.params.we_have_hats?2:0) + this.params.nb_erobots)) {
+			//	logger.info("On a pas le meme nombre de spots ("+dots.length+") que de robots à détecter ("+
+//					((this.params.we_have_hats?2:0) + this.params.nb_erobots) + ").");
+			}
+
+			// takes a timestamp to be able to compute speeds
+			var now = this.ia.timer.get();
+			// var now = this.lastNow = this.lastNow+1;
+
+			// if we have hats, kill ourselves (virtualy, of course)
+			if (this.params.we_have_hats)
+				this.deleteOurRobots(dots);
+
+			// // until there are dots left to be matched with ennmies
+			// while (dots.length > 0){
+			// 	// if some robots aren't already matched
+			// 	var e_r2Bmatched = [];
+
+			// 	for (var i = 0; i &lt; this.ia.data.nb_erobots; i++) {
+			// 		if(this.ia.data.erobot[i].lastUpdate &lt; now){
+			// 			// logger.debug(this.ia.data.erobot[i].name + " last update :");
+			// 			// logger.debug(this.ia.data.erobot[i].lastUpdate);
+			// 			e_r2Bmatched.push(this.ia.data.erobot[i]);
+			// 		}
+			// 	}
+
+			// 	if (e_r2Bmatched.length > 0) {
+			// 		// logger.debug("On s'occupe des robots :");
+			// 		// logger.debug(e_r2Bmatched);
+			// 		// logger.debug("Avec les points :");
+			// 		// logger.debug(dots);
+
+
+			// 		// for each eatimated position of the robots
+			// 		var best_coef = this.getBestMatchingCoef(dots, e_r2Bmatched, now);
+			// 		// logger.debug(best_coef);
+
+			// 		// if the bigger coefficient is under the arbitrary threshold
+			// 		// XXX
+
+			// 		// we take the best/bigger coefficient (well named best_coef :P )
+
+			// 		// if it isn't, set the new position, speed, status, call the "ennemy went there" function
+			// 		// logger.debug("On a matché le point suivant avec le "+e_r2Bmatched[best_coef.e_robot].name+" ennemi");
+			// 		// logger.debug(dots[best_coef.dot]);
+
+			// 		if (best_coef.e_robot == -1){
+			// 			logger.warn('Erreur de matching (il reste des robots à matcher avec des points mais ils collent pas) :');
+			// 			//logger.warn(e_r2Bmatched);
+			// 			//logger.warn(dots);
+			// 			break;
+			// 		}
+
+			// 		//logger.debug("Le "+e_r2Bmatched[best_coef.e_robot].name+" est passé de "+e_r2Bmatched[best_coef.e_robot].pos.x+", "+e_r2Bmatched[best_coef.e_robot].pos.y+ " à "+dots[best_coef.dot].x+", "+dots[best_coef.dot].y);
+
+			// 		e_r2Bmatched[best_coef.e_robot].lastUpdate = now;
+			// 		var deltaT = now - this.lastNow;
+			// 		if (deltaT !== 0){
+			// 			var x_spd = (dots[best_coef.dot].x - e_r2Bmatched[best_coef.e_robot].pos.x)/deltaT;
+			// 			var y_spd = (dots[best_coef.dot].y - e_r2Bmatched[best_coef.e_robot].pos.y)/deltaT;
+			// 			if (x_spd > MAX_SPD) {
+			// 				x_spd = MAX_SPD;
+			// 			} else if (x_spd &lt; -MAX_SPD) {
+			// 				x_spd = -MAX_SPD;
+			// 			}
+			// 			if (y_spd > MAX_SPD) {
+			// 				y_spd = MAX_SPD;
+			// 			} else if (y_spd &lt; -MAX_SPD) {
+			// 				y_spd = -MAX_SPD;
+			// 			}
+
+			// 			e_r2Bmatched[best_coef.e_robot].speed = {
+			// 				x: x_spd,
+			// 				y: y_spd
+			// 			};
+			// 		} else {
+			// 			logger.warn("Tiens, deltaT = 0, c'est bizarre...");
+			// 			e_r2Bmatched[best_coef.e_robot].speed = {
+			// 				x:0,
+			// 				y:0
+			// 			};
+			// 		}
+
+			// 		e_r2Bmatched[best_coef.e_robot].pos = {
+			// 			x: dots[best_coef.dot].x,
+			// 			y: dots[best_coef.dot].y,
+			// 		};
+
+			// 		// logger.debug("Position et vitesse du robot :");
+			// 		// logger.debug(e_r2Bmatched[best_coef.e_robot].pos);
+			// 		// logger.debug(e_r2Bmatched[best_coef.e_robot].speed);
+
+
+			// 		// if it's climbing the stairs, set the correct status
+			// 		if (this.isOnTheStairs(dots[best_coef.dot])){
+			// 			e_r2Bmatched[best_coef.e_robot].status = "on_the_stairs";
+			// 			logger.info(e_r2Bmatched[best_coef.e_robot].status);
+			// 		} else {
+			// 			e_r2Bmatched[best_coef.e_robot].status = "moving";
+			// 			this.ia.data.theEnnemyWentThere(e_r2Bmatched[best_coef.e_robot].pos, best_coef.e_robot);
+			// 		}
+					
+			// 		// and delete the dot
+			// 		dots.splice(best_coef.dot,1);
+			// 	} else {
+			// 		// if all the robots are tidied up, ouw, that's strange ^^
+			// 		//logger.warn("Un ou plusieurs spots de plus que de robots sur la table :");
+			// 		//logger.warn(dots);
+			// 		//logger.warn("e_r2Bmatched");
+			// 		//logger.warn(e_r2Bmatched);
+			// 		break;
+			// 	}
+
+			// }
+
+			// // XXX /!\ robots on the stairs !
+
+
+			// // if there's some robots to be matched (but no real point left :/), they're lost...
+			// // we estimate their position and tag them with "lost"
+			// for (var i = 0; i &lt; this.ia.data.nb_erobots; i++) {
+			// 	if ((this.ia.data.erobot[i].lastUpdate &lt; now) &amp;&amp; (this.ia.data.erobot[i].status == "moving")){
+			// 		this.ia.data.erobot[i].pos = {
+			// 			x: this.ia.data.erobot[i].pos.x +  this.ia.data.erobot[i].speed.x*Math.abs(this.ia.data.erobot[i].lastUpdate - now),
+			// 			y: this.ia.data.erobot[i].pos.y +  this.ia.data.erobot[i].speed.y*Math.abs(this.ia.data.erobot[i].lastUpdate - now)
+			// 		};
+			// 		this.ia.data.erobot[i].speed = {
+			// 			x:0,
+			// 			y:0,
+			// 		};
+			// 		this.ia.data.erobot[i].status = "lost";
+			// 		this.ia.data.erobot[i].lastUpdate = now;
+			// 		this.nb_lost = 0;
+			// 	} else if ((this.ia.data.erobot[i].lastUpdate &lt; now) &amp;&amp; (this.ia.data.erobot[i].status == "lost") &amp;&amp; (this.nb_lost&lt;LOST_TIMEOUT)){
+			// 		this.nb_lost += 1;
+			// 	} else if ((this.ia.data.erobot[i].lastUpdate &lt; now) &amp;&amp; (this.ia.data.erobot[i].status == "lost") &amp;&amp; (this.nb_lost==LOST_TIMEOUT)){
+			// 		// Si le robot était déjà perdu à l'itération d'avant
+			// 		this.mayday("On a perdu le "+this.ia.data.erobot[i].name + " ennemi");
+			// 	}
+			// }
+
+			// this.lastNow = now;
+
+			// this.detectCollision(dots);
+			// this.ia.data.dots = dots.map(function(val){
+			// 	return {
+			// 		pos: val,
+			// 		d: 320
+			// 	};	
+			// });
+
+			for(var d in dots) {
+				if(d.x > 300 &amp;&amp; d.x &lt; 2700 &amp;&amp; d.y > 300 &amp;&amp; d.y &lt; 1700) {
+					this.ia.pr.stop();
+				}
+			}
+
+			timeout = setTimeout(function() {this.timedOut();}.bind(this) , 1000);
+		}
+
+	};
+
+	/**
+	 * Detects Collision
+	 * 
+	 * @param {Object} dots
+	 */
+	Hokuyo.prototype.detectCollision = function(dots) {
+		var collision = false;
+		var pf = this.ia.pr.path;
+		var minDist;
+		// for each path segment
+		var complete_path = [this.ia.pr.pos].concat(this.ia.pr.path);
+		for (var i = 0; i &lt; complete_path.length-1 &amp;&amp; !collision; (i++) ) {
+			var segment = [complete_path[i], complete_path[i+1]]; // so segment[0][0] is the x value of the beginning of the segment
+			var segLength = this.getDistance({x:segment[0].x , y:segment[0].y }, {x:segment[1].x , y:segment[1].y });
+			var nthX = (segment[1].x-segment[0].x)*SEGMENT_DELTA_D/segLength; // segment X axis length nth 
+			var nthY = (segment[1].y-segment[0].y)*SEGMENT_DELTA_D/segLength;
+
+			// for each X cm of the segment
+			for (var j = 0; (j*SEGMENT_DELTA_D) &lt; segLength &amp;&amp; !collision; (j++)) {
+
+				var segPoint = {
+					x: segment[0].x + nthX*j,
+					y: segment[0].y + nthY*j
+				};
+
+				// distance to each estimated position of the ennemi robots
+				minDist = 10000;//this.getDistance(dots[0], segPoint);
+
+				for(var k = 0; k &lt; dots.length; k++) {
+					var tmp = this.getDistance(dots[k], segPoint);
+					if (tmp &lt; minDist) {
+						minDist = tmp;
+					}
+				}
+				// if (ebots.length == 2) {
+				// 	var tmp = this.getDistance(ebots[1], segPoint);
+				// 	if (tmp &lt; minDist) {
+				// 		minDist = tmp;
+				// 	}
+				// }
+
+				// if one of the dist &lt; security diameter, there will be a collision
+				if (minDist &lt; 450) {
+					collision = true;
+				}
+				
+			}
+		}
+
+		if (collision) {
+			this.ia.pr.collision();
+		}
+	};
+
+	// Hokuyo.prototype.detectCollision = function() {
+	// 	var collision = false;
+	// 	var pf = this.ia.pr.path;
+	// 	var ebots = [{ // estimated positions
+	// 			x:this.ia.data.erobot[0].pos.x +  this.ia.data.erobot[0].speed.x*DELTA_T,
+	// 			y:this.ia.data.erobot[0].pos.y +  this.ia.data.erobot[0].speed.y*DELTA_T,
+	// 			d:this.ia.data.erobot[0].d
+	// 		}];
+
+	// 	if (this.ia.data.nb_erobots == 2) {
+	// 		ebots.push = {
+	// 			x:this.ia.data.erobot[1].pos.x +  this.ia.data.erobot[1].speed.x*DELTA_T,
+	// 			y:this.ia.data.erobot[1].pos.y +  this.ia.data.erobot[1].speed.y*DELTA_T,
+	// 			d:this.ia.data.erobot[1].d
+	// 		};
+	// 	}
+
+	// 	// for each path segment
+	// 	var complete_path = [this.ia.pr.pos].concat(this.ia.pr.path);
+	// 	for (var i = 0; i &lt; complete_path.length-1 &amp;&amp; !collision; (i++) ) {
+	// 		var segment = [complete_path[i], complete_path[i+1]]; // so segment[0][0] is the x value of the beginning of the segment
+	// 		var segLength = this.getDistance({x:segment[0].x , y:segment[0].y }, {x:segment[1].x , y:segment[1].y });
+	// 		var nthX = (segment[1].x-segment[0].x)*SEGMENT_DELTA_D/segLength; // segment X axis length nth 
+	// 		var nthY = (segment[1].y-segment[0].y)*SEGMENT_DELTA_D/segLength;
+
+	// 		// for each X cm of the segment
+	// 		for (var j = 0; (j*SEGMENT_DELTA_D) &lt; segLength &amp;&amp; !collision; (j++)) {
+
+	// 			var segPoint = {
+	// 				x: segment[0].x + nthX*j,
+	// 				y: segment[0].y + nthY*j
+	// 			};
+
+	// 			// distance to each estimated position of the ennemi robots
+	// 			var minDist = this.getDistance(ebots[0], segPoint);
+
+	// 			/*
+	// 			if (ebots.length == 2) {
+	// 				var tmp = this.getDistance(ebots[1], segPoint);
+	// 				if (tmp &lt; minDist) {
+	// 					minDist = tmp;
+	// 				}
+	// 			}*/
+
+	// 			// if one of the dist &lt; security diameter, there will be a collision
+	// 			if (minDist &lt; SECURITY_COEF*ebots[0].d/2.0) {
+	// 				collision = true;
+	// 			}
+				
+	// 		}
+	// 	}
+
+	// 	if (collision) {
+	// 		this.ia.pr.collision();
+	// 	}
+	// };
+
+	/**
+	 * Updates number of robots
+	 * 
+	 * @param {int} nb Number of robots
+	 */
+	Hokuyo.prototype.updateNumberOfRobots = function (nb) {
+		switch (nb){
+			case 0:
+				this.nb_hokuyo = 0;
+				// Fatal error
+				this.mayday("On plus d'hokuyo");
+				break;
+			case 1:
+				this.nb_hokuyo = 1;
+				// bigger security zone ? throw startAgain ?
+				break;
+			case 2:
+				this.nb_hokuyo = 2;
+				break;
+			default:
+				logger.info("Invalid number of robots received :" + nb);
+		}
+	};
+
+	/**
+	 * May Day
+	 * 
+	 * @param {string} reason
+	 */
+	Hokuyo.prototype.mayday = function(reason) {
+		logger.error("Mayday called, the given reason is :");
+		logger.error(reason);
+
+		// XXX ? -> en fait on bloque peut-être pas ! : si le robot s'est vautré, c'est son soucis
+	};
+
+	/**
+	 * Parse Order
+	 * 
+	 * @param {string} from
+	 * @param {string} name
+	 * @param {Object} params
+	 */
+	Hokuyo.prototype.parseOrder = function (from, name, params) {
+		var orderName = name.split('.')[1];
+		switch (orderName){
+			case "position_tous_robots":
+				this.updatePos(params.dots);
+				break;
+			case "nb_hokuyo":
+				this.updateNumberOfRobots(params.nb);
+				break;
+			default:
+				logger.warn("Message name " + name + " not understood");
+		}
+	};
+
+	/**
+	 * Return true if the number of Hokuyo isn't equal to 0
+	 */
+	Hokuyo.prototype.isOk = function () {
+		if (this.nb_hokuyo === 0)
+			return false;
+		else
+			return true;
+	};
+
+	return Hokuyo;
+})();</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Nov 12 2016 17:40:18 GMT+0100 (CET) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

@@ -1,3 +1,10 @@
+/**
+ * Asserv Simulator module
+ * 
+ * @module clients/shared/asserv-simu
+ * @see {@link clients/shared/asserv-simu.Asserv}
+ */
+
 module.exports = (function () {
 	var logger = require('log4js').getLogger('asserv');
 
@@ -12,17 +19,38 @@ module.exports = (function () {
 
 	var timeouts = [];
 
+	/**
+	 * Asserv Constructor
+	 * 
+	 * @exports clients/shared/asserv-simu.Asserv
+	 * @constructor
+	 * @param {Object} client
+	 * @param {Object} who
+	 * @param {clients/shared/asserv.Asserv} fifo
+	 */
 	function Asserv(client, who, fifo) {
+		/** @type {Object} */
 		this.client = client;
+		/** @type {Object} */
 		this.who = who;
+		/** @type {Object} */
 		this.pos = {
 			x:0,y:0,a:0
 		};
+		/** @type {clients/shared/asserv.Asserv} */
 		this.fifo = fifo;
+		/** @type {int} */
 		this.vitesse = 800;
 		this.getPos();
 	}
 
+	/**
+	 * New Order
+	 * 
+	 * @param {Object} callback
+	 * @param {int} ms
+	 * @param {boolean} no_fifo
+	 */
 	Asserv.prototype.newOrder = function(callback, ms, no_fifo, delay_order_finished){
 		if(callback === undefined)
 			callback = function(){};
@@ -48,50 +76,117 @@ module.exports = (function () {
 		}
 	}
 
+	/**
+	 * Convert Angle
+	 * 
+	 * @param {int} a Angle
+	 */
 	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
+	/**
+	 * Set Angle
+	 * 
+	 * @param {int} a Angle
+	 */
 	Asserv.prototype.setA = function(a) {
 		this.pos.a = convertA(a);
 	}
+	/**
+	 * Position ?
+	 * 
+	 * @param {Object} pos
+	 */
 	Asserv.prototype.Pos = function(pos) {
 		this.pos.x = pos.x;
 		this.pos.y = pos.y;
 		this.setA(pos.a);
 	}
+	/**
+	 * Sets Position
+	 * 
+	 * @param {Object} pos
+	 * @param {Object} callback
+	 */
 	Asserv.prototype.setPos = function(pos, callback) {
 		this.Pos(pos);
 		this.sendPos();
 		if(callback !== undefined)
 			callback();
 	}
+	/**
+	 * Gets Position
+	 * 
+	 * @param {Object} pos
+	 */
 	Asserv.prototype.getPos = function(pos) {
 		this.client.send('ia', this.who+'.getpos');
 	}
+	/**
+	 * Sends Position
+	 */
 	Asserv.prototype.sendPos = function() {
 		this.client.send('ia', this.who+'.pos', this.pos);
 	}
 
+	/**
+	 * Clean
+	 */
 	Asserv.prototype.clean = function(){
 		logger.debug('cleaning %d timeouts', timeouts.length);
 		while(timeouts.length > 0) {
 			clearTimeout(timeouts.shift());
 		}
 	};
+	/**
+	 * Avancer plot
+	 * 
+	 * @param {Object} callback
+	 */
 	Asserv.prototype.avancerPlot = function(callback) {
 		this.newOrder(callback, 1200);
 	}
 
+	/**
+	 * Set vitesse
+	 * 
+	 * @param {int} v Speed
+	 * @param {int} r rotation
+	 * @param {Object} callback
+	 */
 	Asserv.prototype.setVitesse = function(v, r, callback) {
 		this.vitesse = parseInt(v);
 		if(callback !== undefined)
 			callback();
 	};
+	/**
+	 * Calage X
+	 * 
+	 * @param {int} x
+	 * @param {int} a Angle
+	 * @param {Object} callback
+	 */
 	Asserv.prototype.calageX = function(x, a, callback) {
 		this.setPos({x: x, y: this.pos.y, a: a}, callback);
 	}
+	/**
+	 * Calage Y
+	 * 
+	 * @param {int} y
+	 * @param {int} a Angle
+	 * @param {Object} callback
+	 */
 	Asserv.prototype.calageY = function(y, a, callback) {
 		this.setPos({x: this.pos.x, y: y, a: a}, callback);
 	}
 
+	/**
+	 * Simu Speed
+	 * 
+	 * @param {int} vit Speed
+	 * @param {int} x
+	 * @param {int} y
+	 * @param {int} a Angle
+	 * @param {int} dt
+	 */
 	Asserv.prototype.simu_speed = function(vit, x, y, a, dt) {
 		return function() {
 			this.pos = {
@@ -102,6 +197,14 @@ module.exports = (function () {
 			this.sendPos();
 		}.bind(this);
 	}
+	/**
+	 * Speed ?
+	 * 
+	 * @param {int} l
+	 * @param {int} a Angle
+	 * @param {int} ms
+	 * @param {Object} callback
+	 */
 	Asserv.prototype.speed = function(l, a, ms,callback) {
 		this.newOrder(function() {
 			// this.simu.pwm(callback, l/3, l/3, ms);
@@ -113,6 +216,14 @@ module.exports = (function () {
 		}.bind(this), 0, false, ms);
 	};
 
+	/**
+	 * Simu Pulse Width Modulation
+	 * 
+	 * @param {int} x
+	 * @param {int} y
+	 * @param {int} a Angle
+	 * @param {int} dt
+	 */
 	Asserv.prototype.simu_pwm = function(pwm, x, y, a, dt) {
 		return function() {
 			this.pos = {
@@ -123,6 +234,14 @@ module.exports = (function () {
 			this.sendPos();
 		}.bind(this);
 	}
+	/**
+	 * Pulse Width Modulation
+	 * 
+	 * @param {string} left
+	 * @param {string} right
+	 * @param {int} ms
+	 * @param {Object} callback
+	 */
 	Asserv.prototype.pwm = function(left, right, ms, callback) {
 		this.newOrder(function() {
 			var pwm = (left+right)/2;
@@ -134,6 +253,12 @@ module.exports = (function () {
 		}.bind(this), 0, false, ms);
 	};
 
+	/**
+	 * Simu Go X Y
+	 * 
+	 * @param {int} x
+	 * @param {int} y
+	 */
 	Asserv.prototype.simu_goxy = function(x, y) {
 		return function() {
 			this.pos.x = x;
@@ -141,6 +266,15 @@ module.exports = (function () {
 			this.sendPos();
 		}.bind(this);
 	}
+	/**
+	 * Go X Y
+	 * 
+	 * @param {int} x
+	 * @param {int} y
+	 * @param {string} sens
+	 * @param {Object} callback
+	 * @param {boolean} no_fifo
+	 */
 	Asserv.prototype.goxy = function(x, y, sens, callback, no_fifo) {
 		
 			var dx = x-this.pos.x;
@@ -173,12 +307,24 @@ module.exports = (function () {
 				}.bind(this), 0, no_fifo, tf);
 			}.bind(this), no_fifo);
 	};
+	/**
+	 * Simu Go Angle
+	 * 
+	 * @param {int} a Angle
+	 */
 	Asserv.prototype.simu_goa = function(a) {
 		return function() {
 			this.setA(a);
 			this.sendPos();
 		}.bind(this);
 	}
+	/**
+	 * Simu Go Angle
+	 * 
+	 * @param {int} a Angle
+	 * @param {Object} callback
+	 * @param {boolean} no_fifo
+	 */
 	Asserv.prototype.goa = function(a, callback, no_fifo){
 		a = convertA(a);
 		da = convertA(a-this.pos.a);
@@ -197,6 +343,14 @@ module.exports = (function () {
 		}.bind(this), 0, no_fifo, tf);
 	};
 
+	/**
+	 * Set P I D
+	 * 
+	 * @param {int} p
+	 * @param {int} i
+	 * @param {int} d
+	 * @param {Object} callback
+	 */
 	Asserv.prototype.setPid = function(p, i, d, callback){
 		this.newOrder(callback);
 	};
