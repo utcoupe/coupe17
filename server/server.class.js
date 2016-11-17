@@ -1,3 +1,9 @@
+/**
+ * Server module
+ * @module server/server
+ * @requires module:ia/main
+ * @see {@link server/server.Server}
+ */
 module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
@@ -7,24 +13,42 @@ module.exports = (function () {
 	var convert = new Convert({newLine: true});
 	var spawn = require('child_process').spawn;
 
+	/**
+	 * Starts a server on the port specified. Default port: 3128
+	 * 
+	 * @exports server/server.Server
+	 * @constructor
+	 * @param {int} [server_port=3128] Server port
+	 */
 	function Server(server_port) {
+		/**
+		 * @type {int}
+		 */
 		this.server_port = server_port || 3128;
 		
 		// Get server IP address
 		var os = require('os');
 		var networkInterfaces = os.networkInterfaces();
 		try {
+			/** @type {string} */
 			this.ip = networkInterfaces["eth0"][0].address || networkInterfaces["Wi-Fi"][0].address || "127.0.0.1";
 		}
 		catch(e) {
 			this.ip = "127.0.0.1";
 		}
+		/** @type {string} */
 		this.ip_port = this.ip+':'+this.server_port;
 
-		// Create the server
+		/**
+		 * Create the server
+		 * @type {Object}
+		 */
 		this.server = require('socket.io')();
 
-		// Create the network default object
+		/** 
+		 * Create the network default object
+		 * @type {Object}
+		 * */
 		this.network = {
 			server: {
 				name: "Server",
@@ -36,12 +60,14 @@ module.exports = (function () {
 			pr: {},
 			gr: {}
 		};
+		/** @type {Object} */
 		this.utcoupe = {
 			'ia': false,
 			'pr': false,
 			'gr': false,
 			'hokuyo': false
 		};
+		 /** @type {Object} */
 		this.progs = {
 			'ia': null,
 			'pr': null,
@@ -132,6 +158,9 @@ module.exports = (function () {
 		logger.info("Server started at "+this.ip_port);
 	}
 
+	/**
+	 * Send Network
+	 */
 	Server.prototype.sendNetwork = function(){
 		// logger.info("Message sent to webclient !");
 		// logger.info(this.network);
@@ -145,6 +174,9 @@ module.exports = (function () {
 			});
 	}
 
+	/**
+	 * Launch the robot
+	 */
 	Server.prototype.launch = function(params) {
 		var prog = params.prog;
 		if(!this.utcoupe[prog]) {
@@ -227,6 +259,11 @@ module.exports = (function () {
 		this.sendUTCoupe();
 	}
 
+	/**
+	 * Stops all
+	 * 
+	 * @param {string} prog
+	 */
 	Server.prototype.stop = function(prog) {
 		if (prog == "pr") {
 			this.progs[prog] = spawn('ssh', ['igep', 'pkill', 'node']);
@@ -240,6 +277,12 @@ module.exports = (function () {
 		}
 		this.sendUTCoupe();
 	}
+
+	/**
+	 * sendUTCoupe
+	 * 
+	 * @param {string} prog
+	 */
 	Server.prototype.sendUTCoupe = function(prog) {
 		this.server.to('webclient').emit('order', {
 			to: 'webclient',

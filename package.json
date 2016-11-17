@@ -16,10 +16,14 @@
     "socket.io": "^1.5.0",
     "socket.io-client": "^1.5.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "docdash": "^0.4.0",
+    "jsdoc": "^3.4.3"
+  },
   "scripts": {
     "utcoupe": "node utcoupe/utcoupe.js",
-    "serve": "http-server"
+    "serve": "http-server",
+    "doc": "node_modules/.bin/jsdoc -c conf_jsdoc.json"
   },
   "repository": {
     "type": "git",

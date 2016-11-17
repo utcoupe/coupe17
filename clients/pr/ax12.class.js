@@ -1,3 +1,10 @@
+/**
+ * AX12 module
+ * 
+ * @module clients/pr/ax12
+ * @see clients/pr/ax12.Ax12
+ */
+
 module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('pr.ax12');
@@ -29,11 +36,23 @@ module.exports = (function () {
 		}
 	};
 
+	/**
+	 * Ax12 Constructor
+	 * 
+	 * @exports clients/pr/ax12.Ax12
+	 * @constructor
+	 * @param {string} sp Serial Port NAME
+	 * @param {Object} sendStatus
+	 * @param {clients/shared/fifo.Fifo} fifo
+	 */
 	function Ax12(sp, sendStatus, fifo) {
-		// sp is Serial Port NAME
+		/** @type {boolean} */
 		this.ready = false;
+		/** @type {Object} */
 		this.sendStatus = sendStatus;
+		/** @type {Object} */
 		this.orders_sent = [];
+		/** @type {clients/shared/fifo.Fifo} */
 		this.fifo = fifo;
 
 		this.connect(sp);
@@ -48,6 +67,11 @@ module.exports = (function () {
 	POS_BALL_2 = 0;
 
 
+	/**
+	 * Connect
+	 * 
+	 * @param {string} sp Serial Port NAME
+	 */
 	Ax12.prototype.connect = function(sp) {
 		if(libusb2ax.dxl_initialize(sp.substring("/dev/ttyACM".length), 1) <= 0) {
 			logger.error("Impossible de se connecter à l'USB2AX");
@@ -56,7 +80,9 @@ module.exports = (function () {
 		}
 		this.ready = true;
 		this.sendStatus();
+		/** @type {array<Object>} */
 		this.ax12s = {};
+		/** @type {Object} */
 		this.type_callback = null;
 
 		libusb2ax.dxl_write_word(2, P_COUPLE, 400);
@@ -66,11 +92,19 @@ module.exports = (function () {
 		this.loopAX12();
 	};
 
+	/**
+	 * Disconnect
+	 * 
+	 * @param {} x
+	 */
 	Ax12.prototype.disconnect = function(x) {
 		this.ready = false;
 		this.sendStatus();
 	};
 
+	/**
+	 * Loop AX12
+	 */
 	Ax12.prototype.loopAX12 = function() {
 		var speed;
 		for(var i in ax12s) {
@@ -105,10 +139,20 @@ module.exports = (function () {
 		setTimeout(function() { this.loopAX12(); }.bind(this), 50);
 	};
 
+	/**
+	 * Deg to AX12
+	 * 
+	 * @param {int} deg
+	 */
 	Ax12.prototype.degToAx12 = function(deg) {
 		return parseInt((deg+150)*1024/300);
 	};
 
+	/**
+	 * Ouvrir
+	 * 
+	 * @param {Object} [callback]
+	 */
 	Ax12.prototype.ouvrir = function(callback) {
 		if(callback === undefined) {
 			callback = function(){};
@@ -125,6 +169,11 @@ module.exports = (function () {
 		}.bind(this), 'AX12-Ouvrir');
 	};
 
+	/**
+	 * Fermer
+	 * 
+	 * @param {Object} [callback]
+	 */
 	Ax12.prototype.fermer = function(callback) {
 		if(callback === undefined) {
 			callback = function(){};
@@ -141,6 +190,11 @@ module.exports = (function () {
 			this.type_callback = 'fermer';
 		}.bind(this), 'AX12-Fermer');
 	};
+	/**
+	 * Fermer balle
+	 * 
+	 * @param {Object} [callback]
+	 */
 	Ax12.prototype.fermerBalle = function(callback) {
 		if(callback === undefined) {
 			callback = function(){};
@@ -157,6 +211,11 @@ module.exports = (function () {
 			this.type_callback = 'fermer';
 		}.bind(this), 'AX12-Fermer balle');
 	};
+	/**
+	 * Fermer balle 2
+	 * 
+	 * @param {Object} [callback]
+	 */
 	Ax12.prototype.fermerBalle2 = function(callback) {
 		if(callback === undefined) {
 			callback = function(){};

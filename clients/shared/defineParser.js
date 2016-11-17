@@ -1,4 +1,8 @@
-
+/**
+ * Define Parser module
+ * 
+ * @module clients/shared/defineParser
+ */
 
 /* Converts :
  * #define VALUEA

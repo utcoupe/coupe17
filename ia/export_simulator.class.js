@@ -1,3 +1,10 @@
+/**
+ * Export simulator Module
+ * 
+ * @module ia/export_simulator
+ * @see {@link ia/export_simulator.ExportSimulator}
+ */
+
 module.exports = (function () {
 	"use strict";
 	var log4js = require('log4js');
@@ -5,14 +12,28 @@ module.exports = (function () {
 
 	var __timeout = null;
 	var FPS = 30;
+	/** Color of the team */
 	var color;
 
+	/**
+	 * ExportSimulator Constructor
+	 * 
+	 * @exports ia/export_simulator.ExportSimulator
+	 * @constructor
+	 * @param ia
+	 */
 	function ExportSimulator(ia) {
+		/** IA */
 		this.ia = ia;
 		this.start();
 		color = this.ia.color;
 	}
 
+	/**
+	 * Convert x, depends on the team color
+	 * 
+	 * @param {int} x
+	 */
 	function convertX(x) {
 		if(color == "yellow") {
 			return (x-1500)/1000;
@@ -20,9 +41,19 @@ module.exports = (function () {
 			return (1500-x)/1000;
 		}
 	}
+	/**
+	 * Convert y
+	 * 
+	 * @param {int} y
+	 */
 	function convertY(y) {
 		return (1000-y)/1000;
 	}
+	/**
+	 * Convert Angle, depends on the team color
+	 * 
+	 * @param {int} a Angle
+	 */
 	function convertA(a) {
 		if(color == "yellow") {
 			return a;
@@ -30,14 +61,22 @@ module.exports = (function () {
 			return (a < 0) ? -Math.PI - a : Math.PI - a;
 		}
 	}
-
+	/**
+	 * Start
+	 */
 	ExportSimulator.prototype.start = function() {
 		this.orderToSimu();
 	}
+	/**
+	 * Stop
+	 */
 	ExportSimulator.prototype.stop = function() {
 		clearTimeout(__timeout);
 	}
 
+	/**
+	 * Order to Simulator
+	 */
 	ExportSimulator.prototype.orderToSimu = function() {
 		var data = {};
 		

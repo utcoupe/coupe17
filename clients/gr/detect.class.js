@@ -1,3 +1,10 @@
+/**
+ * Detect module
+ * 
+ * @module clients/gr/detect
+ * @see {@link clients/gr/detect.Detect}
+ */
+
 module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('pr.detect');
@@ -5,20 +12,35 @@ module.exports = (function () {
 
 	var sp = [];
 
+	/**
+	 * Detect constructor
+	 * 
+	 * @exports clients/gr/detect.Detect
+	 * @constructor
+	 * @param {Object} callback
+	 */
 	function Detect(callback) {
+		/** @type {Object} */
 		this.devicesFound = {
 			asserv: null,
 			servos: null
 		};
+		/** @type {Object} */
 		this.callback = callback;
 		this.searchArduinos();
 	}
 
+	/**
+	 * Send SP
+	 */
 	Detect.prototype.sendSP = function (){
 		// Sent to acts
 		this.callback(this.devicesFound);
 	};
 
+	/**
+	 * Searches Arduino
+	 */
 	Detect.prototype.searchArduinos = function() {
 		// On check tous les ports disponibles
 		serialPort.list(function (err, ports) {

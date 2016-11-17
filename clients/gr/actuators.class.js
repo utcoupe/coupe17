@@ -1,28 +1,66 @@
+/**
+ * Actuators module
+ * 
+ * @module clients/gr/actuators
+ * @requires module:clients/shared/fifo
+ * @requires module:clients/gr/servos
+ * @requires module:clients/gr/servos-simu
+ * @requires module:clients/shared/asserv
+ * @requires module:clients/shared/asserv-simu
+ * @see {@link clients/gr/actuators.Acts}
+ */
+
 module.exports = (function () {
 	var logger = require('log4js').getLogger('gr.acts');
+	/** @type {Object} */
 	var serialPort = require("serialport");
+	/** @type {clients/shared/fifo.Fifo} */
 	var fifo = new (require('../shared/fifo.class.js'))();
 
+	/** @type {clients/gr/servos.Servos} */
 	var servos = null;
+	/** @type {clients/gr/asserv.Asserv} */
 	var asserv = null;
 	var date = new Date();
+	/** @type {int} */
 	var lastSendStatus =  date.getTime();
 
+	/**
+	 * Acts Constructor
+	 * 
+	 * @exports clients/gr/actuators.Acts
+	 * @constructor
+	 * @param {Object} client
+	 * @param {Object} sendChildren
+	 */
 	function Acts(client, sendChildren) {
+		/** @type {Object} */
 		this.client = client;
+		/** @type {Object} */
 		this.sendChildren = sendChildren;
 		this.start();
 	}
 
+	/**
+	 * Starts (nothing ?)
+	 */
 	Acts.prototype.start = function(){
 
 	};
 	
+	/**
+	 * Cleans fifo and asserv
+	 */
 	Acts.prototype.clean = function(){
 		fifo.clean(); // A priori déjà vide
 		asserv.clean();
 	};
 
+	/**
+	 * Connect to the servos
+	 * 
+	 * @param {Object} [struct]
+	 */
 	Acts.prototype.connectTo = function(struct){
 		if (!struct.servos) {
 			logger.fatal("Lancement des servos gr en mode simu !");
@@ -43,6 +81,9 @@ module.exports = (function () {
 		}
 	};
 
+	/**
+	 * Sends Status
+	 */
 	Acts.prototype.sendStatus = function() {
 		if(lastSendStatus <  date.getTime()-1000){
 			this.sendChildren(this.getStatus);
@@ -50,6 +91,9 @@ module.exports = (function () {
 		}
 	};
 
+	/**
+	 * Gets the status
+	 */
 	Acts.prototype.getStatus = function(){
 		var data = {
 			"status": "",
@@ -71,6 +115,9 @@ module.exports = (function () {
 		return data;
 	};
 
+	/**
+	 * Tries to quit
+	 */
 	Acts.prototype.quit = function(){
 		if (!!servos && servos.ready)
 			servos.disconnect();
@@ -78,7 +125,14 @@ module.exports = (function () {
 			asserv.disconnect();
 	};
 
-	// Order switch
+	/**
+	 * Order switch
+	 * 
+	 * @param {string} from
+	 * @param {string} name
+	 * @param {Object} params
+	 * @param {Object} callback
+	 */
 	Acts.prototype.orderHandler = function (from, name, params, callback) {
 		// logger.info("Just received an order `" + name + "` from " + from + " with params :");
 		logger.info(name, params);
