@@ -2,6 +2,7 @@
  * Hokuyo module
  * 
  * @module ia/hokuyo
+ * @requires log4js
  * @see ia/hokuyo.Hokuyo
  */
 
