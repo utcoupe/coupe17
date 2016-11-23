@@ -3,6 +3,7 @@
  * 
  * @module ia/main
  * @requires ia/ia
+ * @requires log4js
  */
 
 (function () {

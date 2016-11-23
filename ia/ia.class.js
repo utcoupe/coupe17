@@ -11,6 +11,7 @@
  * @requires module:ia/gr
  * @requires module:ia/pr
  * @requires module:ia/export_simulator
+ * @requires log4js
  * @see {@link ia/ia.Ia}
  */
 
