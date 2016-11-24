@@ -24,7 +24,7 @@
     "utcoupe": "node utcoupe/utcoupe.js",
     "serve": "http-server",
     "doc": "node_modules/.bin/jsdoc -c conf_jsdoc.json",
-    "pr": "node ./clients/pr.main.js"
+    "pr": "node clients/pr/main.js"
   },
   "repository": {
     "type": "git",
