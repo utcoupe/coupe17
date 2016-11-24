@@ -2,6 +2,10 @@
  * Pathfinding module
  * 
  * @module ia/pathfinding
+ * @requires log4js
+ * @requires path
+ * @requires child_process
+ * @requires byline
  * @see {@link ia/pathfinding.Pathfinding}
  */
 
