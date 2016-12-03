@@ -361,7 +361,8 @@ VariantDir('build', '.')
 sources = ['build/' + TARGET + '.cpp']
 # sources += core_sources
 sources += local_sources
-sources += remote_sources
+if TARGET_PATH != "":
+    sources += remote_sources
 sources += all_libs_sources
 
 # Finally Build!!
