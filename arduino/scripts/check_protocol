@@ -5,7 +5,7 @@ used_chars = ''
 ret = 0
 in_vars = 0
 
-f = open('../../common/protocol.h')
+f = open('../../common/asserv/protocol.h')
 for l in f:
     if in_vars and l[0:7] == "#define":
         o = l.split()[1:]
