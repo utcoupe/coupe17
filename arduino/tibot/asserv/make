@@ -8,4 +8,4 @@ if ! ../../scripts/check_protocol; then
 	exit 1
 fi
 
-scons -f ../../scripts/scons/SConstruct -Y ../../common/ ../../common/asserv/ $@
+scons -f ../../scripts/scons/SConstruct -Y ../../common/asserv/ $@
