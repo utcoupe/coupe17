@@ -157,8 +157,8 @@ F_CPU = ARGUMENTS.get('F_CPU', F_CPU)
 
 # There should be a file with the same name as the folder and with the extension .pde / .ino
 if os.path.basename(os.path.realpath(os.curdir)) == "asserv":
-    #TARGET_PATH = "../../common/asserv/"
-    TARGET_PATH = ""
+    TARGET_PATH = "../../common/asserv/"
+    #TARGET_PATH = ""
     TARGET_EXE = os.path.basename(os.path.realpath('../' + os.curdir)) + "_" + os.path.basename(
         os.path.realpath(os.curdir))
 else:
@@ -166,7 +166,7 @@ else:
     TARGET_EXE = os.path.basename(os.path.realpath(os.curdir))
 TARGET = os.path.basename(os.path.realpath(os.curdir))
 print ("Target name : %s" % TARGET)
-print ("Target exe : %s" % TARGET)
+print ("Target exe : %s" % TARGET_EXE)
 assert (os.path.exists(TARGET_PATH + TARGET + FILE_EXTENSION))
 
 cFlags = ['-Wall', '-ffunction-sections', '-fdata-sections', '-fno-exceptions',
@@ -341,6 +341,16 @@ local_sources = map(lambda x: x.replace(build_top, 'build/local/'), local_source
 if local_sources:
     envArduino.Append(CPPPATH='build/local')
 
+# Add the remote sources
+if TARGET_PATH != "":
+    build_top = os.path.realpath('.') + '/' + TARGET_PATH
+    print "build_top : " + build_top
+    VariantDir('build/remote/', build_top)
+    remote_sources = gatherSources(build_top)
+    remote_sources = map(lambda x: x.replace(build_top, 'build/remote/'), remote_sources)
+    if remote_sources:
+        envArduino.Append(CPPPATH='build/remote')
+
 # Convert sketch(.pde) to cpp
 envArduino.Processing('build/' + TARGET + '.cpp', 'build/' + TARGET + FILE_EXTENSION)
 VariantDir('build', '.')
@@ -348,20 +358,21 @@ VariantDir('build', '.')
 sources = ['build/' + TARGET + '.cpp']
 # sources += core_sources
 sources += local_sources
+sources += remote_sources
 sources += all_libs_sources
 
 # Finally Build!!
 core_objs = envArduino.Object(core_sources_patched)
 objs = envArduino.Object(sources)  # , LIBS=libs, LIBPATH='.')
 objs = objs + envArduino.CompressCore('build/core.a', core_objs)
-envArduino.Elf(TARGET + '.elf', objs)
-envArduino.Hex(TARGET + '.hex', TARGET + '.elf')
+envArduino.Elf(TARGET_EXE + '.elf', objs)
+envArduino.Hex(TARGET_EXE + '.hex', TARGET_EXE + '.elf')
 
 # Print Size
 # TODO: check binary size
 MAX_SIZE = getBoardConf(r'^%s\.upload.maximum_size=(.*)' % ARDUINO_BOARD)
 print ("maximum size for hex file: %s bytes" % MAX_SIZE)
-envArduino.Command(None, TARGET + '.hex', AVR_BIN_PREFIX + 'size --target=ihex $SOURCE')
+envArduino.Command(None, TARGET_EXE + '.hex', AVR_BIN_PREFIX + 'size --target=ihex $SOURCE')
 
 
 # Reset
@@ -397,7 +408,7 @@ if AVRDUDE_CONF:
 fuse_cmd = '%s %s' % (pathJoin(os.path.dirname(AVR_BIN_PREFIX), 'avrdude'),
                       ' '.join(avrdudeOpts))
 
-upload = envArduino.Alias('upload', TARGET + '.hex', [reset_cmd, fuse_cmd])
+upload = envArduino.Alias('upload', TARGET_EXE + '.hex', [reset_cmd, fuse_cmd])
 
 AlwaysBuild(upload)
 
