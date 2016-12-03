@@ -5,6 +5,10 @@
 #
 # Copyright (C) 2010 by Homin Lee <ff4500@gmail.com>
 #
+# This file has been modified by Thomas Fuhrmann
+# Now it is possible to use a *.ino file which is not located in the
+# current folder and with a different name than the current folder's one.
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3 of the License, or
@@ -156,9 +160,9 @@ F_CPU = getBoardConf(r'^%s\.build\.f_cpu=(.*)' % ARDUINO_BOARD)
 F_CPU = ARGUMENTS.get('F_CPU', F_CPU)
 
 # There should be a file with the same name as the folder and with the extension .pde / .ino
+# Local modification to use an *.ino file located elsewhere (in case of asserv folder)
 if os.path.basename(os.path.realpath(os.curdir)) == "asserv":
     TARGET_PATH = "../../common/asserv/"
-    #TARGET_PATH = ""
     TARGET_EXE = os.path.basename(os.path.realpath('../' + os.curdir)) + "_" + os.path.basename(
         os.path.realpath(os.curdir))
 else:
@@ -166,7 +170,6 @@ else:
     TARGET_EXE = os.path.basename(os.path.realpath(os.curdir))
 TARGET = os.path.basename(os.path.realpath(os.curdir))
 print ("Target name : %s" % TARGET)
-print ("Target exe : %s" % TARGET_EXE)
 assert (os.path.exists(TARGET_PATH + TARGET + FILE_EXTENSION))
 
 cFlags = ['-Wall', '-ffunction-sections', '-fdata-sections', '-fno-exceptions',
@@ -341,7 +344,7 @@ local_sources = map(lambda x: x.replace(build_top, 'build/local/'), local_source
 if local_sources:
     envArduino.Append(CPPPATH='build/local')
 
-# Add the remote sources
+# Add the remote sources in case of the target is located in another folder
 if TARGET_PATH != "":
     build_top = os.path.realpath('.') + '/' + TARGET_PATH
     print "build_top : " + build_top
