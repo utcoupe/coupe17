@@ -8,7 +8,7 @@
 
 #define BAUDRATE 57600
 #define SERIAL_TYPE SERIAL_8N1
-#define ARDUINO_ID "A"
+#define ARDUINO_ID "grobot_asserv"
 #define DEBUG_TARGET_SPEED 0
 #define DEBUG_MAINLOOP 0
 
