@@ -13,7 +13,10 @@
 #include "pins.h"
 #include "emergency.h"
 
+// Store kind of a timeout
 unsigned long nextTime = 0;
+// Flag to know if a computer is connected to the arduino
+static unsigned char flagConnected = 0;
 
 #ifdef PIN_JACK
 int JackCheck(void) {
@@ -44,9 +47,17 @@ void setup() {
 #endif
 #endif
 	initPins();
-	SERIAL_MAIN.write(ARDUINO_ID);
-	nextTime = micros();
-	ControlInit();
+
+    // Wait a connected computer before launching the loop
+    while (!flagConnected) {
+        SERIAL_MAIN.println(ARDUINO_ID);
+        SERIAL_MAIN.flush();
+        //TODO read the serial and check if a go has been send to escape the loop and startup
+        delay(1000);
+    }
+
+    nextTime = micros();
+    ControlInit();
 }
 
 void loop(){
