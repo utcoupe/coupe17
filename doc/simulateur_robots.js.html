@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>UTCoupe 17 Source: simulateur/robots.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cyborg.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">UTCoupe 17</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-clients_gr_actuators.html">clients/gr/actuators</a></li><li><a href="module-clients_gr_detect.html">clients/gr/detect</a></li><li><a href="module-clients_gr_main.html">clients/gr/main</a></li><li><a href="module-clients_gr_servos.html">clients/gr/servos</a></li><li><a href="module-clients_gr_servos-simu.html">clients/gr/servos-simu</a></li><li><a href="module-clients_pr_actuators.html">clients/pr/actuators</a></li><li><a href="module-clients_pr_ax12.html">clients/pr/ax12</a></li><li><a href="module-clients_pr_ax12-simu.html">clients/pr/ax12-simu</a></li><li><a href="module-clients_pr_detect.html">clients/pr/detect</a></li><li><a href="module-clients_pr_elevator.html">clients/pr/elevator</a></li><li><a href="module-clients_pr_main.html">clients/pr/main</a></li><li><a href="module-clients_pr_others.html">clients/pr/others</a></li><li><a href="module-clients_pr_others-simu.html">clients/pr/others-simu</a></li><li><a href="module-clients_shared_asserv.html">clients/shared/asserv</a></li><li><a href="module-clients_shared_asserv-simu.html">clients/shared/asserv-simu</a></li><li><a href="module-clients_shared_defineParser.html">clients/shared/defineParser</a></li><li><a href="module-clients_shared_fifo.html">clients/shared/fifo</a></li><li><a href="module-config.html">config</a></li><li><a href="module-ia_actions.html">ia/actions</a></li><li><a href="module-ia_data.html">ia/data</a></li><li><a href="module-ia_export_simulator.html">ia/export_simulator</a></li><li><a href="module-ia_gr.html">ia/gr</a></li><li><a href="module-ia_hokuyo.html">ia/hokuyo</a></li><li><a href="module-ia_ia.html">ia/ia</a></li><li><a href="module-ia_main.html">ia/main</a></li><li><a href="module-ia_pathfinding.html">ia/pathfinding</a></li><li><a href="module-ia_pr.html">ia/pr</a></li><li><a href="module-ia_timer.html">ia/timer</a></li><li><a href="module-server_server.html">server/server</a></li><li><a href="module-server_socket_client.html">server/socket_client</a></li><li><a href="module-simulateur_ampoules.html">simulateur/ampoules</a></li><li><a href="module-simulateur_clapets.html">simulateur/clapets</a></li><li><a href="module-simulateur_distributeur.html">simulateur/distributeur</a></li><li><a href="module-simulateur_gobelets.html">simulateur/gobelets</a></li><li><a href="module-simulateur_main.html">simulateur/main</a></li><li><a href="module-simulateur_pieds.html">simulateur/pieds</a></li><li><a href="module-simulateur_robots.html">simulateur/robots</a></li><li><a href="module-simulateur_simulateur.html">simulateur/simulateur</a></li><li><a href="module-utcoupe_utcoupe.html">utcoupe/utcoupe</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="clients_gr_actuators.Acts.html">clients/gr/actuators.Acts</a></li><li><a href="clients_gr_detect.Detect.html">clients/gr/detect.Detect</a></li><li><a href="clients_gr_servos.Servos.html">clients/gr/servos.Servos</a></li><li><a href="clients_gr_servos-simu.Servos.html">clients/gr/servos-simu.Servos</a></li><li><a href="clients_pr_actuators.Acts.html">clients/pr/actuators.Acts</a></li><li><a href="clients_pr_ax12-simu.Ax12.html">clients/pr/ax12-simu.Ax12</a></li><li><a href="clients_pr_ax12.Ax12.html">clients/pr/ax12.Ax12</a></li><li><a href="clients_pr_detect.Detect.html">clients/pr/detect.Detect</a></li><li><a href="clients_pr_elevator.Elevator.html">clients/pr/elevator.Elevator</a></li><li><a href="clients_pr_others.Others.html">clients/pr/others.Others</a></li><li><a href="clients_pr_others-simu.Others.html">clients/pr/others-simu.Others</a></li><li><a href="clients_shared_asserv.Asserv.html">clients/shared/asserv.Asserv</a></li><li><a href="clients_shared_asserv-simu.Asserv.html">clients/shared/asserv-simu.Asserv</a></li><li><a href="clients_shared_fifo.Fifo.html">clients/shared/fifo.Fifo</a></li><li><a href="ia_actions.Actions.html">ia/actions.Actions</a></li><li><a href="ia_data.Data.html">ia/data.Data</a></li><li><a href="ia_export_simulator.ExportSimulator.html">ia/export_simulator.ExportSimulator</a></li><li><a href="ia_gr.Gr.html">ia/gr.Gr</a></li><li><a href="ia_hokuyo.Hokuyo.html">ia/hokuyo.Hokuyo</a></li><li><a href="ia_ia.Ia.html">ia/ia.Ia</a></li><li><a href="ia_pathfinding.Pathfinding.html">ia/pathfinding.Pathfinding</a></li><li><a href="ia_timer.Timer.html">ia/timer.Timer</a></li><li><a href="server_server.Server.html">server/server.Server</a></li><li><a href="server_socket_client.SocketClient.html">server/socket_client.SocketClient</a></li><li><a href="simulateur_simulateur.Simulateur.html">simulateur/simulateur.Simulateur</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: simulateur/robots.js</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">/**
+ * Fonctions utiles pour gérer les robots
+ * 
+ * @module simulateur/robots
+ */
+
+/*
+
+petit : 
+x: 0.15
+y: 0.35
+z: 0.20
+
+grand :
+x: 0.25
+y: 0.35
+z: 0.35
+
+*/
+
+
+
+/**
+ * Crée le robot principal suivant le côté demandé
+ * 
+ * @param {String} cote
+ * @returns {THREE.Mesh}
+ */
+function creerRobotPrincipal(cote){
+
+
+	var posx = {"gauche":-1.5+0.125+0.07,"droit":1.5-0.125-0.07};
+	
+	var geo;
+
+	if(cote==="droit"){
+		geo = new THREE.CylinderGeometry( RAYON_ENNEMIS_GRANDS,RAYON_ENNEMIS_GRANDS,0.35,25);
+	}
+	else{
+		geo = new THREE.BoxGeometry(0.25,0.35,0.35);
+	}
+
+
+    var boxMat;
+    if(cote==="gauche"){
+    	boxMat = [
+				new THREE.MeshLambertMaterial({color:'blue',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'yellow',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'yellow',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'yellow',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'yellow',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'yellow',side:THREE.doubleSided})];
+    }else{
+
+    	boxMat = [
+				new THREE.MeshLambertMaterial({color:'green',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'blue',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'green',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'green',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'green',side:THREE.doubleSided}),
+				new THREE.MeshLambertMaterial({color:'green',side:THREE.doubleSided})];
+    }
+
+	var mat = new THREE.MeshFaceMaterial( boxMat );
+    var robot = new THREE.Mesh(geo,mat);
+
+
+    robot.position.set(posx[cote],0.185,0);
+    var vect = new THREE.Vector3(robot.position.x,0,robot.position.z);
+    robot.direction = vect.negate().normalize();
+
+
+    robot.points = [];
+    robot.largeur = 0.250;
+    robot.longueur = 0.350;
+    robot.hauteur = 0.350;
+  	robot.diago = Math.sqrt(0.25*0.25+0.35*0.35);
+  	robot.tapisDeroule = false;
+
+    
+    robot.nom = "robot principal "+cote;
+    robot.cote = cote;
+    robot.avancer = avancer;
+    robot.reculer = reculer;
+    robot.tournerDroite = tournerDroite;
+    robot.tournerGauche = tournerGauche;
+    robot.updatePoints = updatePoints;
+    robot.verifPosition = verifPosition;
+    robot.verifCollisionObjets = verifCollisionObjets;
+    robot.verifCollisionObjet = verifCollisionObjet;
+    robot.verifCollisionRobot = verifCollisionRobot;
+    robot.verifCollisionRobots = verifCollisionRobots;
+
+    robot.prendreObjet = prendreObjet;
+    robot.deposerObjet = deposerObjet;
+    robot.verifCibleAtteignable = verifCibleAtteignable;
+	robot.objetsTenus = [];
+	robot.objetsTenus.dessus = robot.hauteur/2 + 0.02;
+	robot.objetsTenus.nombre = 0;
+	robot.prendrePopcorn = prendrePopcorn;
+	robot.fermerClapet = fermerClapet;
+	robot.deroulerTapis = deroulerTapis;
+
+
+	robot.enDeplacement = false;
+	robot.aParcourir = {valeur : 0,sens : "avant"};
+	robot.enRotation = false;
+	robot.aTourner = {valeur:0,sens:'gauche'};
+	robot.vitesseDeplacement = 0.01;
+	robot.vitesseRotation = 1;
+
+
+
+	robot.updatePoints();
+    scene.add(robot);
+    return robot;
+}
+
+/**
+ * Crée le robot secondaire suivant le côté demandé
+ * 
+ * @param {String} cote
+ * @returns {THREE.Mesh}
+ */
+function creerRobotSecondaire(cote){
+	var posx = {"gauche":-1.5+0.125+0.07+0.25,"droit":1.5-0.125-0.07-0.25};
+
+
+
+
+	if(cote==="droit"){
+		geo = new THREE.CylinderGeometry( RAYON_ENNEMIS_PETITS,RAYON_ENNEMIS_PETITS,0.35,25);
+	}
+	else{
+		var geo = new THREE.BoxGeometry(0.15,0.35,0.20);
+	}
+
+
+
+
+
+
+
+  	var boxMat;
+
+  	if(cote==="gauche"){
+		boxMat = [	new THREE.MeshLambertMaterial({color:'blue',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(255,255,51)',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(255,255,51)',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(255,255,51)',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(255,255,51)',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(255,255,51)',side:THREE.doubleSided})];
+	}else
+	{
+		boxMat = [	new THREE.MeshLambertMaterial({color:'rgb(63,220,67)',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'blue',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(63,220,67)',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(63,220,67)',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(63,220,67)',side:THREE.doubleSided}),
+					new THREE.MeshLambertMaterial({color:'rgb(63,220,67)',side:THREE.doubleSided})];
+	}
+
+
+
+
+/*
+	if(cote=="droit"){
+		var temp = boxMat[4];
+		boxMat[4] = boxMat[0];
+		boxMat[0] = temp;
+		boxMat.reverse();
+	}*/
+
+
+
+
+	var mat = new THREE.MeshFaceMaterial( boxMat );	
+	var rob = new THREE.Mesh(geo,mat);
+	
+	rob.position.set(posx[cote],0.185,0);
+
+    var vect = new THREE.Vector3(rob.position.x,0,rob.position.z);
+    rob.direction = vect.negate().normalize();
+
+
+    rob.points = [];
+    rob.largeur = 0.150;
+    rob.longueur = 0.200;
+    rob.hauteur = 0.350;
+	rob.diago = Math.sqrt(0.150*0.150+0.200*0.200);
+
+	rob.nom = "robot secondaire "+cote;
+	rob.cote = cote;
+	rob.avancer = avancer;
+    rob.reculer = reculer;
+    rob.tournerDroite = tournerDroite;
+    rob.tournerGauche = tournerGauche;
+    rob.updatePoints = updatePoints;
+    rob.verifPosition = verifPosition;
+    rob.verifCollisionObjets = verifCollisionObjets;
+    rob.verifCollisionObjet = verifCollisionObjet;
+    rob.verifCollisionRobot = verifCollisionRobot;
+    rob.verifCollisionRobots = verifCollisionRobots;
+
+    rob.prendreObjet = prendreObjet;
+    rob.deposerObjet = deposerObjet;
+    rob.verifCibleAtteignable = verifCibleAtteignable;
+    rob.objetsTenus = [];
+    rob.objetsTenus.dessus = rob.hauteur/2 + 0.02;;
+	rob.objetsTenus.nombre = 0;
+	rob.prendrePopcorn = prendrePopcorn;
+	rob.fermerClapet = fermerClapet;
+
+
+	rob.enDeplacement = false;
+	rob.aParcourir = {valeur : 0,sens : "avant"};
+	rob.enRotation = false;
+	rob.aTourner = {valeur:0,sens:'gauche'};
+	rob.vitesseDeplacement = 0.01;
+	rob.vitesseRotation = 1;
+
+
+
+	scene.add(rob);
+
+	rob.updatePoints();
+	return rob;
+}
+
+/**
+ * Fait avancer le robot dans la direction demandée.&lt;br/>
+ * Si le déplacement est autorisé, retourne vrai.&lt;br/>
+ * Sinon annule le déplacement et retourne faux.
+ * 
+ * @param {Number} d distance
+ * @returns {Boolean}
+ */
+function avancer(d){
+	this.translateOnAxis(this.direction,d);
+	if(!this.verifPosition()){
+		this.translateOnAxis(this.direction,-d);
+		return false;
+	}
+	return true;
+}
+
+/**
+ * Fait reculer le robot dans la direction demandée.&lt;br/>
+ * Si le déplacement est autorisé, retourne vrai.&lt;br/>
+ * Sinon annule le déplacement et retourne faux.
+ * 
+ * @param {Number} d distance
+ * @returns {Boolean}
+ */
+function reculer(d){
+	this.translateOnAxis(this.direction,-d);
+	if(!this.verifPosition()){
+		this.translateOnAxis(this.direction,d);
+		return false;
+	}
+	return true;
+}
+
+/**
+ * Fait tourner le robot dans le sens horaire&lt;br/>
+ * Si la rotation est autorisée, retourne vrai.&lt;br/>
+ * Sinon annule la rotation et retourne faux.
+ * 
+ * @param {Number} deg Angle (en degrés)
+ * @returns {Boolean}
+ */
+function tournerDroite(deg){
+	var rad = deg*Math.PI/180;
+	this.rotation.y -= rad;
+	if(!this.verifPosition()){
+		this.rotation.y += rad;
+		return false;
+	}
+	return true;
+}
+
+/**
+ * Fait tourner le robot dans le sens trigonométrique&lt;br/>
+ * Si la rotation est autorisée, retourne vrai.&lt;br/>
+ * Sinon annule la rotation et retourne faux.
+ * 
+ * @param {Number} deg Angle (en degrés)
+ * @returns {Boolean}
+ */
+function tournerGauche(deg){
+	var rad = deg*Math.PI/180;
+	this.rotation.y += rad;
+	if(!this.verifPosition()){
+		this.rotation.y -= rad;
+		return false;
+	}
+	return true;
+}
+
+/**
+ * Met a jour les coordonnees des sommets du robots
+ */
+function updatePoints(){
+	var p = this.position;
+	var largeur = this.largeur;
+	var longueur = this.longueur;
+	var d = this.diago/2;
+
+	var a = 180*Math.atan(longueur/largeur)/Math.PI;
+	var angles = [360-a,a,180-a,180+a,0,180];
+
+
+	//var angles = [305.5,54.5,125.5,234.5,0,180];
+	var rotation = -this.rotation.y; 	//la rotation est calculee de +Z vers +X
+
+	// pour les sommets on prend les 4 angles + les 2 milieux des faces avant et arriere
+	//on peut rajouter des points intermediaires pour une meilleure detection des bords
+	for(var i=0;i&lt;4;i++)
+		this.points[i] = {x:p.x+Math.cos(rotation+angles[i]*Math.PI/180)*d,z:p.z+Math.sin(rotation+angles[i]*Math.PI/180)*d};
+	this.points[4] = {x:p.x+Math.cos(rotation+angles[4]*Math.PI/180)*largeur/2,z:p.z+Math.sin(rotation+angles[4]*Math.PI/180)*largeur/2};
+	this.points[5] = {x:p.x+Math.cos(rotation+angles[5]*Math.PI/180)*largeur/2,z:p.z+Math.sin(rotation+angles[5]*Math.PI/180)*largeur/2};
+
+	if(this.cote ==="droit"){
+		echangerPoints(this.points,0,2);
+		echangerPoints(this.points,1,3);
+		echangerPoints(this.points,4,5);
+	}
+}
+
+
+/**
+ * Vérifie la position du robot
+ * 
+ * @returns {Boolean}
+ */
+function verifPosition(){
+	this.updatePoints();
+	this.verifCollisionObjets();
+	var collision_robots = this.verifCollisionRobots();
+	var ok = true;
+	for(var i=0;i&lt;6;i++){
+		if(!verifPoint(this.points[i]))
+			ok = false;
+	}
+	return ok &amp;&amp; !collision_robots;
+}
+
+/**
+ * Vérifie la position d'un sommet des robots
+ * 
+ * @param {{x: Number, y: Number, z: Number}} p
+ * @returns {Boolean}
+ */
+function verifPoint(p){
+	if(p.x&lt;1.500 &amp;&amp; p.x>-1.500 &amp;&amp; p.z&lt;1.000 &amp;&amp; p.z>-1.000)
+	{
+		if(p.x&lt;=0.533 &amp;&amp; p.x>=-0.533){
+			if(p.z>-0.420){
+				if(p.z>=0.9){
+					if(p.x>0.3 || p.x&lt;-0.3)
+						return true;
+					else
+						return false;
+				}else
+					return true;
+			}
+			else
+				return false;
+		}
+		if(p.z&lt;=-0.420){
+			if(p.x>0.533 || p.x&lt;-0.533)
+				return true;
+			else
+				return false;
+		}
+
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Vérifie les collisions avec les objets
+ */
+function verifCollisionObjets(){
+	//console.log("verif collision gobelets");
+	for(var i=0;i&lt;5;i++){
+		if(tabGobelets[i].scene.ok &amp;&amp; this.verifCollisionObjet(tabGobelets[i].scene.position)){
+
+			tabGobelets[i].scene.ok = false;
+			tabGobelets[i].dae.effects["Material_002-effect"].shader.material.opacity = 0.8;
+			tabGobelets[i].dae.effects["Material_002-effect"].shader.material.color = {r:1,g:0,b:0}; 
+			console.log("collision GOBELETS - ROBOT !!!");
+		}
+	}
+	for(var i=0;i&lt;8;i++)
+	{
+		if(tabPiedsVerts[i].scene.ok &amp;&amp; this.verifCollisionObjet(tabPiedsVerts[i].scene.position)){
+			//tabPiedsVerts[i].scene.visible=false;
+			tabPiedsVerts[i].scene.ok=false;
+			tabPiedsVerts[i].dae.effects["vertPied-effect"].shader.material.color = {r:1,g:0,b:0};
+			console.log("collision pied vert");
+		}
+		if(tabPiedsJaunes[i].scene.ok &amp;&amp; this.verifCollisionObjet(tabPiedsJaunes[i].scene.position)){
+			//tabPiedsJaunes[i].scene.visible=false;
+			tabPiedsJaunes[i].scene.ok=false;
+			tabPiedsJaunes[i].dae.effects["Material-effect"].shader.material.color = {r:1,g:0,b:0};
+			console.log("collision pied jaune");
+		}
+	}
+}
+
+/**
+ * Vérifie si il y a collision au niveau de la position donnée
+ * 
+ * @param {{x: Number, y: Number, z: Number}} pos
+ * @returns {Boolean}
+ */
+function verifCollisionObjet(pos){
+
+	var vectTangents = [{x: this.points[1].x-this.points[0].x, z: this.points[1].z-this.points[0].z},
+	{x: this.points[3].x-this.points[0].x, z: this.points[3].z-this.points[0].z},
+	{x: this.points[1].x-this.points[2].x, z: this.points[1].z-this.points[2].z},
+	{x: this.points[3].x-this.points[2].x, z: this.points[3].z-this.points[2].z}]
+	
+	var origines = [ getVecteur(this.points[0],pos),getVecteur(this.points[0],pos),getVecteur(this.points[2],pos),getVecteur(this.points[2],pos)]
+	var collision = true;
+	for(var i=0;i&lt;4;i++){
+		if(angle(vectTangents[i],origines[i])>90)
+			collision = false;
+	}
+
+	return collision;
+}
+
+/**
+ * Calcule la distance entre a et b
+ * 
+ * @param {{x: Number, y: Number, z: Number}} a
+ * @param {{x: Number, y: Number, z: Number}} b
+ * @returns {Boolean}
+ */
+function dist(a,b){
+	return Math.sqrt(Math.pow((a.x-b.x),2)+Math.pow((a.z-b.z),2));
+}
+
+/**
+ * Calcule l'angle entre deux vecteurs
+ * 
+ * @param {{x: Number, y: Number, z: Number}} u
+ * @param {{x: Number, y: Number, z: Number}} v
+ * @returns {Number} L'angle en degrés'
+ */
+function angle(u,v){
+	var a = Math.acos(prodScal(u,v)/(dist({x:0,z:0},u)*dist({x:0,z:0},v)))*180/Math.PI;
+	//console.log("angle : ",a);
+	return a;
+}
+
+/**
+ * Calcule le produit scalaire entre deux vecteurs
+ * 
+ * @param {{x: Number, y: Number, z: Number}} u
+ * @param {{x: Number, y: Number, z: Number}} v
+ * @returns {{x: Number, y: Number, z: Number}}
+ */
+function prodScal(u,v){
+	return (u.x*v.x + v.z*u.z);
+}
+/**
+ * Calcule le vecteur à l'aide des deux points donnés'
+ * 
+ * @param {{x: Number, y: Number, z: Number}} p1
+ * @param {{x: Number, y: Number, z: Number}} p2
+ * @returns {{x: Number, y: Number, z: Number}}
+ */
+function getVecteur(p1,p2){
+	return {x: p2.x-p1.x, z: p2.z-p1.z};
+}
+
+/**
+ * Affiche haut-dessus du robot l'objet pris par celui-ci&lt;br/>
+ * Retourne vrai si la cible est atteignable ou faux sinon
+ * 
+ * @param {{scene: Object, hauteur: Number}} objet
+ * @returns {Boolean} 
+ */
+function prendreObjet(objet){
+
+	//quand on robot tient un objet on l'affiche au-dessus
+	var objScene;
+	var decalage;	 //quand l'objet est cree avec threejs son centre est au milieu
+	if(objet.scene){	 	 	 	 //si objet charge avec collada
+		objScene = objet.scene;
+		decalage = 0;
+	}else{ 		 	 	 	 	 //si simple objet
+		objScene = objet;
+		decalage = objet.hauteur/2;
+	}
+	//console.log("objet  :",objet);
+	//console.log("objscene : ",objScene);
+
+	if(objScene.ok &amp;&amp; this.verifCibleAtteignable(objScene.position)){
+		this.objetsTenus.push(objet);
+		objScene.ok = false;
+		scene.remove(objScene);
+		this.add(objScene);
+		objScene.position.set(0,this.objetsTenus.dessus+decalage,0);//this.hauteur + this.objetsTenus.dessus,0);
+		this.objetsTenus.dessus += objScene.hauteur + 0.01;
+		this.objetsTenus.nombre++;
+		return true;
+	}else{
+		console.log("CIBLE NON ATTEIGNABLE !!!!!");
+	}
+	return false;
+	
+}
+
+/**
+ * Vérifie si la cible est atteignable.&lt;br/>
+ * Retourn vrai si la cible est atteignable, faux sinon
+ * 
+ * @param {{x: Number, y: Number, z: Number}} pos
+ * @returns {Boolean}
+ */
+function verifCibleAtteignable(pos){
+	this.updatePoints();
+	var LIMITE = 0.4;
+	var a;
+	var d = dist(this.points[0],pos)+dist(this.points[1],pos);
+	if(d&lt;LIMITE){
+		if(angle(getVecteur(this.points[0],this.points[1]),getVecteur(this.points[0],pos))>=0)
+			return true;
+	}
+	return false;
+}
+
+
+/**
+ * Vérifie si il y a colision avec un autre robot&lt;br/>
+ * Retourne vrai si il y a collision et faux sinon
+ * 
+ * @returns {Boolean}
+ */
+function verifCollisionRobots(){
+	var col = false;
+	for(var i=0;i&lt;4;i++){
+		if(tabRobots[i].nom !== this.nom &amp;&amp; this.verifCollisionRobot(tabRobots[i])){
+			col = true;
+		}
+	}
+	return col;
+}
+
+/**
+ * Vérifie si il y a collision avec le robot passé en paramètre&lt;br/>
+ * On verifie que les 6 points de robot ne sont pas dans le robot this
+ * 
+ * @param {Object} robot
+ * @returns {Boolean}
+ */
+function verifCollisionRobot(robot){
+	var collision = false;
+	for(var i=0;i&lt;6 &amp;&amp; !collision;i++){
+		if(this.verifCollisionObjet(robot.points[i])){
+			collision = true;
+		}
+	}
+	return collision;
+}
+
+/**
+ * Echange deux points contenus dans le tableau passé en argument
+ * 
+ * @param {Array} tab
+ * @param {Number} a
+ * @param {Number} b
+ */
+function echangerPoints(tab,a,b){
+	var xa = tab[a].x;
+	var za = tab[a].z;
+	tab[a].x = tab[b].x;
+	tab[a].z = tab[b].z;
+	tab[b].x = xa;
+	tab[b].z = za;
+}
+
+
+/**
+ * Dépose l'objet porté par le robot'
+ * 
+ * @param {Number} num Numéro désignant l'objet à déposer
+ */
+function deposerObjet(num){
+	if(num>=0 &amp;&amp; num&lt;this.objetsTenus.nombre){
+
+		console.log("this.objetsTenus : ",this.objetsTenus);
+
+
+		var objScene;
+		var decalage;
+		var objetDae = this.objetsTenus[num];
+		if(this.objetsTenus[num].scene){	 	 	 	 //si objet charge avec collada
+			objScene = this.objetsTenus[num].scene;
+			decalage = 0;
+		}		else{ 		 	 	 	 	 //si simple objet
+			objScene = this.objetsTenus[num];
+			decalage = objScene.hauteur/2;
+		}
+		
+		var v1 = getVecteur(this.position,this.points[0]);
+		var v2 = getVecteur(this.position,this.points[1]);
+		var cible = {x:this.position.x+v1.x+v2.x,y:0.01+decalage,z : this.position.z+v1.z+v2.z};
+
+		if(verifPoint(cible)){
+			this.remove(objScene);
+
+			for(var i=num;i&lt;this.objetsTenus.nombre;i++){
+				if(this.objetsTenus[i].scene)
+					this.objetsTenus[i].scene.position.y -= objScene.hauteur;    // ATTENTION à ce qui est dans le tableau this.objtenus ? 
+				else
+					this.objetsTenus[i].position.y -= objScene.hauteur; 
+			}
+			this.objetsTenus.dessus -= objScene.hauteur;
+
+
+			console.log("objet depose : ",objScene);
+
+			//quand un objet est depose par un robot
+			//on change sa couleur pour indiquer qu'il n'est 
+			//plus a sa place initiale
+
+			if(objScene.type==="gobelet")
+			{
+				objetDae.dae.effects["Material_002-effect"].shader.material.opacity = 0.8;
+				objetDae.dae.effects["Material_002-effect"].shader.material.color = {r:1,g:0.5,b:0}; 
+			}else if(objScene.type==="piedvert")
+			{
+				console.log("piedvert",objetDae);
+				objetDae.dae.effects["vertPied-effect"].shader.material.color = {r:0,g:0.2,b:0};
+			}else if(objScene.type==="piedjaune")
+			{
+				console.log("piedjaune",objetDae);
+				objetDae.dae.effects["Material-effect"].shader.material.color = {r:0.2,g:0.2,b:0};
+			}
+
+
+
+			scene.add(objScene);
+			objScene.position.set(cible.x,cible.y,cible.z);
+			this.objetsTenus.splice(num,1);
+			this.objetsTenus.nombre--;
+
+
+		}
+		console.log("this.objetsTenus : ",this.objetsTenus);
+	}
+}
+
+/**
+ * Prend les popcorns
+ * 
+ * @param {{tailleReservoir: Number, x: Number, z: Number}} distri
+ * @returns {Boolean}
+ */
+function prendrePopcorn(distri){
+	if(distri.tailleReservoir>0 &amp;&amp; this.verifCibleAtteignable({x:distri.x,z:distri.z})){
+		var pop = distri.vider();
+		this.prendreObjet(pop);
+		return true;
+	}else
+		return false;
+}
+
+/**
+ * Ferme le clapet
+ * 
+ * @param {{etat: String, position: {{x: Number, z: Number}}, enFermeture: Boolean}} clapet
+ * @returns {Boolean}
+ */
+function fermerClapet(clapet){
+	if(clapet.etat==="ouvert" &amp;&amp; this.verifCibleAtteignable(clapet.position)){
+		console.log("Fermeutre clapet");
+		clapet.enFermeture = true;
+		fermeture = true;
+		return true;
+	}
+	return false;
+}
+
+
+
+
+/**
+ * Déroule les tapis
+ */
+function deroulerTapis(){
+	if(!this.tapisDeroule){
+		if(this.cote==="gauche")
+		{
+			if(this.verifCibleAtteignable({x: -0.2665,z:-0.420})){
+				plateau.dae.effects["gris_004-effect"].shader.material.color = {r:1,g:0,b:0}; 
+				this.tapisDeroule = true;
+				this.position.z -= 0.540;
+				this.position.x = -0.2265;
+				this.position.y +=  0.088;
+			}
+		}else
+		{
+			if(this.verifCibleAtteignable({x: 0.2665, z: -0.420})){
+				plateau.dae.effects["gris_003-effect"].shader.material.color = {r:1,g:0,b:0}; 
+				this.tapisDeroule = true;
+				this.position.z -= 0.540;
+				this.position.x = 0.2265;
+				this.position.y += 0.088;
+			}
+		}
+	}
+}
+
+
+
+
+/*
+function combinerPopcornGobelet(gob)
+{
+	for(var i=0;i&lt;this.objtenus.nombre;i++)
+	{
+		if(this.objtenus[i])
+	}
+}*/</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	DocStrap Copyright © 2012-2015 The contributors to the JSDoc3 and DocStrap projects.
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
+	
+		on Sat Dec 10th 2016
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>

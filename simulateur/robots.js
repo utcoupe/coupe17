@@ -1,3 +1,9 @@
+/**
+ * Fonctions utiles pour gérer les robots
+ * 
+ * @module simulateur/robots
+ */
+
 /*
 
 petit : 
@@ -14,7 +20,12 @@ z: 0.35
 
 
 
-
+/**
+ * Crée le robot principal suivant le côté demandé
+ * 
+ * @param {String} cote
+ * @returns {THREE.Mesh}
+ */
 function creerRobotPrincipal(cote){
 
 
@@ -105,7 +116,12 @@ function creerRobotPrincipal(cote){
     return robot;
 }
 
-
+/**
+ * Crée le robot secondaire suivant le côté demandé
+ * 
+ * @param {String} cote
+ * @returns {THREE.Mesh}
+ */
 function creerRobotSecondaire(cote){
 	var posx = {"gauche":-1.5+0.125+0.07+0.25,"droit":1.5-0.125-0.07-0.25};
 
@@ -211,7 +227,14 @@ function creerRobotSecondaire(cote){
 	return rob;
 }
 
-
+/**
+ * Fait avancer le robot dans la direction demandée.<br/>
+ * Si le déplacement est autorisé, retourne vrai.<br/>
+ * Sinon annule le déplacement et retourne faux.
+ * 
+ * @param {Number} d distance
+ * @returns {Boolean}
+ */
 function avancer(d){
 	this.translateOnAxis(this.direction,d);
 	if(!this.verifPosition()){
@@ -221,6 +244,14 @@ function avancer(d){
 	return true;
 }
 
+/**
+ * Fait reculer le robot dans la direction demandée.<br/>
+ * Si le déplacement est autorisé, retourne vrai.<br/>
+ * Sinon annule le déplacement et retourne faux.
+ * 
+ * @param {Number} d distance
+ * @returns {Boolean}
+ */
 function reculer(d){
 	this.translateOnAxis(this.direction,-d);
 	if(!this.verifPosition()){
@@ -230,6 +261,14 @@ function reculer(d){
 	return true;
 }
 
+/**
+ * Fait tourner le robot dans le sens horaire<br/>
+ * Si la rotation est autorisée, retourne vrai.<br/>
+ * Sinon annule la rotation et retourne faux.
+ * 
+ * @param {Number} deg Angle (en degrés)
+ * @returns {Boolean}
+ */
 function tournerDroite(deg){
 	var rad = deg*Math.PI/180;
 	this.rotation.y -= rad;
@@ -240,6 +279,14 @@ function tournerDroite(deg){
 	return true;
 }
 
+/**
+ * Fait tourner le robot dans le sens trigonométrique<br/>
+ * Si la rotation est autorisée, retourne vrai.<br/>
+ * Sinon annule la rotation et retourne faux.
+ * 
+ * @param {Number} deg Angle (en degrés)
+ * @returns {Boolean}
+ */
 function tournerGauche(deg){
 	var rad = deg*Math.PI/180;
 	this.rotation.y += rad;
@@ -250,8 +297,10 @@ function tournerGauche(deg){
 	return true;
 }
 
+/**
+ * Met a jour les coordonnees des sommets du robots
+ */
 function updatePoints(){
-	//met a jour les coordonnees des sommets du robots
 	var p = this.position;
 	var largeur = this.largeur;
 	var longueur = this.longueur;
@@ -279,7 +328,11 @@ function updatePoints(){
 }
 
 
-
+/**
+ * Vérifie la position du robot
+ * 
+ * @returns {Boolean}
+ */
 function verifPosition(){
 	this.updatePoints();
 	this.verifCollisionObjets();
@@ -292,8 +345,13 @@ function verifPosition(){
 	return ok && !collision_robots;
 }
 
+/**
+ * Vérifie la position d'un sommet des robots
+ * 
+ * @param {{x: Number, y: Number, z: Number}} p
+ * @returns {Boolean}
+ */
 function verifPoint(p){
-	//verifie la position d'un sommet des robots
 	if(p.x<1.500 && p.x>-1.500 && p.z<1.000 && p.z>-1.000)
 	{
 		if(p.x<=0.533 && p.x>=-0.533){
@@ -321,7 +379,9 @@ function verifPoint(p){
 	return false;
 }
 
-
+/**
+ * Vérifie les collisions avec les objets
+ */
 function verifCollisionObjets(){
 	//console.log("verif collision gobelets");
 	for(var i=0;i<5;i++){
@@ -350,7 +410,12 @@ function verifCollisionObjets(){
 	}
 }
 
-
+/**
+ * Vérifie si il y a collision au niveau de la position donnée
+ * 
+ * @param {{x: Number, y: Number, z: Number}} pos
+ * @returns {Boolean}
+ */
 function verifCollisionObjet(pos){
 
 	var vectTangents = [{x: this.points[1].x-this.points[0].x, z: this.points[1].z-this.points[0].z},
@@ -368,23 +433,58 @@ function verifCollisionObjet(pos){
 	return collision;
 }
 
+/**
+ * Calcule la distance entre a et b
+ * 
+ * @param {{x: Number, y: Number, z: Number}} a
+ * @param {{x: Number, y: Number, z: Number}} b
+ * @returns {Boolean}
+ */
 function dist(a,b){
 	return Math.sqrt(Math.pow((a.x-b.x),2)+Math.pow((a.z-b.z),2));
 }
 
+/**
+ * Calcule l'angle entre deux vecteurs
+ * 
+ * @param {{x: Number, y: Number, z: Number}} u
+ * @param {{x: Number, y: Number, z: Number}} v
+ * @returns {Number} L'angle en degrés'
+ */
 function angle(u,v){
 	var a = Math.acos(prodScal(u,v)/(dist({x:0,z:0},u)*dist({x:0,z:0},v)))*180/Math.PI;
 	//console.log("angle : ",a);
 	return a;
 }
 
+/**
+ * Calcule le produit scalaire entre deux vecteurs
+ * 
+ * @param {{x: Number, y: Number, z: Number}} u
+ * @param {{x: Number, y: Number, z: Number}} v
+ * @returns {{x: Number, y: Number, z: Number}}
+ */
 function prodScal(u,v){
 	return (u.x*v.x + v.z*u.z);
 }
+/**
+ * Calcule le vecteur à l'aide des deux points donnés'
+ * 
+ * @param {{x: Number, y: Number, z: Number}} p1
+ * @param {{x: Number, y: Number, z: Number}} p2
+ * @returns {{x: Number, y: Number, z: Number}}
+ */
 function getVecteur(p1,p2){
 	return {x: p2.x-p1.x, z: p2.z-p1.z};
 }
 
+/**
+ * Affiche haut-dessus du robot l'objet pris par celui-ci<br/>
+ * Retourne vrai si la cible est atteignable ou faux sinon
+ * 
+ * @param {{scene: Object, hauteur: Number}} objet
+ * @returns {Boolean} 
+ */
 function prendreObjet(objet){
 
 	//quand on robot tient un objet on l'affiche au-dessus
@@ -416,6 +516,13 @@ function prendreObjet(objet){
 	
 }
 
+/**
+ * Vérifie si la cible est atteignable.<br/>
+ * Retourn vrai si la cible est atteignable, faux sinon
+ * 
+ * @param {{x: Number, y: Number, z: Number}} pos
+ * @returns {Boolean}
+ */
 function verifCibleAtteignable(pos){
 	this.updatePoints();
 	var LIMITE = 0.4;
@@ -429,7 +536,12 @@ function verifCibleAtteignable(pos){
 }
 
 
-
+/**
+ * Vérifie si il y a colision avec un autre robot<br/>
+ * Retourne vrai si il y a collision et faux sinon
+ * 
+ * @returns {Boolean}
+ */
 function verifCollisionRobots(){
 	var col = false;
 	for(var i=0;i<4;i++){
@@ -440,9 +552,14 @@ function verifCollisionRobots(){
 	return col;
 }
 
-
+/**
+ * Vérifie si il y a collision avec le robot passé en paramètre<br/>
+ * On verifie que les 6 points de robot ne sont pas dans le robot this
+ * 
+ * @param {Object} robot
+ * @returns {Boolean}
+ */
 function verifCollisionRobot(robot){
-	//on verifie que les 6 points de robot ne sont pas dans le robot this
 	var collision = false;
 	for(var i=0;i<6 && !collision;i++){
 		if(this.verifCollisionObjet(robot.points[i])){
@@ -452,6 +569,13 @@ function verifCollisionRobot(robot){
 	return collision;
 }
 
+/**
+ * Echange deux points contenus dans le tableau passé en argument
+ * 
+ * @param {Array} tab
+ * @param {Number} a
+ * @param {Number} b
+ */
 function echangerPoints(tab,a,b){
 	var xa = tab[a].x;
 	var za = tab[a].z;
@@ -462,7 +586,11 @@ function echangerPoints(tab,a,b){
 }
 
 
-
+/**
+ * Dépose l'objet porté par le robot'
+ * 
+ * @param {Number} num Numéro désignant l'objet à déposer
+ */
 function deposerObjet(num){
 	if(num>=0 && num<this.objetsTenus.nombre){
 
@@ -529,7 +657,12 @@ function deposerObjet(num){
 	}
 }
 
-
+/**
+ * Prend les popcorns
+ * 
+ * @param {{tailleReservoir: Number, x: Number, z: Number}} distri
+ * @returns {Boolean}
+ */
 function prendrePopcorn(distri){
 	if(distri.tailleReservoir>0 && this.verifCibleAtteignable({x:distri.x,z:distri.z})){
 		var pop = distri.vider();
@@ -539,6 +672,12 @@ function prendrePopcorn(distri){
 		return false;
 }
 
+/**
+ * Ferme le clapet
+ * 
+ * @param {{etat: String, position: {{x: Number, z: Number}}, enFermeture: Boolean}} clapet
+ * @returns {Boolean}
+ */
 function fermerClapet(clapet){
 	if(clapet.etat==="ouvert" && this.verifCibleAtteignable(clapet.position)){
 		console.log("Fermeutre clapet");
@@ -552,7 +691,9 @@ function fermerClapet(clapet){
 
 
 
-
+/**
+ * Déroule les tapis
+ */
 function deroulerTapis(){
 	if(!this.tapisDeroule){
 		if(this.cote==="gauche")
