@@ -9,7 +9,7 @@ module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('pr.detect');
 	var serialPort = require("serialport");
-	var SerialPort = serialPort.SerialPort;
+
 
 	var sp = [];
 

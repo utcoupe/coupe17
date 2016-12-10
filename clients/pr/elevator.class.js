@@ -8,8 +8,6 @@
 module.exports = (function () {
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('pr.elevator');
-	var serialPort = require("serialport");
-	var SerialPort = serialPort.SerialPort;
 
 	var ORDER_ACHIEVED =		'K'; // Like Ok
 	var ORDER_UNKNOWN =			'U'; // Like Unknown

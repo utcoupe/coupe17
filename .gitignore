@@ -19,4 +19,7 @@ cmake_install*
 *sensor_parameter
 *sync_time_stamp
 *liburg_c.a
+*.swp
+.idea
 .vscode/
+

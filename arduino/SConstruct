@@ -149,6 +149,7 @@ F_CPU = ARGUMENTS.get('F_CPU', F_CPU)
 
 # There should be a file with the same name as the folder and with the extension .pde
 TARGET = os.path.basename(os.path.realpath(os.curdir))
+print ("Target name : %s"%TARGET)
 assert(os.path.exists(TARGET+FILE_EXTENSION))
 
 cFlags = ['-Wall', '-ffunction-sections', '-fdata-sections', '-fno-exceptions',

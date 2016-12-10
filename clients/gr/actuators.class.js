@@ -12,9 +12,8 @@
 
 module.exports = (function () {
 	var logger = require('log4js').getLogger('gr.acts');
-	var serialPort = require("serialport");
 	/** @type {Object} */
-	var SerialPort = serialPort.SerialPort;
+	var SerialPort = require("serialport");
 	/** @type {clients/shared/fifo.Fifo} */
 	var fifo = new (require('../shared/fifo.class.js'))();
 
@@ -76,7 +75,7 @@ module.exports = (function () {
 			asserv = new (require('../shared/asserv.class.js'))(
 				new SerialPort(struct.asserv, {
 					baudrate: 57600,
-					parser:serialPort.parsers.readline('\n'),
+					parser:SerialPort.parsers.readline('\n')
 				}), this.client, 'gr', this.sendStatus, fifo
 			);
 		}
