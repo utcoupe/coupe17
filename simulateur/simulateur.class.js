@@ -2,6 +2,7 @@
  * Simulateur module
  * 
  * @module simulateur/simulateur
+ * @requires log4js
  * @see {@link simulateur/simulateur.Simulateur}
  */
 
@@ -17,9 +18,12 @@ module.exports = (function () {
 	 * @constructor
 	 */
 	function Simulateur() {
-		// Toutes les données sur la position/rotation des différents robots/objets
-		// préfixé par "e" pour tout ce qui concerne l'ennemi
-		/** @type {Object} */
+		/**
+		 * Toutes les données sur la position/rotation des différents robots/objets<br/>
+		 * préfixé par "e" pour tout ce qui concerne l'ennemi
+		 * 
+		 * @type {{color: string, ecolor: string, pr: Array, gr: Array, epr: Array, egr: array, plots: Array, eplot: Array}}
+		 */
 		this.data = {
 			color: "yellow",
 			ecolor: "green",

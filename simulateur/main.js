@@ -1,3 +1,7 @@
+/**
+ * @module simulateur/main
+ */
+
 
 RAYON_ENNEMIS_PETITS = 0.0875;
 RAYON_ENNEMIS_GRANDS = 0.126; //0.15
@@ -15,8 +19,10 @@ window.addEventListener('resize', function() {
 
 var container = document.getElementById("container");
 
+/** @type {THREE.scene} */
 var scene= new THREE.Scene();
 
+/** @type {THREE.WebGLRenderer} */
 var renderer = new THREE.WebGLRenderer({antialias:true});
 
 renderer.setSize(window.innerWidth,window.innerHeight*0.75);
@@ -24,13 +30,18 @@ renderer.setClearColor(0x272525,0.5);
 //renderer.setClearColor(0xff8c00,0.5);
 container.appendChild(renderer.domElement);
 
+/** @type {THREE.PerspectiveCamera} */
 var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
 
 camera.position.z = 3;
 camera.position.y = 1;
 camera.lookAt(camera.position);
 
-//gere les controles de la camera
+/**
+ * Gere les controles de la camera
+ * 
+ * @type {THREE.OrbitControls}
+ */
 controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 
@@ -38,33 +49,38 @@ controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 
 //lights
-
+/** @type {THREE.DirectionalLight} */
 var directionLight = new THREE.DirectionalLight(0xffffff,1);
 directionLight.position.set(-2,5,-2);
 directionLight.intensity = 0.5;
 scene.add(directionLight);
 
+/** @type {THREE.DirectionalLight} */
 var directionLight2 = new THREE.DirectionalLight(0xffffff,1);
 directionLight2.position.set(-2,5,2);
 directionLight.intensity2 = 0.5;
 scene.add(directionLight2);
 
+/** @type {THREE.DirectionalLight} */
 var directionLight3 = new THREE.DirectionalLight(0xffffff,1);
 directionLight3.position.set(2,5,-2);
 directionLight.intensity3 = 0.5;
 scene.add(directionLight3);
 
+/** @type {THREE.DirectionalLight} */
 var directionLight4 = new THREE.DirectionalLight(0xffffff,1);
 directionLight4.position.set(2,5,2);
 directionLight.intensity4 = 0.5;
 scene.add(directionLight4);
 
 
+/** @type {THREE.AxisHelper} */
 var axisHelper = new THREE.AxisHelper( 5 ); scene.add( axisHelper );
 
-//charge le plateau
+/** charge le plateau */
 var plateau;
 
+/** @type {THREE.ColladaLoader} */
 var loader = new THREE.ColladaLoader();
 loader.options.convertUpAxis = true;
 loader.load('3d/plateau_mieux.dae',function(collada){
@@ -90,12 +106,16 @@ loader.load('3d/plateau_mieux.dae',function(collada){
 
 
 
+/** @type {Array<Object>} */
 var tabClapets = initClapets();
+/** @type {Boolean} */
 var fermeture = false;
+/** @type {Boolean} */
 var vidage = false;
 
 
 
+/** @type {Array<Object>} */
 var tabDistributeurs = [];
 for(var i=0;i<4;i++) {
     tabDistributeurs.push(creerDistributeur(i));
@@ -104,14 +124,17 @@ for(var i=0;i<4;i++) {
 
 
 
+/** @type {Array<Object>} */
 var tabPiedsJaunes = [];
+/** @type {Array<Object>} */
 var tabPiedsVerts = [];
 
 initPieds(tabPiedsJaunes,tabPiedsVerts);
 
+/** @type {Array<Object>} */
 var tabGobelets = [];initGobelets(tabGobelets);
 
-
+/** @type {Array<Object>} */
 var tabAmpoules = [];
 initAmpoules(tabAmpoules);
 
@@ -179,7 +202,9 @@ var rob;
 
 
 
-
+/**
+ * Génère les animations
+ */
 function render(){
 
 
@@ -262,7 +287,11 @@ render();
 
 
 
-
+/**
+ * Effectue l'action dans le simulateur
+ * 
+ * @param {String} action
+ */
 function commande(action){
 	var robot;
 	for(var i=0;i<4;i++)
@@ -342,6 +371,12 @@ function commande(action){
 
 }
 
+/**
+ * Exporte le fils vers l'objet
+ * 
+ * @param {Array} children
+ * @returns {Array}
+ */
 function exportChildrenToObject(children) {
 	var new_object = [], child, child2;
 	for(var i in children) {
@@ -356,6 +391,12 @@ function exportChildrenToObject(children) {
 
 	return new_object;
 }
+/**
+ * Exporte la scène en JSON
+ * 
+ * @param {{children: Object}} scene
+ * @returns {JSON}
+ */
 function sceneToJson(scene) {
 	return JSON.stringify(exportChildrenToObject(scene.children));
 }

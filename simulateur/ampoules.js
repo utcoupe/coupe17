@@ -1,5 +1,15 @@
+/**
+ * Ampoules
+ * 
+ * @module simulateur/ampoules
+ */
 
-
+/**
+ * 
+ * 
+ * @param {{x: Number, y: Number, z: Number}} pos
+ * @returns {THREE.Mesh}
+ */
 function creerAmpoule(pos){
     var geo = new THREE.SphereGeometry(0.0325,60,60);
     var mat = new THREE.MeshLambertMaterial({color:'yellow',side:THREE.doubleSide});
@@ -11,6 +21,11 @@ function creerAmpoule(pos){
     return ampoule;
 }
 
+/**
+ * Initialise les ampoules
+ * 
+ * @param {Array} tab
+ */
 function initAmpoules(tab){
     //cree les 4 ampoules et les ajoute dans tab
     var positions = [

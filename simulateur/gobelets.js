@@ -1,5 +1,17 @@
+/**
+ * Gobelets
+ * 
+ * @module simulateur/gobelets
+ */
 
-
+/**
+ * CRée un gobelet avec la position indiquée
+ * 
+ * @param {Array} tab Tableau des gobelets
+ * @param {Number} x
+ * @param {Number} y
+ * @param {Number} z
+ */
 function creerGobelet(tab,x,y,z){
     loader.load("3d/gobelet.dae",function(collada){
         var dae = collada.scene;
@@ -20,6 +32,11 @@ function creerGobelet(tab,x,y,z){
     });
 }
 
+/**
+ * Ajoute tous les gobelets de la scène
+ * 
+ * @param {Array} tab
+ */
 function initGobelets(tab){
     var posGobelets = [{x:-1.250,z:0.750},
                        {x:-0.590,z: -0.170},
@@ -31,6 +48,11 @@ function initGobelets(tab){
         creerGobelet(tab,posGobelets[i].x,positionY,posGobelets[i].z);
 }
 
+/**
+ * Ajoute les popcorns dans les gobelets
+ * 
+ * @param {Object} gob
+ */
 function ajouterPopcorn(gob){
 
     var pos = [                                     //positions des popcorn dans le gobelet

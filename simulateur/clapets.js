@@ -1,4 +1,14 @@
+/**
+ * Clapets
+ * 
+ * @module simulateur/clapets
+ */
 
+/**
+ * Initialise les clapets
+ * 
+ * @returns {Array<Object>}
+ */
 function initClapets(){
 
     var tab = [];
@@ -15,6 +25,13 @@ function initClapets(){
     return tab;
 }
 
+/**
+ * Crée un clapet
+ * 
+ * @param {{x: Number, y: Number, z: Number}} p
+ * @param {Number} num Numéro du clapet
+ * @returns {Object}
+ */
 function creerClapet(p,num){
     var geo = new THREE.BoxGeometry(0.16,0.03,0.03);
 
@@ -78,6 +95,9 @@ Position de gauche a droite :
 
 */
 
+/**
+ * Ferme le clapet
+ */
 function fermer(){
 
     if(this.position.y-this.pivot.y>0.0155){

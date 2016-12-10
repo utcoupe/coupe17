@@ -1,10 +1,22 @@
 /**
- * Created by matthieu on 02/02/15.
+ * Pied
+ * 
+ * @author Created by matthieu on 02/02/15.
+ * 
+ * @module simulateur/pieds
  */
 
 
 
-
+/**
+ * Creer pied
+ * 
+ * @param {Array} tab
+ * @param {String} coul Couleur
+ * @param {Number} x
+ * @param {Number} y
+ * @param {Number} z
+ */
 function creerPied(tab,coul,x,y,z){
     loader.load("3d/pied_"+coul+".dae",function(collada){
         var dae = collada.scene;
@@ -19,7 +31,12 @@ function creerPied(tab,coul,x,y,z){
     });
 }
 
-
+/**
+ * Initialise les pieds des différentes couleurs
+ * 
+ * @param {any} tabj Tableau des jaunes
+ * @param {any} tabv Tableau des verts
+ */
 function initPieds(tabj,tabv){
 
     var posPiedsJaunes = [{x:-1.410,z:-0.800},

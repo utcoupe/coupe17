@@ -1,3 +1,17 @@
+/**
+ * Distributeur
+ * 
+ * @module simulateur/distributeur
+ */
+
+/**
+ * Crée un popcorn à la position souhaitée
+ * 
+ * @param {Number} x
+ * @param {Number} y
+ * @param {Number} z
+ * @returns {THREE.Mesh}
+ */
 function creerPopcorn(x,y,z){
     var geo = new THREE.SphereGeometry(0.02,60,60);
     var mat = new THREE.MeshLambertMaterial({color:'white',side:THREE.DoubleSide});
@@ -12,7 +26,12 @@ function creerPopcorn(x,y,z){
 
 
 
-
+/**
+ * Crée un distributeur
+ * 
+ * @param {Number} n Nombre de popcorns dans le distributeur
+ * @returns {Object}
+ */
 function creerDistributeur(n) {
 
     if(n>=0 && n<4) {
@@ -39,6 +58,9 @@ function creerDistributeur(n) {
 
 
 
+/**
+ * Remplit le distributeur
+ */
 function remplirDistributeur(){
     if(this.tailleReservoir<5){
         var yy = this.y+0.04*this.tailleReservoir;
@@ -47,6 +69,11 @@ function remplirDistributeur(){
     }
 }
 
+/**
+ * Vide le distribueteur
+ * 
+ * @returns {Object | undefined}
+ */
 function viderDistributeur(){
 	console.log("vidage distri ",this.num);
     if(this.tailleReservoir>0){
@@ -58,7 +85,9 @@ function viderDistributeur(){
         return undefined;
 }
 
-
+/**
+ * Descent les popcorns
+ */
 function descendrePopcorn(){
     if(this.tailleReservoir>0 && this.reservoir[0].position.y>this.y){
         for(var i=0;i<this.tailleReservoir;i++){
