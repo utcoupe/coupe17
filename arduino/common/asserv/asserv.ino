@@ -12,11 +12,20 @@
 #include "control.h"
 #include "pins.h"
 #include "emergency.h"
+#include "sender.h"
+#include <os48.h>
+//include to match with SConstruct
+#include <QueueArray.h>
 
 // Store kind of a timeout
 unsigned long nextTime = 0;
 // Flag to know if a computer is connected to the arduino
 static unsigned char flagConnected = 0;
+
+os48::Scheduler* scheduler = os48::Scheduler::get();
+os48::Task* task1 = NULL;
+os48::Task* task2 = NULL;
+os48::Task* task3 = NULL;
 
 #ifdef PIN_JACK
 int JackCheck(void) {
@@ -36,8 +45,26 @@ int JackCheck(void) {
 }
 #endif
 
+void sender_task () {
+    while (!flagConnected) {
+        SERIAL_MAIN.print(ARDUINO_ID);
+        SERIAL_MAIN.flush();
+        //TODO read the serial and check if a go has been send to escape the loop and startup
+        delay(1000);
+    }
+}
+
+void reader_task () {
+    String receivedString;
+    while (true) {
+        receivedString = SERIAL_MAIN.readString();
+        SERIAL_MAIN.print(receivedString);
+        SERIAL_MAIN.flush();
+    }
+}
+
 void setup() {
-	SERIAL_MAIN.begin(BAUDRATE, SERIAL_TYPE);
+//	SERIAL_MAIN.begin(BAUDRATE, SERIAL_TYPE);
 #ifdef __AVR_ATmega2560__
 	TCCR3B = (TCCR3B & 0xF8) | 0x01 ;
 	TCCR1B = (TCCR1B & 0xF8) | 0x01 ;
@@ -48,13 +75,12 @@ void setup() {
 #endif
 	initPins();
 
-    // Wait a connected computer before launching the loop
-    while (!flagConnected) {
-        SERIAL_MAIN.println(ARDUINO_ID);
-        SERIAL_MAIN.flush();
-        //TODO read the serial and check if a go has been send to escape the loop and startup
-        delay(1000);
-    }
+    SerialSender sender;
+    task1 = scheduler->createTask(&SerialSender::SerialSendTask, 60);
+    task2 = scheduler->createTask(&sender_task, 60);
+    task3 = scheduler->createTask(&reader_task, 60);
+
+    scheduler->start();
 
     nextTime = micros();
     ControlInit();
