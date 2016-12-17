@@ -1,0 +1,36 @@
+/**
+ * \file	sender.h
+ * \author	Thomas Fuhrmann <tomesman@gmail.com>
+ * \brief   Functions to send data accross the serial communication line
+ * \date	06/12/2016
+ * \copyright Copyright (c) 2016 UTCoupe All rights reserved.
+ */
+
+#ifndef ARDUINO_SENDER_H
+#define ARDUINO_SENDER_H
+
+#include "Semaphore.h"
+#include <QueueArray.h>
+
+typedef enum
+{
+    SERIAL_ERROR = 0,
+    SERIAL_INFO,
+    SERIAL_DEBUG
+} SerialSendEnum;
+
+class SerialSender
+{
+public:
+    SerialSender();
+    ~SerialSender() {}
+    //to be used everywhere
+    static void SerialSend(SerialSendEnum level, const char* data, ...);
+    //to be used in the task
+    static void SerialSendTask();
+private:
+    static os48::Semaphore senderSemaphore;
+    static QueueArray<String> dataToSend;
+};
+
+#endif //ARDUINO_SENDER_H
