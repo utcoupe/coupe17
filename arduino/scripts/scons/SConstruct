@@ -354,7 +354,7 @@ if TARGET_PATH != "":
     if remote_sources:
         envArduino.Append(CPPPATH='build/remote')
 
-# Ass the OS48 target, by default for all the projects
+# Add the OS48 target, by default for all the projects
 build_top = os.path.realpath('.') + '/' + '../../common/os48'
 print "build_top_os48 : " + build_top
 VariantDir('build/os48/', build_top)
@@ -362,6 +362,15 @@ os48_sources = gatherSources(build_top)
 os48_sources = map(lambda x: x.replace(build_top, 'build/os48/'), os48_sources)
 if os48_sources:
     envArduino.Append(CPPPATH='build/os48')
+
+# Add the common target, by default for all the projects
+build_top = os.path.realpath('.') + '/' + '../../common'
+print "build_top_common : " + build_top
+VariantDir('build/common/', build_top)
+common_sources = gatherSources(build_top)
+common_sources = map(lambda x: x.replace(build_top, 'build/common/'), common_sources)
+if common_sources:
+    envArduino.Append(CPPPATH='build/common')
 
 # Convert sketch(.pde) to cpp
 envArduino.Processing('build/' + TARGET + '.cpp', 'build/' + TARGET + FILE_EXTENSION)
@@ -373,6 +382,7 @@ sources += local_sources
 if TARGET_PATH != "":
     sources += remote_sources
 sources += os48_sources
+sources += common_sources
 sources += all_libs_sources
 
 # Finally Build!!
