@@ -1,8 +1,26 @@
+/**
+ * Afficheur du simulateur
+ * 
+ * @module simulateur/afficheur/afficheur
+ */
+
+/**
+ * Instance du simulateur
+ * @type {Object}
+ */
 var Simu = Simu || {};
 
+/**
+ * Initialise le simulateur
+ */
 Simu.init = function(){
 
-
+	/**
+	 * Dossier dans lequel sont stockés les fichiers colladas
+	 * 
+	 * @type {String}
+	 */
+	Simu.DIR_COLLADAS = "../simulateur/afficheur/new_3d/";
 
 	//threejs
 
@@ -246,14 +264,16 @@ Simu.init = function(){
 
 	Simu.loader = new THREE.ColladaLoader();
 	Simu.loader.options.convertUpAxis = true;
-	Simu.loader.load('../simulateur/afficheur/3d/plateau_mieux.dae',function(collada){
+	Simu.loader.load(Simu.DIR_COLLADAS + 'table_statique.dae',function(collada){
 
 		var dae = collada.scene;
 		var skin = collada.skins[0];
 	   
 		//rendre les cylindres transparents
-		collada.dae.effects["transparent_003-effect"].shader.material.opacity = 0.2;
-		collada.dae.effects["transparent_003-effect"].shader.material.transparent = true;
+		//collada.dae.effects["transparent_003-effect"].shader.material.opacity = 0.2;
+		// ************
+
+		//collada.dae.effects["transparent_003-effect"].shader.material.transparent = true;
 		plateau = collada;
 		dae.position.set(0,0,0);
 		dae.scale.set(1,1,1);
