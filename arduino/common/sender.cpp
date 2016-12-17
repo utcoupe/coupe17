@@ -18,28 +18,57 @@ SerialSender::SerialSender() {
     SERIAL_MAIN.begin(BAUDRATE, SERIAL_TYPE);
 }
 
+void SerialSender::SerialSend(SerialSendEnum level, String data) {
+//    SERIAL_MAIN.println("SerialSend String");
+//    SERIAL_MAIN.flush();
+    if (level <= DEBUG_LEVEL) {
+        dataToSend.push(data);
+//        SERIAL_MAIN.println("SerialSend String pushed");
+//        SERIAL_MAIN.flush();
+        senderSemaphore.release();
+    }
+}
+
 void SerialSender::SerialSend(SerialSendEnum level, const char* data, ...) {
     if (level <= DEBUG_LEVEL) {
         va_list args;
         va_start(args, data);
 
-        char* formattedData;
-//        int formattedDataSize;
-//        formattedDataSize = sprintf(formattedData, data, args);
-        sprintf(formattedData, data, args);
+//        SERIAL_MAIN.println("SerialSend before sprintf");
+//        SERIAL_MAIN.flush();
 
-//        String formattedDataString(formattedData, formattedDataSize);
-        String formattedDataString(formattedData);
-        dataToSend.push(formattedDataString);
+        static char formattedData[80];
+        int formattedDataSize = sprintf(formattedData, data, args);
 
-        senderSemaphore.release();
+//        SERIAL_MAIN.println("SerialSend after sprintf");
+//        SERIAL_MAIN.flush();
+        if (formattedDataSize != 0) {
+            String formattedDataString(formattedData);
+//        String formattedDataString("toto");
+            dataToSend.push(formattedDataString);
+
+            SERIAL_MAIN.println("SerialSend release sem");
+            SERIAL_MAIN.flush();
+
+            senderSemaphore.release();
+        }
     }
 }
 
 void SerialSender::SerialSendTask() {
-    senderSemaphore.acquire();
-    if (!dataToSend.isEmpty()) {
-        SERIAL_MAIN.println(dataToSend.dequeue());
+    while (1) {
+//        SERIAL_MAIN.println("SendTask before sem");
+//        SERIAL_MAIN.flush();
+        senderSemaphore.acquire();
+        SERIAL_MAIN.println(dataToSend.count());
         SERIAL_MAIN.flush();
+        if (!dataToSend.isEmpty()) {
+
+//            SERIAL_MAIN.print("SendTask not empty");
+//            SERIAL_MAIN.flush();
+
+            SERIAL_MAIN.println(dataToSend.dequeue());
+            SERIAL_MAIN.flush();
+        }
     }
 }

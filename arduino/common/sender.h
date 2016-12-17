@@ -26,6 +26,7 @@ public:
     ~SerialSender() {}
     //to be used everywhere
     static void SerialSend(SerialSendEnum level, const char* data, ...);
+    static void SerialSend(SerialSendEnum level, String data);
     //to be used in the task
     static void SerialSendTask();
 private:

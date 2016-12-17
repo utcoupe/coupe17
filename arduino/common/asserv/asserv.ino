@@ -47,8 +47,12 @@ int JackCheck(void) {
 
 void sender_task () {
     while (!flagConnected) {
-        SERIAL_MAIN.print(ARDUINO_ID);
-        SERIAL_MAIN.flush();
+//        SERIAL_MAIN.print(ARDUINO_ID);
+//        SERIAL_MAIN.flush();
+//        String to_send = ARDUINO_ID;
+//        SerialSender::SerialSend(SERIAL_DEBUG, to_send);
+//        SerialSender::SerialSend(SERIAL_DEBUG, ARDUINO_ID);
+        SerialSender::SerialSend(SERIAL_DEBUG, "test : %d", 50);
         //TODO read the serial and check if a go has been send to escape the loop and startup
         delay(1000);
     }
@@ -58,6 +62,7 @@ void reader_task () {
     String receivedString;
     while (true) {
         receivedString = SERIAL_MAIN.readString();
+//        SerialSender::SerialSend(SERIAL_DEBUG, receivedString);
         SERIAL_MAIN.print(receivedString);
         SERIAL_MAIN.flush();
     }
@@ -76,9 +81,9 @@ void setup() {
 	initPins();
 
     SerialSender sender;
-    task1 = scheduler->createTask(&SerialSender::SerialSendTask, 60);
-    task2 = scheduler->createTask(&sender_task, 60);
-    task3 = scheduler->createTask(&reader_task, 60);
+    task1 = scheduler->createTask(&SerialSender::SerialSendTask, 150);
+    task2 = scheduler->createTask(&sender_task, 200);
+    task3 = scheduler->createTask(&reader_task, 150);
 
     scheduler->start();
 
