@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>UTCoupe 17 Module: clients/gr/servos-simu</title>
+	<title>UTCoupe 17 Source: simulateur/afficheur/path_aff.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -67,107 +67,73 @@
 <div class="row">
 
 	
-	<div class="col-md-8">
+	<div class="col-md-12">
 	
 		<div id="main">
 			
 
-	<h1 class="page-title">Module: clients/gr/servos-simu</h1>
+		<h1 class="page-title">Source: simulateur/afficheur/path_aff.js</h1>
+    
 <section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">/**
+ * Chemin
+ * 
+ * @module simulateur/afficheur/path-aff
+ */
 
-<header>
-    
-</header>
+/**
+ * @type {simulateur/afficheur/afficheur~Simu}
+ */
+var Simu = Simu || {};
 
+/**
+ * Nombre de points maximum du chemin
+ */
+var PATH_MAX_POINTS = 20;
 
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">Servos Simulator module</div>
-        
+/*
+ * Initialise le chemin
+ */
+Simu.initPath = function(){
 
-        
-<dl class="details">
-    
+	var mat = new THREE.LineBasicMaterial( {color: 0x000000, linewidth: 3} );
+	var geo = new THREE.Geometry();
 
-	
+	//Geometry only vertices initial length will be used after creation, so we need to create some before
+	for(var i=0; i&lt;PATH_MAX_POINTS; i++){
+		geo.vertices.push( new THREE.Vector3( 0, 0, 0 ) );
+	};
 
-	
+	Simu.pathPR = new THREE.Line(
+		geo,
+		mat
+	);
+	Simu.scene.add(Simu.pathPR);
+	console.log("initPath()");
+};
 
-	
+/**
+ * Met à jour le chemin
+ */
+Simu.updatePath = function (vecArray){
 
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="clients_gr_servos.simu.class.js.html">clients/gr/servos.simu.class.js</a>,
-				 <a href="clients_gr_servos.simu.class.js.html#sunlight-1-line-1">line 1</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li><a href="clients_gr_servos-simu.Servos.html">clients/gr/servos-simu.Servos</a></li>
-			</ul>
-	</dd>
-	
-
-	
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
+	//Simu.pathPR.geometry.dynamic = true;
+	var i=0;
+	for(; i&lt;vecArray.length; i++){
+		Simu.pathPR.geometry.vertices[i] = vecArray[i];
+	}
+	var end = vecArray[vecArray.length-1].clone();
+	end.setY(.05);
+	for(; i&lt;PATH_MAX_POINTS; i++){
+		Simu.pathPR.geometry.vertices[i] = end;
+	}
+	Simu.pathPR.geometry.verticesNeedUpdate = true;
+};</pre>
+    </article>
 </section>
+
 
 
 
@@ -177,10 +143,6 @@
 
 	<div class="clearfix"></div>
 
-	
-		<div class="col-md-3">
-			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
-		</div>
 	
 
 </div>
