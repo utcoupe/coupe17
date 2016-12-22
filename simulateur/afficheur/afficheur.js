@@ -6,12 +6,13 @@
 
 /**
  * Instance du simulateur
- * @type {Object}
+ * @class Simu
  */
 var Simu = Simu || {};
 
 /**
  * Initialise le simulateur
+ * @constructor Simu
  */
 Simu.init = function(){
 
@@ -31,7 +32,10 @@ Simu.init = function(){
 	*/
 
 
-
+	/**
+	 * Paramètres des différents objets 3D
+	 * @type {Object}
+	 */
 	Simu.datatext = {
 		"robots" : {
 			"gr" : { "x": -1.290, "y": 0.11, "z": 0, "yrot": 0, "coul": "#ffff00"},
@@ -127,6 +131,9 @@ Simu.init = function(){
 		]
 	};
 
+	/**
+	 * Génère la scène
+	 */
 	Simu.generer_scene = function generer_scene(data){
 
 	//Chargement des robots
@@ -190,15 +197,33 @@ Simu.init = function(){
 	//var data = JSON.parse(datatext);
 
 
-
+	/** @type {Number} */
 	Simu.RAYON_ENNEMIS_PETITS = 0.0875;
+	/** @type {Number} */
 	Simu.RAYON_ENNEMIS_GRANDS = 0.126; //0.15
 
-	//Simu.GR,Simu.PR,Simu.GE,Simu.PE, Simu.pathPR; //commented: useless ?
-	Simu.ampoules = [], Simu.clapets = [],Simu.gobelets = [];
-	Simu.pieds = [], Simu.popcorns = [];
+	/** @type {Array} */
+	Simu.ampoules = [];
+	/** @type {Array} */
+	Simu.clapets = [];
+	/** @type {Array} */
+	Simu.gobelets = [];
+	/** @type {Array} */
+	Simu.pieds = [];
+	/** @type {Array} */
+	Simu.popcorns = [];
 
+	/**
+	 * Width of the window in the browser
+	 * 
+	 * @type {Number}
+	 */
 	var W = $('#simulateur_container').width();
+	/**
+	 * Height of the window in the browser
+	 * 
+	 * @type {Number}
+	 */
 	var H = Math.max($('body').height() - $('#div_menu').outerHeight() - 2*$('#simu_before').outerHeight(), 200);
 
 	//permet de redimensionner la fenetre
@@ -210,12 +235,18 @@ Simu.init = function(){
 		Simu.camera.updateProjectionMatrix();
 	});
 
+	/** Container */
 	Simu.container = document.getElementById("simulateur_container");
 
 
-
+	/**
+	 * @type {THREE.Scene}
+	 */
 	Simu.scene= new THREE.Scene();
 
+	/**
+	 * @type {THREE.WebGLRenderer}
+	 */
 	Simu.renderer = new THREE.WebGLRenderer({antialias:true});
 
 	Simu.renderer.setSize(W,H);
@@ -223,11 +254,17 @@ Simu.init = function(){
 
 	Simu.container.appendChild(Simu.renderer.domElement);
 
-	// Simu.camera = new THREE.OrthographicCamera(-2,2,1,-1,0.1,10);
+	/**
+	 * @type {THREE.PerspectiveCamera}
+	 */
 	Simu.camera = new THREE.PerspectiveCamera(45,W/H,0.1,10);
 
 
-	//gere les controles de la camera
+	/**
+	 * Gère les contrôles de la caméra
+	 * 
+	 * @type {THREE.OrbitControls}
+	 */
 	Simu.controls = new THREE.OrbitControls(Simu.camera, Simu.renderer.domElement);
 
 	Simu.vueDeFace();
@@ -235,33 +272,51 @@ Simu.init = function(){
 
 	//lights
 
+	/**
+	 * @type {THREE.DirectionalLight}
+	 */
 	Simu.directionLight = new THREE.DirectionalLight(0xffffff,1);
 	Simu.directionLight.position.set(-2,5,-2);
 	Simu.directionLight.intensity = 0.5;
 	Simu.scene.add(Simu.directionLight);
 
+	/**
+	 * @type {THREE.DirectionalLight}
+	 */
 	Simu.directionLight2 = new THREE.DirectionalLight(0xffffff,1);
 	Simu.directionLight2.position.set(-2,5,2);
 	Simu.directionLight.intensity2 = 0.5;
 	Simu.scene.add(Simu.directionLight2);
 
+	/**
+	 * @type {THREE.DirectionalLight}
+	 */
 	Simu.directionLight3 = new THREE.DirectionalLight(0xffffff,1);
 	Simu.directionLight3.position.set(2,5,-2);
 	Simu.directionLight.intensity3 = 0.5;
 	Simu.scene.add(Simu.directionLight3);
 
+	/**
+	 * @type {THREE.DirectionalLight}
+	 */
 	Simu.directionLight4 = new THREE.DirectionalLight(0xffffff,1);
 	Simu.directionLight4.position.set(2,5,2);
 	Simu.directionLight.intensity4 = 0.5;
 	Simu.scene.add(Simu.directionLight4);
 
 
+	/**
+	 * @type {THREE.AxisHelper}
+	 */
 	Simu.axisHelper = new THREE.AxisHelper( 5 ); 
 	Simu.scene.add( Simu.axisHelper );
 
 	//charge le plateau
 	Simu.plateau;
 
+	/**
+	 * @type {THREE.ColladaLoader}
+	 */
 	Simu.loader = new THREE.ColladaLoader();
 	Simu.loader.options.convertUpAxis = true;
 	Simu.loader.load(Simu.DIR_COLLADAS + 'table_statique.dae',function(collada){
@@ -291,10 +346,11 @@ Simu.init = function(){
 			}
 		});
 
-
+	
+	/**
+	 * Render the scene
+	 */
 	Simu.render = function render(){
-
-
 		requestAnimationFrame(Simu.render);
 		Simu.renderer.render(Simu.scene,Simu.camera);
 		Simu.controls.update();
@@ -302,114 +358,138 @@ Simu.init = function(){
 
 	Simu.generer_scene(Simu.datatext);
 	Simu.render();
-
-
-
 };
 
-	Simu.vueDeFace = function() {
-		Simu.controls.reset();
-		Simu.camera.position.set(0,1.5,2.5);
-	}
-	Simu.vueDeDessus = function() {
-		Simu.controls.reset();
-		Simu.camera.position.set(0,3,0);
-	}
-	Simu.vueDeDerriere = function() {
-		Simu.controls.reset();
-		Simu.camera.position.set(0,1.5,-2.5);
-	}
-	Simu.vueDeGauche = function() {
-		Simu.controls.reset();
-		Simu.camera.position.set(-2.8,1.5,0);
-	}
-	Simu.vueDeDroite = function() {
-		Simu.controls.reset();
-		Simu.camera.position.set(2.8,1.5,0);
-	}
+/**
+ * Vue de face
+ */
+Simu.vueDeFace = function() {
+	Simu.controls.reset();
+	Simu.camera.position.set(0,1.5,2.5);
+}
 
-	Simu.update = function (data){
+/**
+ * Vue de dessus
+ */
+Simu.vueDeDessus = function() {
+	Simu.controls.reset();
+	Simu.camera.position.set(0,3,0);
+}
+
+/**
+ * Vue de Derrière
+ */
+Simu.vueDeDerriere = function() {
+	Simu.controls.reset();
+	Simu.camera.position.set(0,1.5,-2.5);
+}
+
+/**
+ * Vue de gauche
+ */
+Simu.vueDeGauche = function() {
+	Simu.controls.reset();
+	Simu.camera.position.set(-2.8,1.5,0);
+}
+
+/**
+ * Vue de droite
+ */
+Simu.vueDeDroite = function() {
+	Simu.controls.reset();
+	Simu.camera.position.set(2.8,1.5,0);
+}
+
+/**
+ * Update the scene
+ */
+Simu.update = function (data){
 
 	// update des robots
 	var t; // temp
-		t = data.robots.gr;
-		Simu.GR.position.set(t.x,0.11,t.y);
-		Simu.GR.rotation.y = t.a;
+	t = data.robots.gr;
+	Simu.GR.position.set(t.x,0.11,t.y);
+	Simu.GR.rotation.y = t.a;
 
-		t = data.robots.pr;
-		Simu.PR.position.set(t.x,0.185,t.y);
-		Simu.PR.rotation.y = t.a;
-
-
-		Simu.updatePath(data.robots.pr.path.map(function(pos){
-			return new THREE.Vector3(pos[0], 0.01, pos[1]);
-		}));
-
-		Simu.updatePiles(data.dynamic);
-
-		t = data.robots.egr;
-		var t = data.robots.egr;
-		Simu.GE.position.set(t.x,0.185,t.y);
-		
-
-		var t = data.robots.epr;
-		Simu.PE.position.set(t.x,0.185,t.y);
-		
-
-/* TEMP on n'update que les robots
-	// update des ampoules
-
-		var t = data.ampoules;
-		for(var i=0;i<Simu.ampoules.length;i++){
-			Simu.ampoules[i].position.set(t.x,t.y,t.z);
-		}
-		
-
-	// update des clapets
-		
-		var t = data.clapets;
-		for(var i=0;i<Simu.clapets.length;i++){
-			Simu.clapets[i].position.set(t[i].x,t[i].y,t[i].z);
-			Simu.clapets[i].rotation.z = t[i].zrot;
-		}
+	t = data.robots.pr;
+	Simu.PR.position.set(t.x,0.185,t.y);
+	Simu.PR.rotation.y = t.a;
 
 
-	// update des gobelets
-		
-		var t = data.gobelets;
-		for(var i=0;i<Simu.gobelets.length;i++){
-			Simu.gobelets[i].scene.position.set(t[i].x,t[i].y,t[i].z);
-			var color = new THREE.Color(t[i].coul);
-			Simu.gobelets[i].dae.effects["Material_002-effect"].shader.material.color.set(color);
-		}
+	Simu.updatePath(data.robots.pr.path.map(function(pos){
+		return new THREE.Vector3(pos[0], 0.01, pos[1]);
+	}));
 
-	// update des pieds
-		
-		var t = data.pieds;
-		for(var i=0;i<Simu.pieds.length;i++){
-			Simu.pieds[i].scene.position.set(t[i].x,t[i].y,t[i].z);
-			var color = new THREE.Color(t[i].coul);
-			Simu.pieds[i].dae.effects["Material-effect"].shader.material.color.set(t[i].coul);
-		}
+	Simu.updatePiles(data.dynamic);
+
+	t = data.robots.egr;
+	var t = data.robots.egr;
+	Simu.GE.position.set(t.x,0.185,t.y);
 
 
-	// update des popcorns
-		
-		var t = data.popcorns;
-		for(var i=0;i<Simu.popcorns.length;i++){
-			Simu.popcorns[i].position.set(t[i].x,t[i].y,t[i].z);
-		}
-*/
-	}
+	var t = data.robots.epr;
+	Simu.PE.position.set(t.x,0.185,t.y);
+			
+
+	/* TEMP on n'update que les robots
+		// update des ampoules
+
+			var t = data.ampoules;
+			for(var i=0;i<Simu.ampoules.length;i++){
+				Simu.ampoules[i].position.set(t.x,t.y,t.z);
+			}
+			
+
+		// update des clapets
+			
+			var t = data.clapets;
+			for(var i=0;i<Simu.clapets.length;i++){
+				Simu.clapets[i].position.set(t[i].x,t[i].y,t[i].z);
+				Simu.clapets[i].rotation.z = t[i].zrot;
+			}
 
 
-	Simu.drawLine = function(c1,c2){
-		var mat = new THREE.LineBasicMaterial( {color: 0x000000} );
-		var geo = new THREE.Geometry();
-		geo.vertices.push(
-			new THREE.Vector3( c1.x, c1.y, c1.z ),
-			new THREE.Vector3( c2.x, c2.y, c2.z)
-			);
-		var line = new THREE.Line( geo, mat);
-		Simu.scene.add(line);
-	}
+		// update des gobelets
+			
+			var t = data.gobelets;
+			for(var i=0;i<Simu.gobelets.length;i++){
+				Simu.gobelets[i].scene.position.set(t[i].x,t[i].y,t[i].z);
+				var color = new THREE.Color(t[i].coul);
+				Simu.gobelets[i].dae.effects["Material_002-effect"].shader.material.color.set(color);
+			}
+
+		// update des pieds
+			
+			var t = data.pieds;
+			for(var i=0;i<Simu.pieds.length;i++){
+				Simu.pieds[i].scene.position.set(t[i].x,t[i].y,t[i].z);
+				var color = new THREE.Color(t[i].coul);
+				Simu.pieds[i].dae.effects["Material-effect"].shader.material.color.set(t[i].coul);
+			}
+
+
+		// update des popcorns
+			
+			var t = data.popcorns;
+			for(var i=0;i<Simu.popcorns.length;i++){
+				Simu.popcorns[i].position.set(t[i].x,t[i].y,t[i].z);
+			}
+	*/
+}
+
+/**
+ * Dessine une ligne entre deux position
+ * 
+ * @param {{x: Number, y:Number, z:Number}} c1
+ * @param {{x: Number, y:Number, z:Number}} c2
+ */
+Simu.drawLine = function(c1,c2){
+	var mat = new THREE.LineBasicMaterial( {color: 0x000000} );
+	var geo = new THREE.Geometry();
+	geo.vertices.push(
+		new THREE.Vector3( c1.x, c1.y, c1.z ),
+		new THREE.Vector3( c2.x, c2.y, c2.z)
+		);
+	var line = new THREE.Line( geo, mat);
+	Simu.scene.add(line);
+}
