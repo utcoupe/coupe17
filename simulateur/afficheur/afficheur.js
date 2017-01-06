@@ -1,18 +1,23 @@
 /**
  * Afficheur du simulateur
  * 
- * @module simulateur/afficheur/afficheur
+ * 
+ */
+/**
+ * @file Gère l'afficheur 3D
  */
 
 /**
  * Instance du simulateur
- * @class Simu
+ * @namespace Simu
  */
 var Simu = Simu || {};
 
 /**
  * Initialise le simulateur
- * @constructor Simu
+ * 
+ * @function init
+ * @memberof Simu
  */
 Simu.init = function(){
 

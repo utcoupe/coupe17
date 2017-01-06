@@ -1,11 +1,9 @@
 /**
- * Chemin
- * 
- * @module simulateur/afficheur/path-aff
+ * @file Gère l'affichage du chemin
  */
 
-/**
- * @type {simulateur/afficheur/afficheur~Simu}
+/*
+ * @namespace Simu
  */
 var Simu = Simu || {};
 
@@ -16,6 +14,8 @@ var PATH_MAX_POINTS = 20;
 
 /*
  * Initialise le chemin
+ * 
+ * @memberof Simu
  */
 Simu.initPath = function(){
 
@@ -37,6 +37,9 @@ Simu.initPath = function(){
 
 /**
  * Met à jour le chemin
+ * 
+ * @memberof Simu
+ * @param {Array} vecArray
  */
 Simu.updatePath = function (vecArray){
 

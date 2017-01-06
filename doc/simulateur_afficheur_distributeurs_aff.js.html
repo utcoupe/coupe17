@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>UTCoupe 17 Modules</title>
+	<title>UTCoupe 17 Source: simulateur/afficheur/distributeurs_aff.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -81,176 +81,45 @@
 <div class="row">
 
 	
-	<div class="col-md-8">
+	<div class="col-md-12">
 	
 		<div id="main">
 			
 
-	<h1 class="page-title">Modules</h1>
+		<h1 class="page-title">Source: simulateur/afficheur/distributeurs_aff.js</h1>
+    
 <section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">/*
+ * @namespace Simu
+ */
+var Simu = Simu || {};
 
-<header>
-    
-        <h2>
-        
-        </h2>
-        
-    
-</header>
-
-
-<article>
-    <div class="container-overview">
-    
-        
-
-        
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
+/**
+ * Crée des popcorns
+ * 
+ * @memberof Simu
+ * @param {Number} x
+ * @param {Number} y
+ * @param {Number} z
+ */
+Simu.creerPopcorn = function creerPopcorn(x,y,z){
+    var geo = new THREE.SphereGeometry(0.02,60,60);
+    var mat = new THREE.MeshLambertMaterial({color:'white',side:THREE.DoubleSide});
+    var sphere = new THREE.Mesh(geo,mat);
+    sphere.position.set(x,y,z);
+    sphere.ok = true;
+    sphere.hauteur = 0.04;
+    Simu.scene.add(sphere);
+    return sphere;
+}
 
 
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="clients_gr_actuators.Acts.html">Acts</a></dt>
-            <dd></dd>
-        
-            <dt><a href="clients_gr_detect.Detect.html">Detect</a></dt>
-            <dd></dd>
-        
-            <dt><a href="clients_gr_servos.Servos.html">Servos</a></dt>
-            <dd></dd>
-        
-            <dt><a href="clients_gr_servos-simu.Servos.html">Servos</a></dt>
-            <dd></dd>
-        
-            <dt><a href="clients_pr_actuators.Acts.html">Acts</a></dt>
-            <dd></dd>
-        
-            <dt><a href="clients_pr_ax12-simu.Ax12.html">Ax12</a></dt>
-            <dd></dd>
-        
-            <dt><a href="clients_pr_ax12.Ax12.html">Ax12</a></dt>
-            <dd></dd>
-        
-            <dt><a href="clients_pr_detect.Detect.html">Detect</a></dt>
-            <dd></dd>
-        
-            <dt><a href="clients_pr_elevator.Elevator.html">Elevator</a></dt>
-            <dd></dd>
-        
-            <dt><a href="clients_pr_others.Others.html">Others</a></dt>
-            <dd></dd>
-        
-            <dt><a href="clients_pr_others-simu.Others.html">Others</a></dt>
-            <dd></dd>
-        
-            <dt><a href="clients_shared_asserv.Asserv.html">Asserv</a></dt>
-            <dd></dd>
-        
-            <dt><a href="clients_shared_asserv-simu.Asserv.html">Asserv</a></dt>
-            <dd></dd>
-        
-            <dt><a href="clients_shared_fifo.Fifo.html">Fifo</a></dt>
-            <dd></dd>
-        
-            <dt><a href="ia_actions.Actions.html">Actions</a></dt>
-            <dd></dd>
-        
-            <dt><a href="ia_data.Data.html">Data</a></dt>
-            <dd></dd>
-        
-            <dt><a href="ia_export_simulator.ExportSimulator.html">ExportSimulator</a></dt>
-            <dd></dd>
-        
-            <dt><a href="ia_gr.Gr.html">Gr</a></dt>
-            <dd></dd>
-        
-            <dt><a href="ia_hokuyo.Hokuyo.html">Hokuyo</a></dt>
-            <dd></dd>
-        
-            <dt><a href="ia_ia.Ia.html">Ia</a></dt>
-            <dd></dd>
-        
-            <dt><a href="ia_pathfinding.Pathfinding.html">Pathfinding</a></dt>
-            <dd></dd>
-        
-            <dt><a href="ia_timer.Timer.html">Timer</a></dt>
-            <dd></dd>
-        
-            <dt><a href="server_server.Server.html">Server</a></dt>
-            <dd></dd>
-        
-            <dt><a href="server_socket_client.SocketClient.html">SocketClient</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-
-    
-        <h3 class="subsection-title">Namespaces</h3>
-
-        <dl>
-            <dt><a href="namespaces.html#Simu"><a href="Simu.html">Simu</a></a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
+</pre>
+    </article>
 </section>
+
 
 
 
@@ -260,10 +129,6 @@
 
 	<div class="clearfix"></div>
 
-	
-		<div class="col-md-3">
-			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
-		</div>
 	
 
 </div>
