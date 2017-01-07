@@ -63,8 +63,8 @@ void SerialSender::SerialSendTask() {
 //        SERIAL_MAIN.println("SendTask before sem");
 //        SERIAL_MAIN.flush();
         senderSemaphore.acquire();
-        SERIAL_MAIN.println(dataToSend.count());
-        SERIAL_MAIN.flush();
+//        SERIAL_MAIN.println(dataToSend.count());
+//        SERIAL_MAIN.flush();
         if (!dataToSend.isEmpty()) {
 
 //            SERIAL_MAIN.print("SendTask not empty");
@@ -78,7 +78,7 @@ void SerialSender::SerialSendTask() {
 
 void SerialSender::SerialTest() {
 //    char* charString = "test char %d oy yeah !";
-    SerialSendA(SERIAL_INFO, "test char %d oy %d yeah !", 36, 45);
+    SerialSendA(SERIAL_INFO, "test %d char %l oh %c yeah %s !", -36, -45000000, 'X', "toto");
 //    static char* tmpCharString[30];
 //    String to_return = "";
 //    String tmp;
@@ -144,13 +144,16 @@ void SerialSender::SerialSendA(SerialSendEnum level, const char* str, ...) {
 //        Serial.write(reinterpret_cast<const uint8_t*>(str+j), i-j);
 //        tmpString = CharArrayToString(reinterpret_cast<const uint8_t*>(str+j), i-j);
         tmpString = CharArrayToString((str+j), i-j);
-        SERIAL_MAIN.print("TmpString : ");
-        SERIAL_MAIN.println(tmpString);
+//        SERIAL_MAIN.print("TmpString : ");
+//        SERIAL_MAIN.println(tmpString);
         serialData.concat(tmpString);
-        SERIAL_MAIN.print("SerialData : ");
-        SERIAL_MAIN.println(serialData);
-        SERIAL_MAIN.flush();
+//        SERIAL_MAIN.print("SerialData : ");
+//        SERIAL_MAIN.println(serialData);
+//        SERIAL_MAIN.flush();
     }
+
+    dataToSend.push(serialData);
+    senderSemaphore.release();
 
 //    return count;
 }
@@ -165,52 +168,3 @@ String SerialSender::CharArrayToString(const char * str, unsigned char size) {
     }
     return returnedString;
 }
-
-
-//int ardprintf(char *str, ...)
-//{
-//    int i, count=0, j=0, flag=0;
-//    char temp[ARDBUFFER+1];
-//    for(i=0; str[i]!='\0';i++)  if(str[i]=='%')  count++;
-//
-//    va_list argv;
-//    va_start(argv, count);
-//    for(i=0,j=0; str[i]!='\0';i++)
-//    {
-//        if(str[i]=='%')
-//        {
-//            temp[j] = '\0';
-//            Serial.print(temp);
-//            j=0;
-//            temp[0] = '\0';
-//
-//            switch(str[++i])
-//            {
-//                case 'd': Serial.print(va_arg(argv, int));
-//                    break;
-//                case 'l': Serial.print(va_arg(argv, long));
-//                    break;
-//                case 'f': Serial.print(va_arg(argv, double));
-//                    break;
-//                case 'c': Serial.print((char)va_arg(argv, int));
-//                    break;
-//                case 's': Serial.print(va_arg(argv, char *));
-//                    break;
-//                default:  ;
-//            };
-//        }
-//        else
-//        {
-//            temp[j] = str[i];
-//            j = (j+1)%ARDBUFFER;
-//            if(j==0)
-//            {
-//                temp[ARDBUFFER] = '\0';
-//                Serial.print(temp);
-//                temp[0]='\0';
-//            }
-//        }
-//    };
-//    Serial.println();
-//    return count + 1;
-//}

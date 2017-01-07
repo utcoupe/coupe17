@@ -57,7 +57,7 @@ void sender_task () {
 
         SerialSender::SerialTest();
         //TODO read the serial and check if a go has been send to escape the loop and startup
-        delay(1000);
+        delay(2000);
     }
 }
 
@@ -85,8 +85,8 @@ void setup() {
 
     SerialSender sender;
     task1 = scheduler->createTask(&SerialSender::SerialSendTask, 150);
-    task2 = scheduler->createTask(&sender_task, 200);
-    task3 = scheduler->createTask(&reader_task, 150);
+    task2 = scheduler->createTask(&sender_task, 250);
+    task3 = scheduler->createTask(&reader_task, 100);
 
     scheduler->start();
 
