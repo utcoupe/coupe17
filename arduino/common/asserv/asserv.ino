@@ -52,7 +52,10 @@ void sender_task () {
 //        String to_send = ARDUINO_ID;
 //        SerialSender::SerialSend(SERIAL_DEBUG, to_send);
 //        SerialSender::SerialSend(SERIAL_DEBUG, ARDUINO_ID);
-        SerialSender::SerialSend(SERIAL_DEBUG, "test : %d", 50);
+//        int tmp = 36;
+//        SerialSender::SerialSend(SERIAL_DEBUG, "test : %d", tmp);
+
+        SerialSender::SerialTest();
         //TODO read the serial and check if a go has been send to escape the loop and startup
         delay(1000);
     }

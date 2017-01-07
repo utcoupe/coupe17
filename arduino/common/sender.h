@@ -12,6 +12,8 @@
 #include "Semaphore.h"
 #include <QueueArray.h>
 
+//#include <String.h>
+
 typedef enum
 {
     SERIAL_ERROR = 0,
@@ -29,7 +31,10 @@ public:
     static void SerialSend(SerialSendEnum level, String data);
     //to be used in the task
     static void SerialSendTask();
+    static void SerialTest();
+    static void SerialSendA(SerialSendEnum level, const char* data, ...);
 private:
+    static String CharArrayToString(const char * str, unsigned char size);
     static os48::Semaphore senderSemaphore;
     static QueueArray<String> dataToSend;
 };
