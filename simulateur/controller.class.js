@@ -3,6 +3,7 @@
  * @author Mindstan
  * 
  * @requires {THREE}
+ * @requires {THREE.OrbitControls}
  * @requires {Position}
  * @requires {Object3d}
  */
@@ -28,13 +29,14 @@ class Controller
         this.configPath = configPath;
         
         // A charger dynamiquement du fichier
-        /** @type {Position} */
-        this.posRelative = new Position(0, 0, 0);
         /** @type {String} */
         this.container = document.getElementById("simulateur_container");
 
         /** @type {Array<Object3d>} */
-        this.objects3d = {};
+        this.objects3d = [];
+
+        /** @type {Array<THREE.DirectionalLight>} */
+        this.directionLights = [];
     }
 
     /**
@@ -57,6 +59,7 @@ class Controller
             $('body').height() - $('#div_menu').outerHeight() - 2*$('#simu_before').outerHeight(),
             200
         );
+        //alert($('body').height() - $('#div_menu').outerHeight() - 2*$('#simu_before').outerHeight());
         // largeur de la zone de rendu
 		var width = $('#simulateur_container').width();
 
@@ -72,10 +75,44 @@ class Controller
         this.container.appendChild(this.renderer.domElement);
 
         /** @type {THREE.OrbitControls} */
-        this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
+        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+
+        /** @type {THREE.AxisHelper} */
+        this.axisHelper = new THREE.AxisHelper(5);
+        this.scene.add(this.axisHelper);
+
+        this.createLights();
+        this.selectView("front");
 
         // On lance le rendu
         this.render();
+    }
+
+    /**
+     * Crée et insert des lumières directionnelles dans la scène
+     */
+    createLights()
+    {
+        var heightLights = 5;
+        // Les lumières sont disposés haut-dessus des quattres coins du plateau
+        var posLights = [
+            new Position(0, heightLights, 0),
+            new Position(4, heightLights, 0),
+            new Position(0, heightLights, 0),
+            new Position(4, heightLights, 0)
+        ];
+
+        posLights.forEach(function(pos) {
+            var light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(pos.x, pos.y, pos.z);
+            light.intensity = 0.5;
+            this.directionLights.push(light);
+        }, this);
+
+        for(var idLight = 0; idLight < this.directionLights.length; idLight++)
+        {
+            this.scene.add(this.directionLights[idLight]);
+        }
     }
 
     /**
@@ -97,5 +134,42 @@ class Controller
         this.scene.add( cube );
 
         this.camera.position.z = 5;
+    }
+
+    /**
+     * Affiche la vue désirée
+     * 
+     * Valeurs possibles : "front", "top", "behind", "left", "right"
+     * 
+     * @param {String} view Vue désirée
+     */
+    selectView(view)
+    {
+        console.log("Changement de vue : " + view);
+        if(view == "front")
+        {
+            this.controls.reset();
+            this.camera.position.set(2, 1.5, 4.5);
+        }
+        else if(view == "top")
+        {
+            this.controls.reset();
+            this.camera.position.set(2, 3, 2);
+        }
+        else if (view == "behind")
+        {
+            this.controls.reset();
+            this.camera.position.set(2, 1.5, -0.5);
+        }
+        else if (view == "left")
+        {
+            this.controls.reset();
+            this.camera.position.set(0.8, 1.5, 2);
+        }
+        else if (view == "right")
+        {
+            this.controls.reset();
+            this.camera.position.set(4.8, 1.5, 2);
+        }
     }
 }

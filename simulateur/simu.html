@@ -4,14 +4,22 @@
         <meta charset="utf-8"/>
         <link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="webclient.css">
+
         <title>Page de test du nouveau simulateur</title>
+
         <script type="text/javascript" src="three/three.js"></script>
+        <script type="text/javascript" src="three/OrbitControls.js"></script>
+        <script type="text/javascript" src="three/loader.js"></script>
+        <script type="text/javascript" src="three/ColladaLoader.js"></script>
+        <script type="text/javascript" src="three/detector.js"></script>
+
         <script type="text/javascript" src="lib/jquery-2.1.1.min.js"></script>
+
         <script type="text/javascript" src="position.class.js"></script>
         <script type="text/javascript" src="object3d.class.js"></script>
         <script type="text/javascript" src="controller.class.js"></script>
     </head>
-    <body>
+    <body style="height:900px">
         <div ng-controller="AppCtrl">
 			<div id="div_menu" ng-include="'menu.tpl.html'"></div>
 			<div ng-view class="container-fluid">

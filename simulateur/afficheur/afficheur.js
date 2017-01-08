@@ -369,6 +369,7 @@ Simu.init = function(){
  * Vue de face
  */
 Simu.vueDeFace = function() {
+	console.log("Changement de vue : face");
 	Simu.controls.reset();
 	Simu.camera.position.set(0,1.5,2.5);
 }
