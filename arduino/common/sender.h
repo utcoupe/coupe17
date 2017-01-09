@@ -12,6 +12,8 @@
 #include "Semaphore.h"
 #include <QueueArray.h>
 
+#include "os48.h"
+
 //#include <String.h>
 
 typedef enum
@@ -37,6 +39,7 @@ private:
     static String CharArrayToString(const char * str, unsigned char size);
     static os48::Semaphore senderSemaphore;
     static QueueArray<String> dataToSend;
+    static os48::Scheduler* scheduler;
 };
 
 #endif //ARDUINO_SENDER_H

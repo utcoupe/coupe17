@@ -16,9 +16,11 @@
 
 os48::Semaphore SerialSender::senderSemaphore;
 QueueArray<String> SerialSender::dataToSend;
+os48::Scheduler* SerialSender::scheduler = os48::Scheduler::get();
 
 SerialSender::SerialSender() {
     SERIAL_MAIN.begin(BAUDRATE, SERIAL_TYPE);
+//    scheduler = os48::Scheduler::get();
 }
 
 void SerialSender::SerialSend(SerialSendEnum level, String data) {
@@ -60,11 +62,13 @@ void SerialSender::SerialSend(SerialSendEnum level, const char* data, ...) {
 
 void SerialSender::SerialSendTask() {
     while (1) {
-//        SERIAL_MAIN.println("SendTask before sem");
-//        SERIAL_MAIN.flush();
+        SERIAL_MAIN.println("SendTask before sem");
+        SERIAL_MAIN.flush();
         senderSemaphore.acquire();
 //        SERIAL_MAIN.println(dataToSend.count());
 //        SERIAL_MAIN.flush();
+        SERIAL_MAIN.println("SendTask sem acquired");
+        SERIAL_MAIN.flush();
         if (!dataToSend.isEmpty()) {
 
 //            SERIAL_MAIN.print("SendTask not empty");
@@ -73,12 +77,19 @@ void SerialSender::SerialSendTask() {
             SERIAL_MAIN.println(dataToSend.dequeue());
             SERIAL_MAIN.flush();
         }
+
+//        scheduler->yield();
+
+        SERIAL_MAIN.println("SendTask after yield");
+        SERIAL_MAIN.flush();
+
     }
 }
 
 void SerialSender::SerialTest() {
 //    char* charString = "test char %d oy yeah !";
-    SerialSendA(SERIAL_INFO, "test %d char %l oh %c yeah %s !", -36, -45000000, 'X', "toto");
+//    SerialSendA(SERIAL_INFO, "test %d char %l oh %c yeah !", -36, -45000000, 'X');
+    SerialSendA(SERIAL_INFO, "Hello world : %d hein", 36);
 //    static char* tmpCharString[30];
 //    String to_return = "";
 //    String tmp;
@@ -147,13 +158,16 @@ void SerialSender::SerialSendA(SerialSendEnum level, const char* str, ...) {
 //        SERIAL_MAIN.print("TmpString : ");
 //        SERIAL_MAIN.println(tmpString);
         serialData.concat(tmpString);
-//        SERIAL_MAIN.print("SerialData : ");
-//        SERIAL_MAIN.println(serialData);
-//        SERIAL_MAIN.flush();
+        SERIAL_MAIN.print("SerialData : ");
+        SERIAL_MAIN.println(serialData);
+        SERIAL_MAIN.flush();
     }
 
     dataToSend.push(serialData);
     senderSemaphore.release();
+
+    SERIAL_MAIN.println("exit SerialSendA");
+    SERIAL_MAIN.flush();
 
 //    return count;
 }
