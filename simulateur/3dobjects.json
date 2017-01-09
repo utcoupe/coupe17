@@ -1,0 +1,13 @@
+[
+     {
+        "name": "plateau",
+        "source": "3d/table_statique.dae",
+        "position":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "plateau"
+    }
+]

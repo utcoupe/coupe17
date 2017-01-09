@@ -32,21 +32,39 @@ class Controller
         /** @type {String} */
         this.container = document.getElementById("simulateur_container");
 
-        /** @type {Array<Object3d>} */
-        this.objects3d = [];
+        /** @type {Map<Object3d>} */
+        this.objects3d = new Map();
 
         /** @type {Array<THREE.DirectionalLight>} */
         this.directionLights = [];
     }
 
     /**
+     * Charge tous les paramètres
+     */
+    loadParameters()
+    {
+        getParsedJSONFromFile(
+            "3dobjects.json",
+            (objects) => { this.create3dObjects(objects) }
+        );
+    }
+
+    /**
      * Crée tous les objets 3D passés en paramètres
      * 
+     * @param {Array<Object>} objects liste de tous les objets à créer
      * @see {@link{Controller.configPath}}
      */
-    create3dObjects()
+    create3dObjects(objects)
     {
-        //
+        console.log("Creating the 3D objects...");
+        for(var idObject = 0; idObject < objects.lenght; idObject++)
+        {
+            var name = objects[idObject].name;
+            objects3d.set(name, new Object3d(objects[idObject]));
+            this.scene.add(objects3d.get(name).mesh);
+        }
     }
 
     /**
