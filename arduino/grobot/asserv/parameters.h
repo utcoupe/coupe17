@@ -11,6 +11,8 @@
 #define ARDUINO_ID "grobot_asserv"
 #define DEBUG_TARGET_SPEED 0
 #define DEBUG_MAINLOOP 0
+//todo add an enum with the different debug levels available
+#define DEBUG_LEVEL 2
 
 /* Simple ou Double ou Quadruple evaluation ? 
  * La quadruple evaluation utilise 4 interruption par tick
