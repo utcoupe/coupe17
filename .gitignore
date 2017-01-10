@@ -22,4 +22,5 @@ cmake_install*
 *.swp
 .idea
 .vscode/
+tmp.bmp
 
