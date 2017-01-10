@@ -59,11 +59,13 @@ class Controller
     create3dObjects(objects)
     {
         console.log("Creating the 3D objects...");
-        for(var idObject = 0; idObject < objects.lenght; idObject++)
+        for(var idObject = 0; idObject < objects.length; idObject++)
         {
             var name = objects[idObject].name;
-            objects3d.set(name, new Object3d(objects[idObject]));
-            this.scene.add(objects3d.get(name).mesh);
+            this.objects3d.set(name, new Object3d(objects[idObject]));
+            this.objects3d.get(name).loadMesh((scene) => {
+                this.scene.add(scene);
+            });
         }
     }
 
@@ -116,8 +118,8 @@ class Controller
         var posLights = [
             new Position(0, heightLights, 0),
             new Position(4, heightLights, 0),
-            new Position(0, heightLights, 0),
-            new Position(4, heightLights, 0)
+            new Position(0, heightLights, 4),
+            new Position(4, heightLights, 4)
         ];
 
         posLights.forEach(function(pos) {
@@ -167,27 +169,37 @@ class Controller
         if(view == "front")
         {
             this.controls.reset();
-            this.camera.position.set(2, 1.5, 4.5);
+            this.camera.position.set(1, 1.5, 3.5);
+            this.camera.rotation.set(-0.5, 0, 0);
+            this.controls.target.set(1, 0, 1);
         }
         else if(view == "top")
         {
             this.controls.reset();
-            this.camera.position.set(2, 3, 2);
+            this.camera.position.set(1, 3, 1);
+            this.camera.rotation.set(-1.6, 0, 0);
+            this.controls.target.set(1, 0, 1);
         }
         else if (view == "behind")
         {
             this.controls.reset();
-            this.camera.position.set(2, 1.5, -0.5);
+            this.camera.position.set(1.5, 1, -1.5);
+            this.camera.rotation.set(-2.5, 0, 3.0);
+            this.controls.target.set(1, 0, 1);
         }
         else if (view == "left")
         {
             this.controls.reset();
-            this.camera.position.set(0.8, 1.5, 2);
+            this.camera.position.set(-0.8, 1.5, 1);
+            this.camera.rotation.set(-1.6, -1, -1.6);
+            this.controls.target.set(1, 0, 1);
         }
         else if (view == "right")
         {
             this.controls.reset();
-            this.camera.position.set(4.8, 1.5, 2);
+            this.camera.position.set(4, 0.5, 1);
+            this.camera.rotation.set(-1.5, 1.5, 1.5);
+            this.controls.target.set(1, 0, 1);
         }
     }
 }

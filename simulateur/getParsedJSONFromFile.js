@@ -32,7 +32,7 @@ function getParsedJSONFromFile(fileName, onSuccess)
         url: fileName,
         mimeType: "application/json",
         success: function(result){
-            console.log("Successfuly retrived " + fileName + " from the server.");
+            console.log("Successfuly retrieved " + fileName + " from the server.");
             onSuccess(result);
         }
     });
