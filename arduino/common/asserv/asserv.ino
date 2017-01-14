@@ -51,12 +51,21 @@ void sender_task () {
         SerialSender::SerialSend(SERIAL_INFO, "%s", ARDUINO_ID);
         delay(1000);
     }
+    while (1) {
+        SerialSender::SerialSend(SERIAL_INFO, "Started up !");
+        delay(1000);
+    }
 }
 
 void reader_task () {
     String receivedString;
     while (true) {
         receivedString = SERIAL_MAIN.readString();
+        receivedString.replace("\n", "");
+        if (receivedString == "START")
+        {
+            flagConnected = 1;
+        }
         if (receivedString != "") {
             SerialSender::SerialSend(SERIAL_INFO, receivedString);
         }
