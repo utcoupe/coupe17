@@ -9,14 +9,10 @@
 #ifndef ARDUINO_SENDER_H
 #define ARDUINO_SENDER_H
 
-#include "Semaphore.h"
-#include "Sync.h"
-#include <QueueArray.h>
-#include <QueueList.h>
-
 #include "os48.h"
+#include "Sync.h"
 
-//#include <String.h>
+#include <QueueList.h>
 
 typedef enum
 {
@@ -35,16 +31,11 @@ public:
     static void SerialSend(SerialSendEnum level, String data);
     //to be used in the task
     static void SerialSendTask();
-    static void SerialTest();
-    static void SerialSendA(SerialSendEnum level, const char* data, ...);
 private:
     static String CharArrayToString(const char * str, unsigned char size);
-    static os48::Semaphore senderSemaphore;
     static os48::Sync senderSync;
-    static QueueArray<String> dataToSend;
-    static QueueList<String> dataToSendList;
+    static QueueList<String> dataToSend;
     static os48::Scheduler* scheduler;
-    static String data;
 };
 
 #endif //ARDUINO_SENDER_H

@@ -15,7 +15,6 @@
 #include "sender.h"
 #include <os48.h>
 //include to match with SConstruct
-#include <QueueArray.h>
 #include <QueueList.h>
 
 // Store kind of a timeout
@@ -47,21 +46,9 @@ int JackCheck(void) {
 #endif
 
 void sender_task () {
+    //TODO read the serial and check if a go has been send to escape the loop and startup
     while (!flagConnected) {
-//        SERIAL_MAIN.print(ARDUINO_ID);
-//        SERIAL_MAIN.flush();
-//        String to_send = ARDUINO_ID;
-//        SerialSender::SerialSend(SERIAL_DEBUG, to_send);
-//        SerialSender::SerialSend(SERIAL_DEBUG, ARDUINO_ID);
-//        int tmp = 36;
-//        SerialSender::SerialSend(SERIAL_DEBUG, "test : %d", tmp);
-//        SerialSender::SerialTest();
-
-        SerialSender::SerialSendA(SERIAL_INFO, "test %d char %l oh %c yeah %s !", -36, -45000000, 'X', "fucking");
-
-//        SERIAL_MAIN.println("sender_task after SerialTest call");
-//        SERIAL_MAIN.flush();
-        //TODO read the serial and check if a go has been send to escape the loop and startup
+        SerialSender::SerialSend(SERIAL_INFO, "%s", ARDUINO_ID);
         delay(1000);
     }
 }
@@ -70,17 +57,14 @@ void reader_task () {
     String receivedString;
     while (true) {
         receivedString = SERIAL_MAIN.readString();
-//        SerialSender::SerialSend(SERIAL_DEBUG, receivedString);
         if (receivedString != "") {
             SerialSender::SerialSend(SERIAL_INFO, receivedString);
         }
-//        SERIAL_MAIN.print(receivedString);
-//        SERIAL_MAIN.flush();
     }
 }
 
 void setup() {
-//	SERIAL_MAIN.begin(BAUDRATE, SERIAL_TYPE);
+
 #ifdef __AVR_ATmega2560__
 	TCCR3B = (TCCR3B & 0xF8) | 0x01 ;
 	TCCR1B = (TCCR1B & 0xF8) | 0x01 ;
