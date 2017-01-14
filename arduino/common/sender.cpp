@@ -36,7 +36,10 @@ void SerialSender::SerialSend(SerialSendEnum level, String data) {
 //    SERIAL_MAIN.flush();
 //    if (level <= DEBUG_LEVEL) {
     if (1) {
-        dataToSendList.push(data);
+        OS48_NO_CS_BLOCK
+        {
+            dataToSendList.push(data);
+        }
 //        SERIAL_MAIN.println("SerialSend String pushed");
 //        SERIAL_MAIN.flush();
 //        senderSemaphore.release();
@@ -92,7 +95,12 @@ void SerialSender::SerialSendTask() {
 //            SERIAL_MAIN.flush();
 //            SERIAL_MAIN.println(dataToSend.dequeue());
 //            SERIAL_MAIN.flush();
-            SERIAL_MAIN.println(dataToSendList.pop());
+            String dataToPrint;
+            OS48_NO_CS_BLOCK
+            {
+                dataToPrint = dataToSendList.pop();
+            }
+            SERIAL_MAIN.println(dataToPrint);
             SERIAL_MAIN.flush();
         }
 
@@ -195,7 +203,10 @@ void SerialSender::SerialSendA(SerialSendEnum level, const char* str, ...) {
 //    SERIAL_MAIN.flush();
 
 //    dataToSend.enqueue(serialData);
-    dataToSendList.push(serialData);
+    OS48_NO_CS_BLOCK
+    {
+        dataToSendList.push(serialData);
+    }
 //    data = serialData;
 //    senderSemaphore.release();
     senderSync.releaseOne();

@@ -57,7 +57,7 @@ void sender_task () {
 //        SerialSender::SerialSend(SERIAL_DEBUG, "test : %d", tmp);
 //        SerialSender::SerialTest();
 
-        SerialSender::SerialSendA(SERIAL_INFO, "test %d char %l oh %c yeah !", -36, -45000000, 'X');
+        SerialSender::SerialSendA(SERIAL_INFO, "test %d char %l oh %c yeah %s !", -36, -45000000, 'X', "fucking");
 
 //        SERIAL_MAIN.println("sender_task after SerialTest call");
 //        SERIAL_MAIN.flush();
