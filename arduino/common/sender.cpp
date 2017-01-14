@@ -74,6 +74,7 @@ void SerialSender::SerialSend(SerialSendEnum level, const char* data, ...) {
 }
 
 void SerialSender::SerialSendTask() {
+    String dataToPrint;
     while (1) {
 //        SERIAL_MAIN.println("SendTask before sem");
 //        SERIAL_MAIN.flush();
@@ -89,13 +90,13 @@ void SerialSender::SerialSendTask() {
 //        SERIAL_MAIN.flush();
 
 //        if (!dataToSend.isEmpty()) {
-        if (!dataToSendList.isEmpty()) {
+//        if (!dataToSendList.isEmpty()) {
+        while (!dataToSendList.isEmpty()) {
 
 //            SERIAL_MAIN.print("SendTask not empty");
 //            SERIAL_MAIN.flush();
 //            SERIAL_MAIN.println(dataToSend.dequeue());
 //            SERIAL_MAIN.flush();
-            String dataToPrint;
             OS48_NO_CS_BLOCK
             {
                 dataToPrint = dataToSendList.pop();
