@@ -34,11 +34,13 @@ SerialSender::SerialSender() {
 void SerialSender::SerialSend(SerialSendEnum level, String data) {
 //    SERIAL_MAIN.println("SerialSend String");
 //    SERIAL_MAIN.flush();
-    if (level <= DEBUG_LEVEL) {
-        dataToSend.push(data);
+//    if (level <= DEBUG_LEVEL) {
+    if (1) {
+        dataToSendList.push(data);
 //        SERIAL_MAIN.println("SerialSend String pushed");
 //        SERIAL_MAIN.flush();
-        senderSemaphore.release();
+//        senderSemaphore.release();
+        senderSync.releaseOne();
     }
 }
 
@@ -70,8 +72,8 @@ void SerialSender::SerialSend(SerialSendEnum level, const char* data, ...) {
 
 void SerialSender::SerialSendTask() {
     while (1) {
-        SERIAL_MAIN.println("SendTask before sem");
-        SERIAL_MAIN.flush();
+//        SERIAL_MAIN.println("SendTask before sem");
+//        SERIAL_MAIN.flush();
 
         senderSync.wait();
 

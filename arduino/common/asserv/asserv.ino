@@ -55,9 +55,12 @@ void sender_task () {
 //        SerialSender::SerialSend(SERIAL_DEBUG, ARDUINO_ID);
 //        int tmp = 36;
 //        SerialSender::SerialSend(SERIAL_DEBUG, "test : %d", tmp);
-        SerialSender::SerialTest();
-        SERIAL_MAIN.println("sender_task after SerialTest call");
-        SERIAL_MAIN.flush();
+//        SerialSender::SerialTest();
+
+        SerialSender::SerialSendA(SERIAL_INFO, "test %d char %l oh %c yeah !", -36, -45000000, 'X');
+
+//        SERIAL_MAIN.println("sender_task after SerialTest call");
+//        SERIAL_MAIN.flush();
         //TODO read the serial and check if a go has been send to escape the loop and startup
         delay(1000);
     }
@@ -68,8 +71,11 @@ void reader_task () {
     while (true) {
         receivedString = SERIAL_MAIN.readString();
 //        SerialSender::SerialSend(SERIAL_DEBUG, receivedString);
-        SERIAL_MAIN.print(receivedString);
-        SERIAL_MAIN.flush();
+        if (receivedString != "") {
+            SerialSender::SerialSend(SERIAL_INFO, receivedString);
+        }
+//        SERIAL_MAIN.print(receivedString);
+//        SERIAL_MAIN.flush();
     }
 }
 
@@ -88,7 +94,7 @@ void setup() {
     SerialSender sender;
     task1 = scheduler->createTask(&SerialSender::SerialSendTask, 150);
     task2 = scheduler->createTask(&sender_task, 250);
-//    task3 = scheduler->createTask(&reader_task, 100);
+    task3 = scheduler->createTask(&reader_task, 100);
 
     scheduler->start();
 
