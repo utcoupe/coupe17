@@ -10,6 +10,7 @@
 #define ARDUINO_SENDER_H
 
 #include "Semaphore.h"
+#include "Sync.h"
 #include <QueueArray.h>
 
 #include "os48.h"
@@ -38,6 +39,7 @@ public:
 private:
     static String CharArrayToString(const char * str, unsigned char size);
     static os48::Semaphore senderSemaphore;
+    static os48::Sync senderSync;
     static QueueArray<String> dataToSend;
     static os48::Scheduler* scheduler;
 };

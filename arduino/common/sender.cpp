@@ -9,6 +9,7 @@
 #include "sender.h"
 #include "parameters.h"
 #include "Semaphore.h"
+#include "Sync.h"
 #include <QueueArray.h>
 //#include <String.h>
 
@@ -18,8 +19,11 @@ os48::Semaphore SerialSender::senderSemaphore;
 QueueArray<String> SerialSender::dataToSend;
 os48::Scheduler* SerialSender::scheduler = os48::Scheduler::get();
 
+os48::Sync SerialSender::senderSync;
+
 SerialSender::SerialSender() {
     SERIAL_MAIN.begin(BAUDRATE, SERIAL_TYPE);
+//    senderSync = os48::Sync();
 //    scheduler = os48::Scheduler::get();
 }
 
@@ -64,12 +68,16 @@ void SerialSender::SerialSendTask() {
     while (1) {
         SERIAL_MAIN.println("SendTask before sem");
         SERIAL_MAIN.flush();
-        senderSemaphore.acquire();
+
+        senderSync.wait();
+
+//        senderSemaphore.acquire();
 //        SERIAL_MAIN.println(dataToSend.count());
 //        SERIAL_MAIN.flush();
-        SERIAL_MAIN.println("SendTask sem acquired");
-        SERIAL_MAIN.flush();
-        if (!dataToSend.isEmpty()) {
+//        SERIAL_MAIN.println("SendTask sem acquired");
+//        SERIAL_MAIN.flush();
+//        if (!dataToSend.isEmpty()) {
+        if (0) {
 
 //            SERIAL_MAIN.print("SendTask not empty");
 //            SERIAL_MAIN.flush();
@@ -80,9 +88,9 @@ void SerialSender::SerialSendTask() {
 
 //        scheduler->yield();
 
-        SERIAL_MAIN.println("SendTask after yield");
-        SERIAL_MAIN.flush();
-
+//        SERIAL_MAIN.println("SendTask after yield");
+//        SERIAL_MAIN.flush();
+        delay(1000);
     }
 }
 
@@ -90,6 +98,9 @@ void SerialSender::SerialTest() {
 //    char* charString = "test char %d oy yeah !";
 //    SerialSendA(SERIAL_INFO, "test %d char %l oh %c yeah !", -36, -45000000, 'X');
     SerialSendA(SERIAL_INFO, "Hello world : %d hein", 36);
+
+    senderSync.releaseOne();
+
 //    static char* tmpCharString[30];
 //    String to_return = "";
 //    String tmp;
@@ -158,16 +169,19 @@ void SerialSender::SerialSendA(SerialSendEnum level, const char* str, ...) {
 //        SERIAL_MAIN.print("TmpString : ");
 //        SERIAL_MAIN.println(tmpString);
         serialData.concat(tmpString);
-        SERIAL_MAIN.print("SerialData : ");
-        SERIAL_MAIN.println(serialData);
-        SERIAL_MAIN.flush();
+//        SERIAL_MAIN.print("SerialData : ");
+//        SERIAL_MAIN.println(serialData);
+//        SERIAL_MAIN.flush();
     }
 
-    dataToSend.push(serialData);
-    senderSemaphore.release();
-
-    SERIAL_MAIN.println("exit SerialSendA");
+    SERIAL_MAIN.println(serialData);
     SERIAL_MAIN.flush();
+
+//    dataToSend.push(serialData);
+//    senderSemaphore.release();
+
+//    SERIAL_MAIN.println("exit SerialSendA");
+//    SERIAL_MAIN.flush();
 
 //    return count;
 }
