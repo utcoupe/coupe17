@@ -51,10 +51,11 @@ void sender_task () {
         SerialSender::SerialSend(SERIAL_INFO, "%s", ARDUINO_ID);
         delay(1000);
     }
-    while (1) {
+//    while (1) {
         SerialSender::SerialSend(SERIAL_INFO, "Started up !");
         delay(1000);
-    }
+//    }
+    loop();
 }
 
 void reader_task () {
@@ -84,15 +85,15 @@ void setup() {
 #endif
 	initPins();
 
+    nextTime = micros();
+    ControlInit();
+
     SerialSender sender;
     task1 = scheduler->createTask(&SerialSender::SerialSendTask, 150);
     task2 = scheduler->createTask(&sender_task, 250);
     task3 = scheduler->createTask(&reader_task, 100);
 
     scheduler->start();
-
-    nextTime = micros();
-    ControlInit();
 }
 
 void loop(){
