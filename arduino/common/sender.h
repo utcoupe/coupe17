@@ -12,6 +12,7 @@
 #include "Semaphore.h"
 #include "Sync.h"
 #include <QueueArray.h>
+#include <QueueList.h>
 
 #include "os48.h"
 
@@ -41,7 +42,9 @@ private:
     static os48::Semaphore senderSemaphore;
     static os48::Sync senderSync;
     static QueueArray<String> dataToSend;
+    static QueueList<String> dataToSendList;
     static os48::Scheduler* scheduler;
+    static String data;
 };
 
 #endif //ARDUINO_SENDER_H
