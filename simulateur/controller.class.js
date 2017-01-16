@@ -62,6 +62,7 @@ class Controller
         for(var idObject = 0; idObject < objects.length; idObject++)
         {
             var name = objects[idObject].name;
+            console.log("Creating " + name);
             this.objects3d.set(name, new Object3d(objects[idObject]));
             this.objects3d.get(name).loadMesh((scene) => {
                 this.scene.add(scene);
@@ -103,6 +104,17 @@ class Controller
 
         this.createLights();
         this.selectView("front");
+
+        window.addEventListener('resize', () => {
+            var HEIGHT = Math.max(
+                $('body').height() - $('#div_menu').outerHeight() - 2*$('#simu_before').outerHeight(),
+                200
+            );
+		    var WIDTH = $('#simulateur_container').width();
+            this.renderer.setSize(WIDTH, HEIGHT);
+            this.camera.aspect = WIDTH / HEIGHT;
+            this.camera.updateProjectionMatrix();
+        });
 
         // On lance le rendu
         this.render();

@@ -69,7 +69,18 @@ class Object3d
             this.mesh = collada.scene;
             this.mesh.position.set(this.position.x, this.position.y, this.position.z);
             this.mesh.scale.set(1, 1, 1);
+            //this.debug_scene();
             onSuccess(this.mesh);
+            console.log("finished " + this.name);
         });
+    }
+
+    debug_scene()
+    {
+        this.mesh.traverse(function ( object ) { 
+            if ( object.material ) {
+                object.material = new THREE.MeshBasicMaterial( { wireframe: true } );
+            }
+        } );
     }
 }

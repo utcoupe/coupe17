@@ -9,5 +9,41 @@
             "z": 2
         },
         "type": "plateau"
+    },
+    {
+        "name": "mod_lun00",
+        "source": "3d/mod_lun_bleu.dae",
+        "pos":
+        {
+            "x": 0.2,
+            "Y": 0,
+            "z": 0.950
+        },
+        "type": "cylindre",
+        "couleur": "bleu"
+    },
+    {
+        "name": "mod_lun01",
+        "source": "3d/mod_lun_bleu.dae",
+        "pos":
+        {
+            "x": 0.6,
+            "Y": 0,
+            "z": 0.2
+        },
+        "type": "cylindre",
+        "couleur": "bleu"
+    },
+    {
+        "name": "mod_lun02",
+        "source": "3d/mod_lun_bleu.dae",
+        "pos":
+        {
+            "x": 1.85,
+            "Y": 0,
+            "z": 0.8
+        },
+        "type": "cylindre",
+        "couleur": "bleu"
     }
 ]
