@@ -1,6 +1,6 @@
 "use strict";
 
-/**
+/*
  * Permet de travailler avec des coordonnées sur 3 dimensions
  * 
  * @class Position
@@ -45,7 +45,7 @@ class Position
      * @param {Position} pos
      * @returns {Number}
      */
-    get2dDistance(pos)
+    get3dDistance(pos)
     {
         deltaX = this.x - pos.x;
         deltaY = this.y - pos.y;

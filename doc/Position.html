@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>UTCoupe 17 Class: Server</title>
+	<title>UTCoupe 17 Class: Position</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -86,13 +86,13 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: Server</h1>
+	<h1 class="page-title">Class: Position</h1>
 <section>
 
 <header>
     
         <h2>
-        Server
+        Position
         </h2>
         
     
@@ -105,7 +105,7 @@
         
 <hr>
 <dt>
-    <h4 class="name" id="Server"><span class="type-signature"></span>new Server( [server_port])</h4>
+    <h4 class="name" id="Position"><span class="type-signature"></span>new Position(x, y, z)</h4>
     
     
 </dt>
@@ -113,7 +113,7 @@
 
     
     <div class="description">
-        Starts a server on the port specified. Default port: 3128
+        Constructeur de Position
     </div>
     
 
@@ -136,11 +136,7 @@
         <th>Type</th>
 
         
-        <th>Argument</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -152,13 +148,13 @@
 
         <tr>
             
-                <td class="name"><code>server_port</code></td>
+                <td class="name"><code>x</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">int</span>
+<span class="param-type">Number</span>
 
 
 
@@ -166,26 +162,58 @@
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
 
-                
+            
 
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y</code></td>
+            
+
+            <td class="type">
+            
                 
-                </td>
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
             
 
             
-                <td class="default">
-                
-                    3128
-                
-                </td>
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>z</code></td>
             
 
-            <td class="description last">Server port</td>
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
         </tr>
 
     
@@ -229,8 +257,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-27">line 27</a>
+				<a href="simulateur_position.class.js.html">simulateur/position.class.js</a>,
+				 <a href="simulateur_position.class.js.html#sunlight-1-line-18">line 18</a>
 			</li>
 		</ul>
 	</dd>
@@ -278,8 +306,8 @@
         <dl>
             
 <hr>
-<dt class="name" id="ip">
-    <h4 id="ip"><span class="type-signature"></span>ip<span class="type-signature"> :string</span></h4>
+<dt class="name" id="x">
+    <h4 id="x"><span class="type-signature"></span>x<span class="type-signature"> :Number</span></h4>
 
     
 </dt>
@@ -291,7 +319,7 @@
         <ul>
             <li>
                 
-<span class="param-type">string</span>
+<span class="param-type">Number</span>
 
 
 
@@ -334,8 +362,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-38">line 38</a>
+				<a href="simulateur_position.class.js.html">simulateur/position.class.js</a>,
+				 <a href="simulateur_position.class.js.html#sunlight-1-line-21">line 21</a>
 			</li>
 		</ul>
 	</dd>
@@ -355,8 +383,8 @@
         
             
 <hr>
-<dt class="name" id="ip_port">
-    <h4 id="ip_port"><span class="type-signature"></span>ip_port<span class="type-signature"> :string</span></h4>
+<dt class="name" id="y">
+    <h4 id="y"><span class="type-signature"></span>y<span class="type-signature"> :Number</span></h4>
 
     
 </dt>
@@ -368,7 +396,7 @@
         <ul>
             <li>
                 
-<span class="param-type">string</span>
+<span class="param-type">Number</span>
 
 
 
@@ -411,8 +439,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-44">line 44</a>
+				<a href="simulateur_position.class.js.html">simulateur/position.class.js</a>,
+				 <a href="simulateur_position.class.js.html#sunlight-1-line-23">line 23</a>
 			</li>
 		</ul>
 	</dd>
@@ -432,16 +460,12 @@
         
             
 <hr>
-<dt class="name" id="network">
-    <h4 id="network"><span class="type-signature"></span>network<span class="type-signature"> :Object</span></h4>
+<dt class="name" id="z">
+    <h4 id="z"><span class="type-signature"></span>z<span class="type-signature"> :Number</span></h4>
 
     
 </dt>
 <dd>
-    
-    <div class="description">
-        Create the network default object
-    </div>
     
 
     
@@ -449,7 +473,7 @@
         <ul>
             <li>
                 
-<span class="param-type">Object</span>
+<span class="param-type">Number</span>
 
 
 
@@ -492,320 +516,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-56">line 56</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="progs">
-    <h4 id="progs"><span class="type-signature"></span>progs<span class="type-signature"> :Object</span></h4>
-
-    
-</dt>
-<dd>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-75">line 75</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="server">
-    <h4 id="server"><span class="type-signature"></span>server<span class="type-signature"> :Object</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Create the server
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-50">line 50</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="server_port">
-    <h4 id="server_port"><span class="type-signature"></span>server_port<span class="type-signature"> :int</span></h4>
-
-    
-</dt>
-<dd>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">int</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-31">line 31</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="utcoupe">
-    <h4 id="utcoupe"><span class="type-signature"></span>utcoupe<span class="type-signature"> :Object</span></h4>
-
-    
-</dt>
-<dd>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-68">line 68</a>
+				<a href="simulateur_position.class.js.html">simulateur/position.class.js</a>,
+				 <a href="simulateur_position.class.js.html#sunlight-1-line-25">line 25</a>
 			</li>
 		</ul>
 	</dd>
@@ -832,7 +544,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="launch"><span class="type-signature"></span>launch()</h4>
+    <h4 class="name" id="add"><span class="type-signature"></span>add(pos)</h4>
     
     
 </dt>
@@ -840,183 +552,7 @@
 
     
     <div class="description">
-        Launch the robot
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-184">line 184</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="sendNetwork"><span class="type-signature"></span>sendNetwork()</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Send Network
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-168">line 168</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="sendUTCoupe"><span class="type-signature"></span>sendUTCoupe(prog)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        sendUTCoupe
+        Aditionne la position passée en paramètre avec celle actuelle
     </div>
     
 
@@ -1051,13 +587,13 @@
 
         <tr>
             
-                <td class="name"><code>prog</code></td>
+                <td class="name"><code>pos</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><a href="Position.html">Position</a></span>
 
 
 
@@ -1112,8 +648,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-290">line 290</a>
+				<a href="simulateur_position.class.js.html">simulateur/position.class.js</a>,
+				 <a href="simulateur_position.class.js.html#sunlight-1-line-61">line 61</a>
 			</li>
 		</ul>
 	</dd>
@@ -1146,7 +682,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="stop"><span class="type-signature"></span>stop(prog)</h4>
+    <h4 class="name" id="get2dDistance"><span class="type-signature"></span>get2dDistance(pos)</h4>
     
     
 </dt>
@@ -1154,7 +690,7 @@
 
     
     <div class="description">
-        Stops all
+        Calcule la distance sur 2 dimentions par rapport à la position passée en paramètre (x et y)
     </div>
     
 
@@ -1189,13 +725,13 @@
 
         <tr>
             
-                <td class="name"><code>prog</code></td>
+                <td class="name"><code>pos</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><a href="Position.html">Position</a></span>
 
 
 
@@ -1250,8 +786,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-271">line 271</a>
+				<a href="simulateur_position.class.js.html">simulateur/position.class.js</a>,
+				 <a href="simulateur_position.class.js.html#sunlight-1-line-35">line 35</a>
 			</li>
 		</ul>
 	</dd>
@@ -1276,6 +812,184 @@
     
 
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Number</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="get3dDistance"><span class="type-signature"></span>get3dDistance(pos)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Calcule la distance sur 3 dimentions par rapport à la position passée en paramètre
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>pos</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Position.html">Position</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="simulateur_position.class.js.html">simulateur/position.class.js</a>,
+				 <a href="simulateur_position.class.js.html#sunlight-1-line-48">line 48</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Number</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
 
     
 </dd>

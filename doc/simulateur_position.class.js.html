@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>UTCoupe 17 Module: clients/shared/defineParser</title>
+	<title>UTCoupe 17 Source: simulateur/position.class.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -81,100 +81,87 @@
 <div class="row">
 
 	
-	<div class="col-md-8">
+	<div class="col-md-12">
 	
 		<div id="main">
 			
 
-	<h1 class="page-title">Module: clients/shared/defineParser</h1>
+		<h1 class="page-title">Source: simulateur/position.class.js</h1>
+    
 <section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">"use strict";
 
-<header>
-    
-</header>
+/*
+ * Permet de travailler avec des coordonnées sur 3 dimensions
+ * 
+ * @class Position
+ */
+class Position
+{
 
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">Define Parser module</div>
-        
-
-        
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
+    /**
+     * Constructeur de Position
+     * @constructs Position
+     * @param {Number} x
+     * @param {Number} y
+     * @param {Number} z
+     */
+    constructor (x, y, z)
+    {
+        /** @type {Number} */
+        this.x = x;
+        /** @type {Number} */
+        this.y = y;
+        /** @type {Number} */
+        this.z = z;
+    }
 
 
+    /**
+     * Calcule la distance sur 2 dimentions par rapport à la position passée en paramètre (x et y)
+     * 
+     * @param {Position} pos
+     * @returns {Number}
+     */
+    get2dDistance(pos)
+    {
+        deltaX = this.x - pos.x;
+        deltaY = this.y - pos.y;
+        return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2))
+    }
 
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="clients_shared_defineParser.js.html">clients/shared/defineParser.js</a>,
-				 <a href="clients_shared_defineParser.js.html#sunlight-1-line-1">line 1</a>
-			</li>
-		</ul>
-	</dd>
-	
+    /**
+     * Calcule la distance sur 3 dimentions par rapport à la position passée en paramètre
+     * 
+     * @param {Position} pos
+     * @returns {Number}
+     */
+    get3dDistance(pos)
+    {
+        deltaX = this.x - pos.x;
+        deltaY = this.y - pos.y;
+        deltaY = this.z - pos.z;
+        return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2) + Math.pow(deltaZ, 2))
+    }
 
-	
-
-	
-
-	
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
+    /**
+     * Aditionne la position passée en paramètre avec celle actuelle
+     * 
+     * @param {Position} pos
+     */
+    add(pos)
+    {
+        this.x += pos.x;
+        this.y += pos.y;
+        this.z += pos.z;
+    }
+}
+</pre>
+    </article>
 </section>
+
 
 
 
@@ -184,10 +171,6 @@
 
 	<div class="clearfix"></div>
 
-	
-		<div class="col-md-3">
-			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
-		</div>
 	
 
 </div>

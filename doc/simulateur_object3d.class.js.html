@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>UTCoupe 17 Module: clients/shared/defineParser</title>
+	<title>UTCoupe 17 Source: simulateur/object3d.class.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -81,100 +81,106 @@
 <div class="row">
 
 	
-	<div class="col-md-8">
+	<div class="col-md-12">
 	
 		<div id="main">
 			
 
-	<h1 class="page-title">Module: clients/shared/defineParser</h1>
+		<h1 class="page-title">Source: simulateur/object3d.class.js</h1>
+    
 <section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">/**
+ * @file Gestion des objects 3d dans le simulateur
+ * @author Mindstan
+ * 
+ * @requires {THREE}
+ * @requires {THREE.ColladaLoader}
+ * @requires {Position}
+ */
 
-<header>
-    
-</header>
+"use strict";
 
+/*
+ * Gère les meshes
+ * 
+ * @class Object3d
+ */
+class Object3d
+{
+    /**
+     * Constructeur de Object3d
+     * 
+     * @constructs Object3d
+     * @param {Object} params Paramètres divers de l'objet 3d
+     */
+    constructor (params)
+    {
+        /** @type {THREE.ColladaLoader} */
+        this.loader = new THREE.ColladaLoader();
+        this.loader.options.convertUpAxis = true;
 
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">Define Parser module</div>
-        
+        /** @type {Object} */
+        this.mesh = null;
 
-        
-<dl class="details">
-    
+        this.setParams(params);
+    }
 
-	
+    /**
+     * Répartit les valeurs contenues dans params dans les bonne variables membres
+     * 
+     * /!\ Ecrase les données existantes si elles existent ! /!\
+     * 
+     * @param {Object} params Paramètres divers de l'objet 3d
+     */
+    setParams(params)
+    {
+        console.log("Loading params for " + params.name);
+        /** @type {Object} */
+        this.params = params;
 
-	
+        /** @type {String} */
+        this.name = params.name;
 
-	
+        /** @type {Position} */
+        this.position = new Position(params.pos.x,params.pos.y, params.pos.z);
 
-    
+        /** @type {String} */
+        this.source = params.source;
+    }
 
-    
+    /**
+     * Charge le mesh contenu dans le fichier collada spécifié par {@link Object3d#source}
+     * Appelle la fonction onSucess avec en paramètre la scène losque le chargement est terminé.
+     * 
+     * @param {function} onSuccess
+     */
+    loadMesh(onSuccess)
+    {
+        console.log("Object3d:" + this.name + ":loading " + this.source);
+        this.loader.load(this.source, (collada) => {
+            this.mesh = collada.scene;
+            this.mesh.position.set(this.position.x, this.position.y, this.position.z);
+            this.mesh.scale.set(1, 1, 1);
+            //this.debug_scene();
+            onSuccess(this.mesh);
+            console.log("finished " + this.name);
+        });
+    }
 
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="clients_shared_defineParser.js.html">clients/shared/defineParser.js</a>,
-				 <a href="clients_shared_defineParser.js.html#sunlight-1-line-1">line 1</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
+    debug_scene()
+    {
+        this.mesh.traverse(function ( object ) { 
+            if ( object.material ) {
+                object.material = new THREE.MeshBasicMaterial( { wireframe: true } );
+            }
+        } );
+    }
+}</pre>
+    </article>
 </section>
+
 
 
 
@@ -184,10 +190,6 @@
 
 	<div class="clearfix"></div>
 
-	
-		<div class="col-md-3">
-			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
-		</div>
 	
 
 </div>

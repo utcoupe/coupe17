@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>UTCoupe 17 Class: Server</title>
+	<title>UTCoupe 17 Class: Object3d</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -86,13 +86,13 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: Server</h1>
+	<h1 class="page-title">Class: Object3d</h1>
 <section>
 
 <header>
     
         <h2>
-        Server
+        Object3d
         </h2>
         
     
@@ -105,7 +105,7 @@
         
 <hr>
 <dt>
-    <h4 class="name" id="Server"><span class="type-signature"></span>new Server( [server_port])</h4>
+    <h4 class="name" id="Object3d"><span class="type-signature"></span>new Object3d(params)</h4>
     
     
 </dt>
@@ -113,7 +113,7 @@
 
     
     <div class="description">
-        Starts a server on the port specified. Default port: 3128
+        Constructeur de Object3d
     </div>
     
 
@@ -136,11 +136,7 @@
         <th>Type</th>
 
         
-        <th>Argument</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -152,13 +148,13 @@
 
         <tr>
             
-                <td class="name"><code>server_port</code></td>
+                <td class="name"><code>params</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">int</span>
+<span class="param-type">Object</span>
 
 
 
@@ -166,26 +162,10 @@
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                    3128
-                
-                </td>
-            
 
-            <td class="description last">Server port</td>
+            <td class="description last">Paramètres divers de l'objet 3d</td>
         </tr>
 
     
@@ -229,8 +209,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-27">line 27</a>
+				<a href="simulateur_object3d.class.js.html">simulateur/object3d.class.js</a>,
+				 <a href="simulateur_object3d.class.js.html#sunlight-1-line-25">line 25</a>
 			</li>
 		</ul>
 	</dd>
@@ -278,8 +258,8 @@
         <dl>
             
 <hr>
-<dt class="name" id="ip">
-    <h4 id="ip"><span class="type-signature"></span>ip<span class="type-signature"> :string</span></h4>
+<dt class="name" id="loader">
+    <h4 id="loader"><span class="type-signature"></span>loader<span class="type-signature"> :THREE.ColladaLoader</span></h4>
 
     
 </dt>
@@ -291,7 +271,7 @@
         <ul>
             <li>
                 
-<span class="param-type">string</span>
+<span class="param-type">THREE.ColladaLoader</span>
 
 
 
@@ -334,8 +314,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-38">line 38</a>
+				<a href="simulateur_object3d.class.js.html">simulateur/object3d.class.js</a>,
+				 <a href="simulateur_object3d.class.js.html#sunlight-1-line-28">line 28</a>
 			</li>
 		</ul>
 	</dd>
@@ -355,166 +335,8 @@
         
             
 <hr>
-<dt class="name" id="ip_port">
-    <h4 id="ip_port"><span class="type-signature"></span>ip_port<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-44">line 44</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="network">
-    <h4 id="network"><span class="type-signature"></span>network<span class="type-signature"> :Object</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Create the network default object
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-56">line 56</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="progs">
-    <h4 id="progs"><span class="type-signature"></span>progs<span class="type-signature"> :Object</span></h4>
+<dt class="name" id="mesh">
+    <h4 id="mesh"><span class="type-signature"></span>mesh<span class="type-signature"> :Object</span></h4>
 
     
 </dt>
@@ -569,8 +391,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-75">line 75</a>
+				<a href="simulateur_object3d.class.js.html">simulateur/object3d.class.js</a>,
+				 <a href="simulateur_object3d.class.js.html#sunlight-1-line-32">line 32</a>
 			</li>
 		</ul>
 	</dd>
@@ -590,16 +412,12 @@
         
             
 <hr>
-<dt class="name" id="server">
-    <h4 id="server"><span class="type-signature"></span>server<span class="type-signature"> :Object</span></h4>
+<dt class="name" id="name">
+    <h4 id="name"><span class="type-signature"></span>name<span class="type-signature"> :String</span></h4>
 
     
 </dt>
 <dd>
-    
-    <div class="description">
-        Create the server
-    </div>
     
 
     
@@ -607,7 +425,7 @@
         <ul>
             <li>
                 
-<span class="param-type">Object</span>
+<span class="param-type">String</span>
 
 
 
@@ -650,8 +468,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-50">line 50</a>
+				<a href="simulateur_object3d.class.js.html">simulateur/object3d.class.js</a>,
+				 <a href="simulateur_object3d.class.js.html#sunlight-1-line-51">line 51</a>
 			</li>
 		</ul>
 	</dd>
@@ -671,85 +489,8 @@
         
             
 <hr>
-<dt class="name" id="server_port">
-    <h4 id="server_port"><span class="type-signature"></span>server_port<span class="type-signature"> :int</span></h4>
-
-    
-</dt>
-<dd>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">int</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-31">line 31</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="utcoupe">
-    <h4 id="utcoupe"><span class="type-signature"></span>utcoupe<span class="type-signature"> :Object</span></h4>
+<dt class="name" id="params">
+    <h4 id="params"><span class="type-signature"></span>params<span class="type-signature"> :Object</span></h4>
 
     
 </dt>
@@ -804,8 +545,162 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-68">line 68</a>
+				<a href="simulateur_object3d.class.js.html">simulateur/object3d.class.js</a>,
+				 <a href="simulateur_object3d.class.js.html#sunlight-1-line-48">line 48</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="position">
+    <h4 id="position"><span class="type-signature"></span>position<span class="type-signature"> :<a href="Position.html">Position</a></span></h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="Position.html">Position</a></span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="simulateur_object3d.class.js.html">simulateur/object3d.class.js</a>,
+				 <a href="simulateur_object3d.class.js.html#sunlight-1-line-54">line 54</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="source">
+    <h4 id="source"><span class="type-signature"></span>source<span class="type-signature"> :String</span></h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">String</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="simulateur_object3d.class.js.html">simulateur/object3d.class.js</a>,
+				 <a href="simulateur_object3d.class.js.html#sunlight-1-line-57">line 57</a>
 			</li>
 		</ul>
 	</dd>
@@ -832,7 +727,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="launch"><span class="type-signature"></span>launch()</h4>
+    <h4 class="name" id="loadMesh"><span class="type-signature"></span>loadMesh(onSuccess)</h4>
     
     
 </dt>
@@ -840,183 +735,8 @@
 
     
     <div class="description">
-        Launch the robot
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-184">line 184</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="sendNetwork"><span class="type-signature"></span>sendNetwork()</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Send Network
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-168">line 168</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="sendUTCoupe"><span class="type-signature"></span>sendUTCoupe(prog)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        sendUTCoupe
+        Charge le mesh contenu dans le fichier collada spécifié par <a href="Object3d.html#source">Object3d#source</a>
+Appelle la fonction onSucess avec en paramètre la scène losque le chargement est terminé.
     </div>
     
 
@@ -1051,13 +771,13 @@
 
         <tr>
             
-                <td class="name"><code>prog</code></td>
+                <td class="name"><code>onSuccess</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">function</span>
 
 
 
@@ -1112,8 +832,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-290">line 290</a>
+				<a href="simulateur_object3d.class.js.html">simulateur/object3d.class.js</a>,
+				 <a href="simulateur_object3d.class.js.html#sunlight-1-line-66">line 66</a>
 			</li>
 		</ul>
 	</dd>
@@ -1146,7 +866,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="stop"><span class="type-signature"></span>stop(prog)</h4>
+    <h4 class="name" id="setParams"><span class="type-signature"></span>setParams(params)</h4>
     
     
 </dt>
@@ -1154,7 +874,9 @@
 
     
     <div class="description">
-        Stops all
+        Répartit les valeurs contenues dans params dans les bonne variables membres
+
+/!\ Ecrase les données existantes si elles existent ! /!\
     </div>
     
 
@@ -1189,13 +911,13 @@
 
         <tr>
             
-                <td class="name"><code>prog</code></td>
+                <td class="name"><code>params</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
 
@@ -1206,7 +928,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">Paramètres divers de l'objet 3d</td>
         </tr>
 
     
@@ -1250,8 +972,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-271">line 271</a>
+				<a href="simulateur_object3d.class.js.html">simulateur/object3d.class.js</a>,
+				 <a href="simulateur_object3d.class.js.html#sunlight-1-line-44">line 44</a>
 			</li>
 		</ul>
 	</dd>

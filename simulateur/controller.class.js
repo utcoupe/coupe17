@@ -10,7 +10,7 @@
 
 "use strict";
 
-/**
+/*
  * Gère le simulateur
  * 
  * @class Controller
@@ -41,11 +41,12 @@ class Controller
 
     /**
      * Charge tous les paramètres
+     * @see {@link Controller#configPath}
      */
     loadParameters()
     {
         getParsedJSONFromFile(
-            "3dobjects.json",
+            this.configPath,
             (objects) => { this.create3dObjects(objects) }
         );
     }
@@ -54,7 +55,6 @@ class Controller
      * Crée tous les objets 3D passés en paramètres
      * 
      * @param {Array<Object>} objects liste de tous les objets à créer
-     * @see {@link{Controller.configPath}}
      */
     create3dObjects(objects)
     {

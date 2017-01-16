@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>UTCoupe 17 Module: clients/shared/defineParser</title>
+	<title>UTCoupe 17 Source: simulateur/getParsedJSONFromFile.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -81,100 +81,58 @@
 <div class="row">
 
 	
-	<div class="col-md-8">
+	<div class="col-md-12">
 	
 		<div id="main">
 			
 
-	<h1 class="page-title">Module: clients/shared/defineParser</h1>
+		<h1 class="page-title">Source: simulateur/getParsedJSONFromFile.js</h1>
+    
 <section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">/**
+ * @file Défini une fonction qui télécharge via AJAX le fichier JSON, puis retourne son contenu converti en objet.
+ * @author Mindstan
+ * 
+ * @requires {JQuery}
+ */
 
-<header>
-    
-</header>
+/**
+ * Télécharge via AJAX le fichier JSON demandé, puis appelle la fonction passée en paramètre avec son contenu converti en objet.
+ * 
+ * @param {String} fileName Nom du fichier distant
+ * @param {function} onSuccess Fonction appelée lorsque la requête a abouti
+ * @returns {Object}
+ */
+function getParsedJSONFromFile(fileName, onSuccess)
+{
+    /* Ne fonctionne pas en local, retourne une réponse xml à la place de json
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 &amp;&amp; this.status == 200) {
+            this.overrideMimeType('application/json');
+            onSuccess(JSON.parse(this.responseText));
+        }
+    };
+    xmlhttp.open("GET", fileName, true);
+    xmlhttp.send();
+    */
 
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">Define Parser module</div>
-        
-
-        
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="clients_shared_defineParser.js.html">clients/shared/defineParser.js</a>,
-				 <a href="clients_shared_defineParser.js.html#sunlight-1-line-1">line 1</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
+    // Plutôt ceci :
+    $.ajax({
+        dataType: "json",
+        url: fileName,
+        mimeType: "application/json",
+        success: function(result){
+            console.log("Successfuly retrieved " + fileName + " from the server.");
+            onSuccess(result);
+        }
+    });
+}</pre>
+    </article>
 </section>
+
 
 
 
@@ -184,10 +142,6 @@
 
 	<div class="clearfix"></div>
 
-	
-		<div class="col-md-3">
-			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
-		</div>
 	
 
 </div>

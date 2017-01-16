@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>UTCoupe 17 Class: Server</title>
+	<title>UTCoupe 17 Class: Controller</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -86,13 +86,13 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: Server</h1>
+	<h1 class="page-title">Class: Controller</h1>
 <section>
 
 <header>
     
         <h2>
-        Server
+        Controller
         </h2>
         
     
@@ -105,7 +105,7 @@
         
 <hr>
 <dt>
-    <h4 class="name" id="Server"><span class="type-signature"></span>new Server( [server_port])</h4>
+    <h4 class="name" id="Controller"><span class="type-signature"></span>new Controller(configPath)</h4>
     
     
 </dt>
@@ -113,7 +113,7 @@
 
     
     <div class="description">
-        Starts a server on the port specified. Default port: 3128
+        Constructeur du controlleur
     </div>
     
 
@@ -136,11 +136,7 @@
         <th>Type</th>
 
         
-        <th>Argument</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -152,13 +148,13 @@
 
         <tr>
             
-                <td class="name"><code>server_port</code></td>
+                <td class="name"><code>configPath</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">int</span>
+<span class="param-type">String</span>
 
 
 
@@ -166,26 +162,10 @@
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                    3128
-                
-                </td>
-            
 
-            <td class="description last">Server port</td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -229,8 +209,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-27">line 27</a>
+				<a href="simulateur_controller.class.js.html">simulateur/controller.class.js</a>,
+				 <a href="simulateur_controller.class.js.html#sunlight-1-line-26">line 26</a>
 			</li>
 		</ul>
 	</dd>
@@ -278,8 +258,8 @@
         <dl>
             
 <hr>
-<dt class="name" id="ip">
-    <h4 id="ip"><span class="type-signature"></span>ip<span class="type-signature"> :string</span></h4>
+<dt class="name" id="axisHelper">
+    <h4 id="axisHelper"><span class="type-signature"></span>axisHelper<span class="type-signature"> :THREE.AxisHelper</span></h4>
 
     
 </dt>
@@ -291,7 +271,7 @@
         <ul>
             <li>
                 
-<span class="param-type">string</span>
+<span class="param-type">THREE.AxisHelper</span>
 
 
 
@@ -334,8 +314,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-38">line 38</a>
+				<a href="simulateur_controller.class.js.html">simulateur/controller.class.js</a>,
+				 <a href="simulateur_controller.class.js.html#sunlight-1-line-102">line 102</a>
 			</li>
 		</ul>
 	</dd>
@@ -355,8 +335,8 @@
         
             
 <hr>
-<dt class="name" id="ip_port">
-    <h4 id="ip_port"><span class="type-signature"></span>ip_port<span class="type-signature"> :string</span></h4>
+<dt class="name" id="camera">
+    <h4 id="camera"><span class="type-signature"></span>camera<span class="type-signature"> :THREE.PerspectiveCamera</span></h4>
 
     
 </dt>
@@ -368,7 +348,7 @@
         <ul>
             <li>
                 
-<span class="param-type">string</span>
+<span class="param-type">THREE.PerspectiveCamera</span>
 
 
 
@@ -411,8 +391,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-44">line 44</a>
+				<a href="simulateur_controller.class.js.html">simulateur/controller.class.js</a>,
+				 <a href="simulateur_controller.class.js.html#sunlight-1-line-90">line 90</a>
 			</li>
 		</ul>
 	</dd>
@@ -432,16 +412,12 @@
         
             
 <hr>
-<dt class="name" id="network">
-    <h4 id="network"><span class="type-signature"></span>network<span class="type-signature"> :Object</span></h4>
+<dt class="name" id="configPath">
+    <h4 id="configPath"><span class="type-signature"></span>configPath<span class="type-signature"> :String</span></h4>
 
     
 </dt>
 <dd>
-    
-    <div class="description">
-        Create the network default object
-    </div>
     
 
     
@@ -449,7 +425,7 @@
         <ul>
             <li>
                 
-<span class="param-type">Object</span>
+<span class="param-type">String</span>
 
 
 
@@ -492,8 +468,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-56">line 56</a>
+				<a href="simulateur_controller.class.js.html">simulateur/controller.class.js</a>,
+				 <a href="simulateur_controller.class.js.html#sunlight-1-line-29">line 29</a>
 			</li>
 		</ul>
 	</dd>
@@ -513,8 +489,8 @@
         
             
 <hr>
-<dt class="name" id="progs">
-    <h4 id="progs"><span class="type-signature"></span>progs<span class="type-signature"> :Object</span></h4>
+<dt class="name" id="container">
+    <h4 id="container"><span class="type-signature"></span>container<span class="type-signature"> :String</span></h4>
 
     
 </dt>
@@ -526,7 +502,7 @@
         <ul>
             <li>
                 
-<span class="param-type">Object</span>
+<span class="param-type">String</span>
 
 
 
@@ -569,8 +545,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-75">line 75</a>
+				<a href="simulateur_controller.class.js.html">simulateur/controller.class.js</a>,
+				 <a href="simulateur_controller.class.js.html#sunlight-1-line-33">line 33</a>
 			</li>
 		</ul>
 	</dd>
@@ -590,16 +566,12 @@
         
             
 <hr>
-<dt class="name" id="server">
-    <h4 id="server"><span class="type-signature"></span>server<span class="type-signature"> :Object</span></h4>
+<dt class="name" id="controls">
+    <h4 id="controls"><span class="type-signature"></span>controls<span class="type-signature"> :THREE.OrbitControls</span></h4>
 
     
 </dt>
 <dd>
-    
-    <div class="description">
-        Create the server
-    </div>
     
 
     
@@ -607,7 +579,7 @@
         <ul>
             <li>
                 
-<span class="param-type">Object</span>
+<span class="param-type">THREE.OrbitControls</span>
 
 
 
@@ -650,8 +622,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-50">line 50</a>
+				<a href="simulateur_controller.class.js.html">simulateur/controller.class.js</a>,
+				 <a href="simulateur_controller.class.js.html#sunlight-1-line-99">line 99</a>
 			</li>
 		</ul>
 	</dd>
@@ -671,8 +643,8 @@
         
             
 <hr>
-<dt class="name" id="server_port">
-    <h4 id="server_port"><span class="type-signature"></span>server_port<span class="type-signature"> :int</span></h4>
+<dt class="name" id="directionLights">
+    <h4 id="directionLights"><span class="type-signature"></span>directionLights<span class="type-signature"> :Array.&lt;THREE.DirectionalLight></span></h4>
 
     
 </dt>
@@ -684,7 +656,7 @@
         <ul>
             <li>
                 
-<span class="param-type">int</span>
+<span class="param-type">Array.&lt;THREE.DirectionalLight></span>
 
 
 
@@ -727,8 +699,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-31">line 31</a>
+				<a href="simulateur_controller.class.js.html">simulateur/controller.class.js</a>,
+				 <a href="simulateur_controller.class.js.html#sunlight-1-line-39">line 39</a>
 			</li>
 		</ul>
 	</dd>
@@ -748,8 +720,8 @@
         
             
 <hr>
-<dt class="name" id="utcoupe">
-    <h4 id="utcoupe"><span class="type-signature"></span>utcoupe<span class="type-signature"> :Object</span></h4>
+<dt class="name" id="objects3d">
+    <h4 id="objects3d"><span class="type-signature"></span>objects3d<span class="type-signature"> :Map.&lt;<a href="Object3d.html">Object3d</a>></span></h4>
 
     
 </dt>
@@ -761,7 +733,7 @@
         <ul>
             <li>
                 
-<span class="param-type">Object</span>
+<span class="param-type">Map.&lt;<a href="Object3d.html">Object3d</a>></span>
 
 
 
@@ -804,8 +776,162 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-68">line 68</a>
+				<a href="simulateur_controller.class.js.html">simulateur/controller.class.js</a>,
+				 <a href="simulateur_controller.class.js.html#sunlight-1-line-36">line 36</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="renderer">
+    <h4 id="renderer"><span class="type-signature"></span>renderer<span class="type-signature"> :THREE.WebGLRenderer</span></h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">THREE.WebGLRenderer</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="simulateur_controller.class.js.html">simulateur/controller.class.js</a>,
+				 <a href="simulateur_controller.class.js.html#sunlight-1-line-93">line 93</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="scene">
+    <h4 id="scene"><span class="type-signature"></span>scene<span class="type-signature"> :THREE.Scene</span></h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">THREE.Scene</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="simulateur_controller.class.js.html">simulateur/controller.class.js</a>,
+				 <a href="simulateur_controller.class.js.html#sunlight-1-line-88">line 88</a>
 			</li>
 		</ul>
 	</dd>
@@ -832,7 +958,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="launch"><span class="type-signature"></span>launch()</h4>
+    <h4 class="name" id="create3dObjects"><span class="type-signature"></span>create3dObjects(objects)</h4>
     
     
 </dt>
@@ -840,183 +966,7 @@
 
     
     <div class="description">
-        Launch the robot
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-184">line 184</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="sendNetwork"><span class="type-signature"></span>sendNetwork()</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Send Network
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-168">line 168</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="sendUTCoupe"><span class="type-signature"></span>sendUTCoupe(prog)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        sendUTCoupe
+        Crée tous les objets 3D passés en paramètres
     </div>
     
 
@@ -1051,13 +1001,13 @@
 
         <tr>
             
-                <td class="name"><code>prog</code></td>
+                <td class="name"><code>objects</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Array.&lt;Object></span>
 
 
 
@@ -1068,7 +1018,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">liste de tous les objets à créer</td>
         </tr>
 
     
@@ -1112,8 +1062,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-290">line 290</a>
+				<a href="simulateur_controller.class.js.html">simulateur/controller.class.js</a>,
+				 <a href="simulateur_controller.class.js.html#sunlight-1-line-59">line 59</a>
 			</li>
 		</ul>
 	</dd>
@@ -1146,7 +1096,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="stop"><span class="type-signature"></span>stop(prog)</h4>
+    <h4 class="name" id="createLights"><span class="type-signature"></span>createLights()</h4>
     
     
 </dt>
@@ -1154,7 +1104,368 @@
 
     
     <div class="description">
-        Stops all
+        Crée et insert des lumières directionnelles dans la scène
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="simulateur_controller.class.js.html">simulateur/controller.class.js</a>,
+				 <a href="simulateur_controller.class.js.html#sunlight-1-line-126">line 126</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="createRenderer"><span class="type-signature"></span>createRenderer()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Crée le moteur de rendu
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="simulateur_controller.class.js.html">simulateur/controller.class.js</a>,
+				 <a href="simulateur_controller.class.js.html#sunlight-1-line-76">line 76</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="loadParameters"><span class="type-signature"></span>loadParameters()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Charge tous les paramètres
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="simulateur_controller.class.js.html">simulateur/controller.class.js</a>,
+				 <a href="simulateur_controller.class.js.html#sunlight-1-line-46">line 46</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li><a href="Controller.html#configPath">Controller#configPath</a></li>
+			</ul>
+	</dd>
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="render"><span class="type-signature"></span>render()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Crée une boucle et met à jour le rendu à 60fps
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="simulateur_controller.class.js.html">simulateur/controller.class.js</a>,
+				 <a href="simulateur_controller.class.js.html#sunlight-1-line-153">line 153</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="selectView"><span class="type-signature"></span>selectView(view)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Affiche la vue désirée
+
+Valeurs possibles : "front", "top", "behind", "left", "right"
     </div>
     
 
@@ -1189,13 +1500,13 @@
 
         <tr>
             
-                <td class="name"><code>prog</code></td>
+                <td class="name"><code>view</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">String</span>
 
 
 
@@ -1206,7 +1517,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">Vue désirée</td>
         </tr>
 
     
@@ -1250,8 +1561,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="server_server.class.js.html">server/server.class.js</a>,
-				 <a href="server_server.class.js.html#sunlight-1-line-271">line 271</a>
+				<a href="simulateur_controller.class.js.html">simulateur/controller.class.js</a>,
+				 <a href="simulateur_controller.class.js.html#sunlight-1-line-178">line 178</a>
 			</li>
 		</ul>
 	</dd>
