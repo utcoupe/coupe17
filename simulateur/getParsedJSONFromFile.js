@@ -36,4 +36,6 @@ function getParsedJSONFromFile(fileName, onSuccess)
             onSuccess(result);
         }
     });
+    // Fonction de JQUERY, ne fonctionne pas en local
+    //$.getJSON(fileName, onSuccess);
 }

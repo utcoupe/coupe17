@@ -18,11 +18,11 @@ class Position
     constructor (x, y, z)
     {
         /** @type {Number} */
-        this.x = x;
+        this.x = x || 0;
         /** @type {Number} */
-        this.y = y;
+        this.y = y || 0;
         /** @type {Number} */
-        this.z = z;
+        this.z = z || 0;
     }
 
 
@@ -63,5 +63,23 @@ class Position
         this.x += pos.x;
         this.y += pos.y;
         this.z += pos.z;
+    }
+
+    /**
+     * Convertit tous les angles portés par les axes en radians
+     */
+    makeRotationFromDegrees()
+    {
+        this.x = this.convertDegreesToRadians(this.x);
+        this.y = this.convertDegreesToRadians(this.y);
+        this.z = this.convertDegreesToRadians(this.z);
+    }
+
+    /**
+     * Convertit des degrés en radians
+     */
+    convertDegreesToRadians(deg)
+    {
+        return (deg * Math.PI / 180);
     }
 }

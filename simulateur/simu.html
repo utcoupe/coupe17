@@ -7,10 +7,10 @@
 
         <title>Page de test du nouveau simulateur</title>
 
-        <script type="text/javascript" src="three/three.js"></script>
+        <script type="text/javascript" src="three/three.min.js"></script>
         <script type="text/javascript" src="three/OrbitControls.js"></script>
         <script type="text/javascript" src="three/loader.js"></script>
-        <script type="text/javascript" src="three/ColladaLoader2.js"></script>
+        <script type="text/javascript" src="three/ColladaLoader.js"></script>
         <script type="text/javascript" src="three/detector.js"></script>
 
         <script type="text/javascript" src="lib/jquery-2.1.1.min.js"></script>
@@ -44,6 +44,7 @@
             
             var controller = new Controller("3dobjects.json");
             controller.createRenderer();
+            controller.loadParameters();
         </script>
     </body>
 </html>

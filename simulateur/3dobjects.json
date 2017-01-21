@@ -8,6 +8,12 @@
             "y": 0,
             "z": 2
         },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
         "type": "plateau"
     },
     {
@@ -15,11 +21,17 @@
         "source": "3d/mod_lun_bleu.dae",
         "pos":
         {
-            "x": 0.2,
-            "Y": 0,
-            "z": 0.950
+            "x": 0.950,
+            "Y": 0.0,
+            "z": 0.2
         },
-        "type": "cylindre",
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
         "couleur": "bleu"
     },
     {
@@ -27,11 +39,17 @@
         "source": "3d/mod_lun_bleu.dae",
         "pos":
         {
-            "x": 0.6,
-            "Y": 0,
-            "z": 0.2
+            "x": 0.2,
+            "Y": 0.0,
+            "z": 0.6
         },
-        "type": "cylindre",
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
         "couleur": "bleu"
     },
     {
@@ -39,11 +57,179 @@
         "source": "3d/mod_lun_bleu.dae",
         "pos":
         {
-            "x": 1.85,
-            "Y": 0,
-            "z": 0.8
+            "x": 0.8,
+            "Y": 0.0,
+            "z": 1.85
         },
-        "type": "cylindre",
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
         "couleur": "bleu"
+    },
+    {
+        "name": "mod_lun03",
+        "source": "3d/mod_lun_jaune.dae",
+        "pos":
+        {
+            "x": 2.050,
+            "Y": 0.0,
+            "z": 0.2
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "jaune"
+    },
+    {
+        "name": "mod_lun04",
+        "source": "3d/mod_lun_jaune.dae",
+        "pos":
+        {
+            "x": 2.8,
+            "Y": 0.0,
+            "z": 0.6
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "jaune"
+    },
+    {
+        "name": "mod_lun05",
+        "source": "3d/mod_lun_jaune.dae",
+        "pos":
+        {
+            "x": 2.2,
+            "Y": 0.0,
+            "z": 1.85
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "jaune"
+    },
+    {
+        "name": "mod_lun06",
+        "source": "3d/mod_lun_bleu_jaune.dae",
+        "pos":
+        {
+            "x": 0.5,
+            "Y": 0.0,
+            "z": 1.1
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleujaune"
+    },
+    {
+        "name": "mod_lun07",
+        "source": "3d/mod_lun_bleu_jaune.dae",
+        "pos":
+        {
+            "x": 0.9,
+            "Y": 0.0,
+            "z": 1.4
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleujaune"
+    },
+    {
+        "name": "mod_lun08",
+        "source": "3d/mod_lun_bleu_jaune.dae",
+        "pos":
+        {
+            "x": 0.95,
+            "Y": 0.0,
+            "z": 0.6
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleujaune"
+    },
+    {
+        "name": "mod_lun09",
+        "source": "3d/mod_lun_bleu_jaune.dae",
+        "pos":
+        {
+            "x": 2.5,
+            "Y": 0.0,
+            "z": 1.1
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 180,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleujaune"
+    },
+    {
+        "name": "mod_lun10",
+        "source": "3d/mod_lun_bleu_jaune.dae",
+        "pos":
+        {
+            "x": 2.1,
+            "Y": 0.0,
+            "z": 1.4
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 180,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleujaune"
+    },
+    {
+        "name": "mod_lun11",
+        "source": "3d/mod_lun_bleu_jaune.dae",
+        "pos":
+        {
+            "x": 2,
+            "Y": 0.0,
+            "z": 0.6
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 180,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleujaune"
     }
 ]
