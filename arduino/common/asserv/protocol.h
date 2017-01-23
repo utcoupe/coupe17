@@ -79,11 +79,14 @@
 #define MAX_AUTOSEND_SIZE (24)
 #endif
 
+//todo check if it can be called by c++ ?
 #ifdef __cplusplus
-extern "C" int ProtocolExecuteCmd(char data);
+//extern "C" int ProtocolExecuteCmd(char data);
+extern "C" void protocolExecuteCmd(char* command);
 extern "C" void ProtocolAutoSendStatus(int bytes_left);
 #else
-int ProtocolExecuteCmd(char data);
+//int ProtocolExecuteCmd(char data);
+void protocolExecuteCmd(char* command);
 void ProtocolAutoSendStatus(int bytes_left);
 #endif
 

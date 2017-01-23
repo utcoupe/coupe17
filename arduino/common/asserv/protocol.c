@@ -97,10 +97,22 @@ int ProtocolExecuteCmd(char data) {
 		current_command[end_of_id] = '\0';
 		sscanf(&current_command[ID_START_INDEX], "%i", &id);
 
-		switchOrdre(order, id, &current_command[end_of_id+1], response, &response_size);
+//		switchOrdre(order, id, &current_command[end_of_id+1], response, &response_size);
 		sent_size = sendResponse(order, response, response_size, id);
 		clean_current_command(current_command, &index);
 		return sent_size;
 	}
 	return 0;
+}
+
+// 'ordre;id;arg1;arg2;argn'
+void protocolExecuteCmd(char* command) {
+    char ordre = command[0];
+    int id = atoi(command[2]);
+    // To skip : "ordre;id;"
+    command += 3;
+    switchOrdre(ordre, id, command);
+    // extract ordre and id and keep the rest of the chain unchanged in order to call switchOrdre
+    //modify switchOrdre to send response directly using the SerialSend facilities
+    //-> protocol.c not useful anymore, all can be done direcly in switchOrdre function
 }

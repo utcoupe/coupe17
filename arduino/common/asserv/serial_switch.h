@@ -6,6 +6,9 @@
 #ifndef SERIAL_SWITCH_H
 #define SERIAL_SWITCH_H
 
-int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size);//Si doublon, ne pas executer d'ordre mais renvoyer les données à renvoyer 
+//int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size);//Si doublon, ne pas executer d'ordre mais renvoyer les données à renvoyer
+
+//Si doublon, ne pas executer d'ordre mais renvoyer les données à renvoyer
+int switchOrdre(char ordre, int id, char *argv);
 
 #endif
