@@ -18,15 +18,16 @@
 #include <QueueList.h>
 
 // Store kind of a timeout
-unsigned long nextTime = 0;
+//unsigned long nextTime = 0;
 // Flag to know if a computer is connected to the arduino
 static unsigned char flagConnected = 0;
 
 os48::Scheduler* scheduler = os48::Scheduler::get();
-os48::Task* task1 = NULL;
-os48::Task* task2 = NULL;
-os48::Task* task3 = NULL;
+os48::TaskTimer* main_task = NULL;
+os48::Task* serial_send_task = NULL;
+os48::Task* serial_read_task = NULL;
 
+//todo adapt with asynchronous serial
 #ifdef PIN_JACK
 int JackCheck(void) {
 	static int last_jack_status = 1;
@@ -45,8 +46,14 @@ int JackCheck(void) {
 }
 #endif
 
-void sender_task () {
+/*
+ * Main task, compute all the control actions.
+ * This task is periodically called.
+ */
+bool mainTask() {
     //TODO read the serial and check if a go has been send to escape the loop and startup
+    //TODO sync instead of while
+    //TODO flag activated by executeCmd ?
     while (!flagConnected) {
         SerialSender::SerialSend(SERIAL_INFO, "%s", ARDUINO_ID);
         delay(1000);
@@ -55,21 +62,48 @@ void sender_task () {
         SerialSender::SerialSend(SERIAL_INFO, "Started up !");
         delay(1000);
 //    }
-    loop();
+
+
+
+//    digitalWrite(LED_MAINLOOP, HIGH);
+//
+//#ifdef PIN_JACK
+//    //todo check the jack and send its status
+////    JackCheck();
+//#endif
+//
+//    //Action asserv
+//    ComputeEmergency();
+//    ComputeIsBlocked();
+//    ControlCompute();
+//
+//    digitalWrite(LED_MAINLOOP, LOW);
+
+    return true;
 }
 
-void reader_task () {
+/*
+ * This task read the serial port (orders) and execute them.
+ */
+void serialReadTask() {
+    static char receivedCommand[20];
     String receivedString;
     while (true) {
-        receivedString = SERIAL_MAIN.readString();
-        receivedString.replace("\n", "");
+        // Each order sent is null terminated
+        receivedString = SERIAL_MAIN.readStringUntil('\0');
+        if (receivedString != "") {
+            //todo verify that this way is working fine
+            receivedString.toCharArray(receivedCommand, receivedString.length());
+            protocolExecuteCmd(receivedCommand);
+        }
+
+
+//        receivedString.replace("\n", "");
         if (receivedString == "START")
         {
             flagConnected = 1;
         }
-        if (receivedString != "") {
-            SerialSender::SerialSend(SERIAL_INFO, receivedString);
-        }
+
     }
 }
 
@@ -85,59 +119,60 @@ void setup() {
 #endif
 	initPins();
 
-    nextTime = micros();
+//    nextTime = micros();
     ControlInit();
 
     SerialSender sender;
-    task1 = scheduler->createTask(&SerialSender::SerialSendTask, 150);
-    task2 = scheduler->createTask(&sender_task, 250);
-    task3 = scheduler->createTask(&reader_task, 100);
+    serial_send_task = scheduler->createTask(&SerialSender::SerialSendTask, 150);
+    main_task = scheduler->createTaskTimer(&mainTask, 250, (uint32_t)(DT*1000));
+    serial_read_task = scheduler->createTask(&serialReadTask, 100);
 
     scheduler->start();
 }
 
+//todo remove, not used anymore
 void loop(){
-	int available, sent_bytes;
-#if DEBUG_MAINLOOP
-	static unsigned long start_overtime = micros();
-	unsigned long now;
-#endif
-
-	nextTime = nextTime + DT*1000000;
-	sent_bytes = 0;
-	digitalWrite(LED_MAINLOOP, HIGH);
-
-#ifdef PIN_JACK
-	sent_bytes += JackCheck();
-#endif
-
-	//Action asserv
-	ComputeEmergency();
-	ComputeIsBlocked();
-	ControlCompute();
-
-	// Flush serial every time to stay in time
-	Serial.flush();
-	// zone programmation libre
-	available = SERIAL_MAIN.available();
-	for(int i = 0; i < available; i++) {
-		// recuperer l'octet courant
-		sent_bytes += ProtocolExecuteCmd(generic_serial_read());
-	}
-	// Auto send status if necessary
-	ProtocolAutoSendStatus(MAX_BYTES_PER_IT - sent_bytes);
-
-	digitalWrite(LED_MAINLOOP, LOW);
-
-#if DEBUG_MAINLOOP
-	now = micros();
-	if (now - start_overtime > 10000000) {
-		digitalWrite(LED_DEBUG, LOW);
-	}
-	if (now >= nextTime) {
-		start_overtime = micros();
-		digitalWrite(LED_DEBUG, HIGH);
-	}
-#endif
-	while (micros() < nextTime);
+//	int available, sent_bytes;
+//#if DEBUG_MAINLOOP
+//	static unsigned long start_overtime = micros();
+//	unsigned long now;
+//#endif
+//
+//	nextTime = nextTime + DT*1000000;
+//	sent_bytes = 0;
+//	digitalWrite(LED_MAINLOOP, HIGH);
+//
+//#ifdef PIN_JACK
+//	sent_bytes += JackCheck();
+//#endif
+//
+//	//Action asserv
+//	ComputeEmergency();
+//	ComputeIsBlocked();
+//	ControlCompute();
+//
+//	// Flush serial every time to stay in time
+//	Serial.flush();
+//	// zone programmation libre
+//	available = SERIAL_MAIN.available();
+//	for(int i = 0; i < available; i++) {
+//		// recuperer l'octet courant
+//		sent_bytes += ProtocolExecuteCmd(generic_serial_read());
+//	}
+//	// Auto send status if necessary
+//	ProtocolAutoSfendStatus(MAX_BYTES_PER_IT - sent_bytes);
+//
+//	digitalWrite(LED_MAINLOOP, LOW);
+//
+//#if DEBUG_MAINLOOP
+//	now = micros();
+//	if (now - start_overtime > 10000000) {
+//		digitalWrite(LED_DEBUG, LOW);
+//	}
+//	if (now >= nextTime) {
+//		start_overtime = micros();
+//		digitalWrite(LED_DEBUG, HIGH);
+//	}
+//#endif
+//	while (micros() < nextTime);
 }
