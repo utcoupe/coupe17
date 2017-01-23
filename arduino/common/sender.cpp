@@ -46,6 +46,7 @@ void SerialSender::SerialSend(SerialSendEnum level, const char* str, ...) {
                 serialData.concat(tmpString);
 
                 switch (str[++i]) {
+                    case 'i':
                     case 'd':
                         tmpString = String(va_arg(argv, int));
                         break;
