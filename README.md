@@ -5,7 +5,7 @@
 
 Installer tous les logiciels requis (compilation, installation, etc.) :
 ```
-sudo apt install git build-essential python nodejs npm nodejs-legacy cmake libboost-dev
+sudo apt install git build-essential python nodejs npm nodejs-legacy cmake libboost-dev g++
 ```
 
 Une fois dans le dossier, pour installer les dépendances JavaScript :
