@@ -320,7 +320,7 @@
             "z": 0
         },
         "type": "mod_lun",
-        "couleur": "jaunbe"
+        "couleur": "jaune"
     },
     {
         "name": "mod_lun17",
@@ -375,6 +375,150 @@
         },
         "type": "mod_lun",
         "couleur": "jaune"
+    },
+    {
+        "name": "mod_lun20",
+        "source": "3d/mod_lun_bleu_jaune.dae",
+        "pos":
+        {
+            "x": 0.038,
+            "y": 0.0,
+            "z": 1.35
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 180,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleujaune"
+    },
+    {
+        "name": "mod_lun21",
+        "source": "3d/mod_lun_bleu_jaune.dae",
+        "pos":
+        {
+            "x": 0.038,
+            "y": 0.1,
+            "z": 1.35
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleujaune"
+    },
+    {
+        "name": "mod_lun22",
+        "source": "3d/mod_lun_bleu_jaune.dae",
+        "pos":
+        {
+            "x": 0.038,
+            "y": 0.2,
+            "z": 1.35
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 180,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleujaune"
+    },
+    {
+        "name": "mod_lun23",
+        "source": "3d/mod_lun_bleu_jaune.dae",
+        "pos":
+        {
+            "x": 0.038,
+            "y": 0.3,
+            "z": 1.35
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleujaune"
+    },
+    {
+        "name": "mod_lun24",
+        "source": "3d/mod_lun_bleu_jaune.dae",
+        "pos":
+        {
+            "x": 2.962,
+            "y": 0.0,
+            "z": 1.35
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleujaune"
+    },
+    {
+        "name": "mod_lun25",
+        "source": "3d/mod_lun_bleu_jaune.dae",
+        "pos":
+        {
+            "x": 2.962,
+            "y": 0.1,
+            "z": 1.35
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 180,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleujaune"
+    },
+    {
+        "name": "mod_lun26",
+        "source": "3d/mod_lun_bleu_jaune.dae",
+        "pos":
+        {
+            "x": 2.962,
+            "y": 0.2,
+            "z": 1.35
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleujaune"
+    },
+    {
+        "name": "mod_lun27",
+        "source": "3d/mod_lun_bleu_jaune.dae",
+        "pos":
+        {
+            "x": 2.962,
+            "y": 0.3,
+            "z": 1.35
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 180,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleujaune"
     },
     {
         "name": "pr_bleu",

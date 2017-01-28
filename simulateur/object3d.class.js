@@ -35,7 +35,7 @@ class Object3d
     }
 
     /**
-     * Répartit les valeurs contenues dans params dans les bonne variables membres
+     * Répartit les valeurs contenues dans params dans les bonnes variables membres
      * 
      * /!\ Ecrase les données existantes si elles existent ! /!\
      * 
@@ -59,6 +59,12 @@ class Object3d
 
         /** @type {String} */
         this.source = params.source;
+
+        /** @type {String} */
+        this.color = params.color;
+
+        /** @type {String} */
+        this.type = params.type;
     }
 
     /**
