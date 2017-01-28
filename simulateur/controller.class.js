@@ -126,12 +126,12 @@ class Controller
     createLights()
     {
         var heightLights = 5;
-        // Les lumières sont disposés haut-dessus des quattres coins du plateau
+        // Les lumières sont disposés haut-dessus des quattres coins du plateau, avec un offset de 1
         var posLights = [
-            new Position(0, heightLights, 0),
-            new Position(4, heightLights, 0),
-            new Position(0, heightLights, 4),
-            new Position(4, heightLights, 4)
+            new Position(-1, heightLights, -1),
+            new Position(4, heightLights, -1),
+            new Position(-1, heightLights, 3),
+            new Position(4, heightLights, 3)
         ];
 
         posLights.forEach(function(pos) {
@@ -213,5 +213,7 @@ class Controller
             this.camera.rotation.set(-1.5, 1.5, 1.5);
             this.controls.target.set(1, 0, 1);
         }
+        else // Invalide
+            console.warn("Attention : \"" + view + "\" n'est pas une vue valide.");
     }
 }

@@ -18,11 +18,11 @@ class Position
     constructor (x, y, z)
     {
         /** @type {Number} */
-        this.x = x || 0;
+        this.x = x;
         /** @type {Number} */
-        this.y = y || 0;
+        this.y = y;
         /** @type {Number} */
-        this.z = z || 0;
+        this.z = z;
     }
 
 

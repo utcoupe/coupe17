@@ -22,7 +22,7 @@
         "pos":
         {
             "x": 0.950,
-            "Y": 0.0,
+            "y": 0.0,
             "z": 0.2
         },
         "rotation":
@@ -40,7 +40,7 @@
         "pos":
         {
             "x": 0.2,
-            "Y": 0.0,
+            "y": 0.0,
             "z": 0.6
         },
         "rotation":
@@ -58,7 +58,7 @@
         "pos":
         {
             "x": 0.8,
-            "Y": 0.0,
+            "y": 0.0,
             "z": 1.85
         },
         "rotation":
@@ -76,7 +76,7 @@
         "pos":
         {
             "x": 2.050,
-            "Y": 0.0,
+            "y": 0.0,
             "z": 0.2
         },
         "rotation":
@@ -94,7 +94,7 @@
         "pos":
         {
             "x": 2.8,
-            "Y": 0.0,
+            "y": 0.0,
             "z": 0.6
         },
         "rotation":
@@ -112,7 +112,7 @@
         "pos":
         {
             "x": 2.2,
-            "Y": 0.0,
+            "y": 0.0,
             "z": 1.85
         },
         "rotation":
@@ -130,7 +130,7 @@
         "pos":
         {
             "x": 0.5,
-            "Y": 0.0,
+            "y": 0.0,
             "z": 1.1
         },
         "rotation":
@@ -148,7 +148,7 @@
         "pos":
         {
             "x": 0.9,
-            "Y": 0.0,
+            "y": 0.0,
             "z": 1.4
         },
         "rotation":
@@ -166,7 +166,7 @@
         "pos":
         {
             "x": 0.95,
-            "Y": 0.0,
+            "y": 0.0,
             "z": 0.6
         },
         "rotation":
@@ -184,7 +184,7 @@
         "pos":
         {
             "x": 2.5,
-            "Y": 0.0,
+            "y": 0.0,
             "z": 1.1
         },
         "rotation":
@@ -202,7 +202,7 @@
         "pos":
         {
             "x": 2.1,
-            "Y": 0.0,
+            "y": 0.0,
             "z": 1.4
         },
         "rotation":
@@ -220,7 +220,7 @@
         "pos":
         {
             "x": 2,
-            "Y": 0.0,
+            "y": 0.0,
             "z": 0.6
         },
         "rotation":
@@ -231,5 +231,213 @@
         },
         "type": "mod_lun",
         "couleur": "bleujaune"
+    },
+    {
+        "name": "mod_lun12",
+        "source": "3d/mod_lun_bleu.dae",
+        "pos":
+        {
+            "x": 1.15,
+            "y": 0.0,
+            "z": 0.038
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleu"
+    },
+    {
+        "name": "mod_lun13",
+        "source": "3d/mod_lun_bleu.dae",
+        "pos":
+        {
+            "x": 1.15,
+            "y": 0.1,
+            "z": 0.038
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleu"
+    },
+    {
+        "name": "mod_lun14",
+        "source": "3d/mod_lun_bleu.dae",
+        "pos":
+        {
+            "x": 1.15,
+            "y": 0.2,
+            "z": 0.038
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleu"
+    },
+    {
+        "name": "mod_lun15",
+        "source": "3d/mod_lun_bleu.dae",
+        "pos":
+        {
+            "x": 1.15,
+            "y": 0.3,
+            "z": 0.038
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "bleu"
+    },
+    {
+        "name": "mod_lun16",
+        "source": "3d/mod_lun_jaune.dae",
+        "pos":
+        {
+            "x": 1.85,
+            "y": 0.0,
+            "z": 0.038
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "jaunbe"
+    },
+    {
+        "name": "mod_lun17",
+        "source": "3d/mod_lun_jaune.dae",
+        "pos":
+        {
+            "x": 1.85,
+            "y": 0.1,
+            "z": 0.038
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "jaune"
+    },
+    {
+        "name": "mod_lun18",
+        "source": "3d/mod_lun_jaune.dae",
+        "pos":
+        {
+            "x": 1.85,
+            "y": 0.2,
+            "z": 0.038
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "jaune"
+    },
+    {
+        "name": "mod_lun19",
+        "source": "3d/mod_lun_jaune.dae",
+        "pos":
+        {
+            "x": 1.85,
+            "y": 0.3,
+            "z": 0.038
+        },
+        "rotation":
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "type": "mod_lun",
+        "couleur": "jaune"
+    },
+    {
+        "name": "pr_bleu",
+        "source": "3d/pr_bleu.dae",
+        "pos":{
+            "x": 0.9,
+            "y": 0,
+            "z": 0.15
+        },
+        "type": "pr",
+        "couleur": "bleu",
+        "rotation":{
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    {
+        "name": "pr_jaune",
+        "source": "3d/pr_jaune.dae",
+        "pos":{
+            "x": 2.1,
+            "y": 0,
+            "z": 0.15
+        },
+        "type": "pr",
+        "couleur": "jaune",
+        "rotation":{
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    {
+        "name": "gr_bleu",
+        "source": "3d/gr_bleu.dae",
+        "pos":{
+            "x": 0.15,
+            "y": 0,
+            "z": 0.15
+        },
+        "type": "gr",
+        "couleur": "bleu",
+        "rotation":{
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    },
+    {
+        "name": "gr_jaune",
+        "source": "3d/gr_jaune.dae",
+        "pos":{
+            "x": 2.85,
+            "y": 0,
+            "z": 0.15
+        },
+        "type": "gr",
+        "couleur": "jaune",
+        "rotation":{
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
     }
 ]
