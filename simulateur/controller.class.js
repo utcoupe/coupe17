@@ -22,11 +22,15 @@ class Controller
      * 
      * @constructs Controller
      * @param {String} configPath
+     * @param {String} ressourcesPath
      */
-    constructor (configPath)
+    constructor (configPath, ressourcesPath)
     {
         /** @type {String} */
         this.configPath = configPath;
+
+        /** @type {String} */
+        this.ressourcesPath = ressourcesPath;
         
         // A charger dynamiquement du fichier
         /** @type {String} */
@@ -46,7 +50,7 @@ class Controller
     loadParameters()
     {
         getParsedJSONFromFile(
-            this.configPath,
+            this.ressourcesPath + this.configPath,
             (objects) => { this.create3dObjects(objects) }
         );
     }
@@ -63,7 +67,7 @@ class Controller
         {
             var name = objects[idObject].name;
             console.log("Creating " + name);
-            this.objects3d.set(name, new Object3d(objects[idObject]));
+            this.objects3d.set(name, new Object3d(objects[idObject], this.ressourcesPath));
             this.objects3d.get(name).loadMesh((scene) => {
                 this.scene.add(scene);
             });

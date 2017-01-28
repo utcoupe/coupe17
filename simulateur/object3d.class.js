@@ -21,9 +21,13 @@ class Object3d
      * 
      * @constructs Object3d
      * @param {Object} params Paramètres divers de l'objet 3d
+     * @param {String} ressourcesPath Répertoire de travail
      */
-    constructor (params)
+    constructor (params, ressourcesPath)
     {
+        /** @type {String} */
+        this.ressourcesPath = ressourcesPath;
+
         /** @type {THREE.ColladaLoader} */
         this.loader = new THREE.ColladaLoader();
         this.loader.options.convertUpAxis = true;
@@ -77,7 +81,7 @@ class Object3d
     loadMesh (onSuccess)
     {
         console.log("Object3d:" + this.name + ":loading " + this.source);
-        this.loader.load(this.source, (collada) => {
+        this.loader.load(this.ressourcesPath + this.source, (collada) => {
             this.mesh = collada.scene;
             this.mesh.position.set(this.position.x, this.position.y, this.position.z);
             this.mesh.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);

@@ -9,17 +9,19 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
 		.when('/orders', {templateUrl: 'pages/orders/orders.tpl.html'})
 		.when('/logger', {templateUrl: 'pages/logger/logger.tpl.html'})
 		.when('/reseau', {templateUrl: 'pages/reseau/reseau.tpl.html'})
+		.when('/simulateurold', {templateUrl: 'pages/simulateurold/simulateurold.tpl.html'})
 		.when('/simulateur', {templateUrl: 'pages/simulateur/simulateur.tpl.html'})
 		.when('/telecommande', {templateUrl: 'pages/telecommande/telecommande.tpl.html'})
 		.otherwise({redirectTo:'/'});
 }]);
 
-angular.module('app').controller('AppCtrl', ['$scope', 'UTCoupe', 'Orders', 'Logger', 'Reseau', 'Simulateur',
-	function($scope, UTCoupe, Orders, Logger, Reseau, Simulateur) {
+angular.module('app').controller('AppCtrl', ['$scope', 'UTCoupe', 'Orders', 'Logger', 'Reseau', 'Simulateurold', 'Simulateur',
+	function($scope, UTCoupe, Orders, Logger, Reseau, Simulateurold, Simulateur) {
 	UTCoupe.init();
 	Orders.init();
 	Logger.init();
 	Reseau.init();
+	Simulateurold.init();
 	Simulateur.init();
 }]);
 
