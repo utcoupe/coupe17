@@ -15,11 +15,15 @@
 #include "goals.h"
 #include "emergency.h"
 
-#include "sender.h"
+#include "sender_wrapper.h"
 
 //La fonction renvoit le nombre d'octet dans ret, chaine de caractère de réponse. Si doublon, ne pas executer d'ordre mais renvoyer les données à renvoyer
 //int switchOrdre(char ordre, int id, char *argv, char *ret, int *ret_size){
 int switchOrdre(char ordre, int id, char *argv) {
+//    SerialSender::SerialSendC(SERIAL_INFO, String("Test"));
+    int toto = 36;
+//    SerialSendWrap(SERIAL_INFO, "test : %d", toto);
+    return 1;
     switch(ordre){
         case PINGPING:
             digitalWrite(LED_DEBUG, HIGH);
@@ -28,7 +32,7 @@ int switchOrdre(char ordre, int id, char *argv) {
             break;
         case GET_CODER:
 //            *ret_size = sprintf(ret, "%li;%li", left_ticks, right_ticks);
-            SerialSender::SerialSend(SERIAL_INFO, "%li;%li", left_ticks, right_ticks);
+//            SerialSender::SerialSendC(SERIAL_INFO, "%li;%li", left_ticks, right_ticks);
             break;
         case GOTO: {
             int x, y, direction;
@@ -122,7 +126,7 @@ int switchOrdre(char ordre, int id, char *argv) {
             y = round(current_pos.y);
             a_int = a * (float)FLOAT_PRECISION;
 //            *ret_size = sprintf(ret, "%i;%i;%i", x, y, a_int);
-            SerialSender::SerialSend(SERIAL_INFO, "%i;%i;%i", x, y, a_int);
+//            SerialSender::SerialSendC(SERIAL_INFO, "%i;%i;%i", x, y, a_int);
             break;
         }
         case GET_SPD: {
@@ -130,7 +134,7 @@ int switchOrdre(char ordre, int id, char *argv) {
             l = wheels_spd.left;
             r = wheels_spd.right;
 //            *ret_size = sprintf(ret, "%i;%i", l, r);
-            SerialSender::SerialSend(SERIAL_INFO, "%i;%i", l, r);
+//            SerialSender::SerialSendC(SERIAL_INFO, "%i;%i", l, r);
             break;
         }
         case GET_TARGET_SPD: {
@@ -138,7 +142,7 @@ int switchOrdre(char ordre, int id, char *argv) {
             left_spd = control.speeds.linear_speed - control.speeds.angular_speed;
             right_spd = control.speeds.linear_speed + control.speeds.angular_speed;
 //            *ret_size = sprintf(ret, "%i;%i", left_spd, right_spd);
-            SerialSender::SerialSend(SERIAL_INFO, "%i;%i", left_spd, right_spd);
+//            SerialSender::SerialSendC(SERIAL_INFO, "%i;%i", left_spd, right_spd);
             break;
         }
         case GET_POS_ID:{
@@ -149,7 +153,7 @@ int switchOrdre(char ordre, int id, char *argv) {
             y = round(current_pos.y);
             a_int = a * (float)FLOAT_PRECISION;
 //            *ret_size = sprintf(ret, "%i;%i;%i;%i", x, y, a_int, control.last_finished_id);
-            SerialSender::SerialSend(SERIAL_INFO, "%i;%i;%i;%i", x, y, a_int, control.last_finished_id);
+//            SerialSender::SerialSendC(SERIAL_INFO, "%i;%i;%i;%i", x, y, a_int, control.last_finished_id);
             break;
         }
         case SPDMAX:{
@@ -169,7 +173,7 @@ int switchOrdre(char ordre, int id, char *argv) {
         }
         case GET_LAST_ID: {
 //            *ret_size = sprintf(ret, "%i", control.last_finished_id);
-            SerialSender::SerialSend(SERIAL_INFO, "%i", control.last_finished_id);
+//            SerialSender::SerialSendC(SERIAL_INFO, "%i", control.last_finished_id);
             break;
         }
         case PAUSE:
@@ -180,7 +184,7 @@ int switchOrdre(char ordre, int id, char *argv) {
             break;
         case WHOAMI:
 //            *ret_size = sprintf(ret, ARDUINO_ID);
-            SerialSender::SerialSend(SERIAL_INFO, "%s", ARDUINO_ID);
+//            SerialSender::SerialSendC(SERIAL_INFO, "%s", ARDUINO_ID);
             break;
         case SETEMERGENCYSTOP: {
             int enable;

@@ -90,19 +90,27 @@ void serialReadTask() {
     String receivedString;
     while (true) {
         // Each order sent is null terminated
-        receivedString = SERIAL_MAIN.readStringUntil('\0');
+//        receivedString = SERIAL_MAIN.readStringUntil('\0');
+        receivedString = SERIAL_MAIN.readString();
+        receivedString.replace("\n", "");
+//        SerialSender::SerialSend(SERIAL_INFO, receivedString);
+//        delay(1000);
         if (receivedString != "") {
             //todo verify that this way is working fine
-            receivedString.toCharArray(receivedCommand, receivedString.length());
-            protocolExecuteCmd(receivedCommand);
+//            receivedString.toCharArray(receivedCommand, receivedString.length());
+            //todo why is this not working ?!
+            SerialSender::SerialSend(SERIAL_INFO, "%s", ARDUINO_ID);
+            delay(1000);
+//            protocolExecuteCmd(receivedCommand);
+//            SerialSender::SerialSend(SERIAL_INFO, "after call");
         }
 
 
 //        receivedString.replace("\n", "");
-        if (receivedString == "START")
-        {
-            flagConnected = 1;
-        }
+//        if (receivedString == "START")
+//        {
+//            flagConnected = 1;
+//        }
 
     }
 }
