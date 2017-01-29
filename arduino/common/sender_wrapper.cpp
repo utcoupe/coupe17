@@ -13,7 +13,7 @@ static void SerialSendWrapVariadic(SerialSendEnum level, const char* data, va_li
 }
 
 void SerialSendWrap(SerialSendEnum level, String data) {
-    SerialSendC(level, data);
+    SerialSender::SerialSend(level, data);
 }
 
 void SerialSendWrapVar(SerialSendEnum level, const char* data, ...) {

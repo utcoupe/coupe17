@@ -9,17 +9,26 @@
 #ifndef ARDUINO_SENDER_H
 #define ARDUINO_SENDER_H
 
-#include "os48.h"
+//#include "os48.h"
 #include "Sync.h"
+
+#include <stdarg.h>
 
 #include <QueueList.h>
 
+#ifndef SENDER_ENUM
+#define SENDER_ENUM
 typedef enum
 {
     SERIAL_ERROR = 0,
     SERIAL_INFO,
     SERIAL_DEBUG
 } SerialSendEnum;
+#endif
+
+//#ifdef __cplusplus
+//extern "C" void SerialSendC(SerialSendEnum level, String data);
+//#endif
 
 class SerialSender
 {
@@ -27,7 +36,9 @@ public:
     SerialSender();
     ~SerialSender() {}
     //to be used everywhere
+    //todo check why its only working with minimal 1 variadic argument
     static void SerialSend(SerialSendEnum level, const char* data, ...);
+    static void SerialSend(SerialSendEnum level, const char* data, va_list args);
     static void SerialSend(SerialSendEnum level, String data);
     //to be used in the task
     static void SerialSendTask();
@@ -35,7 +46,7 @@ private:
     static String CharArrayToString(const char * str, unsigned char size);
     static os48::Sync senderSync;
     static QueueList<String> dataToSend;
-    static os48::Scheduler* scheduler;
+    //static os48::Scheduler* scheduler;
 };
 
 #endif //ARDUINO_SENDER_H
