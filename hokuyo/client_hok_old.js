@@ -53,7 +53,6 @@
 				case "start":
 					if(!!params.color && !started) {
 						started = true;
-						logger.info("Receive order to start");
 						start(params.color);
 					} else
 						logger.error("ALready started or Missing parameters !");
@@ -126,12 +125,31 @@
 		//process.on('uncaughtException', uException);
 
 		// Functions
-		function parseData(string) {
+		function parseRobots(string) {
+			var dots = [];
+			now = Date.now() - lastT;
 
-			var temp = string.split("#")
+			if(!!string){
+				var temp = string.split("#");
+				for (var i = 0; i <= temp.length - 1; i++) {
+					temp[i] = temp[i].split(",");
+					dots.push({x: 0, y: 0});
+					dots[i].x = parseInt(temp[i][0]);
+					dots[i].y = parseInt(temp[i][1]);
+
+					// Log them :
+					matchLogger(match_name, now+"; dotx:"+dots[i].x+"; doty:"+dots[i].y);
+				}
+				logger.info('[J-HOK] Robots');
+				logger.info(dots);
+			} else {
+				logger.info('[J-HOK] No robot detected !');
+			}
+
+			now = lastT;
+
 			// Send all robots
-			client.send("webclient", "hokuyo.polar_raw_data", { "hokuyo": temp[0], "polarSpots" : JSON.parse(temp[1]) });
-			logger.info(string);
+			client.send("ia", "hokuyo.position_tous_robots", {dots: dots});
 		}
 
 		function parseInfo(string) {
@@ -189,15 +207,15 @@
 							break;
 						case "DATA":
 							logger.info('C Hokuyo software sends datas');
-							parseData(inputAr[i].substring(6));
+							parseRobots(inputAr[i].substring(6));
 							break;
 						case "INFO":
 							logger.info('C Hokuyo software sends information :'+inputAr[i].substring(6));
-							//parseInfo(inputAr[i].substring(6));
+							parseInfo(inputAr[i].substring(6));
 							break;
 						case "WARN":
 							logger.warn('C Hokuyo software sends a warning :'+inputAr[i].substring(6));
-							//parseInfo(inputAr[i].substring(6));
+							parseInfo(inputAr[i].substring(6));
 							break;
 						default:
 							logger.info("Data "+ inputAr[i].substring(1,5) + " not understood at line " + i + " : " + inputAr[i]);
@@ -213,7 +231,6 @@
 		// var options = // default : { cwd: undefined, env: process.env};
 		logger.info('Launching : ' + command + ' ' + args);
 		child = child_process.spawn(command, args);
-		logger.info("process C lance");
 
 		// Events
 		child.stdout.on('data', function(data) {
@@ -254,6 +271,7 @@
 				sendChildren({"status": "waiting", "children":[]});
 		});
 	}
+
 	function getStatus(){
 		var data = {
 			"status": "",
