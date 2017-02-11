@@ -160,7 +160,7 @@ class HokuyoDisplay {
 			console.error("Main display can't handle polar spot");
 			return;
 		}
-		console.log(spots);
+		// console.log(spots);
 		// For each spots
 		spots.forEach(function(newSpot) {
 			var existingPlot = this.dots.get(newSpot[0]);
@@ -227,6 +227,7 @@ class HokuyoDisplay {
 					"fill-opacity": .4}) );
 		}
 
+		// console.log(cartesianSpots);
 		for(let spot of cartesianSpots) {
 			this.objects.push( this.r.circle(spot[0], spot[1], this.dotRadius).attr({
 					stroke: this.dotColor,

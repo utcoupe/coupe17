@@ -30,7 +30,7 @@ angular.module('app').controller('HokuyoCtrl', ['$rootScope', '$scope', 'Hokuyo'
 	$scope.name = "hokuyo.polar_raw_data";
 	$scope.from = "hokuyo";
 	$scope.data = '{\n\
- 	"hokuyo": "corner",\n\
+ 	"hokuyo": "one",\n\
 	"polarSpots": [\n\
 		[ -40, 235 ],\n\
 		[ -30, 235 ],\n\
@@ -120,15 +120,19 @@ angular.module('app').service('Hokuyo', ['$rootScope', '$sce', 'Client',
 		this.onOrder = function (from, name, data) {
 			// if($rootScope.act_page == 'hokuyo') {
 				if (name == 'hokuyo.polar_raw_data') {
-					if (data.hokuyo == "corner" && !!this.displays.one) {
+					if (data.hokuyo == "one" && !!this.displays.one) {
 						// Save for later
 						this.lastData.one = data.polarSpots;
 
+						// console.log("Received one");
+
 						// Show
 						this.displays.one.updatePolarSpots(data.polarSpots);
-					} else if (data.hokuyo == "enemy" && !!this.displays.two) {
+					} else if (data.hokuyo == "two" && !!this.displays.two) {
 						// Save for later
 						this.lastData.two = data.polarSpots;
+
+						// console.log("Received two");
 
 						// Show
 						this.displays.two.updatePolarSpots(data.polarSpots);
@@ -140,6 +144,8 @@ angular.module('app').service('Hokuyo', ['$rootScope', '$sce', 'Client',
 					this.lastData.main.hokuyos = data.hokuyos;
 					this.lastData.main.robotsSpots = data.robotsSpots;
 					this.lastData.main.cartesianSpots = data.cartesianSpots;
+
+					// console.log("Received all");
 
 					// Show
 					this.displays.main.updateAll(data.hokuyos, data.robotsSpots, data.cartesianSpots);
