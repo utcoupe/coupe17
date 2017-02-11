@@ -1,9 +1,28 @@
 angular.module('app').controller('HokuyoCtrl', ['$rootScope', '$scope', 'Hokuyo',
 	function($rootScope, $scope, Hokuyo) {
-	$rootScope.act_page = 'hokuyo';
-	Hokuyo.displays.one = new HokuyoDisplay("hok1", "one");
+	// $rootScope.act_page = 'hokuyo';
+	let changedTab = false;
+	if (Hokuyo.displays.one != null) {
+		changedTab = true;
+	}
+
+	Hokuyo.displays.one = new HokuyoDisplay("hok1", "one", true);
 	Hokuyo.displays.two = new HokuyoDisplay("hok2", "two");
-	Hokuyo.displays.main = new HokuyoDisplay("mainHokDisp", "main", Hokuyo.displays.one.dotColor, Hokuyo.displays.two.dotColor);
+	Hokuyo.displays.main = new HokuyoDisplay("mainHokDisp", "main", false, Hokuyo.displays.one.dotColor, Hokuyo.displays.two.dotColor);
+
+	if (changedTab) {
+		// Restore data
+		if (Hokuyo.lastData.one != null) {
+			Hokuyo.displays.one.updatePolarSpots(Hokuyo.lastData.one);
+		}
+		if (Hokuyo.lastData.two != null) {
+			Hokuyo.displays.two.updatePolarSpots(Hokuyo.lastData.two);
+		}
+		if (Hokuyo.lastData.main != null) {
+			Hokuyo.displays.main.updateAll(Hokuyo.lastData.main.hokuyos, Hokuyo.lastData.main.robotsSpots, Hokuyo.lastData.main.cartesianSpots);
+		}
+	}
+
 	// $scope.test = "Coucou !";
 	// $scope.test3 = 42;
 
@@ -88,25 +107,46 @@ angular.module('app').service('Hokuyo', ['$rootScope', '$sce', 'Client',
 			two: null
 		};
 
+		this.lastData = {
+			one: null,
+			two: null,
+			main: null
+		};
+
 		this.init = function () {
 			Client.order(this.onOrder);
 		};
 
 		this.onOrder = function (from, name, data) {
-			if($rootScope.act_page == 'hokuyo') {
+			// if($rootScope.act_page == 'hokuyo') {
 				if (name == 'hokuyo.polar_raw_data') {
 					if (data.hokuyo == "corner" && !!this.displays.one) {
+						// Save for later
+						this.lastData.one = data.polarSpots;
+
+						// Show
 						this.displays.one.updatePolarSpots(data.polarSpots);
 					} else if (data.hokuyo == "enemy" && !!this.displays.two) {
+						// Save for later
+						this.lastData.two = data.polarSpots;
+
+						// Show
 						this.displays.two.updatePolarSpots(data.polarSpots);
 					}
 				} else if (name == 'lidar.all'
 					&& !!this.displays.main) {
+					// Save for later
+					this.lastData.main = {};
+					this.lastData.main.hokuyos = data.hokuyos;
+					this.lastData.main.robotsSpots = data.robotsSpots;
+					this.lastData.main.cartesianSpots = data.cartesianSpots;
+
+					// Show
 					this.displays.main.updateAll(data.hokuyos, data.robotsSpots, data.cartesianSpots);
 				} else if (name == 'lidar.robots'
 					&& !!this.displays.main) {
 					// this.displays.main.updateRobots(data.robots);
 				}
-			}
+			// }
 		}.bind(this);
 }]);

@@ -1,7 +1,7 @@
 "use strict";
 
 class HokuyoDisplay {
-	constructor(parentId, mode, oneColor = null, twoColor = null) {
+	constructor(parentId, mode, reinitColor = false, oneColor = null, twoColor = null) {
 		this.MAIN = "main";
 		this.ONE = "one";
 		this.TWO = "two";
@@ -12,6 +12,9 @@ class HokuyoDisplay {
 		this.mode = mode;
 		this.div = $('#' + this.parentId);
 
+		if (reinitColor) {
+			Raphael.getColor.reset();
+		}
 
 		this.onResize();// Math.max($('body').height() - $('#div_menu').outerHeight() - 2*$('#simu_before').outerHeight(), 200);
 
@@ -157,7 +160,7 @@ class HokuyoDisplay {
 			console.error("Main display can't handle polar spot");
 			return;
 		}
-
+		console.log(spots);
 		// For each spots
 		spots.forEach(function(newSpot) {
 			var existingPlot = this.dots.get(newSpot[0]);
