@@ -56,6 +56,7 @@ module.exports = (function () {
 			},
 			webclient: {},
 			ia: {},
+			lidar: {},
 			hokuyo: {},
 			pr: {},
 			gr: {}

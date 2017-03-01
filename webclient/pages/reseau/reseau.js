@@ -84,16 +84,16 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		    		newDiv.innerHTML += "<br/>";
 		    }
 
-		    if(parentId == "clients"){
+		    if(parentId == "clients" || parentId == "children"){
 		    	devClass = "";
 		    	switch (name){
 		    		case "Hokuyo":
 		    			devClass = "hokuyo";
 		    			break;
-		    		case "Oscar (GR)":
+		    		case "GR":
 		    			devClass = "gr";
 		    			break;
-		    		case "Cesar (PR)":
+		    		case "PR":
 		    			devClass = "pr";
 		    			break;
 		    	}
@@ -170,23 +170,38 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 
 		        // Clients and their children
 					var randId;
+					let lidarKeys = Object.keys(status.lidar);
+					if (lidarKeys.length > 1) {
+						console.log("There's more than one Lidar object, we onely print the first as it is supposed to be a singleton");
+					}
+					if (lidarKeys.length > 0) {
+						client = status.lidar[lidarKeys[0]];
+					    addDiv("clients", lidarKeys[0], "lidar", client.status, "Lidar", client.ip);
+					}
+					
 					for(i in status.hokuyo) {
 					    client = status.hokuyo[i];
-					    addDiv("clients", i, "hok", client.status, "Hokuyo", client.ip);
+					    // addDiv("clients", i, "hok", client.status, "Hokuyo", client.ip);
+					    addDiv("children", i, "hok", client.status, "Hokuyo", client.ip);
 
-					    if(!!client.children)
-					        for(var j=0; j<client.children.length; j++) {
-					        	randId = Math.round(Math.random()*1000);
-					            addDiv("children", (client.children[j].replace(/\s+/g,''))+randId, "hok", "", client.children[j], null);
-					            links.push({
-					            	start: i,
-					            	end: (client.children[j]+randId).replace(/\s+/g,'')
-					            });
-					        }
+			            links.push({
+			            	start: lidarKeys[0],
+			            	end: i
+			            });
+
+					    // if(!!client.children)
+					    //     for(var j=0; j<client.children.length; j++) {
+					    //     	randId = Math.round(Math.random()*1000);
+					    //         addDiv("children", (client.children[j].replace(/\s+/g,''))+randId, "hok", "", client.children[j], null);
+					    //         links.push({
+					    //         	start: i,
+					    //         	end: (client.children[j]+randId).replace(/\s+/g,'')
+					    //         });
+					    //     }
 					}
 					for(i in status.gr) {
 					    client = status.gr[i];
-					    addDiv("clients", i, "robot", client.status, "Oscar (GR)", client.ip);
+					    addDiv("clients", i, "robot", client.status, "GR", client.ip);
 
 					    if(!!client.children)
 					        for(var j=0; j<client.children.length; j++) {
@@ -200,7 +215,7 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 					}
 					for(i in status.pr) {
 					    client = status.pr[i];
-					    addDiv("clients", i, "robot", client.status, "Cesar (PR)", client.ip);
+					    addDiv("clients", i, "robot", client.status, "PR", client.ip);
 
 					    // console.log(client.children.length);
 					    // console.log(client.children);
