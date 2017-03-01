@@ -24,7 +24,7 @@ typedef struct Hokuyo {
 	char path[20];
 	double error; // non utilisé coupe14, utilisé pour l'erreur de cap maintenant
 	struct fastmathTrigo fm; // enregistre les cos et sin pour les n angles
-	double *angles; // angles en degrés correspondant a data[MAX_DATA] récupéré par urg_receiveData
+ 	double *angles; // angles en degrés correspondant a data[MAX_DATA] récupéré par urg_receiveData
 	char c;
 } Hok_t;
 

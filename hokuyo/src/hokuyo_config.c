@@ -3,6 +3,7 @@
 #include "fast_math.h"
 #include "global.h"
 #include "compat.h"
+#include <math.h>
 
 #include <urg_ctrl.h>
 #include <stdlib.h>
@@ -291,8 +292,13 @@ void checkAndConnect(Hok_t *hok) {
 				}
 				//fprintf(stderr, "angle : %lf\n", angles[2]);
 				double *angles1 = malloc(MAX_DATA * sizeof(double));
-				for (i=0; i<MAX_DATA; i++) {
-					angles1[i] = -urg_index2deg(hok->urg, i);
+				/*for (i=0; i<MAX_DATA; i++) {
+					angles1[i] = urg_index2deg(hok->urg, i);
+				}*/
+				double j = hok->cone_min*180/M_PI;
+				for (i=hok->imin; i<MAX_DATA; i++) {
+					angles1[i] = j;
+					j = j + 0.3515625 ;
 				}
 				hok->angles = angles1;
 
