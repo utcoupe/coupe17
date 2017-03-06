@@ -72,6 +72,20 @@ class Object3d
     }
 
     /**
+     * Met à jour la position et la rotation de l'objet 3D.
+     * Si certains paramètres ne sont pas définis, ils ne seront pas modifiés.
+     * 
+     * @param {Object} params Paramètres divers de l'objet 3D
+     */
+    updateParams (params)
+    {
+        if(params.pos)
+            this.setPosition(params.pos);
+        if(params.rotation)
+            this.setRotation(params.rotation);
+    }
+
+    /**
      * Charge le mesh contenu dans le fichier collada spécifié par {@link Object3d#source}
      * 
      * Appelle la fonction onSucess avec en paramètre la scène (c'est-à-dire l'objet) losque le chargement est terminé.
@@ -80,7 +94,6 @@ class Object3d
      */
     loadMesh (onSuccess)
     {
-        console.log("Object3d:" + this.name + ":loading " + this.source);
         this.loader.load(this.ressourcesPath + this.source, (collada) => {
             this.mesh = collada.scene;
             this.mesh.position.set(this.position.x, this.position.y, this.position.z);
@@ -88,7 +101,6 @@ class Object3d
             this.mesh.scale.set(1, 1, 1);
             //this.debug_scene();
             onSuccess(this.mesh);
-            console.log("Object3d:" + this.name + ": finished loading");
         });
     }
 
@@ -100,9 +112,9 @@ class Object3d
     setPosition (pos)
     {
         this.position = pos;
-        if ( mesh )
+        if ( this.mesh )
         {
-            mesh.position.set(pos.x, pos.y, pos.z);
+            this.mesh.position.set(pos.x, pos.y, pos.z);
         }
     }
 
@@ -114,9 +126,9 @@ class Object3d
     setRotation (rotation)
     {
         this.rotation = rotation;
-        if ( mesh )
+        if ( this.mesh )
         {
-            mesh.rotation.set(rotation.x, rotation.y, rotation.z);
+            this.mesh.rotation.set(rotation.x, rotation.y, rotation.z);
         }
     }
 

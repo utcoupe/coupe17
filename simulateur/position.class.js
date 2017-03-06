@@ -82,4 +82,14 @@ class Position
     {
         return (deg * Math.PI / 180);
     }
+
+    /**
+     * Met à jour la position sur tous les axes
+     */
+    set (x, y, z)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
 }

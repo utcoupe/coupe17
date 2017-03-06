@@ -220,4 +220,16 @@ class Controller
         else // Invalide
             console.warn("Attention : \"" + view + "\" n'est pas une vue valide.");
     }
+
+    /**
+     * Met à jour les données des objets dans param. Cette fonction est destinée à être appelée depuis le webclient.
+     * 
+     * @param {Object} params 
+     */
+    updateObjects(params)
+    {
+        params.forEach(function(object3d) {
+            this.objects3d.get(object3d.name).updateParams(object3d);
+        }, this);
+    }
 }
