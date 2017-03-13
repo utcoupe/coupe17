@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>UTCoupe 17 Source: clients/pr/actuators.class.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cyborg.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">UTCoupe 17</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="Simu.html">Simu</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-clients_gr_actuators.html">clients/gr/actuators</a></li><li><a href="module-clients_gr_detect.html">clients/gr/detect</a></li><li><a href="module-clients_gr_main.html">clients/gr/main</a></li><li><a href="module-clients_gr_servos.html">clients/gr/servos</a></li><li><a href="module-clients_gr_servos-simu.html">clients/gr/servos-simu</a></li><li><a href="module-clients_pr_actuators.html">clients/pr/actuators</a></li><li><a href="module-clients_pr_ax12.html">clients/pr/ax12</a></li><li><a href="module-clients_pr_ax12-simu.html">clients/pr/ax12-simu</a></li><li><a href="module-clients_pr_detect.html">clients/pr/detect</a></li><li><a href="module-clients_pr_elevator.html">clients/pr/elevator</a></li><li><a href="module-clients_pr_main.html">clients/pr/main</a></li><li><a href="module-clients_pr_others.html">clients/pr/others</a></li><li><a href="module-clients_pr_others-simu.html">clients/pr/others-simu</a></li><li><a href="module-clients_shared_asserv.html">clients/shared/asserv</a></li><li><a href="module-clients_shared_asserv-simu.html">clients/shared/asserv-simu</a></li><li><a href="module-clients_shared_defineParser.html">clients/shared/defineParser</a></li><li><a href="module-clients_shared_fifo.html">clients/shared/fifo</a></li><li><a href="module-config.html">config</a></li><li><a href="module-ia_actions.html">ia/actions</a></li><li><a href="module-ia_data.html">ia/data</a></li><li><a href="module-ia_export_simulator.html">ia/export_simulator</a></li><li><a href="module-ia_gr.html">ia/gr</a></li><li><a href="module-ia_hokuyo.html">ia/hokuyo</a></li><li><a href="module-ia_ia.html">ia/ia</a></li><li><a href="module-ia_main.html">ia/main</a></li><li><a href="module-ia_pathfinding.html">ia/pathfinding</a></li><li><a href="module-ia_pr.html">ia/pr</a></li><li><a href="module-ia_timer.html">ia/timer</a></li><li><a href="module-server_server.html">server/server</a></li><li><a href="module-server_socket_client.html">server/socket_client</a></li><li><a href="module-utcoupe_utcoupe.html">utcoupe/utcoupe</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="clients_gr_actuators.Acts.html">clients/gr/actuators.Acts</a></li><li><a href="clients_gr_detect.Detect.html">clients/gr/detect.Detect</a></li><li><a href="clients_gr_servos.Servos.html">clients/gr/servos.Servos</a></li><li><a href="clients_gr_servos-simu.Servos.html">clients/gr/servos-simu.Servos</a></li><li><a href="clients_pr_actuators.Acts.html">clients/pr/actuators.Acts</a></li><li><a href="clients_pr_ax12-simu.Ax12.html">clients/pr/ax12-simu.Ax12</a></li><li><a href="clients_pr_ax12.Ax12.html">clients/pr/ax12.Ax12</a></li><li><a href="clients_pr_detect.Detect.html">clients/pr/detect.Detect</a></li><li><a href="clients_pr_elevator.Elevator.html">clients/pr/elevator.Elevator</a></li><li><a href="clients_pr_others.Others.html">clients/pr/others.Others</a></li><li><a href="clients_pr_others-simu.Others.html">clients/pr/others-simu.Others</a></li><li><a href="clients_shared_asserv.Asserv.html">clients/shared/asserv.Asserv</a></li><li><a href="clients_shared_asserv-simu.Asserv.html">clients/shared/asserv-simu.Asserv</a></li><li><a href="clients_shared_fifo.Fifo.html">clients/shared/fifo.Fifo</a></li><li><a href="Controller.html">Controller</a></li><li><a href="ia_actions.Actions.html">ia/actions.Actions</a></li><li><a href="ia_data.Data.html">ia/data.Data</a></li><li><a href="ia_export_simulator.ExportSimulator.html">ia/export_simulator.ExportSimulator</a></li><li><a href="ia_gr.Gr.html">ia/gr.Gr</a></li><li><a href="ia_hokuyo.Hokuyo.html">ia/hokuyo.Hokuyo</a></li><li><a href="ia_ia.Ia.html">ia/ia.Ia</a></li><li><a href="ia_pathfinding.Pathfinding.html">ia/pathfinding.Pathfinding</a></li><li><a href="ia_timer.Timer.html">ia/timer.Timer</a></li><li><a href="Object3d.html">Object3d</a></li><li><a href="Position.html">Position</a></li><li><a href="server_server.Server.html">server/server.Server</a></li><li><a href="server_socket_client.SocketClient.html">server/socket_client.SocketClient</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#convertir_dist">convertir_dist</a></li><li><a href="global.html#getParsedJSONFromFile">getParsedJSONFromFile</a></li><li><a href="global.html#PATH_MAX_POINTS">PATH_MAX_POINTS</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: clients/pr/actuators.class.js</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">/**
+ * Actuators module
+ * 
+ * @module clients/pr/actuators
+ * @requires clients/shared/fifo
+ * @see {@link clients/pr/actuators.Acts}
+ */
+
+module.exports = (function () {
+	var logger = require('log4js').getLogger('pr.acts');
+	var SerialPort = require("serialport");
+	var spawn = require('child_process').spawn;
+	/** @type {clients/shared/fifo.Fifo} */
+	var fifo = new (require('../shared/fifo.class.js'))();
+
+	var others = null;
+	var asserv = null;
+	var ax12 = null;
+	var date = new Date();
+	/** @type {int} */
+	var lastSendStatus =  date.getTime();
+
+	/**
+	 * Acts Constructor
+	 * 
+	 * @exports clients/pr/actuators.Acts
+	 * @constructor
+	 * @param {Object} client
+	 * @param {Object} sendChildren
+	 */
+	function Acts(client, sendChildren) {
+		/** @type {Object} */
+		this.client = client;
+		/** @type {Object} */
+		this.sendChildren = sendChildren;
+		this.start();
+		/** @type {int} */
+		this.nb_plots = 0;
+		/** @type {boolean} */
+		this.new_has_ball = false;
+		/** @type {boolean} */
+		this.has_gobelet = false;
+	}
+
+	/**
+	 * Starts (nothing ?)
+	 */
+	Acts.prototype.start = function(){
+		
+	};
+
+	/**
+	 * Cleans all
+	 */
+	Acts.prototype.clean = function(){
+		fifo.clean();  // A priori déjà vide
+		asserv.clean();
+		ax12.ouvrir();
+		others.ouvrirStabilisateurGrand();
+		others.ouvrirBloqueurGrand();
+	};
+
+	/**
+	 * Connect to
+	 * 
+	 * @param {Object} struct
+	 */
+	Acts.prototype.connectTo = function(struct){
+		if (!struct.others) {
+			logger.fatal("Lancement de others pr en mode simu !");
+			others = new (require('./others.simu.class.js'))(fifo);
+		} else {
+			others = new (require('./others.class.js'))(
+				new SerialPort(struct.others, { baudrate: 57600 }),
+				this.sendStatus,
+				fifo
+			);
+		}
+
+		if (!struct.asserv) {
+			logger.fatal("Lancement de l'asserv pr en mode simu !");
+			asserv = new (require('../shared/asserv.simu.class.js'))(this.client, 'pr', fifo);
+		} else {
+			asserv = new (require('../shared/asserv.class.js'))(
+				new SerialPort(struct.asserv, {
+					baudrate: 57600,
+					parser:SerialPort.parsers.readline('\n')
+				}), this.client, 'pr', this.sendStatus, fifo
+			);
+		}
+
+		if (!struct.ax12) {
+			logger.fatal("Lancement de l'usb2ax pr en mode simu !");
+			ax12 = new (require('./ax12.simu.class.js'))(fifo);
+		} else {
+			ax12 = new (require('./ax12.class.js'))(struct.ax12, this.sendStatus, fifo);
+		}
+
+		// Initialisation
+		setTimeout(function() {
+			others.ouvrirStabilisateurGrand();
+			others.lacherGobelet();
+			others.ouvrirBloqueurGrand();
+			others.descendreAscenseur();
+			ax12.ouvrir(function() {
+				logger.fatal('BAZOOKA');
+			});
+		}, 1000);
+	};
+
+	/**
+	 * Send status
+	 */
+	Acts.prototype.sendStatus = function() {
+		if(lastSendStatus &lt;  date.getTime()-1000){
+			this.sendChildren(this.getStatus);
+			lastSendStatus =  date.getTime();
+		}
+	};
+
+	/**
+	 * Get Status
+	 */
+	Acts.prototype.getStatus = function(){
+		var data = {
+			"status": "",
+			"children": []
+		};
+
+		data.status = "everythingIsAwesome";
+
+		if(others &amp;&amp; !!others.ready)
+			data.children.push("Arduino others");
+		else
+			data.status = "ok";
+
+		if(ax12 &amp;&amp; !!ax12.ready)
+			data.children.push("USB2AX");
+		else
+			data.status = "ok";
+
+		if(asserv &amp;&amp; !!asserv.ready)
+			data.children.push("Arduino asserv");
+		else
+			data.status = "error";
+
+		return data;
+	};
+
+	/**
+	 * Quit
+	 */
+	Acts.prototype.quit = function(){
+		if (ax12 &amp;&amp; ax12.ready)
+			ax12.disconnect();
+	};
+
+	/**
+	 * fake
+	 */
+	function fake() {}
+	Acts.prototype.delay = function(ms, callback){
+		fifo.newOrder(function() {
+			setTimeout(function() {
+				if(callback !== undefined)
+					callback();
+				fifo.orderFinished();
+			}, ms);
+		}, 'delay');
+	}
+
+	/**
+	 * Prendre plot
+	 * 
+	 * @param {Object} [callback]
+	 * @param {int} [monter]
+	 */
+	Acts.prototype.prendre_plot = function(callback, monter){
+		if(callback === undefined) {
+			callback = function() {};
+		}
+		if (monter === undefined) {
+			monter = 1;
+		}
+		var that = this;
+		if (that.new_has_ball) {
+			that.new_has_ball = false;
+			others.descendreUnPeuAscenseur();
+			ax12.ouvrir();
+			others.descendreAscenseur();
+			that.prendre_plot(callback);
+		}
+		else if (that.nb_plots>=3 || !monter){
+			ax12.ouvrir();
+			others.fermerStabilisateur();
+			ax12.fermer();
+			others.monterUnPeuAscenseur(function() {
+				that.client.send('ia', 'pr.plot++');
+				callback();
+			});
+			others.ouvrirBloqueurMoyen();
+			others.fermerBloqueur();
+		}
+		else if (that.nb_plots==0) {
+			ax12.ouvrir();
+			others.ouvrirBloqueurMoyen();
+			ax12.fermer();
+			others.monterAscenseur(function() {
+				that.client.send('ia', 'pr.plot++');
+				setTimeout(callback, 200);
+			});
+			others.fermerBloqueur();
+			ax12.ouvrir();
+			others.ouvrirStabilisateurMoyen(function() {}, 0);
+			others.descendreAscenseur();
+		}
+		else if(that.nb_plots==1){
+			ax12.ouvrir();
+			others.ouvrirStabilisateurMoyen();
+			ax12.fermer();
+			others.ouvrirBloqueurMoyen();
+			others.monterAscenseur(function() {
+				that.client.send('ia', 'pr.plot++');
+				setTimeout(callback, 200);
+			});
+			others.fermerBloqueur();
+			ax12.ouvrir(function() {});
+			others.descendreAscenseur();
+		}
+		else {
+			ax12.ouvrir();
+			others.ouvrirStabilisateurMoyen();
+			ax12.fermer();
+			others.ouvrirBloqueurMoyen();
+			others.monterAscenseur(function() {
+				that.client.send('ia', 'pr.plot++');
+				setTimeout(callback, 200);
+			});
+			others.fermerStabilisateur(fake,0);
+			others.fermerBloqueur();
+			ax12.ouvrir(function() {});
+			others.descendreAscenseur();
+		}
+		that.nb_plots++;
+	}
+
+	/**
+	 * Pousser plot
+	 * 
+	 * @param {Object} [callback]
+	 */
+	Acts.prototype.pousser_plot = function(callback){
+		if(callback === undefined) {
+			callback = function() {};
+		}
+		ax12.ouvrir();
+		asserv.goxy(1150, 200, "avant");
+		asserv.goxy(1100, 250, "arriere", callback);
+	}
+
+	/**
+	 * Prendre plot
+	 * 
+	 * @param {Object} [callback]
+	 */
+	Acts.prototype.prendre_plot2 = function(callback){
+		if(callback === undefined) {
+			callback = function() {};
+		}
+		var that = this;
+		asserv.speed(300, 0, 750);
+		if (that.new_has_ball) {
+			that.new_has_ball = false;
+			others.descendreUnPeuAscenseur();
+			ax12.ouvrir();
+			others.descendreAscenseur();
+			that.prendre_plot(callback);
+		}
+		else {
+
+			ax12.ouvrir();
+			ax12.fermer();
+			others.monterUnPeuAscenseur(function() {
+				that.client.send('ia', 'pr.plot++');
+				callback();
+			});
+		}
+		
+		that.nb_plots++;
+	}
+
+	/**
+	 * Monter plot 2
+	 * 
+	 * @param {Object} [callback]
+	 */
+	Acts.prototype.monter_plot2 = function(callback){
+		if(callback === undefined) {
+			callback = function() {};
+		}
+		var that = this;
+
+		callback();
+		if (that.nb_plots == 1) {
+			others.ouvrirBloqueurMoyen();
+			others.monterAscenseur();
+			others.fermerBloqueur();
+			others.fermerStabilisateur();
+			ax12.ouvrir();
+			others.descendreAscenseur();
+		} else {
+			others.ouvrirStabilisateurMoyen();
+			others.ouvrirBloqueurMoyen();
+			others.monterAscenseur();
+			others.fermerBloqueur();
+			others.fermerStabilisateur();
+			ax12.ouvrir();
+			others.descendreAscenseur();
+		}
+	}
+ 
+	/**
+	 * Order switch
+	 * 
+	 * @param {string} from
+	 * @param {string} name
+	 * @param {Object} params
+	 * @param {Object} callback
+	 */
+	Acts.prototype.orderHandler = function (from, name, params, callback) {
+		// logger.info("Just received an order `" + name + "` from " + from + " with params :");
+		// logger.info(params);
+		var that = this;
+		/** @todo : add a callback parameter to all functions (and call it) */
+		switch (name){
+			// others
+			case "placer":
+				asserv.setPid(0.25, 130, 13);
+				asserv.goxy(500, 940);
+				asserv.goa(-0.62);
+				this.orderHandler('ia','fermer_tout', {}, callback);
+			break;
+			case "prendre_plot":
+				this.prendre_plot(callback);
+			break;
+			case "pousser_plot":
+				this.pousser_plot(callback);
+			break;
+			case "prendre_plot2":
+				this.prendre_plot2(callback);
+			break;
+			case "monter_plot2":
+				this.monter_plot2(callback);
+			break;
+			case "reset_nb_plots":
+				this.nb_plots = 0;
+				callback();
+			break;	
+			case "prendre_plot_rear_left":
+				asserv.goxy(160, 1800, "avant");
+				that.prendre_plot(undefined, 0);
+				asserv.goxy(270, 1800, "arriere", callback);
+			break;
+			case "prendre_plot_rear_left_calage":
+				asserv.goxy(250, 1450, "arriere");
+				asserv.goa(1.5708);
+				asserv.pwm(-70, -70, 1500);
+				asserv.calageY(1288, 1.5708);
+				asserv.goxy(250, 1450, 500);
+				asserv.goa(0);
+				asserv.pwm(-70, -70, 1500);
+				asserv.calageX(65, 0);
+				asserv.goxy(120, 1450, "avant");
+				asserv.goxy(120, 1790, "avant");
+				that.prendre_plot();
+				asserv.goa(-1);
+				asserv.speed(500, 0, 750, callback);
+			break;
+			case "prendre_gobelet_et_2_plots_front":
+				others.lacherGobelet(fake,0);
+				asserv.goxy(275, 260, "arriere");
+				others.prendreGobelet(function() {
+					that.has_gobelet = true;
+					that.client.send('ia', 'pr.gobelet1');
+				});
+				asserv.speed(500, 0, 500); 
+				asserv.goxy(165, 270, "avant"); //100 au lieu de 90 pos plot
+				that.prendre_plot(undefined, 1);
+				//asserv.speed(-300, -300, 600); 
+				asserv.goxy(285, 310, "arriere");
+				asserv.goxy(155, 180, "avant");
+				that.prendre_plot(callback);
+			break;
+
+			case "deposer_pile_left_2":
+				asserv.goxy(650, 1000, "avant");
+				others.descendreAscenseur();
+				ax12.ouvrir();
+				others.ouvrirBloqueurMoyen(fake,0);
+				others.ouvrirStabilisateurMoyen();
+				that.delay(500);
+				others.ouvrirBloqueurGrand(fake,0);
+				others.ouvrirStabilisateurGrand(function() {
+					that.nb_plots = 0;
+					that.client.send('ia', 'pr.plot0');
+				});
+				asserv.speed(-300, 0, 1000);
+			break;
+
+			case "recalage_stairs":
+				asserv.goxy(250, 1450, "arriere");
+				asserv.goa(1.5708);
+				asserv.pwm(-80, -80, 1500);
+				asserv.calageY(1288, 1.5708);
+				asserv.goxy(250, 1450, 500);
+				asserv.goa(0);
+				asserv.pwm(-80, -80, 1500);
+				asserv.calageY(65, 0);
+				asserv.goxy(120, 1450, "avant");
+			break;
+
+			case "prendre_2_plots_stairs":
+				asserv.goxy(800, 1740, "avant");
+				that.prendre_plot(undefined, 1);
+				that.delay(1000);
+				asserv.goxy(830, 1850, "avant");
+				that.prendre_plot(undefined, 0);
+				asserv.speed(-300, 0, 1000, callback); 
+			break;
+
+			case "prendre_gobelet":
+				others.lacherGobelet(fake,0);
+				asserv.speed(-300, 0, 500);
+				others.prendreGobelet(function() {
+					that.client.send('ia', 'pr.gobelet1');
+					that.has_gobelet = true;
+					callback();
+				});
+			break;
+
+			case "deposer_pile_et_gobelet":
+				asserv.goxy(250, 1000, "avant");
+				others.descendreUnPeuAscenseur();
+				ax12.ouvrir();
+				others.ouvrirBloqueurMoyen(fake,0);
+				others.ouvrirStabilisateurMoyen();
+				that.delay(500);
+				others.ouvrirBloqueurGrand(fake,0);
+				others.ouvrirStabilisateurGrand(function() {
+					that.nb_plots = 0;
+					that.client.send('ia', 'pr.plot0');
+				});
+				asserv.speed(-300, 0, 1000);
+				asserv.goa(0);
+				others.lacherGobelet(function() {
+					that.client.send('ia', 'pr.gobelet0');
+				});
+				that.delay(300);
+				asserv.speed(300, 0, 750, callback);
+				others.ouvrirStabilisateurMoyen(fake,0);
+				others.ouvrirBloqueurMoyen(fake,0);
+				others.descendreAscenseur();
+				break;
+
+			case "deposer_pile_gobelet_prendre_balle_gauche":
+				asserv.goxy(300, 1000, "avant");
+				//asserv.goa(-2.3562);
+				others.descendreUnPeuAscenseur();
+				ax12.ouvrir();
+				others.ouvrirBloqueurGrand(fake,0);
+				others.ouvrirStabilisateurMoyen();
+				that.delay(500);
+				others.ouvrirStabilisateurGrand();
+				asserv.speed(-300, 0, 1000);
+				asserv.goa(0);
+				others.lacherGobelet();
+				that.delay(300);
+				asserv.speed(300, 0, 750);
+				/*asserv.goxy(700, 1300, "arriere", function() {
+					that.client.send('ia', 'data.add_dynamic', {pos:{x:450, y:880}, d:8});
+				});
+				others.ouvrirBloqueurMoyen(fake,0);
+				others.ouvrirStabilisateurMoyen(fake,0);
+				others.monterMoyenAscenseur();
+
+				asserv.goxy(260, 1050, "osef");
+				asserv.goa(3.1416/2);
+				asserv.pwm(50, 50, 1500);
+				asserv.calageY(1126, 3.1416/2);
+				asserv.goxy(260, 1000, "arriere");
+				asserv.goa(3.1416);
+
+				asserv.goxy(200, 1000, "avant");
+				asserv.goa(3.1416);
+				asserv.pwm(50, 50, 1500);
+				asserv.calageX(145, 3.1416);
+				ax12.fermerBalle();
+				asserv.goxy(260, 1000, "arriere");
+				others.descendreMoyenAscenseur();
+				ax12.fermerBalle2();
+				asserv.goxy(260, 1000, "arriere");
+				others.monterAscenseur();
+				asserv.goxy(330, 1000, "avant");
+				asserv.goa(0.1863);
+				others.lacherGobelet();
+				that.delay(100);
+				that.new_has_ball = true;
+				that.client.send('ia', 'pr.plot0');
+				that.client.send('ia', 'pr.gobelet0');
+				that.nb_plots = 0;
+				that.has_gobelet = false;
+				asserv.goxy(600, 1050, "avant", callback);*/
+			break;
+
+			case "deposer_gobelet":
+				asserv.goa(3.1416);
+				that.delay(100);
+				others.lacherGobelet();
+				that.client.send('ia', 'pr.gobelet0');
+				asserv.speed(500, 0, 800, callback);
+			break;
+
+			case "fermer_tout":
+				others.lacherGobelet();
+				others.fermerBloqueur();
+				others.descendreAscenseur();
+				others.rangerClap();
+				others.fermerStabilisateur();
+				ax12.fermer(callback);
+			break;
+			case "ouvrir_ax12":
+				ax12.ouvrir(callback);
+			break;
+			case "monter_ascenseur":
+				others.monterAscenseur(callback);
+			break;
+			case "clap_1":
+				others.sortirClap();
+				asserv.goxy(330, 140, "osef", function() {
+					callback();
+					others.rangerClap();
+				});
+			break;
+			case "clap_3":
+				others.sortirClap();
+				asserv.goxy(1000, 140, "osef", function() {
+					callback();
+					others.rangerClap();
+				});
+			break;
+			case "clap_5":
+				others.sortirClap();
+				asserv.goxy(2300, 140, "osef", function() {
+					callback();
+					others.rangerClap();
+				});
+			break;
+
+			// Asserv
+			case "pwm":
+				asserv.pwm(params.left, params.right, params.ms, callback);
+			break;
+			case "setvit":
+				asserv.setVitesse(params.v, params.r, callback);
+			break;
+			case "clean":
+				asserv.clean(callback);
+			break;
+			case "goa":
+				asserv.goa(params.a, callback, true);
+			break;
+			case "goxy":
+				asserv.goxy(params.x, params.y, params.sens, callback, true);
+			break;
+			case "setpos":
+				asserv.setPos(params, callback);
+			break;
+			case "setacc":
+				asserv.setAcc(params.acc, callback);
+			break;
+			case "setpid":
+				asserv.setPid(params.p, params.i, params.d, callback);
+			break;
+			case "sync_git":
+				spawn('/root/sync_git.sh', [], {
+					detached: true
+				});
+			break;
+
+
+			// Debug
+			case "AX12_close":
+				ax12.fermer(callback);
+			break;
+			case "AX12_open":
+				ax12.ouvrir(callback);
+			break;
+			default:
+				logger.warn("Order name " + name + " " + from + " not understood");
+				callback();
+		}
+	};
+
+	return Acts;
+})();
+</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	DocStrap Copyright © 2012-2015 The contributors to the JSDoc3 and DocStrap projects.
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
+	
+		on Mon Mar 13th 2017
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>

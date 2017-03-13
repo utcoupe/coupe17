@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>UTCoupe 17 Source: ia/actions.class.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cyborg.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">UTCoupe 17</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="Simu.html">Simu</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-clients_gr_actuators.html">clients/gr/actuators</a></li><li><a href="module-clients_gr_detect.html">clients/gr/detect</a></li><li><a href="module-clients_gr_main.html">clients/gr/main</a></li><li><a href="module-clients_gr_servos.html">clients/gr/servos</a></li><li><a href="module-clients_gr_servos-simu.html">clients/gr/servos-simu</a></li><li><a href="module-clients_pr_actuators.html">clients/pr/actuators</a></li><li><a href="module-clients_pr_ax12.html">clients/pr/ax12</a></li><li><a href="module-clients_pr_ax12-simu.html">clients/pr/ax12-simu</a></li><li><a href="module-clients_pr_detect.html">clients/pr/detect</a></li><li><a href="module-clients_pr_elevator.html">clients/pr/elevator</a></li><li><a href="module-clients_pr_main.html">clients/pr/main</a></li><li><a href="module-clients_pr_others.html">clients/pr/others</a></li><li><a href="module-clients_pr_others-simu.html">clients/pr/others-simu</a></li><li><a href="module-clients_shared_asserv.html">clients/shared/asserv</a></li><li><a href="module-clients_shared_asserv-simu.html">clients/shared/asserv-simu</a></li><li><a href="module-clients_shared_defineParser.html">clients/shared/defineParser</a></li><li><a href="module-clients_shared_fifo.html">clients/shared/fifo</a></li><li><a href="module-config.html">config</a></li><li><a href="module-ia_actions.html">ia/actions</a></li><li><a href="module-ia_data.html">ia/data</a></li><li><a href="module-ia_export_simulator.html">ia/export_simulator</a></li><li><a href="module-ia_gr.html">ia/gr</a></li><li><a href="module-ia_hokuyo.html">ia/hokuyo</a></li><li><a href="module-ia_ia.html">ia/ia</a></li><li><a href="module-ia_main.html">ia/main</a></li><li><a href="module-ia_pathfinding.html">ia/pathfinding</a></li><li><a href="module-ia_pr.html">ia/pr</a></li><li><a href="module-ia_timer.html">ia/timer</a></li><li><a href="module-server_server.html">server/server</a></li><li><a href="module-server_socket_client.html">server/socket_client</a></li><li><a href="module-utcoupe_utcoupe.html">utcoupe/utcoupe</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="clients_gr_actuators.Acts.html">clients/gr/actuators.Acts</a></li><li><a href="clients_gr_detect.Detect.html">clients/gr/detect.Detect</a></li><li><a href="clients_gr_servos.Servos.html">clients/gr/servos.Servos</a></li><li><a href="clients_gr_servos-simu.Servos.html">clients/gr/servos-simu.Servos</a></li><li><a href="clients_pr_actuators.Acts.html">clients/pr/actuators.Acts</a></li><li><a href="clients_pr_ax12-simu.Ax12.html">clients/pr/ax12-simu.Ax12</a></li><li><a href="clients_pr_ax12.Ax12.html">clients/pr/ax12.Ax12</a></li><li><a href="clients_pr_detect.Detect.html">clients/pr/detect.Detect</a></li><li><a href="clients_pr_elevator.Elevator.html">clients/pr/elevator.Elevator</a></li><li><a href="clients_pr_others.Others.html">clients/pr/others.Others</a></li><li><a href="clients_pr_others-simu.Others.html">clients/pr/others-simu.Others</a></li><li><a href="clients_shared_asserv.Asserv.html">clients/shared/asserv.Asserv</a></li><li><a href="clients_shared_asserv-simu.Asserv.html">clients/shared/asserv-simu.Asserv</a></li><li><a href="clients_shared_fifo.Fifo.html">clients/shared/fifo.Fifo</a></li><li><a href="Controller.html">Controller</a></li><li><a href="ia_actions.Actions.html">ia/actions.Actions</a></li><li><a href="ia_data.Data.html">ia/data.Data</a></li><li><a href="ia_export_simulator.ExportSimulator.html">ia/export_simulator.ExportSimulator</a></li><li><a href="ia_gr.Gr.html">ia/gr.Gr</a></li><li><a href="ia_hokuyo.Hokuyo.html">ia/hokuyo.Hokuyo</a></li><li><a href="ia_ia.Ia.html">ia/ia.Ia</a></li><li><a href="ia_pathfinding.Pathfinding.html">ia/pathfinding.Pathfinding</a></li><li><a href="ia_timer.Timer.html">ia/timer.Timer</a></li><li><a href="Object3d.html">Object3d</a></li><li><a href="Position.html">Position</a></li><li><a href="server_server.Server.html">server/server.Server</a></li><li><a href="server_socket_client.SocketClient.html">server/socket_client.SocketClient</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#convertir_dist">convertir_dist</a></li><li><a href="global.html#getParsedJSONFromFile">getParsedJSONFromFile</a></li><li><a href="global.html#PATH_MAX_POINTS">PATH_MAX_POINTS</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: ia/actions.class.js</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">/**
+ * Actions Module
+ * 
+ * @module ia/actions
+ * @requires log4js
+ * @see {@link ia/actions.Actions}
+ */
+
+module.exports = (function () {
+	"use strict";
+	var log4js = require('log4js');
+	var logger = log4js.getLogger('ia.actions');
+	/**
+	 * Actions Constructor
+	 * 
+	 * @exports ia/actions.Actions
+	 * @constructor
+	 * @param ia
+	 */
+	function Actions(ia) {
+		/** IA */
+		this.ia = ia;
+		/** Team color */
+		this.color = ia.color;
+
+		/** done */
+		this.done = {};
+		/** Tasks to do*/
+		this.todo = {};
+		/** Tasks in progress */
+		this.inprogress = null;
+		/** killed */
+		this.killed = {};
+
+		/** Valid id do action */
+		this.valid_id_do_action = -1;
+
+		this.todo = this.importActions(ia.data);
+	}
+
+	var __dist_startpoints_plot = 120;
+	var __nb_startpoints_plot = 16;
+	/**
+	 * Convert Angle
+	 * 
+	 * @param {int} a Angle
+	 */
+	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
+
+	/**
+	 * Collision
+	 */
+	Actions.prototype.collision = function() {
+		if(this.inprogress !== null) {
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// Décommenter la ligne, juste pour tester
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			this.todo[this.inprogress.name] = this.inprogress;
+			this.inprogress = null;
+		}
+	}
+
+	/**
+	 * Import Actions from data
+	 * 
+	 * @param {Object} data
+	 */
+	Actions.prototype.importActions = function (data) {
+		var req;
+
+		try {
+			req = require('./actions.json');
+		}
+		catch(err) {
+		    logger.fatal("Erreur lors de l'importation des actions dans l'IA: "+err);
+		}
+		var actions = req.actions;
+
+		// Link "object" with exiting thing in the Data class
+		Object.keys(actions).forEach(function(i) {
+			actions[i].object = data.getObjectRef(actions[i].objectname);
+			actions[i].name = i;
+
+			if ((actions[i].object !== null) &amp;&amp; (actions[i].type == "plot") &amp;&amp; (actions[i].startpoints.length === 0)) {
+				actions[i].startpoints.push({
+					x: actions[i].object.pos.x,
+					y: actions[i].object.pos.y
+				});
+				// var temp;
+				// for(var j = 0; j &lt; __nb_startpoints_plot; j++) {
+				// 	temp = j*2*Math.PI/__nb_startpoints_plot;
+				// 	actions[i].startpoints.push({
+				// 		x: actions[i].object.pos.x + __dist_startpoints_plot * Math.cos(temp),
+				// 		y: actions[i].object.pos.y + __dist_startpoints_plot * Math.sin(temp),
+				// 		a: convertA(temp+Math.PI)
+				// 	});
+				// }
+			}
+			else if((actions[i].object !== null) &amp;&amp; (actions[i].type == "clap")) {
+				if(this.color != "yellow") {
+					var a = actions[i].startpoints[0].a;
+					actions[i].startpoints[0].a = (a &lt; 0) ? -Math.PI - a : Math.PI - a;
+				}
+			}
+		}.bind(this));
+
+		return actions;
+	};
+
+	/**
+	 * Parse Order
+	 * 
+	 * @param {string} from Sender
+	 * @param {string} name Name of the action
+	 * @param {Object} params Parameters of the action
+	 */
+	Actions.prototype.parseOrder = function (from, name, params) {
+		switch(name) {
+			case 'actions.action_finished':
+			// logger.debug('received action_finished');
+				this.actionFinished();
+			break;
+			case 'actions.path_finished':
+			logger.debug('received path_finished');
+				this.ia.pr.path = [];
+			break;
+			default:
+				logger.warn('Ordre inconnu dans ia.gr: '+name);
+		}
+	};
+
+
+	/**
+	 * Kill an action
+	 * 
+	 * @param {string} action_name
+	 */
+	Actions.prototype.kill = function (action_name){
+		// If action doesn't exist
+		if (!!action_name &amp;&amp; this.exists(action_name)){
+			this.done[action_name] = this.todo[action_name];
+			delete this.todo[action_name];
+		}
+	};
+
+	/**
+	 * Return true if the action exists
+	 * 
+	 * @param {string} action_name
+	 */
+	Actions.prototype.exists = function (action_name){
+		if (!this.todo[action_name]){
+			if (!this.killed[action_name] &amp;&amp; !this.done[action_name] &amp;&amp; !this.done[action_name])
+				logger.warn("Action named '"+ action_name +"' doesn't exist");
+			else
+				logger.warn("Action named '"+ action_name +"' already killed in progress or done !");
+			return false;
+		} else {
+			return true;
+		}
+	};
+
+	/**
+	 * Return true if the action is done
+	 * 
+	 * @param {string} action_name
+	 */
+	Actions.prototype.isDone = function (action_name){
+		return !action_name || this.done.hasOwnProperty(action_name);
+	};
+
+	/**
+	 * Return the distance between two points
+	 * 
+	 * @param {Object} A
+	 * @param {int} A.x
+	 * @param {int} A.y
+	 * @param {Object} B.x
+	 * @param {object} B.y
+	 */
+	function norm2Points(A, B) {
+		return Math.sqrt(Math.pow(A.x-B.x, 2) + Math.pow(A.y-B.y, 2));
+	}
+	/**
+	 * Return the distance between a position and the position of the current action
+	 * 
+	 * @param {Object} pos
+	 * @param {int} pos.x
+	 * @param {int} pos.y
+	 * @param {string} an Action name
+	 */
+	Actions.prototype.getNormAction = function(pos, an) {
+		return norm2Points(pos, this.todo[an].object.pos);
+	};
+	
+	/**
+	 * Get priority Action
+	 * 
+	 * @param {string} an Action name
+	 */
+	Actions.prototype.getPriorityAction = function(an) {
+		return this.todo[an].object.status == "lost" ? -1000 : this.todo[an].priority;
+	};
+	
+	/**
+	 * Return true id is doable
+	 * 
+	 * @param {Object} action
+	 */
+	Actions.prototype.isDoable = function(action) {
+		// Verifies some things about the action
+
+		if (!!action.dependency &amp;&amp; !this.isDone(action.dependency)){
+			// Depends on an action, but it hasn't already been done
+			return false;
+		}
+
+		if (action.dependencyRobotContent !== undefined){
+			// Depends on the robot content
+
+			if ((action.dependencyRobotContent.gobelet !== undefined) &amp;&amp;
+				(this.ia.pr.content.gobelet !== action.dependencyRobotContent.gobelet)){
+				// The cup holder position isn't consistent with needed state
+				return false;
+			}
+
+			// If there's a constraint about the current number of cylinders
+			if ((action.dependencyRobotContent.invPlot !== undefined)  &amp;&amp;
+				(this.ia.pr.content.nb_plots &lt; action.dependencyRobotContent.invPlot)){
+				return false;
+			}
+			if ((action.dependencyRobotContent.subPlot !== undefined)  &amp;&amp;
+				(this.ia.pr.content.nb_plots > action.dependencyRobotContent.subPlot)){
+				return false;
+			}
+		 
+		}
+
+		// if (action.object.status == "lost"){
+		// 	return false;
+		// }
+
+		return true;
+	};
+	
+	/**
+	 * Do next Action
+	 * 
+	 * @param callback
+	 */
+	Actions.prototype.doNextAction = function(callback) {
+		this.valid_id_do_action++;
+		var actions_todo = [];
+
+		// Get les actions possibles
+		Object.getOwnPropertyNames(this.todo).forEach(function(an) { //an = action name
+			if(this.isDoable(this.todo[an])) {
+				actions_todo.push(an);
+			}
+		}, this);
+
+		// Tri par priorité puis par norme
+		var pos = this.ia.pr.pos;
+		actions_todo.sort(function(a, b) {
+			return (this.getPriorityAction(b) - this.getPriorityAction(a)) || (this.getNormAction(pos, a) - this.getNormAction(pos, b));
+		}.bind(this));
+
+		for(var i in actions_todo) {
+			logger.debug('[%d] %s (%d)', this.todo[actions_todo[i]].priority, actions_todo[i], this.getNormAction(pos, actions_todo[i]));
+		}
+
+		// Va choisir l'action la plus proche, demander le path et faire doAction
+		this.pathDoAction(callback, actions_todo, this.valid_id_do_action);
+	};
+
+	/**
+	 * Return nearest Startpoint
+	 * 
+	 * @param {Object} pos
+	 * @param {int} pos.x
+	 * @param {int} pos.y
+	 * @param {Object} startpoints
+	 */
+	Actions.prototype.getNearestStartpoint = function(pos, startpoints) {
+		var min_dist = Infinity;
+		var nearest = null;
+
+		for (var i = 0; i &lt; startpoints.length; i++) {
+			var dist = norm2Points(pos, startpoints[i]);
+
+			if (dist &lt; min_dist){
+				min_dist = dist;
+				nearest = startpoints[i];
+			}
+		}
+
+		return nearest;
+	};
+
+	/**
+	 * Find the path to the action
+	 * 
+	 * @param callback
+	 * @param {Object} actions
+	 * @param {int} id
+	 */
+	Actions.prototype.pathDoAction = function(callback, actions, id) {
+		if(id != this.valid_id_do_action) {
+			logger.Debug('id different');
+			return;
+		}
+		// Va choisir l'action la plus proche, demander le path et faire doAction
+		if(actions.length > 0) {
+			var action = this.todo[actions.shift()];
+			var startpoint = this.getNearestStartpoint(this.ia.pr.pos, action.startpoints);
+			this.ia.pathfinding.getPath(this.ia.pr.pos, startpoint, function(path) {
+				if(path !== null) {
+					this.ia.pr.path = path;
+					this.doAction(callback, action, startpoint, id);
+				} else {
+					logger.debug("path not found");
+					// Si le pathfinding foire, on fait la deuxième action la plus importante
+					this.pathDoAction(callback, actions, id);
+				}
+			}.bind(this));
+		} else {
+			logger.debug("all paths not found");
+			setTimeout(function() {
+				this.doNextAction(callback);
+			}.bind(this), 500);
+		}
+	};
+
+	/**
+	 * Do Action
+	 * 
+	 * @param callback
+	 * @param {Object} action
+	 * @param {Object} startpoint
+	 * @param {int} startpoint.x
+	 * @param {int} startpoint.y
+	 * @param {int} id
+	 */
+	Actions.prototype.doAction = function (callback, action, startpoint, id) {
+		if(id != this.valid_id_do_action)
+			return;
+		this.callback = callback;
+		
+		// // Change action to state "in progress"
+		this.inprogress = action;
+		delete this.todo[action.name];
+
+		logger.debug('Action en cours %s (%d;%d;%d)', action.name, startpoint.x, startpoint.y, startpoint.a);
+		this.ia.pr.path.map(function(checkpoint) {
+			this.ia.client.send('pr', "goxy", {
+				x: checkpoint.x,
+				y: checkpoint.y,
+				sens: action.sens
+			});
+		}, this);
+		if(!!startpoint.a) {
+			this.ia.client.send('pr', "goa", {
+				a: startpoint.a
+			});
+		}
+
+		this.ia.client.send('pr', "send_message", {
+			name: "actions.path_finished"
+		});
+		// 1 order for 1 action
+		// action.orders.forEach(function (order, index, array){
+		this.ia.client.send('pr', action.orders[0].name, action.orders[0].params);
+		// }.bind(this));
+		this.ia.client.send('pr', "send_message", {
+			name: "actions.action_finished"
+		});
+
+		// // Set object to "done" ! XXX
+
+		// // Change action and its "to be killed" actions to state done
+
+		// console.log(this.todo);
+		// console.log(this.inprogress);
+		// console.log(this.done);
+	};
+
+	/**
+	 * Action Finished
+	 */
+	Actions.prototype.actionFinished = function () {
+		if(this.inprogress !== null) {
+			this.done[this.inprogress.name] = this.inprogress;
+			logger.info('Action %s est finie !', this.inprogress.name);
+			this.inprogress = null;
+			var temp = this.callback;
+			this.callback = function() {logger.warn('callback vide'); };
+			temp();
+		}
+	};
+	
+	return Actions;
+})();
+</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	DocStrap Copyright © 2012-2015 The contributors to the JSDoc3 and DocStrap projects.
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
+	
+		on Mon Mar 13th 2017
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>

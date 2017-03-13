@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>UTCoupe 17 Source: clients/shared/asserv.class.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cyborg.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">UTCoupe 17</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="Simu.html">Simu</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-clients_gr_actuators.html">clients/gr/actuators</a></li><li><a href="module-clients_gr_detect.html">clients/gr/detect</a></li><li><a href="module-clients_gr_main.html">clients/gr/main</a></li><li><a href="module-clients_gr_servos.html">clients/gr/servos</a></li><li><a href="module-clients_gr_servos-simu.html">clients/gr/servos-simu</a></li><li><a href="module-clients_pr_actuators.html">clients/pr/actuators</a></li><li><a href="module-clients_pr_ax12.html">clients/pr/ax12</a></li><li><a href="module-clients_pr_ax12-simu.html">clients/pr/ax12-simu</a></li><li><a href="module-clients_pr_detect.html">clients/pr/detect</a></li><li><a href="module-clients_pr_elevator.html">clients/pr/elevator</a></li><li><a href="module-clients_pr_main.html">clients/pr/main</a></li><li><a href="module-clients_pr_others.html">clients/pr/others</a></li><li><a href="module-clients_pr_others-simu.html">clients/pr/others-simu</a></li><li><a href="module-clients_shared_asserv.html">clients/shared/asserv</a></li><li><a href="module-clients_shared_asserv-simu.html">clients/shared/asserv-simu</a></li><li><a href="module-clients_shared_defineParser.html">clients/shared/defineParser</a></li><li><a href="module-clients_shared_fifo.html">clients/shared/fifo</a></li><li><a href="module-config.html">config</a></li><li><a href="module-ia_actions.html">ia/actions</a></li><li><a href="module-ia_data.html">ia/data</a></li><li><a href="module-ia_export_simulator.html">ia/export_simulator</a></li><li><a href="module-ia_gr.html">ia/gr</a></li><li><a href="module-ia_hokuyo.html">ia/hokuyo</a></li><li><a href="module-ia_ia.html">ia/ia</a></li><li><a href="module-ia_main.html">ia/main</a></li><li><a href="module-ia_pathfinding.html">ia/pathfinding</a></li><li><a href="module-ia_pr.html">ia/pr</a></li><li><a href="module-ia_timer.html">ia/timer</a></li><li><a href="module-server_server.html">server/server</a></li><li><a href="module-server_socket_client.html">server/socket_client</a></li><li><a href="module-utcoupe_utcoupe.html">utcoupe/utcoupe</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="clients_gr_actuators.Acts.html">clients/gr/actuators.Acts</a></li><li><a href="clients_gr_detect.Detect.html">clients/gr/detect.Detect</a></li><li><a href="clients_gr_servos.Servos.html">clients/gr/servos.Servos</a></li><li><a href="clients_gr_servos-simu.Servos.html">clients/gr/servos-simu.Servos</a></li><li><a href="clients_pr_actuators.Acts.html">clients/pr/actuators.Acts</a></li><li><a href="clients_pr_ax12-simu.Ax12.html">clients/pr/ax12-simu.Ax12</a></li><li><a href="clients_pr_ax12.Ax12.html">clients/pr/ax12.Ax12</a></li><li><a href="clients_pr_detect.Detect.html">clients/pr/detect.Detect</a></li><li><a href="clients_pr_elevator.Elevator.html">clients/pr/elevator.Elevator</a></li><li><a href="clients_pr_others.Others.html">clients/pr/others.Others</a></li><li><a href="clients_pr_others-simu.Others.html">clients/pr/others-simu.Others</a></li><li><a href="clients_shared_asserv.Asserv.html">clients/shared/asserv.Asserv</a></li><li><a href="clients_shared_asserv-simu.Asserv.html">clients/shared/asserv-simu.Asserv</a></li><li><a href="clients_shared_fifo.Fifo.html">clients/shared/fifo.Fifo</a></li><li><a href="Controller.html">Controller</a></li><li><a href="ia_actions.Actions.html">ia/actions.Actions</a></li><li><a href="ia_data.Data.html">ia/data.Data</a></li><li><a href="ia_export_simulator.ExportSimulator.html">ia/export_simulator.ExportSimulator</a></li><li><a href="ia_gr.Gr.html">ia/gr.Gr</a></li><li><a href="ia_hokuyo.Hokuyo.html">ia/hokuyo.Hokuyo</a></li><li><a href="ia_ia.Ia.html">ia/ia.Ia</a></li><li><a href="ia_pathfinding.Pathfinding.html">ia/pathfinding.Pathfinding</a></li><li><a href="ia_timer.Timer.html">ia/timer.Timer</a></li><li><a href="Object3d.html">Object3d</a></li><li><a href="Position.html">Position</a></li><li><a href="server_server.Server.html">server/server.Server</a></li><li><a href="server_socket_client.SocketClient.html">server/socket_client.SocketClient</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#convertir_dist">convertir_dist</a></li><li><a href="global.html#getParsedJSONFromFile">getParsedJSONFromFile</a></li><li><a href="global.html#PATH_MAX_POINTS">PATH_MAX_POINTS</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: clients/shared/asserv.class.js</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">/**
+ * Asserv module
+ * 
+ * @module clients/shared/asserv
+ * @requires module:clients/shared/defineParser
+ * @see {@link clients/shared/asserv.Asserv}
+ */
+
+module.exports = (function () {
+	var logger = require('log4js').getLogger('asserv');
+	var COMMANDS = require('./defineParser.js')('./arduino/asserv/protocol.h');
+	var DETECT_SERIAL_TIMEOUT = 100; //ms, -1 to disable
+
+	// function Asserv(sp, client) {
+	// 	this.client = client;
+	// 	this.getPos();
+	// 	this.sp = sp;
+	// 	this.pos = {};
+	// 	this.sentCommands = {};
+	// 	this.currentId = 0;
+	// }
+
+	/**
+	 * Asserv Constructor
+	 * 
+	 * @exports clients/shared/asserv.Asserv
+	 * @constructor
+	 * @param {Object} sp
+	 * @param {Object} client
+	 * @param {Object} who
+	 * @param {Object} sendStatus
+	 * @param {clients/shared/asserv.Asserv} fifo
+	 */
+	function Asserv(sp, client, who, sendStatus, fifo) {
+		/** @type {boolean} */
+		this.ready = true;
+		/** @type {Object} */
+		this.sendStatus = sendStatus;
+		/** @type {Object} */
+		this.sp = sp;
+		/** @type {Object} */
+		this.client = client;
+		/** @type {Object} */
+		this.pos = {};
+		/** @type {Object} */
+		this.who = who;
+		/** @type {int} */
+		this.currentId = 0;
+		/** @type {string} */
+		this.color = "yellow";
+		/** @type {clients/shared/asserv.Asserv} */
+		this.fifo = fifo;
+
+		this.sp.on("data", function(data){
+			if(this.ready === false){
+				this.ready = true;
+				this.sendStatus();
+			}
+			this.parseCommand(data.toString());
+		}.bind(this));
+		this.sp.on("error", function(data){
+			this.ready = false;
+			this.sendStatus();
+			logger.debug("error", data.toString());
+		}.bind(this));
+		this.sp.on("close", function(data){
+			this.ready = false;
+			this.sendStatus();
+			logger.error("Serial port close");
+		}.bind(this));
+
+		setTimeout(function() {
+			this.getPos();
+		}.bind(this), 2000);
+	}
+	/**
+	 * Convert color x
+	 * 
+	 * @param {int} x
+	 */
+	Asserv.prototype.convertColorX = function(x) {
+		if(this.color == "yellow") {
+			return x;
+		} else {
+			return 3000-x;
+		}
+	}
+	/**
+	 * Convert color y
+	 * 
+	 * @param {int} y
+	 */
+	Asserv.prototype.convertColorY = function(y) {
+		if(this.color == "yellow") {
+			return y;
+		} else {
+			return y;
+		}
+	}
+	/**
+	 * Convert color Angle
+	 * 
+	 * @param {int} a
+	 */
+	Asserv.prototype.convertColorA = function(a) {
+		if(this.color == "yellow") {
+			return convertA(a);
+		} else {
+			return convertA(Math.PI - a);
+		}
+	}
+
+	/**
+	 * Convert Angle
+	 * 
+	 * @param {int} a
+	 */
+	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
+	/**
+	 * Set Angle
+	 * 
+	 * @param {int} a
+	 */
+	Asserv.prototype.setA = function(a) {
+		// logger.debug(a, convertA(a));
+		this.pos.a = convertA(a);
+	}
+	/**
+	 * Position ?
+	 * 
+	 * @param {Object} pos
+	 */
+	Asserv.prototype.Pos = function(pos) {
+		this.pos.x = pos.x;
+		this.pos.y = pos.y;
+		this.setA(pos.a);
+	}
+	/**
+	 * Sets Position
+	 * 
+	 * @param {Object} pos
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.setPos = function(pos, callback) {
+		logger.debug(pos);
+		if(pos.color !== undefined)
+			this.color = pos.color;
+		this.sendCommand(COMMANDS.SET_POS, [
+			parseInt(this.convertColorX(pos.x)),
+			parseInt(this.convertColorY(pos.y)),
+			myWriteFloat(this.convertColorA(pos.a))
+		], false, callback);
+	}
+	/**
+	 * Gets Potition
+	 * 
+	 * @param {Object} pos
+	 */
+	Asserv.prototype.getPos = function(pos) {
+		this.client.send('ia', this.who+'.getpos');
+	}
+	/**
+	 * Sends Position
+	 */
+	Asserv.prototype.sendPos = function() {
+		this.client.send('ia', this.who+'.pos', this.pos);
+	}
+
+	/**
+	 * Set position calage
+	 * 
+	 * @param {Object} pos
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.setPosCalage = function(pos, callback) {
+		this.sendCommand(COMMANDS.SET_POS, [
+			parseInt(this.convertColorX(pos.x)),
+			parseInt(this.convertColorY(pos.y)),
+			myWriteFloat(this.convertColorA(pos.a))
+		], false, function() {
+			callback();
+			this.fifo.orderFinished();
+		}.bind(this), true);
+	}
+
+	/**
+	 * Calage X
+	 * 
+	 * @param {int} x
+	 * @param {int} a Angle
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.calageX = function(x, a, callback) {
+		if(callback === undefined)
+			callback = function(){};
+		this.fifo.newOrder(function() {
+			this.setPosCalage({x: x, y: this.pos.y, a: a}, callback);
+		}.bind(this), 'calageX');
+
+	}
+	/**
+	 * Calage Y
+	 * 
+	 * @param {int} y
+	 * @param {int} a Angle
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.calageY = function(y, a, callback) {
+		if(callback === undefined)
+			callback = function(){};
+		this.fifo.newOrder(function() {
+			this.setPosCalage({x: this.pos.x, y: y, a: a}, callback, true);
+		}.bind(this), 'calageY');
+	}
+
+	// For float
+	/**
+	 * My write float
+	 * 
+	 * @param {float} f
+	 */
+	function myWriteFloat(f){ return Math.round(f*COMMANDS.FLOAT_PRECISION); }
+	/**
+	 * My Parse float
+	 * 
+	 * @param {float} f
+	 */
+	function myParseFloat(f){ return parseInt(f)/COMMANDS.FLOAT_PRECISION;  }
+
+
+	/**
+	 * Parse Command
+	 * 
+	 * @param {string} data
+	 */
+	Asserv.prototype.parseCommand = function(data){
+		// logger.debug(data);
+		var datas = data.split(';');
+		var cmd = datas.shift();//, id = datas.shift();
+		if(cmd == COMMANDS.AUTO_SEND &amp;&amp; datas.length >= 4) { // periodic position update
+			var lastFinishedId = parseInt(datas.shift()); // TODO
+			this.Pos({
+				x: this.convertColorX(parseInt(datas.shift())),
+				y: this.convertColorY(parseInt(datas.shift())),
+				a: this.convertColorA(myParseFloat(datas.shift()))
+			});
+
+			
+			this.sendPos();
+
+			// logger.debug(lastFinishedId);
+			if(this.currentId != lastFinishedId) {
+				// logger.fatal('finish id', lastFinishedId);
+				this.currentId = lastFinishedId;
+				var use_fifo = this.use_fifo;
+				this.use_fifo = true;
+				this.callback();
+				if(use_fifo)
+					this.fifo.orderFinished();
+			}
+		} else if(cmd == this.order_sent) {
+			this.order_sent = '';
+			// logger.debug('finish', datas.shift());
+			if(!this.wait_for_id) {
+				var use_fifo = this.use_fifo;
+				this.use_fifo = true;
+				this.callback();
+				if(use_fifo)
+					this.fifo.orderFinished();
+			}
+		} else if (cmd == COMMANDS.JACK) {
+			logger.info("JACK !");
+			this.client.send("ia", "ia.jack");
+		} else {
+			// logger.warn(datas);
+			logger.warn("Command return from Arduino to unknown cmd="+cmd);
+		}
+	}
+	/**
+	 * Sends Command
+	 * 
+	 * @param {string} cmd
+	 * @param {string} args
+	 * @param {int} wait_for_id
+	 * @param {Object} [callback]
+	 * @param {boolean} no_fifo
+	 */
+	Asserv.prototype.sendCommand = function(cmd, args, wait_for_id, callback, no_fifo){
+		function nextOrder() {
+			if(callback === undefined)
+				callback = function(){};
+			this.callback = callback;
+			args = args || [];
+			this.order_sent = cmd;
+			this.wait_for_id = wait_for_id;
+			logger.debug([cmd,this.currentId+1].concat(args).join(";")+"\n");
+			this.sp.write([cmd,this.currentId+1].concat(args).join(";")+"\n");
+		}
+
+		this.use_fifo = !no_fifo;
+
+		if(this.use_fifo) {
+			this.fifo.newOrder(nextOrder.bind(this), 'sendCommandAsserv('+cmd+':'+args+')');
+		} else {
+			nextOrder.call(this);
+		}
+	}
+
+	/**
+	 * Set Vitesse
+	 * 
+	 * @param {int} v Speed
+	 * @param {float} r Rotation
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.setVitesse = function(v, r, callback) {
+		// logger.debug(myWriteFloat(r));
+		this.sendCommand(COMMANDS.SPDMAX, [
+			parseInt(v),
+			myWriteFloat(r)
+		], false, callback);
+	};
+
+	/**
+	 * Speed ?
+	 * 
+	 * @param {int} l
+	 * @param {int} a Angle
+	 * @param {int} ms
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.speed = function(l, a, ms, callback) {
+		// logger.debug(myWriteFloat(r));
+		this.sendCommand(COMMANDS.SPD, [
+			parseInt(l),
+			parseInt(a),
+			parseInt(ms)
+		], true, callback);
+	};
+
+	/**
+	 * Set Acceleration
+	 * 
+	 * @param {int} acc
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.setAcc = function(acc,callback) {
+		// logger.debug(myWriteFloat(r));
+		this.sendCommand(COMMANDS.ACCMAX, [
+			parseInt(acc)
+		], false, callback);
+	};
+
+	/**
+	 * Clean
+	 * 
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.clean = function(callback){
+		this.sendCommand(COMMANDS.CLEANG, false, callback);
+	};
+
+	/**
+	 * Pulse Width Modulation
+	 * 
+	 * @param {int} left
+	 * @param {int} right
+	 * @param {int} ms
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.pwm = function(left, right, ms, callback) {
+		this.sendCommand(COMMANDS.PWM, [
+			parseInt(left),
+			parseInt(right),
+			parseInt(ms)
+		], true, callback);
+		
+	};
+
+	/**
+	 * Go X Y
+	 * 
+	 * @param {int} x
+	 * @param {int} y
+	 * @param {string} sens
+	 * @param {Object} callback
+	 * @param {boolean} no_fifo
+	 */
+	Asserv.prototype.goxy = function(x, y, sens, callback, no_fifo){
+		if(sens == "avant") sens = 1;
+		else if(sens == "arriere") sens = -1;
+		else sens = 0;
+		
+		this.sendCommand(COMMANDS.GOTO, [
+			parseInt(this.convertColorX(x)),
+			parseInt(this.convertColorY(y)),
+			sens
+		], true, callback, no_fifo);
+	};
+	/**
+	 * Go Angle
+	 * 
+	 * @param {int} a
+	 * @param {Object} callback
+	 * @param {boolean} no_fifo
+	 */
+	Asserv.prototype.goa = function(a, callback, no_fifo){
+		// this.clean();
+		this.sendCommand(COMMANDS.ROT, [
+			myWriteFloat(this.convertColorA(a))
+		], true, callback, no_fifo);
+	};
+
+	/**
+	 * Set P I D
+	 * @param {float} p
+	 * @param {float} i
+	 * @param {float} d
+	 * @param {Object} callback
+	 */
+	Asserv.prototype.setPid = function(p, i, d, callback){
+		// this.clean();
+		this.sendCommand(COMMANDS.PIDALL, [
+			myWriteFloat(p),
+			myWriteFloat(i),
+			myWriteFloat(d)
+		],false, callback);
+	};
+
+	// Asserv.prototype.gotoPath = function(callback, path){
+	// 	this.clean();
+	// 	if(instanceof path !=== "Array") path = path.path; // not sure about Path class right now
+	// 	path.forEach(function(item));
+	// };
+
+	return Asserv;
+})();
+</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	DocStrap Copyright © 2012-2015 The contributors to the JSDoc3 and DocStrap projects.
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
+	
+		on Mon Mar 13th 2017
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>
