@@ -2,11 +2,13 @@
  * Timer Module
  * 
  * @module ia/timer
+ * @requires log4js
  * @see {@link ia/timer.Timer}
  */
 
 module.exports = (function () {
 	"use strict";
+	var logger = require('log4js').getLogger('ia.timer');
 
 	/**
 	 * Timer Constructor
