@@ -11,17 +11,19 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
 		.when('/reseau', {templateUrl: 'pages/reseau/reseau.tpl.html'})
 		.when('/simulateurold', {templateUrl: 'pages/simulateurold/simulateurold.tpl.html'})
 		.when('/simulateur', {templateUrl: 'pages/simulateur/simulateur.tpl.html'})
+		.when('/hokuyo', {templateUrl: 'pages/hokuyo/hokuyo.tpl.html'})
 		.when('/telecommande', {templateUrl: 'pages/telecommande/telecommande.tpl.html'})
 		.otherwise({redirectTo:'/'});
 }]);
 
-angular.module('app').controller('AppCtrl', ['$scope', 'UTCoupe', 'Orders', 'Logger', 'Reseau', 'Simulateurold', 'Simulateur',
-	function($scope, UTCoupe, Orders, Logger, Reseau, Simulateurold, Simulateur) {
+angular.module('app').controller('AppCtrl', ['$scope', 'UTCoupe', 'Orders', 'Logger', 'Reseau', 'Simulateurold', 'Simulateur', 'Hokuyo',
+	function($scope, UTCoupe, Orders, Logger, Reseau, Simulateurold, Simulateur, Hokuyo) {
 	UTCoupe.init();
 	Orders.init();
 	Logger.init();
 	Reseau.init();
 	Simulateurold.init();
+	Hokuyo.init();
 	Simulateur.init();
 }]);
 
