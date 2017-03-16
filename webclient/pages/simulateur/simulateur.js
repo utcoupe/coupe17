@@ -17,21 +17,28 @@ angular.module('app').controller('SimulateurCtrl', ['$rootScope', '$scope', 'Cli
 	$scope.iaStop = function() { Client.send("ia", "ia.stop"); }
 }]);
 
-function convertPos(act_pos, pos) {
-	act_pos.x = parseInt(pos.x*1000+1500);
-	act_pos.y = -parseInt(pos.y*1000-1000);
-	act_pos.a = parseInt(pos.a/Math.PI*180);
+function convertPosNew(pos) {
+	var act_pos = {};
+	act_pos.x = pos.x + 1.5;
+	act_pos.z = pos.y + 1; // oui c'est logique !!!
+	return act_pos;
 }
 
 angular.module('app').service('Simulateur', ['$rootScope', 'Client', function($rootScope, Client) {
-	this.pos_gr = {x:-1, y:-1, a:0};
-	this.pos_pr = {x:-1, y:-1, a:0};
 	this.init = function () {
 		Client.order(function (from, name, data) {
 			if(name == 'simulateur' && $rootScope.act_page == 'simulateur') {
-				//Simu.update(data);
-				convertPos(this.pos_gr, data.robots.gr);
-				convertPos(this.pos_pr, data.robots.pr);
+				// Met à jour le pr (s'il existe)
+				if(data.robots.pr.x && controllerSimu.objects3d.has("pr_jaune"))
+				{
+					act_pos = convertPosNew(data.robots.pr);
+					position = new Position(act_pos.x, 0, act_pos.z);
+					rotation = new Position(0, data.robots.pr.a, 0);
+					controllerSimu.objects3d.get("pr_jaune").updateParams ({
+						pos: position,
+						rotation: rotation
+					});
+				}
 				$rootScope.$apply();
 			}
 		}.bind(this));

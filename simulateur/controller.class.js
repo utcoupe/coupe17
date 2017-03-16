@@ -109,6 +109,7 @@ class Controller
         this.createLights();
         this.selectView("front");
 
+        // Permet de changer la taille du canva de THREE en fonction de la taille de la fenêtre
         window.addEventListener('resize', () => {
             var HEIGHT = Math.max(
                 $('body').height() - $('#div_menu').outerHeight() - 2*$('#simu_before').outerHeight(),
