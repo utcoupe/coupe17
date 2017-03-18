@@ -1,28 +1,27 @@
 "use strict";
 
-/*
+/**
  * Permet de travailler avec des coordonnées sur 3 dimensions
  * 
- * @class Position
  */
 class Position
 {
 
     /**
      * Constructeur de Position
-     * @constructs Position
-     * @param {Number} x
-     * @param {Number} y
-     * @param {Number} z
+     *
+     * @param {?Number} x
+     * @param {?Number} y
+     * @param {?Number} z
      */
-    constructor (x, y, z)
+    constructor (x = 0, y = 0, z = 0)
     {
         /** @type {Number} */
-        this.x = x || 0;
+        this.x = x;
         /** @type {Number} */
-        this.y = y || 0;
+        this.y = y;
         /** @type {Number} */
-        this.z = z || 0;
+        this.z = z;
     }
 
 
@@ -85,6 +84,10 @@ class Position
 
     /**
      * Met à jour la position sur tous les axes
+     * 
+     * @param {Number} x
+     * @param {Number} y
+     * @param {Number} z
      */
     set (x, y, z)
     {

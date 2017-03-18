@@ -10,17 +10,14 @@
 
 "use strict";
 
-/*
+/**
  * Gère le simulateur
- * 
- * @class Controller
  */
 class Controller
 {
     /**
      * Constructeur du controlleur
      * 
-     * @constructs Controller
      * @param {String} configPath
      * @param {String} ressourcesPath
      */
@@ -66,7 +63,7 @@ class Controller
         for(var idObject = 0; idObject < objects.length; idObject++)
         {
             var name = objects[idObject].name;
-            console.log("Creating " + name);
+            //console.log("Creating " + name);
             this.objects3d.set(name, new Object3d(objects[idObject], this.ressourcesPath));
             this.objects3d.get(name).loadMesh((scene) => {
                 this.scene.add(scene);

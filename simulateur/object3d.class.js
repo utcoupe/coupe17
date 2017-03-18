@@ -9,17 +9,15 @@
 
 "use strict";
 
-/*
+/**
  * Gère les meshes
  * 
- * @class Object3d
  */
 class Object3d
 {
     /**
      * Constructeur de Object3d
      * 
-     * @constructs Object3d
      * @param {Object} params Paramètres divers de l'objet 3d
      * @param {String} ressourcesPath Répertoire de travail
      */
@@ -47,7 +45,7 @@ class Object3d
      */
     setParams (params)
     {
-        console.log("Loading params for " + params.name);
+        //console.log("Loading params for " + params.name);
         /** @type {Object} */
         this.params = params;
 

@@ -1,9 +1,9 @@
 angular.module('app').controller('SimulateuroldCtrl', ['$rootScope', '$scope', 'Client', 'Simulateurold',
-	function($rootScope, $scope, Client, Simulateur) {
+	function($rootScope, $scope, Client, Simulateurold) {
 	$rootScope.act_page = 'simulateurold';
 	Simu.init();
-	$scope.pos_gr = Simulateur.pos_gr;
-	$scope.pos_pr = Simulateur.pos_pr;
+	$scope.pos_gr_old = Simulateurold.pos_gr;
+	$scope.pos_pr_old = Simulateurold.pos_pr;
 	$scope.vueDeFace = function() { Simu.vueDeFace(); }
 	$scope.vueDeDessus = function() { Simu.vueDeDessus(); }
 	$scope.vueDeDerriere = function() { Simu.vueDeDerriere(); }
