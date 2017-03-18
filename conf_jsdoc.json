@@ -4,7 +4,19 @@
         "dictionaries": ["jsdoc","closure"]
     },
     "source": {
-        "include": ["package.json", "README.md", "utcoupe", "server", "config.js", "ia", "clients/gr", "clients/pr", "clients/shared", "simulateur/afficheur", "simulateur"],
+        "include": [
+            "package.json",
+            "README.md",
+            "utcoupe",
+            "server",
+            "config.js",
+            "ia",
+            "clients/gr",
+            "clients/pr",
+            "clients/shared",
+            "simulateur/afficheur",
+            "simulateur",
+            "webclient/pages/simulateur/simulateur.js"],
         "includePattern": ".+\\.js(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_"
     },

@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>UTCoupe 17 Source: clients/gr/servos.class.js</title>
+	<title>UTCoupe 17 Source: webclient/pages/simulateur/simulateur.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -54,7 +54,7 @@
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html#convertir_dist">convertir_dist</a></li><li><a href="global.html#getParsedJSONFromFile">getParsedJSONFromFile</a></li><li><a href="global.html#PATH_MAX_POINTS">PATH_MAX_POINTS</a></li>
+					<li><a href="global.html#convertir_dist">convertir_dist</a></li><li><a href="global.html#convertPosNew">convertPosNew</a></li><li><a href="global.html#getParsedJSONFromFile">getParsedJSONFromFile</a></li><li><a href="global.html#PATH_MAX_POINTS">PATH_MAX_POINTS</a></li><li><a href="global.html#updatePr">updatePr</a></li>
 				</ul>
 			</li>
 			
@@ -86,104 +86,90 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: clients/gr/servos.class.js</h1>
+		<h1 class="page-title">Source: webclient/pages/simulateur/simulateur.js</h1>
     
 <section>
     <article>
         <pre
             class="sunlight-highlight-javascript linenums">/**
- * Servos module
- * 
- * @module clients/gr/servos
- * @see {@link clients/gr/servos.Servos}
- * @see module:clients/gr/servos-simu
+ * @file Fichier permettant de faire le lien entre le webclient et le simulateur
  */
+//"use strict"; Utile ?
 
-module.exports = (function () {
-	var log4js = require('log4js');
-	var logger = log4js.getLogger('gr.servos');
-	var five = require("johnny-five");
-	/** @type {Object} */
-	var board = null;
-	/** @type {Object} */
-	var servo_gauche, servo_droit;
+angular.module('app').controller('SimulateurCtrl', ['$rootScope', '$scope', 'Client', 'Simulateur',
+	function($rootScope, $scope, Client, Simulateur) {
+	$rootScope.act_page = 'simulateur';
+    Simulateur.controllerSimu = new Controller("3dobjects.json", "../simulateur/");
+    Simulateur.controllerSimu.createRenderer();
+    Simulateur.controllerSimu.loadParameters();
+	//$scope.pos_gr = controllerSimu.get("gr_jaune").position;
+	//$scope.rot_gr = controllerSimu.get("gr_jaune").rotation.y/Math.PI*180;
+	Simulateur.pos_pr = new Position(0, 0);
+	Simulateur.rot_pr = new Position(0, 0);
+	$scope.pos_gr = Simulateur.pos_pr;
+	$scope.rot_gr = Simulateur.rot_pr;
+	$scope.vueDeFace = function() { Simulateur.controllerSimu.selectView("front"); }
+	$scope.vueDeDessus = function() { Simulateur.controllerSimu.selectView("top"); }
+    $scope.vueDeDerriere = function() { Simulateur.controllerSimu.selectView("behind"); }
+	$scope.vueDeGauche = function() { Simulateur.controllerSimu.selectView("left"); }
+	$scope.vueDeDroite = function() { Simulateur.controllerSimu.selectView("right"); }
+	$scope.iaJack = function() { Client.send("ia", "ia.jack"); }
+	$scope.iaPlacerPr = function() { Client.send("ia", "pr.placer"); }
+	$scope.iaCollisionPr = function() { Client.send("ia", "pr.collision"); }
+	$scope.iaStop = function() { Client.send("ia", "ia.stop"); }
+}]);
 
-	/**
-	 * Servos Constructors
-	 * 
-	 * @exports clients/gr/servos.Servos
-	 * @constructor
-	 * @param {string} sp Server port
-	 * @param {Object} sendStatus
-	 */
-	function Servos(sp, sendStatus) {
-		/** @type {boolean} */
-		this.ready = false;
-		/** @type {Object} */
-		this.sendStatus = sendStatus;
-		this.connect(sp);
-	}
+/**
+ * Convertit la position indiquée par l'ia en celle du simulateur
+ * 
+ * @param {Object} pos Position sent by the IA
+ * @param {Number} pos.x
+ * @param {Number} pos.y
+ * @returns {{x: Number, z: Number}}
+ */
+function convertPosNew(pos) {
+	var act_pos = {};
+	act_pos.x = pos.x + 1.5;
+	act_pos.z = pos.y + 1; // oui c'est logique !!!
+	return act_pos;
+}
 
-	/**
-	 * Connect
-	 * 
-	 * @param {string} sp Server port
-	 */
-	Servos.prototype.connect = function(sp) {
-		board = new five.Board({
-			port: sp,
-			repl: false
+/**
+ * Met à jour les paramètres du PR avec les données envoyées par l'IA
+ * 
+ * @param {Object} data_pr Data for the PR sent by the IA
+ * @param {Number} data_pr.x
+ * @param {Number} data_pr.y
+ * @param {Number} data_pr.a
+ */
+function updatePr(data_pr, Simulateur)
+{
+	if(data_pr.x &amp;&amp; Simulateur.controllerSimu.objects3d.has("pr_jaune"))
+	{
+		act_pos = convertPosNew(data_pr);
+		position = new Position(act_pos.x, 0, act_pos.z);
+		rotation = new Position(0, data_pr.a, 0);
+		Simulateur.controllerSimu.objects3d.get("pr_jaune").updateParams ({
+			pos: position,
+			rotation: rotation
 		});
+		Simulateur.pos_pr = Simulateur.controllerSimu.objects3d.get("pr_jaune").position;
+		Simulateur.rot_pr = Simulateur.controllerSimu.objects3d.get("pr_jaune").rotation;
+	}
+}
 
-		board.on("ready", function() {
-			logger.info("Board servos Ready");
-			servo_gauche = new five.Servo(2);
-			servo_droit = new five.Servo(3);
-			this.ready = true;
-			this.sendStatus();
-			this.acheter();
+angular.module('app').service('Simulateur', ['$rootScope', 'Client', function($rootScope, Client) {
+	this.init = function () {
+		Client.order(function (from, name, data) {
+			if(name == 'simulateur' &amp;&amp; $rootScope.act_page == 'simulateur') {
+				// Met à jour le pr (s'il existe)
+				updatePr(data.robots.pr, this);
+				$rootScope.$apply();
+			}
 		}.bind(this));
 	};
-
-	/**
-	 * Acheter
-	 * 
-	 * @param {Object} callback
-	 */
-	Servos.prototype.acheter = function(callback) {
-		servo_gauche.to(170);
-		servo_droit.to(0);
-		setTimeout(callback, 500);
-	};
-	/**
-	 * Vendre
-	 * 
-	 * @param {Object} callback
-	 */
-	Servos.prototype.vendre = function(callback) {
-		servo_gauche.to(50);
-		servo_droit.to(120);
-		setTimeout(function(){ // remontée lente
-			servo_gauche.to(100, 1000);
-			servo_droit.to(70, 1000);
-		}, 500);
-		setTimeout(function(){
-			servo_gauche.to(50);
-			servo_droit.to(120);
-		}, 2000);
-		setTimeout(function(){ // remontée lente
-			servo_gauche.to(100, 1000);
-			servo_droit.to(70, 1000);
-		}, 2500);
-		setTimeout(function(){
-			servo_gauche.to(50);
-			servo_droit.to(120);
-		}, 4000);
-		setTimeout(callback, 6000);
-	};
-
-	return Servos;
-})();</pre>
+}]);
+</pre>
     </article>
 </section>
 
@@ -228,7 +214,7 @@ module.exports = (function () {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on Sat Jan 28th 2017
+		on Sat Mar 18th 2017
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
