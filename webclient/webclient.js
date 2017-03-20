@@ -31,6 +31,4 @@ angular.module('app').controller('MenuCtrl', ['$scope', function($scope) {
 	
 }]);
 
-var controllerSimu;
-
 angular.module('app').service('Client', SocketWebclient);

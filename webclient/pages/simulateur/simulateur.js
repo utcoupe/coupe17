@@ -9,12 +9,12 @@ angular.module('app').controller('SimulateurCtrl', ['$rootScope', '$scope', 'Cli
     Simulateur.controllerSimu = new Controller("3dobjects.json", "../simulateur/");
     Simulateur.controllerSimu.createRenderer();
     Simulateur.controllerSimu.loadParameters();
-	//$scope.pos_gr = controllerSimu.get("gr_jaune").position;
-	//$scope.rot_gr = controllerSimu.get("gr_jaune").rotation.y/Math.PI*180;
+	//$scope.pos_gr = Simulateur.controllerSimu.objects3d.get("gr_jaune").position;
+	//$scope.rot_gr = Simulateur.controllerSimu.objects3d.get("gr_jaune").rotation.y/Math.PI*180;
 	Simulateur.pos_pr = new Position();
 	Simulateur.rot_pr = new Position();
-	$scope.pos_gr = Simulateur.pos_pr;
-	$scope.rot_gr = Simulateur.rot_pr;
+	$scope.pos_pr = Simulateur.pos_pr;
+	$scope.rot_pr = Simulateur.rot_pr;
 	$scope.vueDeFace = function() { Simulateur.controllerSimu.selectView("front"); }
 	$scope.vueDeDessus = function() { Simulateur.controllerSimu.selectView("top"); }
     $scope.vueDeDerriere = function() { Simulateur.controllerSimu.selectView("behind"); }
@@ -23,7 +23,12 @@ angular.module('app').controller('SimulateurCtrl', ['$rootScope', '$scope', 'Cli
 	$scope.iaJack = function() { Client.send("ia", "ia.jack"); }
 	$scope.iaPlacerPr = function() { Client.send("ia", "pr.placer"); }
 	$scope.iaCollisionPr = function() { Client.send("ia", "pr.collision"); }
-	$scope.iaStop = function() { Client.send("ia", "ia.stop"); }
+	$scope.iaStop = function() { Client.send("ia", "ia.stop");}
+	
+	Simulateur.updateInterface = function() {
+		$scope.pos_pr = Simulateur.pos_pr;
+		$scope.rot_pr = Simulateur.rot_pr;
+	}
 }]);
 
 /**
@@ -63,6 +68,7 @@ function updatePr(data_pr, Simulateur)
 		
 		Simulateur.pos_pr = Simulateur.controllerSimu.objects3d.get("pr_jaune").position;
 		Simulateur.rot_pr = Simulateur.controllerSimu.objects3d.get("pr_jaune").rotation;
+		Simulateur.updateInterface();
 	}
 }
 
