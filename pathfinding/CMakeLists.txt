@@ -4,37 +4,18 @@ project(pathfinding)
 
 FIND_PACKAGE(Boost REQUIRED)
 SET(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Werror")
+SET(TCLAP_INCLUDE_DIR ../libs/tclap-1.2.1/include)
 
-set(EXECUTABLE_OUTPUT_PATH bin/)
-set(EXEC_NAME pathfinding)
-set(TEST_MAP_EXEC_NAME test_map)
+SET(EXECUTABLE_OUTPUT_PATH bin/)
 
-file(
-	GLOB_RECURSE
-	lib_files
-	src/lib/*
-)
+file(GLOB_RECURSE LIBRARIES_SOURCES src/lib/*)
+file(GLOB_RECURSE SOURCE_FILES	src/main.cpp)
+include_directories(${TCLAP_INCLUDE_DIR})
 
-file(
-	GLOB_RECURSE
-	executable_file
-	src/main.cpp
-)
+add_executable(${PROJECT_NAME} ${LIBRARIES_SOURCES} ${SOURCE_FILES})
 
-file(
-	GLOB_RECURSE
-	test_map
-	src/test/map_test.cpp
-)
+# Test_map binary
 
-add_executable(
-	${EXEC_NAME}
-	${lib_files}
- 	${executable_file}
-)
-
-add_executable(
-	${TEST_MAP_EXEC_NAME}
-	${lib_files}
-	${test_map}
-)
+SET(TEST_MAP_EXEC_NAME test_map)
+file(GLOB_RECURSE TEST_SOURCE_FILES	src/test/map_test.cpp)
+add_executable(${TEST_MAP_EXEC_NAME} ${LIBRARIES_SOURCES} ${TEST_SOURCE_FILES})
