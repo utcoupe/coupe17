@@ -2,27 +2,55 @@
 #include <vector>
 #include <time.h>
 
+#include <tclap/CmdLine.h>
+
 #include "lib/map.hpp"
 
-#define DEBUG 1
-#define RENDER_BMP 1
 #define FAILED_STR "FAIL\n"
 
 using namespace std;
+using namespace TCLAP;
 
+// Declaration of command line options
+bool debugFlag = false;
+bool bmpRenderingFlag = false;
+string mapPath = "";
+heuristic_type heuristicMode = NORM1;
+
+/**
+ * Parse the command line options and sets the corresponding global variables.
+ * @param argc The number of command line arguments
+ * @param argv The array of command line arguments
+ */
+void parseOptions(int argc, char** argv);
+
+
+/*
+ * Communication protocol between the IA and the pathfinding
+ * cmd;x1;y1;x2;y2;....
+ * Cmd =
+ *  C : compute a path (args are x_start:y_start;x_end;y_end)
+ *  D : refresh the internal dynamic objects (x;y;radius)
+ * The pathfinding answers a computing command with the valid path found,
+ * with respect of the format : x_start;y_start;x1;y1;...;x_end;y_end;path_length
+ */
+
+// correspond to a moving robot, we know its position (x,y) and its radius (r)
 typedef struct dynamic_object {
 	int x, y, r;
 } dynamic_object;
 
+// check if we are in the map
 inline bool is_valid(int x, int y, MAP &map) {
 	return x >= 0 && x < map.get_map_w() && y >= 0 && y < map.get_map_h();
 }
 
+// remove the dynamic objects in the MAP and add the one given by command
 void command_add_dynamic(string& command, MAP &map) {
 	vector<dynamic_object> objs;
 	command = command.substr(2);
 #if DEBUG
-	cerr << "Objects this time :" << endl;
+	cout << "Objects this time :" << endl;
 #endif
 	while (command.find(';') != string::npos) {
 		dynamic_object obj;
@@ -32,7 +60,7 @@ void command_add_dynamic(string& command, MAP &map) {
 		command = command.substr(command.find(';')+1);
 		command = command.substr(command.find(';')+1);
 #if DEBUG
-		cerr << obj.x << ":" << obj.y << ":" << obj.r << endl;
+		cout << obj.x << ":" << obj.y << ":" << obj.r << endl;
 #endif
 	}
 	map.clear_dynamic_barriers();
@@ -64,6 +92,8 @@ string command_calc_path(string& command, MAP &map) {
 	double distance;
 	stringstream answer;
 
+    // Get the initial and end point and search the nearest valid point
+
 	command = command.substr(2);
 	if (sscanf(command.c_str(), "%i;%i;%i;%i", &x_s, &y_s, &x_e, &y_e) < 4) {
 		cerr << "Did not parse the input correctly" << endl;
@@ -85,20 +115,24 @@ string command_calc_path(string& command, MAP &map) {
 	start_valid = map.find_nearest_valid(start);
 
 #if DEBUG
-	cerr << "Start : " << start_valid[0] << ":" << start_valid[1] << endl;
-	cerr << "End : " << end_valid[0] << ":" << end_valid[1] << endl;
+	cout << "Start : " << start_valid[0] << ":" << start_valid[1] << endl;
+	cout << "End : " << end_valid[0] << ":" << end_valid[1] << endl;
 	clock_t t = clock();
 #endif
+
+    // Ask the map to compute the path between the start and the end
 
 	map.solve(start_valid, end_valid);
 	if (!map.solved()) {
 		cerr << "Could not find any path" << endl;
 		return FAILED_STR;
 	}
+    // Transform the path to be smoother
 	map.solve_smooth();
+    // Get the result path
 	path = map.get_smooth_solution();
 	distance = map.get_smooth_solution_length();
-
+    // Check if the path is valid
 	if (start != start_valid) {
 		path.insert(path.begin(), start);
 		distance += euclidean_heuristic(start)(start_valid);
@@ -107,14 +141,14 @@ string command_calc_path(string& command, MAP &map) {
 		path.push_back(end);
 		distance += euclidean_heuristic(end)(end_valid);
 	}
-
+    // Create the string representing the path
 	for (auto &point: path) {
 		answer << point[0] << ";" << point[1] << ";";
 	}
 	answer << distance << endl;
 #if DEBUG
-	cerr << "Path contains " << path.size() << " points, total distance = " << distance << endl;
-	cerr << "Computing time : " << double(clock() - t)/CLOCKS_PER_SEC << endl;
+	cout << "Path contains " << path.size() << " points, total distance = " << distance << endl;
+	cout << "Computing time : " << double(clock() - t)/CLOCKS_PER_SEC << endl;
 #if RENDER_BMP
 	map.generate_bmp("tmp.bmp");
 #endif
@@ -123,6 +157,11 @@ string command_calc_path(string& command, MAP &map) {
 }
 
 int main(int argc, char **argv) {
+    // Parse the command line options
+    parseOptions(argc,argv);
+
+
+    //todo with a real parser
 	if (argc < 2) {
 		cerr << "$0 map.bmp, exit the program" << endl;
         return -1;
@@ -137,17 +176,20 @@ int main(int argc, char **argv) {
 			case 'n':
 			mode = NORM1;
 			break;
+            default:
+                cout << "Mode value isn't correct, use the default heuristic mode (Norm1)" << endl;
+            break;
 		}
 	}
 
 #if DEBUG
-	cerr << "Loading map " << argv[1] << endl;
+	cout << "Loading map " << argv[1] << endl;
 	switch (mode) {
 		case EUCLIDEAN:
-		cerr << "Using euclidean heuristic" << endl;
+            cout << "Using euclidean heuristic" << endl;
 		break;
 		case NORM1:
-		cerr << "Using norm1 heuristic" << endl;
+            cout << "Using norm1 heuristic" << endl;
 		break;
 	}
 #endif
@@ -155,11 +197,10 @@ int main(int argc, char **argv) {
 	MAP map(path);
 	map.set_heuristic_mode(mode);
 #if DEBUG
-	cerr << "Done, map size is : " << map.get_map_w() 
+	cout << "Done, map size is : " << map.get_map_w()
 			<< "x" << map.get_map_h() << endl;
 #endif
 	while (std::cin.good()) {
-//    while (1) {
 		string command, answer;
 		cin >> command;
 		switch (command[0]) {
@@ -177,4 +218,31 @@ int main(int argc, char **argv) {
 		}
 	}
     cout << "Communication with system failed, stop the pathfinding" << endl;
+}
+
+void parseOptions(int argc, char** argv) {
+    try {
+        CmdLine cmd("Command description message", ' ', "0.1");
+
+        ValueArg<string> mapArg("m","map","Path to the map used to compute pathfinding.",true,"","string");
+        cmd.add(mapArg);
+
+        ValueArg<uint8_t> heuristicArg("h","heuristic","Heuristic mode for pathfinding computing (EUCLIDIEAN = 0, NORM1 = 1).",false,1,"uint8_t");
+        cmd.add(heuristicArg);
+
+        ValueArg<bool> debugArg("d","debug","Set the debug flag.",false,false,"bool");
+        cmd.add(debugArg);
+
+        ValueArg<bool> renderingArg("r","rendering","Set the rendering flag.",false,false,"bool");
+        cmd.add(renderingArg);
+
+        cmd.parse(argc, argv);
+
+        mapPath = mapArg.getValue();
+        heuristicMode = (heuristic_type)heuristicArg.getValue();
+        debugFlag = debugArg.getValue();
+        bmpRenderingFlag = renderingArg.getValue();
+    } catch (ArgException &e) { // catch any exceptions
+        cerr << "error: " << e.error() << " for arg " << e.argId() << endl;
+    }
 }
