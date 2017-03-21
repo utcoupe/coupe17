@@ -23,7 +23,8 @@
   "scripts": {
     "utcoupe": "node utcoupe/utcoupe.js",
     "serve": "http-server",
-    "doc": "node_modules/.bin/jsdoc -c conf_jsdoc.json"
+    "doc": "node_modules/.bin/jsdoc -c conf_jsdoc.json",
+    "postinstall": "cd pathfinding && ./make.sh"
   },
   "repository": {
     "type": "git",
