@@ -124,7 +124,8 @@ string command_calc_path(string& command, MAP &map) {
 
 int main(int argc, char **argv) {
 	if (argc < 2) {
-		cerr << "$0 map.bmp" << endl;
+		cerr << "$0 map.bmp, exit the program" << endl;
+        return -1;
 	} 
 
 	heuristic_type mode = NORM1;
@@ -157,7 +158,8 @@ int main(int argc, char **argv) {
 	cerr << "Done, map size is : " << map.get_map_w() 
 			<< "x" << map.get_map_h() << endl;
 #endif
-	while (1) {
+	while (std::cin.good()) {
+//    while (1) {
 		string command, answer;
 		cin >> command;
 		switch (command[0]) {
@@ -174,4 +176,5 @@ int main(int argc, char **argv) {
 			break;
 		}
 	}
+    cout << "Communication with system failed, stop the pathfinding" << endl;
 }
