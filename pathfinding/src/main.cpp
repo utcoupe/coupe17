@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <time.h>
 
 #include <tclap/CmdLine.h>
 
@@ -160,31 +159,9 @@ int main(int argc, char **argv) {
     // Parse the command line options
     parseOptions(argc,argv);
 
-
-    //todo with a real parser
-    if (argc < 2) {
-        cerr << "$0 map.bmp, exit the program" << endl;
-        return -1;
-    }
-
-    heuristic_type mode = NORM1;
-    if (argc >= 3) {
-        switch(argv[2][0]) {
-            case 'e':
-                mode = EUCLIDEAN;
-                break;
-            case 'n':
-                mode = NORM1;
-                break;
-            default:
-                cout << "Mode value isn't correct, use the default heuristic mode (Norm1)" << endl;
-                break;
-        }
-    }
-
     if (debugFlag) {
-        cout << "Loading map " << argv[1] << endl;
-        switch (mode) {
+        cout << "Loading map " << mapPath << endl;
+        switch (heuristicMode) {
             case EUCLIDEAN:
                 cout << "Using euclidean heuristic" << endl;
                 break;
@@ -193,9 +170,8 @@ int main(int argc, char **argv) {
                 break;
         }
     }
-    string path = string(argv[1]);
-    MAP map(path);
-    map.set_heuristic_mode(mode);
+    MAP map(mapPath);
+    map.set_heuristic_mode(heuristicMode);
     if (debugFlag) {
         cout << "Done, map size is : " << map.get_map_w()
              << "x" << map.get_map_h() << endl;
