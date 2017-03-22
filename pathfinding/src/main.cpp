@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <chrono>
 
 #include <tclap/CmdLine.h>
 
@@ -90,6 +91,8 @@ string command_calc_path(string& command, MAP &map) {
     vector<vertex_descriptor> path;
     double distance;
     stringstream answer;
+    chrono::time_point <chrono::system_clock> startChrono, endChrono;
+    chrono::duration<double> elapsedSeconds;
 
     // Get the initial and end point and search the nearest valid point
 
@@ -116,7 +119,7 @@ string command_calc_path(string& command, MAP &map) {
     if (debugFlag) {
         cout << "Start : " << start_valid[0] << ":" << start_valid[1] << endl;
         cout << "End : " << end_valid[0] << ":" << end_valid[1] << endl;
-        clock_t t = clock();
+        startChrono = chrono::system_clock::now();
     }
 
     // Ask the map to compute the path between the start and the end
@@ -146,8 +149,10 @@ string command_calc_path(string& command, MAP &map) {
     }
     answer << distance << endl;
     if (debugFlag) {
+        endChrono = chrono::system_clock::now();
+        elapsedSeconds = endChrono - startChrono;
         cout << "Path contains " << path.size() << " points, total distance = " << distance << endl;
-        cout << "Computing time : " << double(clock() - t)/CLOCKS_PER_SEC << endl;
+        cout << "Computing time : " << elapsedSeconds.count() << endl;
         if (bmpRenderingFlag) {
             map.generate_bmp("tmp.bmp");
         }
