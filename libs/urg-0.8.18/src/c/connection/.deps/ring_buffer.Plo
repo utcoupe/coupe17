@@ -1,0 +1,5 @@
+ring_buffer.lo: ring_buffer.c /usr/include/stdc-predef.h ring_buffer.h
+
+/usr/include/stdc-predef.h:
+
+ring_buffer.h:

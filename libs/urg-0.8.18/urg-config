@@ -1,0 +1,30 @@
+#!/bin/sh
+
+prefix=/usr/local
+
+usage="Usage: urg-config [--version] [--cflags] [--libs]"
+
+if test $# -eq 0; then
+      echo "${usage}" 1>&2
+      exit 1
+fi
+
+while test $# -gt 0; do
+
+  case $1 in
+    --version)
+      echo "0.8.18"
+      ;;
+    --cflags)
+      echo -I${prefix}/include/urg
+      ;;
+    --libs)
+      echo -lurg_monitor -lurg -lurg_coordinate -lurg_geometry -lurg_connection -lurg_connection_sdl -lurg_common -lurg_system -lm
+      ;;
+    *)
+      echo "${usage}" 1>&2
+      exit 1
+      ;;
+  esac
+  shift
+done
