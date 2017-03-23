@@ -4,32 +4,32 @@
 //"use strict"; Utile ?
 
 angular.module('app').controller('SimulateurCtrl', ['$rootScope', '$scope', 'Client', 'Simulateur',
-	function($rootScope, $scope, Client, Simulateur) {
-	$rootScope.act_page = 'simulateur';
-    Simulateur.controllerSimu = new Controller("3dobjects.json", "../simulateur/");
-    Simulateur.controllerSimu.createRenderer();
-    Simulateur.controllerSimu.loadParameters();
-	//$scope.pos_gr = Simulateur.controllerSimu.objects3d.get("gr_jaune").position;
-	//$scope.rot_gr = Simulateur.controllerSimu.objects3d.get("gr_jaune").rotation.y/Math.PI*180;
-	Simulateur.pos_pr = new Position();
-	Simulateur.rot_pr = new Position();
-	$scope.pos_pr = Simulateur.pos_pr;
-	$scope.rot_pr = Simulateur.rot_pr;
-	$scope.vueDeFace = function() { Simulateur.controllerSimu.selectView("front"); }
-	$scope.vueDeDessus = function() { Simulateur.controllerSimu.selectView("top"); }
-    $scope.vueDeDerriere = function() { Simulateur.controllerSimu.selectView("behind"); }
-	$scope.vueDeGauche = function() { Simulateur.controllerSimu.selectView("left"); }
-	$scope.vueDeDroite = function() { Simulateur.controllerSimu.selectView("right"); }
-	$scope.iaJack = function() { Client.send("ia", "ia.jack"); }
-	$scope.iaPlacerPr = function() { Client.send("ia", "pr.placer"); }
-	$scope.iaCollisionPr = function() { Client.send("ia", "pr.collision"); }
-	$scope.iaStop = function() { Client.send("ia", "ia.stop");}
-	
-	Simulateur.updateInterface = function() {
-		$scope.pos_pr = Simulateur.pos_pr;
-		$scope.rot_pr = Simulateur.rot_pr;
-	}
-}]);
+	function ($rootScope, $scope, Client, Simulateur) {
+		$rootScope.act_page = 'simulateur';
+		Simulateur.controllerSimu = new Controller("3dobjects.json", "../simulateur/");
+		Simulateur.controllerSimu.createRenderer();
+		Simulateur.controllerSimu.loadParameters();
+		$scope.pos_pr = new Position();
+		$scope.rot_pr = new Position();
+		$scope.pos_gr = new Position();
+		$scope.rot_gr = new Position();
+		$scope.vueDeFace = function () { Simulateur.controllerSimu.selectView("front"); }
+		$scope.vueDeDessus = function () { Simulateur.controllerSimu.selectView("top"); }
+		$scope.vueDeDerriere = function () { Simulateur.controllerSimu.selectView("behind"); }
+		$scope.vueDeGauche = function () { Simulateur.controllerSimu.selectView("left"); }
+		$scope.vueDeDroite = function () { Simulateur.controllerSimu.selectView("right"); }
+		$scope.iaJack = function () { Client.send("ia", "ia.jack"); }
+		$scope.iaPlacerPr = function () { Client.send("ia", "pr.placer"); }
+		$scope.iaCollisionPr = function () { Client.send("ia", "pr.collision"); }
+		$scope.iaStop = function () { Client.send("ia", "ia.stop"); }
+
+		Simulateur.updateInterface = function () {
+			$scope.pos_pr = Simulateur.controllerSimu.objects3d.get("pr_jaune").position;
+			$scope.rot_pr = Simulateur.controllerSimu.objects3d.get("pr_jaune").rotation;
+			$scope.pos_gr = Simulateur.controllerSimu.objects3d.get("gr_jaune").position;
+			$scope.rot_gr = Simulateur.controllerSimu.objects3d.get("gr_jaune").rotation;
+		}
+	}]);
 
 /**
  * Convertit la position indiquée par l'ia en celle du simulateur
@@ -49,35 +49,33 @@ function convertPosNew(pos) {
 /**
  * Met à jour les paramètres du PR avec les données envoyées par l'IA
  * 
- * @param {Object} data_pr Data for the PR sent by the IA
- * @param {Number} data_pr.x
- * @param {Number} data_pr.y
- * @param {Number} data_pr.a
+ * @param {Object} data_robot Data for the PR sent by the IA
+ * @param {Number} data_robot.x
+ * @param {Number} data_robot.y
+ * @param {Number} data_robot.a
+ * @param {String} type Type de Robot
  */
-function updatePr(data_pr, Simulateur)
-{
-	if(data_pr.x && Simulateur.controllerSimu.objects3d.has("pr_jaune"))
-	{
-		act_pos = convertPosNew(data_pr);
+function updatePr(data_robot, Simulateur, type) {
+	if (data_robot.x && Simulateur.controllerSimu.objects3d.has(type + "_jaune")) {
+		act_pos = convertPosNew(data_robot);
 		position = new Position(act_pos.x, 0, act_pos.z);
-		rotation = new Position(0, data_pr.a, 0);
-		Simulateur.controllerSimu.objects3d.get("pr_jaune").updateParams ({
+		rotation = new Position(0, data_robot.a, 0);
+		Simulateur.controllerSimu.objects3d.get(type + "_jaune").updateParams({
 			pos: position,
 			rotation: rotation
 		});
-		
-		Simulateur.pos_pr = Simulateur.controllerSimu.objects3d.get("pr_jaune").position;
-		Simulateur.rot_pr = Simulateur.controllerSimu.objects3d.get("pr_jaune").rotation;
 		Simulateur.updateInterface();
 	}
 }
 
-angular.module('app').service('Simulateur', ['$rootScope', 'Client', function($rootScope, Client) {
+angular.module('app').service('Simulateur', ['$rootScope', 'Client', function ($rootScope, Client) {
 	this.init = function () {
 		Client.order(function (from, name, data) {
-			if(name == 'simulateur' && $rootScope.act_page == 'simulateur') {
+			if (name == 'simulateur' && $rootScope.act_page == 'simulateur') {
 				// Met à jour le pr (s'il existe)
-				updatePr(data.robots.pr, this);
+				updatePr(data.robots.pr, this, "pr");
+				// Met à jour le gr (s'il existe)
+				updatePr(data.robots.gr, this, "gr");
 				$rootScope.$apply();
 			}
 		}.bind(this));
