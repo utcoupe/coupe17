@@ -1,0 +1,26 @@
+# Generated files
+*.o
+*.lo
+*.la
+Makefile
+.libs/
+.Po
+config.log
+config.h
+config.status
+
+# Generated exe
+libtool
+stamp-h1
+
+# Generated sample exe
+capture_sample
+convert_2d
+get_parameters
+get_timestamp
+get_version_lines
+intensity_sample
+md_scan
+multi_urg
+partial_scan
+gd_scan
