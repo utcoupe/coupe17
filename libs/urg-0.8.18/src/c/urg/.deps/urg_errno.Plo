@@ -1,5 +1,0 @@
-urg_errno.lo: urg_errno.c /usr/include/stdc-predef.h urg_errno.h
-
-/usr/include/stdc-predef.h:
-
-urg_errno.h:
