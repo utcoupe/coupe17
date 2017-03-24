@@ -1,3 +1,11 @@
+/*
+
+Je suis désolé pour ce code très très moche... J'étais jeune et insouciant O:)
+Mewen - 03/2017
+
+*/
+
+
 angular.module('app').controller('ReseauCtrl', ['$rootScope', '$scope', 'Reseau',
 	function($rootScope, $scope, Reseau) {
 	$rootScope.act_page = 'reseau';
@@ -43,6 +51,20 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		}
 	});
 
+	$(document).on("click", ".lidar", function(e) {
+		if(e.target.innerHTML == "yellow"){
+			Client.send("lidar", "start", {
+					"color": "yellow"
+				});
+		} else if(e.target.innerHTML == "blue"){
+			Client.send("lidar", "start", {
+					"color": "blue"
+				});
+		} else {
+			Client.send("lidar", "stop", {});
+		}
+	});
+
 
 	/* --------- Prints ------------- */
 		function addDiv (parentId, currentId, type, color, name, ip) {
@@ -85,25 +107,18 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		    }
 
 		    if(parentId == "clients" || parentId == "children"){
-		    	devClass = "";
-		    	switch (name){
-		    		case "Hokuyo":
-		    			devClass = "hokuyo";
-		    			break;
-		    		case "GR":
-		    			devClass = "gr";
-		    			break;
-		    		case "PR":
-		    			devClass = "pr";
-		    			break;
-		    	}
+		    	devClass = name.toLowerCase();
 		    	
 		    	if(color == "waiting"){
 		    		// Hok params
-		    		if(devClass == "lidar")
-		    			newDiv.innerHTML += "<select id='rc_hok_color'> <option value='green' selected>vert</option> <option value='yellow'>jaune</option> </select>";
+		    		if(devClass == "lidar"){
+		    			// newDiv.innerHTML += "<select id='rc_hok_color'> <option value='green' selected>vert</option> <option value='yellow'>jaune</option> </select>";
+			        	newDiv.innerHTML += "Start : <button type='button' class='btn "+devClass+" yellow'>yellow</button>";
+			        	newDiv.innerHTML += "<button type='button' class='btn "+devClass+" blue'>blue</button>";
+		    		} else {
+			        	newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Start</button>";
+		    		}
 
-			        newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Start</button>";
 
 		    		if(devClass == "hokuyo")
 		    			newDiv.innerHTML += "<button type='button' class='btn hokuyo'>Shutdown</button><br>";

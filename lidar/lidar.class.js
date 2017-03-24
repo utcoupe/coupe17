@@ -108,6 +108,7 @@ module.exports = (function () {
 		this.color = color;
 		this.started = true;
 		this.changeStatus("error");		// as far as we do not receive hokuyo data
+		logger.info("Started as " + this.color);
 	};
 
 	Lidar.prototype.stop = function() {

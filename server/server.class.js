@@ -73,6 +73,7 @@ module.exports = (function () {
 			'ia': null,
 			'pr': null,
 			'gr': null,
+			'lidar': null,
 			'hokuyo': false
 		}
 
@@ -193,6 +194,9 @@ module.exports = (function () {
 				break;
 				case 'hokuyo': //todo generic path witg utcoupe_workspace
 					this.progs[prog] = spawn('node', ['/home/pi/coupe17/hokuyo/client_hok.js']);
+				break;
+				case 'lidar':
+					this.progs[prog] = spawn('node', ['./lidar/main.js'/*, params.color, params.nb_erobots, params.EGR_d, params.EPR_d*/]);
 				break;
 			}
 

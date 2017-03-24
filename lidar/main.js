@@ -7,7 +7,7 @@
 	var server = require('../config.js').server;
 	var Lidar = require('./lidar.class.js');
 
-	var server = process.argv[2] || server;
+	var argv = process.argv;
 
 	var client = new SocketClient({
 		server_ip: server,
@@ -33,56 +33,56 @@
 
 	client.connect(function(){
 
-		setTimeout(function() {
-			client.send("lidar", "start", {
-				color: "yellow"
-			}); // TMP
-		}, 300);
+		// setTimeout(function() {
+		// 	client.send("lidar", "start", {
+		// 		color: "yellow"
+		// 	}); // TMP
+		// }, 300);
 
-		setTimeout(function() {
-			client.send("lidar", "hokuyo.polar_raw_data", {
-				hokuyo: "one",
-				polarSpots: [
-					[ -40, 200 ],
-					[ -35, 200 ],
-					[ -30, 200 ],
-					[ -25, 230 ],
-					[ -20, 100 ],
-					[ -15, 105 ],
-					[ -5, 120 ],
-					[ 0, 100 ],
-					[ 5, 90 ],
-					[ 10, 95 ],
-					[ 15, 100 ],
-					[ 20, 100 ],
-					[ 25, 130 ],
-					[ 30, 135 ]
-				]
-			}); // TMP
-		}, 1000);
+		// setTimeout(function() {
+		// 	client.send("lidar", "hokuyo.polar_raw_data", {
+		// 		hokuyo: "one",
+		// 		polarSpots: [
+		// 			[ -40, 200 ],
+		// 			[ -35, 200 ],
+		// 			[ -30, 200 ],
+		// 			[ -25, 230 ],
+		// 			[ -20, 100 ],
+		// 			[ -15, 105 ],
+		// 			[ -5, 120 ],
+		// 			[ 0, 100 ],
+		// 			[ 5, 90 ],
+		// 			[ 10, 95 ],
+		// 			[ 15, 100 ],
+		// 			[ 20, 100 ],
+		// 			[ 25, 130 ],
+		// 			[ 30, 135 ]
+		// 		]
+		// 	}); // TMP
+		// }, 1000);
 
 
-		setTimeout(function() {
-			client.send("lidar", "hokuyo.polar_raw_data", {
-				hokuyo: "two",
-				polarSpots: [
-					[ -40, 155 ],
-					[ -30, 155 ],
-					[ -35, 150 ],
-					[ -25, 150 ],
-					[ -20, 100 ],
-					[ -15, 105 ],
-					[ -5, 120 ],
-					[ 0, 100 ],
-					[ 5, 90 ],
-					[ 10, 95 ],
-					[ 15, 100 ],
-					[ 20, 100 ],
-					[ 25, 230 ],
-					[ 30, 235 ]
-				]
-			}); // TMP
-		}, 1100);
+		// setTimeout(function() {
+		// 	client.send("lidar", "hokuyo.polar_raw_data", {
+		// 		hokuyo: "two",
+		// 		polarSpots: [
+		// 			[ -40, 155 ],
+		// 			[ -30, 155 ],
+		// 			[ -35, 150 ],
+		// 			[ -25, 150 ],
+		// 			[ -20, 100 ],
+		// 			[ -15, 105 ],
+		// 			[ -5, 120 ],
+		// 			[ 0, 100 ],
+		// 			[ 5, 90 ],
+		// 			[ 10, 95 ],
+		// 			[ 15, 100 ],
+		// 			[ 20, 100 ],
+		// 			[ 25, 230 ],
+		// 			[ 30, 235 ]
+		// 		]
+		// 	}); // TMP
+		// }, 1100);
 
 
 		client.order(function(from, name, params){
@@ -97,8 +97,7 @@
 				switch (name){
 					case "start":
 						if (!!params.color && !hokMng.started) {
-							logger.info("Receive order to start");
-							logger.warn("TODO : manage color & started ?");
+							// logger.info("Receive order to start");
 							hokMng.start(params.color);
 						} else if (hokMng.started) {
 							logger.error("Already started !");
@@ -114,12 +113,12 @@
 						}
 						break;
 					case "shutdown":
-						quitC("stop");
+						// quitC("stop");
 						spawn('sudo', ['halt']);
 						break;
 					case "stop":
 						hokMng.stop();
-						quitC("stop");
+						// quitC("stop");
 						break;
 					case "sync_git":
 						spawn('/root/sync_git.sh', [], {
