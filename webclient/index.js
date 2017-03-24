@@ -28,6 +28,7 @@ angular.module('app').service('UTCoupe', ['$rootScope', 'Client', function($root
 		'ia': false,
 		'pr': false,
 		'gr': false,
+		'lidar': false,
 		'hokuyo': false
 	};
 	this.init = function () {
@@ -37,6 +38,7 @@ angular.module('app').service('UTCoupe', ['$rootScope', 'Client', function($root
 				this.utcoupe.ia = data.ia;
 				this.utcoupe.gr = data.gr;
 				this.utcoupe.pr = data.pr;
+				this.utcoupe.lidar = data.lidar;
 				this.utcoupe.hokuyo = data.hokuyo;
 				if($rootScope.act_page == 'index') {
 					$rootScope.$apply();
