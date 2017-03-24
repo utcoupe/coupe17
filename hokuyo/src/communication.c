@@ -41,9 +41,9 @@ void pushData(Hok_t hok, long* data) {
     char type[10];
     char message[MAX_DATA*50];
     if (hok.c == 'c')
-        strcpy(type, "corner");
+        strcpy(type, "one");
     else
-        strcpy(type, "enemy");
+        strcpy(type, "two");
     int i = hok.imin;
     int fin;
     int mid = floor((float)(hok.imax-hok.imin)/3);
