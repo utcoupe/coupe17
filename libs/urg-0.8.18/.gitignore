@@ -2,9 +2,10 @@
 *.o
 *.lo
 *.la
-Makefile
-.libs/
-.Po
+*Makefile
+*.libs/
+*.Po
+*.Plo
 config.log
 config.h
 config.status
