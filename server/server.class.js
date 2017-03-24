@@ -191,8 +191,8 @@ module.exports = (function () {
 				case 'gr':
 					this.progs[prog] = spawn('node', ['./clients/gr/main.js']);
 				break;
-				case 'hokuyo':
-					this.progs[prog] = spawn('ssh', ['raspi', '/root/main.sh']);
+				case 'hokuyo': //todo generic path witg utcoupe_workspace
+					this.progs[prog] = spawn('node', ['/home/pi/coupe17/hokuyo/client_hok.js']);
 				break;
 			}
 
