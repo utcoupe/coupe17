@@ -100,7 +100,7 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		    	
 		    	if(color == "waiting"){
 		    		// Hok params
-		    		if(devClass == "hokuyo")
+		    		if(devClass == "lidar")
 		    			newDiv.innerHTML += "<select id='rc_hok_color'> <option value='green' selected>vert</option> <option value='yellow'>jaune</option> </select>";
 
 			        newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Start</button>";

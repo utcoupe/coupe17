@@ -1,6 +1,7 @@
 angular.module('app').controller('HokuyoCtrl', ['$rootScope', '$scope', 'Hokuyo',
 	function($rootScope, $scope, Hokuyo) {
-	// $rootScope.act_page = 'hokuyo';
+	$rootScope.act_page = 'hokuyo';
+
 	let changedTab = false;
 	if (Hokuyo.displays.one != null) {
 		changedTab = true;
