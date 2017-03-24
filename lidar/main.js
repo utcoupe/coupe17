@@ -4,9 +4,10 @@
 	var log4js = require('log4js');
 	var logger = log4js.getLogger('lidar');
 	var SocketClient = require('../server/socket_client.class.js');
+	var server = require('../config.js').server;
 	var Lidar = require('./lidar.class.js');
 
-	var server = process.argv[2] || config.server;
+	var server = process.argv[2] || server;
 
 	var client = new SocketClient({
 		server_ip: server,
@@ -15,38 +16,51 @@
 
 	var started = false;
 	// var nb_active_hokuyos = -1;
-	var lastStatus = {
-		"status": "waiting"
-	};
+	// var lastStatus = {
+	// 	"status": "starting"
+	// };
 	// sendChildren(lastStatus);
 
 	logger.info("Starting with pid " + process.pid);
 
 	var hokMng = new Lidar(function (name, params){
 		client.send("ia", name, params);
+	}, function (newStatus) {
+		sendChildren({
+			"status": newStatus
+		});
 	});
 
 	client.connect(function(){
 
-		client.send("lidar", "hokuyo.polar_raw_data", {
-			hokuyo: "one",
-			polarSpots: [
-				[ -40, 200 ],
-				[ -35, 200 ],
-				[ -30, 200 ],
-				[ -25, 230 ],
-				[ -20, 100 ],
-				[ -15, 105 ],
-				[ -5, 120 ],
-				[ 0, 100 ],
-				[ 5, 90 ],
-				[ 10, 95 ],
-				[ 15, 100 ],
-				[ 20, 100 ],
-				[ 25, 130 ],
-				[ 30, 135 ]
-			]
-		}); // TMP
+		setTimeout(function() {
+			client.send("lidar", "start", {
+				color: "yellow"
+			}); // TMP
+		}, 300);
+
+		setTimeout(function() {
+			client.send("lidar", "hokuyo.polar_raw_data", {
+				hokuyo: "one",
+				polarSpots: [
+					[ -40, 200 ],
+					[ -35, 200 ],
+					[ -30, 200 ],
+					[ -25, 230 ],
+					[ -20, 100 ],
+					[ -15, 105 ],
+					[ -5, 120 ],
+					[ 0, 100 ],
+					[ 5, 90 ],
+					[ 10, 95 ],
+					[ 15, 100 ],
+					[ 20, 100 ],
+					[ 25, 130 ],
+					[ 30, 135 ]
+				]
+			}); // TMP
+		}, 1000);
+
 
 		setTimeout(function() {
 			client.send("lidar", "hokuyo.polar_raw_data", {
@@ -68,47 +82,55 @@
 					[ 30, 235 ]
 				]
 			}); // TMP
-		}, 100);
+		}, 1100);
 
 
 		client.order(function(from, name, params){
-			if (name == 'hokuyo.polar_raw_data') {
-				hokMng.onHokuyoPolar(params.hokuyo, params.polarSpots);
-			}
+
 			// var now = Date.now();
 			// logger.info("Time since last order : "+(now - lastT));
 			// if (now - lastT > 500) { // half a second between two orders
-			//	logger.info("Just received an order `" + name + "` from " + from + " with params :");
-			//	logger.info(params);
+				logger.info("Just received an order `" + name + "` from " + from + " with params :");
+				logger.info(params);
 
-			//	lastT = now;
-			//	switch (name){
-			//		case "start":
-			//			if(!!params.color && !started) {
-			//				started = true;
-			//				logger.info("Receive order to start");
-			//				start(params.color);
-			//			} else
-			//				logger.error("ALready started or Missing parameters !");
-			//			break;
-			//		case "shutdown":
-			//			quitC("stop");
-			//			spawn('sudo', ['halt']);
-			//			break;
-			//		case "stop":
-			//			started = false;
-			//			quitC("stop");
-			//			break;
-			//		case "sync_git":
-			//			spawn('/root/sync_git.sh', [], {
-			//				detached: true
-			//			});
-			//			break;
-			//		default:
-			//			logger.warn("Name not understood : " + data);
-			//	}
+				// lastT = now;
+				switch (name){
+					case "start":
+						if (!!params.color && !hokMng.started) {
+							logger.info("Receive order to start");
+							logger.warn("TODO : manage color & started ?");
+							hokMng.start(params.color);
+						} else if (hokMng.started) {
+							logger.error("Already started !");
+						} else{
+							logger.error("Missing parameters !");
+						}
+						break;
+					case "hokuyo.polar_raw_data":
+						if (hokMng.started) {
+							hokMng.onHokuyoPolar(params.hokuyo, params.polarSpots);
+						} else {
+							logger.warn("Start the Lidar before sending data !");
+						}
+						break;
+					case "shutdown":
+						quitC("stop");
+						spawn('sudo', ['halt']);
+						break;
+					case "stop":
+						hokMng.stop();
+						quitC("stop");
+						break;
+					case "sync_git":
+						spawn('/root/sync_git.sh', [], {
+							detached: true
+						});
+						break;
+					default:
+						logger.warn("Name not understood : " + data);
+				}
 			// } else {
-			//	logger.warn("Received two orders too closely !");
+			// 	logger.warn("Received two orders too closely !");
 			// }
 		});
 	});
@@ -119,11 +141,6 @@
 	//		// logger.debug('The "data to append" was appended to file!');
 	//	});
 	// }
-
-	function start(color){
-
-		// sendChildren({"status": "starting"});
-	}
 
 	// function getStatus(){
 	//	var data = {
@@ -149,13 +166,11 @@
 	// }
 
 
-	// // Sends status to server
-	// function sendChildren(status){
-	//	lastStatus = status;
-
-	//	client.send("server", "server.childrenUpdate", lastStatus);
-	//	client.send("ia", "hokuyo.nb_hokuyo", { nb: nb_active_hokuyos });
-	// }
+	// Sends status to server
+	function sendChildren(status){
+		client.send("server", "server.childrenUpdate", status);
+		// client.send("ia", "hokuyo.nb_hokuyo", { nb: nb_active_hokuyos });
+	}
 
 	// function isOk(){
 	//	if(lastStatus.status != "waiting")
