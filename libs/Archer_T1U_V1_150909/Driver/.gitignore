@@ -5,5 +5,5 @@
 Module.symvers
 modules.order
 .tmp_versions/
-bin2sh
+bin2h
 mt7650u_sta_util.mod.c
