@@ -2,9 +2,9 @@
  * @file Gestion des objects 3d dans le simulateur
  * @author Mindstan
  * 
- * @requires {THREE}
- * @requires {THREE.ColladaLoader}
- * @requires {Position}
+ * @requires THREE
+ * @requires THREE.ColladaLoader
+ * @requires Position
  */
 
 "use strict";

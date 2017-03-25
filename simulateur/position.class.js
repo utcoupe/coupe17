@@ -1,8 +1,13 @@
+/**
+ * @file Classe permettant de travailler avec des coordonnées cartésiennes et angulaires dans l'espace
+ * @author Mindstan
+ * 
+ */
+
 "use strict";
 
 /**
  * Permet de travailler avec des coordonnées sur 3 dimensions
- * 
  */
 class Position
 {

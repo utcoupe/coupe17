@@ -2,10 +2,10 @@
  * @file Controlleur du simulateur
  * @author Mindstan
  * 
- * @requires {THREE}
- * @requires {THREE.OrbitControls}
- * @requires {Position}
- * @requires {Object3d}
+ * @requires THREE
+ * @requires THREE.OrbitControls
+ * @requires position
+ * @requires object3d
  */
 
 "use strict";
@@ -43,6 +43,7 @@ class Controller
     /**
      * Charge tous les paramètres
      * @see {@link Controller#configPath}
+     * @see {@link Controller#ressourcesPath}
      */
     loadParameters()
     {
@@ -56,6 +57,7 @@ class Controller
      * Crée tous les objets 3D passés en paramètres
      * 
      * @param {Array<Object>} objects liste de tous les objets à créer
+     * @see {@link Controller#ressourcesPath}
      */
     create3dObjects(objects)
     {
@@ -127,13 +129,15 @@ class Controller
      */
     createLights()
     {
-        var heightLights = 5;
+        var largeurTable = 2;
+        var longueurTable = 3;
+        var heightLights = 2;
         // Les lumières sont disposés haut-dessus des quattres coins du plateau, avec un offset de 1
         var posLights = [
-            new Position(-1, heightLights, -1),
-            new Position(4, heightLights, -1),
-            new Position(-1, heightLights, 3),
-            new Position(4, heightLights, 3)
+            new Position(-largeurTable/2, heightLights, -longueurTable/2),
+            new Position(largeurTable*3/2, heightLights, -longueurTable/2),
+            new Position(-largeurTable/2, heightLights, longueurTable*3/2),
+            new Position(largeurTable*3/2, heightLights, longueurTable*3/2)
         ];
 
         posLights.forEach(function(pos) {
@@ -141,12 +145,8 @@ class Controller
             light.position.set(pos.x, pos.y, pos.z);
             light.intensity = 0.5;
             this.directionLights.push(light);
+            this.scene.add(this.directionLights[this.directionLights.length - 1]);
         }, this);
-
-        for(var idLight = 0; idLight < this.directionLights.length; idLight++)
-        {
-            this.scene.add(this.directionLights[idLight]);
-        }
     }
 
     /**

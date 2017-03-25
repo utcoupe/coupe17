@@ -1,7 +1,6 @@
 Simulateur UTCoupe
 ==================
-1) Description des fichiers
----------------------------
+## 1) Description des fichiers
 Le simulateur utilise [Three.js](https://threejs.org/), qui est à minima supporté par la majorité des navigateurs en 2017. Cependant il est recommandé d'avoir un bon cpu car Three.js a tendance à être gourmand en ressources, particulièrement dans ce projet.
 
 Les objets du simulateurs sont chargés à partir de scènes exportées en Collada depuis Blender.
