@@ -18,25 +18,37 @@ class Controller
     /**
      * Constructeur du controlleur
      * 
-     * @param {String} configPath
-     * @param {String} ressourcesPath
+     * Prend en paramètre le chemin d'accès à la configuration et le chemin d'accès aux ressources.
+     * 
+     * @param {String} configPath Chemin d'accès au fichier de coniguration relatif à {@link Controller.ressourcesPath}
+     * @param {String} ressourcesPath Chemin d'accès aux ressources appelées par le simulateur
      */
     constructor (configPath, ressourcesPath)
     {
-        /** @type {String} */
+        /**
+         * Chemin d'accès au fichier contenant la configuration du simulateur.
+         * @see Controller#ressourcesPath
+         * @type {String}
+         */
         this.configPath = configPath;
 
-        /** @type {String} */
+        /**
+         * Chemin d'accès aux différentes ressources chargées par le simulateur.
+         * @type {String}
+         */
         this.ressourcesPath = ressourcesPath;
         
         // A charger dynamiquement du fichier
-        /** @type {String} */
+        /**
+         * Id de la balise qui contiendra le simulateur.
+         * @type {String}
+         * */
         this.container = document.getElementById("simulateur_container");
 
         /** @type {Map<Object3d>} */
         this.objects3d = new Map();
 
-        /** @type {Array<THREE.DirectionalLight>} */
+        /** @type {Array<external:THREE.DirectionalLight>} */
         this.directionLights = [];
     }
 
@@ -87,21 +99,21 @@ class Controller
         // largeur de la zone de rendu
 		var width = $('#simulateur_container').width();
 
-        /** @type {THREE.Scene} */
+        /** @type {external:THREE.Scene} */
         this.scene = new THREE.Scene();
-        /** @type {THREE.PerspectiveCamera} */
+        /** @type {external:THREE.PerspectiveCamera} */
         this.camera = new THREE.PerspectiveCamera(45,width/height,0.1,10);
 
-        /** @type {THREE.WebGLRenderer} */
+        /** @type {external:THREE.WebGLRenderer} */
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setSize(width, height);
 	    this.renderer.setClearColor(0x272525,0.5);
         this.container.appendChild(this.renderer.domElement);
 
-        /** @type {THREE.OrbitControls} */
+        /** @type {external:THREE.OrbitControls} */
         this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
 
-        /** @type {THREE.AxisHelper} */
+        /** @type {external:THREE.AxisHelper} */
         this.axisHelper = new THREE.AxisHelper(5);
         this.scene.add(this.axisHelper);
 

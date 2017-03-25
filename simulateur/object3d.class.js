@@ -26,7 +26,7 @@ class Object3d
         /** @type {String} */
         this.ressourcesPath = ressourcesPath;
 
-        /** @type {THREE.ColladaLoader} */
+        /** @type {external:THREE.ColladaLoader} */
         this.loader = new THREE.ColladaLoader();
         this.loader.options.convertUpAxis = true;
 
