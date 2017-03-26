@@ -40,7 +40,7 @@ void pushData(Hok_t hok, long* data) {
     }
     char type[10];
     char message[MAX_DATA*50];
-    if (hok.c == 'c')
+    if (hok.c == 'e')
         strcpy(type, "one");
     else
         strcpy(type, "two");
