@@ -32,7 +32,7 @@ cd $UTCOUPE_WORKSPACE/libs/urg-0.8.18
 ./configure && make && sudo make install
 
 # Archer driver for 5 GHz wifi
-cd $UTCOUPE_WORKSPACE/libs/Archer_T1U_V1_150909
+cd $UTCOUPE_WORKSPACE/libs/Archer_T1U_V1_150909/Driver
 sudo make && sudo make install
 #TODO add the ra0 interface in configuration files
 
