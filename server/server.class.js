@@ -192,8 +192,8 @@ module.exports = (function () {
 				case 'gr':
 					this.progs[prog] = spawn('node', ['./clients/gr/main.js']);
 				break;
-				case 'hokuyo': //todo generic path witg utcoupe_workspace
-					this.progs[prog] = spawn('node', ['/home/pi/coupe17/hokuyo/client_hok.js']);
+				case 'hokuyo':
+					this.progs[prog] = spawn('node', ['./hokuyo/client_hok.js']);
 				break;
 				case 'lidar':
 					this.progs[prog] = spawn('node', ['./lidar/main.js'/*, params.color, params.nb_erobots, params.EGR_d, params.EPR_d*/]);

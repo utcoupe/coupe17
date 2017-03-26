@@ -10,7 +10,7 @@ module.exports = (function () {
 
 	var Path = require('path');
 
-	var programm = Path.normalize("./pathfinding/build/bin/pathfinding");
+	var programm = Path.normalize("./bin/pathfinding");
 	var image = Path.normalize("./pathfinding/img/map-20mm-yellow.bmp");
 	var RATIO = 20;
 	var SEPARATOR = ";";
