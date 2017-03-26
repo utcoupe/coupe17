@@ -15,8 +15,6 @@
 
 typedef boost::grid_graph<2> grid;
 typedef boost::graph_traits<grid>::vertex_descriptor vertex_descriptor;
-typedef boost::graph_traits<grid>::vertices_size_type vertices_size_type;
-
 struct vertex_hash:std::unary_function<vertex_descriptor, std::size_t> {
 	std::size_t operator()(vertex_descriptor const& u) const {
 		std::size_t seed = 0;
@@ -26,11 +24,49 @@ struct vertex_hash:std::unary_function<vertex_descriptor, std::size_t> {
 	}
 };
 
+typedef boost::graph_traits<grid>::vertices_size_type vertices_size_type;
 typedef boost::unordered_set<vertex_descriptor, vertex_hash> vertex_set;
-typedef boost::vertex_subset_complement_filter<grid, vertex_set>::type
-        filtered_grid;
+typedef boost::vertex_subset_complement_filter<grid, vertex_set>::type filtered_grid;
 
 typedef enum heuristic_type { EUCLIDEAN, NORM1 } heuristic_type;
+
+class MAP;
+std::ostream& operator<<(std::ostream& os, const MAP& map);
+
+struct found_goal {};
+
+class euclidean_heuristic: public boost::astar_heuristic<filtered_grid, double> {
+public:
+    euclidean_heuristic(vertex_descriptor goal):m_goal(goal) {};
+    double operator()(vertex_descriptor v) {
+        return sqrt(pow(double(m_goal[0]) - double(v[0]), 2) + pow(double(m_goal[1]) - double(v[1]), 2));
+    }
+
+private:
+    vertex_descriptor m_goal;
+};
+
+class norm1_heuristic: public boost::astar_heuristic<filtered_grid, double> {
+public:
+    norm1_heuristic(vertex_descriptor goal):m_goal(goal) {};
+    double operator()(vertex_descriptor v) {
+        return abs(m_goal[0] - v[0]) + abs(m_goal[1] - v[1]);
+    }
+
+private:
+    vertex_descriptor m_goal;
+};
+
+struct astar_goal_visitor: public boost::default_astar_visitor {
+    astar_goal_visitor(vertex_descriptor goal):m_goal(goal) {};
+    void examine_vertex(vertex_descriptor u, const filtered_grid&) {
+        if (u == m_goal)
+            throw found_goal();
+    }
+
+private:
+    vertex_descriptor m_goal;
+};
 
 class MAP {
 	public:
@@ -104,43 +140,6 @@ class MAP {
 		vertex_descriptor v_start, v_end;
 		heuristic_type h_mode;
 		double solution_length, smooth_solution_length;
-};
-
-std::ostream& operator<<(std::ostream& os, const MAP& map);
-
-struct found_goal {};
-
-class euclidean_heuristic: public boost::astar_heuristic<filtered_grid, double> {
-	public:
-	euclidean_heuristic(vertex_descriptor goal):m_goal(goal) {};
-	double operator()(vertex_descriptor v) {
-		return sqrt(pow(double(m_goal[0]) - double(v[0]), 2) + pow(double(m_goal[1]) - double(v[1]), 2));
-	}
-
-	private:
-	vertex_descriptor m_goal;
-};
-
-class norm1_heuristic: public boost::astar_heuristic<filtered_grid, double> {
-	public:
-	norm1_heuristic(vertex_descriptor goal):m_goal(goal) {};
-	double operator()(vertex_descriptor v) {
-		return abs(m_goal[0] - v[0]) + abs(m_goal[1] - v[1]);
-	}
-
-	private:
-	vertex_descriptor m_goal;
-};
-
-struct astar_goal_visitor: public boost::default_astar_visitor {
-	astar_goal_visitor(vertex_descriptor goal):m_goal(goal) {};
-	void examine_vertex(vertex_descriptor u, const filtered_grid&) {
-		if (u == m_goal)
-			throw found_goal();
-	}
-
-	private:
-	vertex_descriptor m_goal;
 };
 
 #endif
