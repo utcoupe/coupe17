@@ -30,6 +30,7 @@ npm-debug.log
 
 # UTCoupe folders
 bin/
+doc/
 
 # Some other files
 *get_distance
