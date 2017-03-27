@@ -44,7 +44,7 @@ module.exports = (function () {
 
 		// When the client is connected to the server
 		this.client.on('connect', function(){
-			logger.info('Client connected from server');
+			logger.info('Client connected to server');
 			this.client.emit('type', {
 				type: this.type,
 				options: {
@@ -54,6 +54,11 @@ module.exports = (function () {
 			if(!!this.callbacks.connect)
 				this.callbacks.connect();
 			// this.client.emit('order', {to:'client2',text:'Hello!'});
+		}.bind(this));
+
+		// When the client is connected to the server
+		this.client.on('disconnect', function(){
+			logger.error('Client disconnected from server');
 		}.bind(this));
 
 		// When the client receive log from the server

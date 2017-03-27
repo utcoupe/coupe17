@@ -1,17 +1,38 @@
++++++++++### Main git ignore files
+### Beware, there are som gitignore files in subdirectories, for local and specific files
+
+# Generated executables
 *.elf
 *.hex
+
+# Generated CMake associated files
 build/
-.sconsign.dblite
-__pycache__/
-node_modules/
-npm-debug.log
-*.sublime*
-hokuyo/bin/hokuyo
 CMakeCache*
 CMakeFiles*
 cmake_install*
-*calculate_xy
+
+# Generated scons / arduino files
+.sconsign.dblite
 *find_port
+
+# Generated python files
+__pycache__/
+*calculate_xy
+
+# Generated npm / node files
+node_modules/
+npm-debug.log
+
+# IDE specific files
+*.sublime*
+.idea
+.vscode/
+
+# UTCoupe folders
+bin/
+doc/
+
+# Some other files
 *get_distance
 *get_distance_intensity
 *get_multiecho
@@ -20,7 +41,4 @@ cmake_install*
 *sync_time_stamp
 *liburg_c.a
 *.swp
-.idea
-.vscode/
 tmp.bmp
-doc/

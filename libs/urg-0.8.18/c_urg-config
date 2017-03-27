@@ -1,0 +1,30 @@
+#!/bin/sh
+
+prefix=/usr/local
+
+usage="Usage: c_urg-config [--version] [--cflags] [--libs]"
+
+if test $# -eq 0; then
+      echo "${usage}" 1>&2
+      exit 1
+fi
+
+while test $# -gt 0; do
+
+  case $1 in
+    --version)
+      echo "0.8.18"
+      ;;
+    --cflags)
+      echo -I${prefix}/include/c_urg
+      ;;
+    --libs)
+      echo -lc_urg -lc_urg_connection -lc_urg_system -lm
+      ;;
+    *)
+      echo "${usage}" 1>&2
+      exit 1
+      ;;
+  esac
+  shift
+done

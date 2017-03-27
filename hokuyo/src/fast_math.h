@@ -1,29 +1,29 @@
-/*******************************
-* Quentin CHATEAU pour UTCOUPE *
-* quentin.chateau@gmail.com    *
-* Last edition : 18/11/2013    *
-*******************************/
-
 #ifndef FAST_MATH_H
 #define FAST_MATH_H
 
-#include <urg_utils.h>
+#include "global.h"
 
-#define max(a,b) (a>=b?a:b)
-#define min(a,b) (a<=b?a:b)
+typedef struct Pt {
+	int x, y;
+} Pt_t;
 
-#define PI 3.14159265358979323846264338327950288
 
-struct coord{
-	int x;
-	int y;
+struct fastmathTrigo {
+	int n;
+	double *cos, *sin; 
 };
 
-enum action{sinus, cosinus, calc};
 
-double get_val(enum action ask, int index, urg_t *urg);
+int dist_squared(Pt_t p1, Pt_t p2);
+int dist_to_edge(Pt_t p, int largeurX, int largeurY);
 
-int dist_to_edge(struct coord p);
-int dist(struct coord p1, struct coord p2);
+
+struct fastmathTrigo initFastmath(int n, double *angles, double headingError);
+void freeFastmath(struct fastmathTrigo s);
+
+double angle(Pt_t p1, Pt_t p2);
+double fastCos(struct fastmathTrigo f, int index);
+double fastSin(struct fastmathTrigo f, int index);
+double modTwoPi(double a);
 
 #endif
