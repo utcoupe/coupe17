@@ -193,7 +193,7 @@ module.exports = (function () {
 					this.progs[prog] = spawn('node', ['./clients/gr/main.js']);
 				break;
 				case 'hokuyo':
-					this.progs[prog] = spawn('node', ['./hokuyo/client_hok.js']);
+					this.progs[prog] = spawn('node', ['./hokuyo/main.js']);
 				break;
 				case 'lidar':
 					this.progs[prog] = spawn('node', ['./lidar/main.js'/*, params.color, params.nb_erobots, params.EGR_d, params.EPR_d*/]);
