@@ -100,4 +100,31 @@ class Position
         this.y = y;
         this.z = z;
     }
+    /**
+     * Arrondit les variable à la puissance de 10 demandée.
+     * 
+     * @param {Number} power10 Puissance de 10 à arrondire 
+     * @memberOf Position
+     */
+    roundAll(power10)
+    {
+        this.roundVar(power10, "x");
+        this.roundVar(power10, "y");
+        this.roundVar(power10, "z");
+    }
+
+    /**
+     * Arrondit à la puissance de 10 la variable {x, y, z}
+     * 
+     * @param {Number} power10 Puissance de 10
+     * @param {String} var_name Nom de la variable
+     * 
+     * @memberOf Position
+     */
+    roundVar(power10, var_name)
+    {
+        var oldVar = this[var_name];
+        var newVar = Math.round(oldVar*Math.pow(10, -power10))/Math.pow(10, -power10);
+        this[var_name] = newVar;
+    }
 }

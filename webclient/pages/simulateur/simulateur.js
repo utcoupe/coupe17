@@ -59,7 +59,9 @@ function updatePr(data_robot, Simulateur, type) {
 	if (data_robot.x && Simulateur.controllerSimu.objects3d.has(type + "_jaune")) {
 		act_pos = convertPosNew(data_robot);
 		position = new Position(act_pos.x, 0, act_pos.z);
+		position.roundAll(-3);
 		rotation = new Position(0, data_robot.a, 0);
+		rotation.roundAll(-2);
 		Simulateur.controllerSimu.objects3d.get(type + "_jaune").updateParams({
 			pos: position,
 			rotation: rotation
