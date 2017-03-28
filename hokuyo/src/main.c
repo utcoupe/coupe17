@@ -49,11 +49,10 @@ int main(int argc, char **argv){
 
 	// int nb_robots_to_find = 4;
 	hok1.urg = 0;
-	hok2.urg = 0;
 
 	// Open log file
 	logfile = fopen("/var/log/hokuyo.log", "a+");
-	//logfile = stderr;
+//	logfile = stderr;
 	if (logfile == NULL) {
 		fprintf(stderr, "Can't open log file (what do you think about beeing a sudoer ? :P )\n");
 		exit(EXIT_FAILURE);
@@ -93,12 +92,15 @@ int main(int argc, char **argv){
 	fflush(logfile);
 
 	hok1 = initHokuyo( HOK1_A, HOK1_CONE_MIN, HOK1_CONE_MAX, (Pt_t){HOK1_X, HOK1_Y}, 'c');
-	if (detectHokuyos1(&hok1, &hok2)) {
+	if (detectHokuyos1(&hok1,&hok2)) {
 		fprintf(stderr, "Failed to detect hokuyos paths\n");
 		//exit(EXIT_FAILURE);
 	}
 	else
 		checkAndConnect(&hok1);
+/*****
+A remettre si deux hokuyos sur une raspi
+*****
 
 	hok2 = initHokuyo( HOK2_A, HOK2_CONE_MIN, HOK2_CONE_MAX, (Pt_t){HOK2_X, HOK2_Y}, 'e');
 	if (detectHokuyos1(&hok2, &hok1)) {
@@ -107,7 +109,7 @@ int main(int argc, char **argv){
 	}
 	else
 		checkAndConnect(&hok2);
-
+*/
 	//hok2 = initHokuyo(paths[1], HOK2_A, HOK2_CONE_MIN, HOK2_CONE_MAX, (Pt_t){HOK2_X, HOK2_Y} );
 	//checkAndConnect(&hok2);
 
@@ -123,9 +125,9 @@ int main(int argc, char **argv){
 	while(1){
 		long now = timeMillis();
 		if (now - time_last_try > TIMEOUT) {
-			fprintf(logfile, "%sChecking hokuyos\n", PREFIX);
-			checkAndConnect(&hok1);
-			checkAndConnect(&hok2);
+			fprintf(logfile, "%sChecking hokuyos hok1: %d \n", PREFIX, hok1.isWorking);
+			//checkAndConnect(&hok1);
+//			checkAndConnect(&hok2);
 
 			// If an Hokuyo isn't connected, we scan the ports and try to reconect
 			if (!hok1.isWorking) {
@@ -138,7 +140,7 @@ int main(int argc, char **argv){
 					}
 				}
 			}
-			if (!hok2.isWorking) {
+/*			if (!hok2.isWorking) {
 				if (detectHokuyos1(&hok2, &hok1)) {
 					fprintf(stderr, "Failed to detect hokuyos paths (looking for Hokuyo 2)\n");
 				} else {
@@ -148,6 +150,7 @@ int main(int argc, char **argv){
 					}
 				}
 			}
+			*/
 			/*if (!hok2.isWorking && nb_hokuyo == 2) {
 				if (detectHokuyos(paths, 2)) {
 					fprintf(stderr, "Failed to detect hokuyos paths (looking for Hokuyo 2)\n");
@@ -170,8 +173,8 @@ int main(int argc, char **argv){
 }
 
 void frame(){
-	int nPts1 = 0,  nPts2 =0;
-	long data1[MAX_DATA], data2[MAX_DATA];
+	int nPts1 = 0  ;
+	long data1[MAX_DATA] ;
 	if (hok1.isWorking) {
 		nPts1 = urg_receiveData(hok1.urg, data1, MAX_DATA);
 		if (nPts1 < 1){
@@ -181,7 +184,7 @@ void frame(){
 	}
 	if (hok1.isWorking )
 		pushData(hok1, data1);
-
+/*
 	if(hok2.isWorking ){
 		nPts2 = urg_receiveData(hok2.urg, data2, MAX_DATA);
 		if (nPts2 < 1){
@@ -192,6 +195,7 @@ void frame(){
 	if (hok2.isWorking )
 		pushData(hok2, data2);
 	//pushInfo('9');
+	*/
 	/*for (i=0; i<MAX_DATA; i++){
 		fprintf(stderr, " [%ld] ", data[i]);
 	}*/
@@ -199,78 +203,3 @@ void frame(){
 
 
 }
-
-/*
-void frame(){
-	long timestamp;
-	//static long lastTime = 0;
-	Pt_t pts1[MAX_DATA], pts2[MAX_DATA];
-	Cluster_t robots1[MAX_CLUSTERS], robots2[MAX_CLUSTERS], robots[MAX_ROBOTS];
-	int nPts1 = 0, nPts2 = 0, nRobots1 = 0, nRobots2 = 0, nRobots;
-
-	if (hok1.isWorking && hok2.isWorking) {
-		pushInfo('2');
-		hok1.zone = (ScanZone_t){ BORDER_MARGIN, TABLE_X/2, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN }; // l'hok1 se charge de la partie gauche (vu du public)
-		hok2.zone = (ScanZone_t){ TABLE_X/2, TABLE_X-BORDER_MARGIN, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN }; // l'hok2 se charge de la partie droite
-		if (symetry) {
-			ScanZone_t temp = hok1.zone;
-			hok1.zone = hok2.zone;
-			hok2.zone = temp;
-		}
-	} else if (hok1.isWorking || hok2.isWorking) { // si ya qu'un des deux hok à marcher, le seul survivant scanne toute la table
-		pushInfo('1');
-		hok1.zone = hok2.zone = (ScanZone_t){ BORDER_MARGIN, TABLE_X - BORDER_MARGIN, BORDER_MARGIN, TABLE_Y-BORDER_MARGIN };
-	}
-
-	if (hok1.isWorking || hok2.isWorking) {
-		//long start_t = timeMillis();
-
-		if (hok1.isWorking) {
-			nPts1 = getPoints(hok1, pts1);
-			if (nPts1 == -1) {
-				hok1.isWorking = 0;
-			}
-		}
-		if (hok2.isWorking) {
-			nPts2 = getPoints(hok2, pts2);
-			if (nPts2 == -1) {
-				hok2.isWorking = 0;
-			}
-		}
-
-
-		timestamp = timeMillis() - timeStart;
-		//fprintf(logfile, "%sDuration : %ld\n", PREFIX,timeMillis() - start_t);
-		//fprintf(logfile, "%sGot %d and %d points\n", PREFIX, nPts1, nPts2);
-
-		nRobots1 = getClustersFromPts(pts1, nPts1, robots1);
-		nRobots2 = getClustersFromPts(pts2, nPts2, robots2);
-
-		fprintf(logfile, "%sCalculated %d and %d clusters\n", PREFIX, nRobots1, nRobots2);
-
-		// nRobots1 = sortAndSelectRobots(nRobots1, robots1, nb_robots_to_find);
-		// nRobots2 = sortAndSelectRobots(nRobots2, robots2, nb_robots_to_find);
-
-		nRobots = mergeRobots(robots1, nRobots1, robots2, nRobots2, robots);
-		//fprintf(logfile, "%sGot %d robots\n", PREFIX, nRobots);
-
-		#ifdef SDL
-		struct color l1Color = {255, 0, 0}, l2Color = {0, 0, 255}, lColor = {255, 0, 255};
-		blitMap();
-		blitLidar(hok1.pt, l1Color);
-		blitLidar(hok2.pt, l2Color);
-		blitRobots(robots1, nRobots1, l1Color);
-		blitRobots(robots2, nRobots2, l2Color);
-		blitRobots(robots, nRobots, lColor);
-		blitPoints(pts1, nPts1, l1Color);
-		blitPoints(pts2, nPts2, l2Color);
-		waitScreen();
-		#endif
-
-		pushResults(robots, nRobots, timestamp);
-	} else {
-		pushInfo('0');
-		sleep(1);
-	}
-	//lastTime = timestamp;
-}*/

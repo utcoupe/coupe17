@@ -28,14 +28,14 @@
 #define CALIB_X (TABLE_X/2)
 #define CALIB_Y (TABLE_Y/2)
 
-#define HOK1_SERIAL "1102605"//"1102605"
+#define HOK1_SERIAL "1102605"//one-enemy
 #define HOK1_X -40 // old : 25
 #define HOK1_Y -40  // old : 25
 #define HOK1_A M_PI // orientation
 #define HOK1_CONE_MIN (-M_PI/2)
 #define HOK1_CONE_MAX (M_PI/2)//(M_PI/2)
 
-#define HOK2_SERIAL "1320252"
+#define HOK2_SERIAL "1320252"//two-corner 1320252
 #define HOK2_X 3040 // old 3025
 #define HOK2_Y 1000
 #define HOK2_A M_PI

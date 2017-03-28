@@ -12,6 +12,8 @@ class HokuyoDisplay {
 		this.mode = mode;
 		this.div = $('#' + this.parentId);
 
+		this.isBusy = false; 	// lock
+
 		if (reinitColor) {
 			Raphael.getColor.reset();
 		}
@@ -89,6 +91,8 @@ class HokuyoDisplay {
 	}
 
 	initChart(oneColor = null, twoColor = null) {
+		this.isBusy = true;
+
 		this.r = Raphael(this.parentId, this.div.width(), this.div.height());
 
 		var grey = Raphael.color("#333");
@@ -118,6 +122,7 @@ class HokuyoDisplay {
 			if (oneColor == null
 				|| twoColor == null) {
 				console.error("Main display must have the hokuyos Raphael colors");
+				this.isBusy = false;
 				return;
 			}
 
@@ -153,6 +158,8 @@ class HokuyoDisplay {
 			// Dots container
 			this.objects = [];
 		}
+
+		this.isBusy = false;
 	}
 
 	updatePolarSpots(spots) {
@@ -160,6 +167,9 @@ class HokuyoDisplay {
 			console.error("Main display can't handle polar spot");
 			return;
 		}
+
+		this.isBusy = true;
+
 		// console.log(spots);
 		// For each spots
 		spots.forEach(function(newSpot) {
@@ -179,6 +189,7 @@ class HokuyoDisplay {
 			}
 		}.bind(this));
 
+		this.isBusy = false;
 	}
 
 	// updateRobots(robots) {

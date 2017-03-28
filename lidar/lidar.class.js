@@ -12,6 +12,7 @@ module.exports = (function () {
 	var logger = log4js.getLogger('lidar.lidar');
 
 	var DELTA_T = 100; 					// ms between two data shipping
+	var DELTA_T_CHECK = 200; 			// ms between two data shipping
 
 	/**
 	 * Lidar Constructor
@@ -21,10 +22,18 @@ module.exports = (function () {
 	 * @param {Object} ia IA
 	 * @param {Object} [params] Parameters
 	 */
-	function Lidar(send) {
+	function Lidar(send, sendStatus) {
 		this.send = send;				// send function
 		this.lastDataSent = Date.now();	// ms
 		this.lastCartSpots = {};
+		this.color = undefined;
+		this.started = false;			// we have a color, but we may not be connected to the hokuyos
+		this.status = "starting";
+		this.sendStatus = sendStatus;
+		this.statusTimer;
+
+		this.lastSignOfLife = {};		// of each hokuyo
+
 		this.hokuyoPositions = {
 			one: {
 	 			"x": -6.2,
@@ -40,12 +49,79 @@ module.exports = (function () {
 
 		// If other color
 		logger.warn("TODO: change Lidar color depending ours");
+
+		this.sendStatus(this.status);
+
+
+		// Status loop
+		this.updateStatus();
 	}
+
+	Lidar.prototype.updateStatus = function() {
+		clearTimeout(this.statusTimer);
+
+		var newStatus = "";		// by default, change nothing
+
+		// We juste started the module
+		if (/* Object.keys(this.lastSignOfLife).length == 0
+			&& */ this.status == "starting") {
+			newStatus = "waiting";
+		} else if (this.status == "waiting") {
+			// Do nothing
+		} else {
+			let hokuyoCount = this.hokuyosWorking().length;
+			// console.log("Count = " + hokuyoCount);
+			// console.log("Old status = ");
+			// console.log(this.status);
+			switch (hokuyoCount) {
+				case 0:
+					newStatus = "error";
+				break;
+				case 1:
+					newStatus = "ok";
+				break;
+				case 2:
+					newStatus = "everythingIsAwesome";
+				break;
+				default:
+					newStatus = "error";
+				break;
+			}
+		}
+
+		if (newStatus != "" && newStatus != this.status) {
+			this.changeStatus(newStatus);
+		}
+
+		this.statusTimer = setTimeout( function(){
+			this.updateStatus();
+		}.bind(this), 200);
+	};
+
+	Lidar.prototype.changeStatus = function(newStatus) {
+		logger.info("New status : " + newStatus);
+		this.status = newStatus;
+		this.sendStatus(this.status);
+	};
+
+	Lidar.prototype.start = function(color) {
+		this.color = color;
+		this.started = true;
+		this.changeStatus("error");		// as far as we do not receive hokuyo data
+		logger.info("Started as " + this.color);
+	};
+
+	Lidar.prototype.stop = function() {
+		this.color = undefined;
+		this.started = false;
+		this.changeStatus("waiting");
+	};
 
 	/**
 	 * When Hokuyo data arrives
 	 */
 	Lidar.prototype.onHokuyoPolar = function (hokuyoName, polarSpots) {
+
 		// Filter
 		let filteredPolar = this.filterPolar(polarSpots);
 
@@ -54,6 +130,7 @@ module.exports = (function () {
 
 		// Save
 		this.lastCartSpots[hokuyoName] = {};
+		this.lastCartSpots[hokuyoName].isWorking = function() { return Date.now() - this.time <  2 * DELTA_T; }; // we had some data no long ago
 		this.lastCartSpots[hokuyoName].time = Date.now();
 		this.lastCartSpots[hokuyoName].spots = cartesianSpots;
 
@@ -71,22 +148,27 @@ module.exports = (function () {
 
 			// Prepare data
 			let toBeSent = {
-				hokuyos: this.hokuyosWorking(this.lastCartSpots),
+				hokuyos: this.hokuyosWorking(),
 				cartesianSpots: this.mergedSpots,
 				robotsSpots: this.robotsSpots
 			};
 
 			// Send it to AI
 			this.send("lidar.all", toBeSent);
+			this.lastDataSent = Date.now();
 		}
+
+		this.updateStatus();
 	};
 
-	Lidar.prototype.hokuyosWorking = function(lastData) {
+	Lidar.prototype.hokuyosWorking = function() {
+		let lastData = this.lastCartSpots;
 		var hokuyos = [];
 
 		// For each active hokuyo, add hokuyo information to return value
 		for (let hokName in lastData){
-			if (Date.now() - lastData[hokName].time < 2 * DELTA_T) {
+			// logger.debug(Date.now() - lastData[hokName].time + " -> " + ((Date.now() - lastData[hokName].time < 2 * DELTA_T)?"ok":"not ok"));
+			if (lastData[hokName].isWorking) {
 				hokuyos.push({
 					"name": hokName,
 					"position": this.hokuyoPositions[hokName]
@@ -155,13 +237,25 @@ module.exports = (function () {
 
 	Lidar.prototype.mergeSpots = function(cartSpots) {
 		let ret = [];
+		let workingHokuyos = this.hokuyosWorking();
 
-		for(let spot of cartSpots.one.spots) {
-			ret.push( spot );
-		}
+		logger.warn("TODO: take half of the points");
+		logger.warn("TODO: check that cartSpots[workingHokuyos[0].name].spots works");
 
-		for(let spot of cartSpots.two.spots) {
-			ret.push( spot );
+		if (workingHokuyos.length == 2) {
+			for(let spot of cartSpots.one.spots) {
+				ret.push( spot );
+			}
+
+			for(let spot of cartSpots.two.spots) {
+				ret.push( spot );
+			}
+		} else if (workingHokuyos.length == 1) {
+			for(let spot of cartSpots[workingHokuyos[0].name].spots) {
+				ret.push( spot );
+			}
+		} else if (workingHokuyos.length == 0) {
+			logger.warn("Trying to merge point without active hokuyo");
 		}
 
 		return ret;

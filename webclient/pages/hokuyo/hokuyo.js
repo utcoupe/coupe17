@@ -1,6 +1,7 @@
 angular.module('app').controller('HokuyoCtrl', ['$rootScope', '$scope', 'Hokuyo',
 	function($rootScope, $scope, Hokuyo) {
-	// $rootScope.act_page = 'hokuyo';
+	$rootScope.act_page = 'hokuyo';
+
 	let changedTab = false;
 	if (Hokuyo.displays.one != null) {
 		changedTab = true;
@@ -120,22 +121,16 @@ angular.module('app').service('Hokuyo', ['$rootScope', '$sce', 'Client',
 		this.onOrder = function (from, name, data) {
 			// if($rootScope.act_page == 'hokuyo') {
 				if (name == 'hokuyo.polar_raw_data') {
-					if (data.hokuyo == "one" && !!this.displays.one) {
+					if (!!this.displays[data.hokuyo]) {
 						// Save for later
-						this.lastData.one = data.polarSpots;
+						this.lastData[data.hokuyo] = data.polarSpots;
 
-						// console.log("Received one");
+						// console.log("Received data from " + data.hokuyo);
 
 						// Show
-						this.displays.one.updatePolarSpots(data.polarSpots);
-					} else if (data.hokuyo == "two" && !!this.displays.two) {
-						// Save for later
-						this.lastData.two = data.polarSpots;
-
-						// console.log("Received two");
-
-						// Show
-						this.displays.two.updatePolarSpots(data.polarSpots);
+						if (!this.displays[data.hokuyo].isBusy) {
+							this.displays[data.hokuyo].updatePolarSpots(data.polarSpots);
+						}
 					}
 				} else if (name == 'lidar.all'
 					&& !!this.displays.main) {
