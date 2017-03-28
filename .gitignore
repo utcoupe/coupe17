@@ -7,6 +7,7 @@ node_modules/
 npm-debug.log
 *.sublime*
 hokuyo/bin/hokuyo
+Makefile
 CMakeCache*
 CMakeFiles*
 cmake_install*

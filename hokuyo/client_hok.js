@@ -209,6 +209,7 @@
 
 		// Execute C program
 		// var command = "/home/pi/coupe15/hokuyo/bin/hokuyo";
+		var command = "$UTCOUPE_WORKSPACE/hokuyo/bin/hokuyo";
 		var args = [color];
 		// var options = // default : { cwd: undefined, env: process.env};
 		logger.info('Launching : ' + command + ' ' + args);
