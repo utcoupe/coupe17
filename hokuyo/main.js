@@ -20,6 +20,8 @@
 	var config = require('../config.js');
 	var lastT = Date.now();
 	var startingT = lastT;
+	var bufferData;
+	var count = 0;
 
 	var FREQ_ENVOI_INFO = 50; // tous les 10 infos (genre 1 seconde)
 	var nth = 0;
@@ -134,11 +136,30 @@
 
 		// Functions
 		function parseData(string) {
-
+			//logger.warn(string.length);
 			var temp = string.split("#")
+			if(temp[1] == "0" && count == 0){
+				bufferData = temp[2];
+				count = count + 1;
+			}
+			else {
+				if(temp[1] == "1" && count == 1){
+					bufferData = bufferData + temp[2];
+					count = count + 1;
+				}
+				else {
+					if(temp[1] == "2" && count == 2){
+						bufferData = bufferData + temp[2];
+						client.send("lidar", "hokuyo.polar_raw_data", { "hokuyo": temp[0], "polarSpots" : JSON.parse(bufferData) });
+						count = 0;
+						logger.warn(JSON.parse(bufferData));
+					}
+				}
+			}
+
 			// Send all robots
-			client.send("webclient", "hokuyo.polar_raw_data", { "hokuyo": temp[0], "polarSpots" : JSON.parse(temp[1]) });
-			logger.info(string);
+
+
 		}
 
 		function parseInfo(string) {
@@ -195,7 +216,7 @@
 							sendChildren({"status": "starting"});
 							break;
 						case "DATA":
-							logger.info('C Hokuyo software sends datas');
+							//logger.info('C Hokuyo software sends datas');
 							parseData(inputAr[i].substring(6));
 							break;
 						case "INFO":
@@ -225,7 +246,7 @@
 
 		// Events
 		child.stdout.on('data', function(data) {
-			logger.debug(data.toString());
+			//logger.debug(data.toString());
 			dataFromCHandler(data);
 		});
 
