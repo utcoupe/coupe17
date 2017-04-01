@@ -1,8 +1,8 @@
 /**
  * First In First Out module
  * 
- * @module clients/shared/fifo
- * @see {@link clients/shared/fifo.Fifo}
+ * @module clients/fifo
+ * @see {@link clients/fifo.Fifo}
  */
 
 module.exports = (function () {
@@ -11,7 +11,7 @@ module.exports = (function () {
 	/**
 	 * Fifo Constructor
 	 * 
-	 * @exports clients/shared/fifo.Fifo
+	 * @memberof module:clients/fifo
 	 * @constructor
 	 */
 	function Fifo() {

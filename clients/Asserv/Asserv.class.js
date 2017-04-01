@@ -1,11 +1,15 @@
 /**
  * Module exportant la classe abstraite Asserve
  * 
- * @module clients/Asserv/asserv
+ * @module clients/Asserv/Asserv
  */
 
-
-module.exports = class Asserv{
+/**
+ * Class Asserv.
+ * 
+ * @memberof module:clients/Asserv/Asserv
+ */
+class Asserv{
 	/**
 	 * Creates an instance of Asserv.
 	 * @param {any} client 
@@ -25,7 +29,7 @@ module.exports = class Asserv{
 		/** @type {Object} */
 		this.pos = {};
 
-		/** @type {clients/Asserv/asserv.asserv} */
+		/** @type {clients/fifo.Fifo} */
 		this.fifo = fifo;
 	}
 
@@ -159,3 +163,5 @@ module.exports = class Asserv{
 	 */
 	setPid(p, i, d, callback){}
 }
+
+module.exports = Asserv;

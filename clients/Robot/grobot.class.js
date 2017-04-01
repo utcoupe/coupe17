@@ -1,8 +1,22 @@
+/**
+ * Module du grand robot
+ * 
+ * @module clients/Robot/grobot
+ */
 
+const Robot = require('robot.class.js');
 
-
-module.exports = class Grobot extends Robot{
+/**
+ * Grand Robot
+ * 
+ * @class Grobot
+ * @memberof module:clients/Robot/grobot
+ * @extends {clients/Robot/robot.Robot}
+ */
+class Grobot extends Robot{
 	constructor(){
 		
 	}
 }
+
+module.exports = Grobot;
