@@ -9,9 +9,9 @@ sudo apt-get install git build-essential python cmake libboost-dev libsdl1.2-dev
 
 # Check if it's a PC or a raspi
 if [ "$(uname -m)" == "x86_64" ]; then
-	sudo apt-get install nodejs npm nodejs-legacy linux-headers-$(uname -r)
+	sudo apt-get install libsdl1.2-dev nodejs npm nodejs-legacy linux-headers-$(uname -r)
 else
-	sudo apt-get install raspberrypi-kernel-headers
+	sudo apt-get install libsdl1.2-dev raspberrypi-kernel-headers
 	sudo apt-get remove npm nodejs nodejs-legacy
 	curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 	sudo npm install npm@3.5.2 -g
