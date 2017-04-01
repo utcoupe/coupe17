@@ -78,7 +78,29 @@ class Controller
         {
             var name = objects[idObject].name;
             //console.log("Creating " + name);
-            this.objects3d.set(name, new Object3d(objects[idObject], this.ressourcesPath));
+            switch(objects[idObject].type)
+            {
+                case "pr" :
+                    this.objects3d.set(
+                        name,
+                        new Robot(objects[idObject],
+                        this.ressourcesPath,
+                        (pathLine) => {this.scene.add(pathLine);}
+                    ));
+                    break;
+
+                case "gr" :
+                    this.objects3d.set(
+                        name,
+                        new Robot(objects[idObject],
+                        this.ressourcesPath,
+                        (pathLine) => {this.scene.add(pathLine);}
+                    ));
+                    break;
+
+                default:
+                    this.objects3d.set(name, new Object3d(objects[idObject], this.ressourcesPath));
+            }
             this.objects3d.get(name).loadMesh((scene) => {
                 this.scene.add(scene);
             });

@@ -28,6 +28,27 @@
  */
 
 /**
+ * Crée une forme géométrique
+ * @class Geometry
+ * @memberof external:THREE
+ * @see {@link https://threejs.org/docs/index.html#Reference/Core/Geometry}
+ */
+
+/**
+ * Crée une figure composée d'une suite de points reliés entre eux (sauf le premier et le dernier)
+ * @class Line
+ * @memberof external:THREE
+ * @see {@link https://threejs.org/docs/index.html#Reference/Objects/Line}
+ */
+
+/**
+ * Crée le materiaux qui sera appliqué à une ligne
+ * @class LineBasicMaterial
+ * @memberof external:THREE
+ * @see {@link https://threejs.org/docs/index.html#Reference/Objects/Line}
+ */
+
+/**
  * Crée un controlleur pour bouger la caméra
  * @class OrbitControls
  * @memberof external:THREE

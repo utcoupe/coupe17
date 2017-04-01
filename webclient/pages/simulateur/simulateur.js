@@ -53,6 +53,8 @@ function convertPosNew(pos) {
  * @param {Number} data_robot.x
  * @param {Number} data_robot.y
  * @param {Number} data_robot.a
+ * @param {Array<Number>} data_robot.path
+ * @param {Object} Simulateur
  * @param {String} type Type de Robot
  */
 function updatePr(data_robot, Simulateur, type) {
@@ -66,8 +68,30 @@ function updatePr(data_robot, Simulateur, type) {
 			pos: position,
 			rotation: rotation
 		});
+		if(data_robot.path)
+			updatePath(data_robot.path, Simulateur, type + "_jaune");
 		Simulateur.updateInterface();
 	}
+}
+/**
+ * Met à jour le chemin du robot
+ * 
+ * @param {Array<Number>} path 
+ * @param {Object} Simulateur 
+ * @param {String} robot 
+ */
+function updatePath(path, Simulateur, robot)
+{
+	if(path.length <= 1) // Impossible de tracer une ligne si on n'a pas au moins 2 points
+		return;
+	var PATH_HIGHT = 0.1;
+	Simulateur.controllerSimu.objects3d.get(robot).showPath(
+		path.map( (pos) => {
+			act_pos = convertPosNew({x: pos[0], y: pos[1]});
+			return new Position(act_pos.x, PATH_HIGHT, act_pos.z);
+		})
+	);
+	Simulateur.controllerSimu.scene.add(Simulateur.controllerSimu.objects3d.get(robot).pathLine);
 }
 
 angular.module('app').service('Simulateur', ['$rootScope', 'Client', function ($rootScope, Client) {
