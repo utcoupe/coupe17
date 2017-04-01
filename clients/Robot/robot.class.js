@@ -2,6 +2,7 @@
  * Module du robot de base
  * 
  * @module clients/Robot/robot
+ * @requires module:clients/client
  */
 
 const Client = require('../client.class.js');

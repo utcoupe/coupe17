@@ -2,6 +2,7 @@
  * Module Asservissement en mode simulateur
  * 
  * @module clients/Asserv/AsservSimu
+ * @requires module:clients/Asserv/Asserv
  */
 
 const Asserv = require('Asserv.class.js');

@@ -2,6 +2,7 @@
  * Module du grand robot
  * 
  * @module clients/Robot/grobot
+ * @requires module:clients/Robot/robot
  */
 
 const Robot = require('robot.class.js');

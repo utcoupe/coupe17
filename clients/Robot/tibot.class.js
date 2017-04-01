@@ -2,6 +2,7 @@
  * Module du petit robot
  * 
  * @module clients/Robot/tibot
+ * @requires module:clients/Robot/robot
  */
 
 const Robot = require('robot.class.js');
