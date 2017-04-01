@@ -91,7 +91,6 @@ function updatePath(path, Simulateur, robot)
 			return new Position(act_pos.x, PATH_HIGHT, act_pos.z);
 		})
 	);
-	Simulateur.controllerSimu.scene.add(Simulateur.controllerSimu.objects3d.get(robot).pathLine);
 }
 
 angular.module('app').service('Simulateur', ['$rootScope', 'Client', function ($rootScope, Client) {
