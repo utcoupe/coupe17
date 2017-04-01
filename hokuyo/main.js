@@ -29,7 +29,7 @@
 	var server = process.argv[2] || config.server;
 	var command = process.argv[3] || config.hokuyo_command;
 
-
+	process.env.UTCOUPE_WORKSPACE = config.UTCOUPE_WORKSPACE;
 	if (!process.env.UTCOUPE_WORKSPACE) {
 		logger.error("Missing UTCOUPE_WORKSPACE environment variable. Make sure to call 'sudo -E node ...'");
 		process.exit(1);
@@ -152,7 +152,7 @@
 						bufferData = bufferData + temp[2];
 						client.send("lidar", "hokuyo.polar_raw_data", { "hokuyo": temp[0], "polarSpots" : JSON.parse(bufferData) });
 						count = 0;
-						logger.warn(JSON.parse(bufferData));
+						//logger.warn(JSON.parse(bufferData));
 					}
 				}
 			}
