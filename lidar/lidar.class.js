@@ -1,6 +1,6 @@
 /**
  * Lidar module
- * 
+ *
  * @module ia/Lidar
  * @see ia/Lidar.Lidar
  */
@@ -16,7 +16,7 @@ module.exports = (function () {
 
 	/**
 	 * Lidar Constructor
-	 * 
+	 *
 	 * @exports ia/Lidar.Lidar
 	 * @constructor
 	 * @param {Object} ia IA
@@ -31,6 +31,7 @@ module.exports = (function () {
 		this.status = "starting";
 		this.sendStatus = sendStatus;
 		this.statusTimer;
+
 
 		this.lastSignOfLife = {};		// of each hokuyo
 
@@ -117,39 +118,91 @@ module.exports = (function () {
 		this.changeStatus("waiting");
 	};
 
+	function Spot(angle, distance){
+		this.angle = angle;
+		this.distance = distance;
+	}
+	Spot.prototype.toCartesian = function(lidar, hokName) {
+		let ret = [];
+		let hokPos = lidar.hokuyoPositions[hokName];
+
+		// For each point, transform it to the table frame
+			// Get the polar pt (angle, dist) in the hokuyo cartesian frame (xh, yh)
+			// x is the forward axe
+			// y is the RIGHT axe looking from the top
+			// ie : the hokuyo on the back left hand corner, oriented to 0, has the same frame as the table translated a little
+			// thus, hokuyo positive angles are at its right hand
+			let cartPt = [
+				this.distance * Math.cos(lidar.toRadian(this.angle)),
+				this.distance * Math.sin(lidar.toRadian(this.angle))
+			]
+			// Change to table frame
+			this.x = hokPos.x + cartPt[0] * Math.cos(lidar.toRadian(hokPos.w)) + cartPt[1] * Math.sin(lidar.toRadian(hokPos.w)),
+			this.y = hokPos.y + cartPt[0] * Math.sin(lidar.toRadian(hokPos.w)) + cartPt[1] * Math.cos(lidar.toRadian(hokPos.w))
+
+	}
+
+	function Cluster(){
+		this.spots = [];
+	}
+	Cluster.prototype.calculCenter = function() {
+		let x = 0.0, y =0.0;
+		let nb = this.spots.length;
+		for(let i = 0; i < nb ; i++){
+			x = x + this.spots[i].x;
+			y = y + this.spots[i].y;
+		}
+		this.x = x/nb;
+		this.y = y/nb;
+
+	}
 	/**
 	 * When Hokuyo data arrives
 	 */
 	Lidar.prototype.onHokuyoPolar = function (hokuyoName, polarSpots) {
+		logger.warn("nb points :" + polarSpots.length)
+		let spots = this.createSpot(polarSpots);
+		this.toCartesian(hokuyoName, spots);
 
-		// Filter
-		let filteredPolar = this.filterPolar(polarSpots);
+		//clusterize
+		let clusters = this.clusterize(spots)
+		logger.warn("nb clusters" + clusters.length);
 
-		// Polar to cartesian
-		let cartesianSpots = this.toCartesian(hokuyoName, filteredPolar);
-
+		// First Filter - Delete unused clusters and corresponding spots :
+		// too big or too small clusters
+		let filteredSpots = this.filterPolar(clusters);
+		logger.warn("nb spots:" + filteredSpots.length);
 		// Save
 		this.lastCartSpots[hokuyoName] = {};
 		this.lastCartSpots[hokuyoName].isWorking = function() { return Date.now() - this.time <  2 * DELTA_T; }; // we had some data no long ago
 		this.lastCartSpots[hokuyoName].time = Date.now();
-		this.lastCartSpots[hokuyoName].spots = cartesianSpots;
+		this.lastCartSpots[hokuyoName].spots = filteredSpots;
+		this.lastCartSpots[hokuyoName].clusters = clusters;
+
 
 		// If we reached the DELTAT, send newly merged data
-		// console.log(Date.now() - this.lastDataSent);
+		//console.log(Date.now() - this.lastDataSent);
 		if (Date.now() - this.lastDataSent > DELTA_T) {
+
 			// Merge spots
+			//logger.warn(this.lastCartSpots)
 			this.mergedSpots = this.mergeSpots(this.lastCartSpots);
+			//logger.warn(this.mergedSpots);
+			/* Merge very close clusters provided by two different hokuyo */
+
+
 
 			// Filter (bis)
-			this.mergedSpots = this.filterCart(this.mergedSpots);
+			//this.mergedSpots = this.filterCart(this.mergedSpots);
 
 			// Find enemy robots
 			this.robotsSpots = this.findRobots(this.mergedSpots);
+			this.displaySpots = this.prepareData(this.mergedSpots); //renvoie un tableau de coordonnées prêt à être affiché
 
 			// Prepare data
 			let toBeSent = {
 				hokuyos: this.hokuyosWorking(),
-				cartesianSpots: this.mergedSpots,
+				cartesianSpots: this.displaySpots,
 				robotsSpots: this.robotsSpots
 			};
 
@@ -159,6 +212,7 @@ module.exports = (function () {
 		}
 
 		this.updateStatus();
+
 	};
 
 	Lidar.prototype.hokuyosWorking = function() {
@@ -178,40 +232,114 @@ module.exports = (function () {
 
 		return hokuyos;
 	};
-
-	Lidar.prototype.filterPolar = function(polarSpots) {
-		let ret;
-
-		logger.warn("TODO: filterPolar");
-		ret = polarSpots; // TMP
-
+	Lidar.prototype.createSpot = function(polarSpots){
+		let ret = [];
+		for(let i = 0; i < polarSpots.length ; i ++){
+			var point = new Spot(polarSpots[i][0], polarSpots[i][1]);
+			ret.push(point);
+		}
 		return ret;
 	};
 
-	Lidar.prototype.toCartesian = function(hokName, polarSpots) {
-		let ret = [];
+	Lidar.prototype.clusterize = function(spotsIn) {
+		/*****
+        classe les points en cluster en fonction des parametres k et D
+            D : distance maximale entre deux points d'un même cluster
+            k : la distance est calculée entre le point i et les k points précédents
+        *****/
+			var clusters = [], k = 5;
+			if(spotsIn.length < k){
+				return clusters;
+			}
+            var g = 0, D = 3;
+            var G = []; //le point Spot[i] appartient au groupe G[i]
+			var d=[];
+
+            var jmin, dmin, x, y
+			clusters[0] = new Cluster;
+			clusters[0].spots = new Array;
+			/* A modifier !!
+			On met les k premiers points dans un même cluster
+			*/
+
+			let nulSpot = new Spot;
+			nulSpot.angle = 0; nulSpot.distance = 0;nulSpot.x = 0; nulSpot.y = 0;
+
+            for (i = 0; i < k; i++){
+				spotsIn.unshift(nulSpot);
+                G.push(0);
+				clusters[0].spots.push(spotsIn[i]);
+            }
+            for (var i = k; i < spotsIn.length; i++){
+				G.push(0);
+                if (spotsIn[i].distance > 1){
+                     jmin = 1;
+                     dmin = 0;
+                    for (var j = 1; j <= k; j++){
+                        x = spotsIn[i].x - spotsIn[i - j].x;
+                        y = spotsIn[i].y - spotsIn[i - j].y ;
+                        d[j] =Math.sqrt(x*x + y*y);
+                        if (d[j] <= d[jmin]){
+                            dmin = d[j];
+                            jmin = j;
+                        }
+                    }
+
+                    if (dmin < D) {
+                        if (G[i - jmin] == 0){
+                            g = g + 1;
+                            G[i - jmin] = g;
+
+							clusters[g] = new Cluster;
+							clusters[g].spots = new Array;
+                        }
+
+                        g = G[i - jmin];
+                        G[i] = g;
+						clusters[g].spots.push(spotsIn[i]) ;
+                    }
+				}
+            }
+			for (i = 0; i < k; i++){
+				spotsIn.shift();
+            }
+			clusters.shift();
+			return clusters;
+	};
+	/* Delete unused clusters in clusters
+	Return filteredSpots */
+	Lidar.prototype.filterPolar = function(clusters) {
+		let filteredClusters = [];
+		let filteredSpots = [];
+		let count = [], count1 = [], count3 = 0;
+		for(let i = 0; i < clusters.length ; i++){
+				count.push(clusters[i].spots.length);
+				clusters[i].calculCenter();
+			if (clusters[i].spots.length >= 3 && clusters[i].spots.length <= 10
+				&& clusters[i].x <300 && clusters[i].x > 0
+				&& clusters[i].y <200 && clusters[i].y > 0){
+				count3 = count3 +1;
+				count1.push(clusters[i].spots.length);
+				filteredClusters.push(clusters[i]);
+				for(let j = 0; j < clusters[i].spots.length ; j++){
+					filteredSpots.push(clusters[i].spots[j])
+				}
+
+			}
+		}
+		clusters = filteredClusters;
+		//logger.warn(count, count1, count3);
+		return  filteredSpots;
+	};
+
+	Lidar.prototype.toCartesian = function(hokName, spots) {
 		let hokPos = this.hokuyoPositions[hokName];
 
 		// For each point, transform it to the table frame
-		for(let pt of polarSpots){
-			// Get the polar pt (angle, dist) in the hokuyo cartesian frame (xh, yh)
-			// x is the forward axe
-			// y is the RIGHT axe looking from the top
-			// ie : the hokuyo on the back left hand corner, oriented to 0, has the same frame as the table translated a little
-			// thus, hokuyo positive angles are at its right hand
-			let cartPt = [
-				pt[1] * Math.cos(this.toRadian(pt[0])),
-				pt[1] * Math.sin(this.toRadian(pt[0]))
-			]
-
-			// Change to table frame
-			ret.push([
-				hokPos.x + cartPt[0] * Math.cos(this.toRadian(hokPos.w)) + cartPt[1] * Math.sin(this.toRadian(hokPos.w)),
-				hokPos.y + cartPt[0] * Math.sin(this.toRadian(hokPos.w)) + cartPt[1] * Math.cos(this.toRadian(hokPos.w))
-			]);
+		for(let i = 0; i < spots.length ; i++){
+			spots[i].toCartesian(this,hokName);
 		}
 
-		return ret;
 	};
 
 	Lidar.prototype.filterCart = function(cartSpots) {
@@ -235,43 +363,60 @@ module.exports = (function () {
 		return ret;
 	};
 
+
 	Lidar.prototype.mergeSpots = function(cartSpots) {
 		let ret = [];
 		let workingHokuyos = this.hokuyosWorking();
 
-		logger.warn("TODO: take half of the points");
-		logger.warn("TODO: check that cartSpots[workingHokuyos[0].name].spots works");
+		//logger.warn("TODO: take half of the points");
+		//logger.warn("TODO: check that cartSpots[workingHokuyos[0].name].spots works");
 
 		if (workingHokuyos.length == 2) {
 			for(let spot of cartSpots.one.spots) {
-				ret.push( spot );
+				if(spot.x < 300 && spot.y < 200){
+					ret.push(spot);
+				}
 			}
 
 			for(let spot of cartSpots.two.spots) {
-				ret.push( spot );
+				if(spot.x < 300 && spot.y < 200 ){
+					ret.push(spot);
+				}
 			}
 		} else if (workingHokuyos.length == 1) {
 			for(let spot of cartSpots[workingHokuyos[0].name].spots) {
-				ret.push( spot );
+				if(spot.x < 300 && spot.x > 0 && spot.y < 200 && spot.y > 0){
+					ret.push(spot);
+				}
 			}
 		} else if (workingHokuyos.length == 0) {
 			logger.warn("Trying to merge point without active hokuyo");
 		}
-
 		return ret;
 	};
 
 	Lidar.prototype.findRobots = function(cartSpots) {
-		let ret;
+		let ret = [];
+	 	let clusters = this.clusterize(cartSpots);
 
-		logger.warn("TODO: findRobots");
-		ret = [
+		for (let i = 0 ; i < clusters.length ; i++){
+			clusters[i].calculCenter();
+			ret.push([clusters[i].x, clusters[i].y]);
+		}
+		/*ret = [
 			[ 150, 100 ],
 			[ 100, 135 ]
-		]; // TMP
-
+		]; // TMP */
+		//logger.warn(ret);
 		return ret;
 	};
+	Lidar.prototype.prepareData = function(spots){
+		let ret = [];
+		for(let i = 0; i < spots.length ; i++){
+			ret.push([spots[i].x, spots[i].y])
+		}
+		return ret;
+	}
 
 	Lidar.prototype.toRadian = function(angleInDegree) {
 		let angleInRadian;

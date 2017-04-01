@@ -32,57 +32,57 @@
 	});
 
 	client.connect(function(){
+/*
+		setTimeout(function() {
+			client.send("lidar", "start", {
+				color: "yellow"
+			}); // TMP
+		}, 300);
 
-		// setTimeout(function() {
-		// 	client.send("lidar", "start", {
-		// 		color: "yellow"
-		// 	}); // TMP
-		// }, 300);
-
-		// setTimeout(function() {
-		// 	client.send("lidar", "hokuyo.polar_raw_data", {
-		// 		hokuyo: "one",
-		// 		polarSpots: [
-		// 			[ -40, 200 ],
-		// 			[ -35, 200 ],
-		// 			[ -30, 200 ],
-		// 			[ -25, 230 ],
-		// 			[ -20, 100 ],
-		// 			[ -15, 105 ],
-		// 			[ -5, 120 ],
-		// 			[ 0, 100 ],
-		// 			[ 5, 90 ],
-		// 			[ 10, 95 ],
-		// 			[ 15, 100 ],
-		// 			[ 20, 100 ],
-		// 			[ 25, 130 ],
-		// 			[ 30, 135 ]
-		// 		]
-		// 	}); // TMP
-		// }, 1000);
+		setTimeout(function() {
+			client.send("lidar", "hokuyo.polar_raw_data", {
+				hokuyo: "one",
+				polarSpots: [
+					[ -40, 200 ],
+					[ -35, 200 ],
+					[ -30, 200 ],
+					[ -25, 230 ],
+					[ -20, 100 ],
+					[ -15, 105 ],
+					[ -5, 120 ],
+					[ 0, 100 ],
+					[ 5, 90 ],
+					[ 10, 95 ],
+					[ 15, 100 ],
+					[ 20, 100 ],
+					[ 25, 130 ],
+					[ 30, 135 ]
+				]
+			}); // TMP
+		}, 1000);
 
 
-		// setTimeout(function() {
-		// 	client.send("lidar", "hokuyo.polar_raw_data", {
-		// 		hokuyo: "two",
-		// 		polarSpots: [
-		// 			[ -40, 155 ],
-		// 			[ -30, 155 ],
-		// 			[ -35, 150 ],
-		// 			[ -25, 150 ],
-		// 			[ -20, 100 ],
-		// 			[ -15, 105 ],
-		// 			[ -5, 120 ],
-		// 			[ 0, 100 ],
-		// 			[ 5, 90 ],
-		// 			[ 10, 95 ],
-		// 			[ 15, 100 ],
-		// 			[ 20, 100 ],
-		// 			[ 25, 230 ],
-		// 			[ 30, 235 ]
-		// 		]
-		// 	}); // TMP
-		// }, 1100);
+		setTimeout(function() {
+			client.send("lidar", "hokuyo.polar_raw_data", {
+				hokuyo: "two",
+				polarSpots: [
+					[ -40, 155 ],
+					[ -30, 155 ],
+					[ -35, 150 ],
+					[ -25, 150 ],
+					[ -20, 100 ],
+					[ -15, 105 ],
+					[ -5, 120 ],
+					[ 0, 100 ],
+					[ 5, 90 ],
+					[ 10, 95 ],
+					[ 15, 100 ],
+					[ 20, 100 ],
+					[ 25, 230 ],
+					[ 30, 235 ]
+				]
+			}); // TMP
+		}, 1100);*/
 
 
 		client.order(function(from, name, params){
@@ -90,8 +90,8 @@
 			// var now = Date.now();
 			// logger.info("Time since last order : "+(now - lastT));
 			// if (now - lastT > 500) { // half a second between two orders
-				logger.info("Just received an order `" + name + "` from " + from + " with params :");
-				logger.info(params);
+				//logger.info("Just received an order `" + name + "` from " + from + " with params :");
+				//logger.info(params);
 
 				// lastT = now;
 				switch (name){
@@ -106,7 +106,7 @@
 						}
 						break;
 					case "hokuyo.polar_raw_data":
-						if (hokMng.started) {
+						if (hokMng.started = 1) { //a modifier
 							hokMng.onHokuyoPolar(params.hokuyo, params.polarSpots);
 						} else {
 							logger.warn("Start the Lidar before sending data !");
