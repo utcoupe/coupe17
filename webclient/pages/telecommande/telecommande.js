@@ -174,9 +174,7 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 
 
 	$(document).on("click", "#rc_hok_start", function(e) {
-		Client.send("hokuyo", "start", {
-			"color": $("#rc_hok_color").val(),
-			"nbrobots": parseInt($("#rc_hok_nbrobots").val())});
+		Client.send("hokuyo", "start", {});
 		console.log("Message `start` sent");
 	});
 

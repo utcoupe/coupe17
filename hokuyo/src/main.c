@@ -62,11 +62,11 @@ int main(int argc, char **argv){
 
 	atexit(exit_handler); // en cas de signal de fermeture, on déconnecte proprement
 
-	if(argc <= 1 || ( strcmp(argv[1], "green") != 0 && strcmp(argv[1], "yellow") ) ){
-		// fprintf(stderr, "usage: hokuyo {green|yellow} [nbr_robots]\n");
-		fprintf(stderr, "usage: hokuyo {green|yellow}\n");
-		exit(EXIT_FAILURE);
-	}
+	// if(argc <= 1 || ( strcmp(argv[1], "green") != 0 && strcmp(argv[1], "yellow") ) ){
+	// 	// fprintf(stderr, "usage: hokuyo {green|yellow} [nbr_robots]\n");
+	// 	fprintf(stderr, "usage: hokuyo {green|yellow}\n");
+	// 	exit(EXIT_FAILURE);
+	// }
 
 	if (signal(SIGINT, catch_SIGINT) == SIG_ERR) {
 		fprintf(stderr, "An error occurred while setting a signal handler for SIGINT.\n");
@@ -117,7 +117,7 @@ A remettre si deux hokuyos sur une raspi
 	initSDL();
 	#endif
 
-	fprintf(logfile, "%sStarting hokuyo :\n%sLooking for %s robots\n", PREFIX, PREFIX, argv[1]);
+	fprintf(logfile, "%sStarting hokuyo :\n" /*"%sLooking for %s robots\n"*/, PREFIX/*, PREFIX, argv[1]*/);
 	fflush(stdout);
 	timeStart = timeMillis();
 	long time_last_try = 0;

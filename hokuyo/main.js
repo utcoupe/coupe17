@@ -27,6 +27,12 @@
 	var server = process.argv[2] || config.server;
 	var command = process.argv[3] || config.hokuyo_command;
 
+
+	if (!process.env.UTCOUPE_WORKSPACE) {
+		logger.error("Missing UTCOUPE_WORKSPACE environment variable. Make sure to call 'sudo -E node ...'");
+		process.exit(1);
+	}
+
 	var client = new SocketClient({
 		server_ip: server,
 		type: "hokuyo",
@@ -51,12 +57,12 @@
 			lastT = now;
 			switch (name){
 				case "start":
-					if(!!params.color && !started) {
+					if(!started) {
 						started = true;
 						logger.info("Receive order to start");
-						start(params.color);
+						start();
 					} else
-						logger.error("ALready started or Missing parameters !");
+						logger.error("ALready started !");
 					break;
 				case "shutdown":
 					quitC("stop");
@@ -103,7 +109,7 @@
 		logger.error("uException sent with code "+code);
 	}
 
-	function start(color){
+	function start(){
 		// We just an order to start, with the flavour :P (color, number of robots)
 
 		sendChildren({"status": "starting"});
@@ -112,7 +118,7 @@
 		var tmp = new Date();
 		match_name = tmp.toJSON().replace(/T/, ' ').replace(/\..+/, '');
 		var now = Date.now() - lastT;
-		matchLogger(match_name, now+"; color:"+color);
+		matchLogger(match_name, now);
 		now = lastT;
 
 		// If there's a child, kill it
@@ -210,8 +216,8 @@
 
 		// Execute C program
 		// var command = "/home/pi/coupe15/hokuyo/bin/hokuyo";
-		var command = "$UTCOUPE_WORKSPACE/hokuyo/bin/hokuyo";
-		var args = [color];
+		var command = process.env.UTCOUPE_WORKSPACE + "/bin/hokuyo";
+		var args = []; // [color];
 		// var options = // default : { cwd: undefined, env: process.env};
 		logger.info('Launching : ' + command + ' ' + args);
 		child = child_process.spawn(command, args);
