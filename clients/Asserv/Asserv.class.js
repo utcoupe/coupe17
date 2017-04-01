@@ -1,7 +1,17 @@
-
+/**
+ * Module exportant la classe abstraite Asserve
+ * 
+ * @module clients/Asserv/asserv
+ */
 
 
 module.exports = class Asserv{
+	/**
+	 * Creates an instance of Asserv.
+	 * @param {any} client 
+	 * @param {any} who 
+	 * @param {any} fifo 
+	 */
 	constructor(client, who, fifo){
 		/** @type {Log4js} */
 		this.logger = require('log4js').getLogger('asserv');
