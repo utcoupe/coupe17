@@ -2,6 +2,7 @@
  * Module du client de base
  * 
  * @module clients/client
+ * @requires module:server/socket_client
  */
 
 
@@ -17,7 +18,7 @@ class Client {
 	 */
 	constructor(status){
 		this.Log4js = require('log4js');
-		this.SocketClient = require('../../server/socket_client.class.js');
+		this.SocketClient = require('../server/socket_client.class.js');
 		this.parser = null;
 		this.status = status;
 	}
