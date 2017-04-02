@@ -22,7 +22,7 @@ heuristic_type heuristicMode = NORM1;
  * @param argc The number of command line arguments
  * @param argv The array of command line arguments
  */
-void parseOptions(int argc, char** argv);
+void parseOptions(int argc, char **argv);
 
 
 /*
@@ -46,7 +46,7 @@ inline bool is_valid(int x, int y, MAP &map) {
 }
 
 // remove the dynamic objects in the MAP and add the one given by command
-void command_add_dynamic(string& command, MAP &map) {
+void command_add_dynamic(string &command, MAP &map) {
     vector<dynamic_object> objs;
     command = command.substr(2);
     if (debugFlag) {
@@ -56,9 +56,9 @@ void command_add_dynamic(string& command, MAP &map) {
         dynamic_object obj;
         sscanf(command.c_str(), "%i;%i;%i", &obj.x, &obj.y, &obj.r);
         objs.push_back(obj);
-        command = command.substr(command.find(';')+1);
-        command = command.substr(command.find(';')+1);
-        command = command.substr(command.find(';')+1);
+        command = command.substr(command.find(';') + 1);
+        command = command.substr(command.find(';') + 1);
+        command = command.substr(command.find(';') + 1);
         if (debugFlag) {
             cout << obj.x << ":" << obj.y << ":" << obj.r << endl;
         }
@@ -85,13 +85,13 @@ void command_add_dynamic(string& command, MAP &map) {
  * 		the end point is in a dynamic barrier (aka a robot)
  * 		then return \n immediatly
  */
-string command_calc_path(string& command, MAP &map) {
+string command_calc_path(string &command, MAP &map) {
     int x_s, y_s, x_e, y_e;
     vertex_descriptor start, end, start_valid, end_valid;
     vector<vertex_descriptor> path;
     double distance;
     stringstream answer;
-    chrono::time_point <chrono::system_clock> startChrono, endChrono;
+    chrono::time_point<chrono::system_clock> startChrono, endChrono;
     chrono::duration<double> elapsedSeconds;
 
     // Get the initial and end point and search the nearest valid point
@@ -162,7 +162,7 @@ string command_calc_path(string& command, MAP &map) {
 
 int main(int argc, char **argv) {
     // Parse the command line options
-    parseOptions(argc,argv);
+    parseOptions(argc, argv);
 
     if (debugFlag) {
         cout << "Loading map " << mapPath << endl;
@@ -201,26 +201,28 @@ int main(int argc, char **argv) {
     cout << "Communication with system failed, stop the pathfinding" << endl;
 }
 
-void parseOptions(int argc, char** argv) {
+void parseOptions(int argc, char **argv) {
     try {
         CmdLine cmd("Command description message", ' ', "0.1");
 
-        ValueArg<string> mapArg("m","map","Path to the map used to compute pathfinding.",true,"","string");
+        ValueArg<string> mapArg("m", "map", "Path to the map used to compute pathfinding.", true, "", "string");
         cmd.add(mapArg);
 
-        ValueArg<uint8_t> heuristicArg("h","heuristic","Heuristic mode for pathfinding computing (EUCLIDIEAN = 0, NORM1 = 1).",false,1,"uint8_t");
+        ValueArg<uint8_t> heuristicArg("h", "heuristic",
+                                       "Heuristic mode for pathfinding computing (EUCLIDIEAN = 0, NORM1 = 1).", false,
+                                       1, "uint8_t");
         cmd.add(heuristicArg);
 
-        ValueArg<bool> debugArg("d","debug","Set the debug flag.",false,false,"bool");
+        ValueArg<bool> debugArg("d", "debug", "Set the debug flag.", false, false, "bool");
         cmd.add(debugArg);
 
-        ValueArg<bool> renderingArg("r","rendering","Set the rendering flag.",false,false,"bool");
+        ValueArg<bool> renderingArg("r", "rendering", "Set the rendering flag.", false, false, "bool");
         cmd.add(renderingArg);
 
         cmd.parse(argc, argv);
 
         mapPath = mapArg.getValue();
-        heuristicMode = (heuristic_type)heuristicArg.getValue();
+        heuristicMode = (heuristic_type) heuristicArg.getValue();
         debugFlag = debugArg.getValue();
         bmpRenderingFlag = renderingArg.getValue();
     } catch (ArgException &e) { // catch any exceptions

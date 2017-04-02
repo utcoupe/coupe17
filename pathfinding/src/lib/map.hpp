@@ -16,25 +16,30 @@
 
 typedef boost::grid_graph<2> grid;
 typedef boost::graph_traits<grid>::vertex_descriptor vertex_descriptor;
-struct vertex_hash:std::unary_function<vertex_descriptor, std::size_t> {
-	std::size_t operator()(vertex_descriptor const& u) const {
-		std::size_t seed = 0;
-		boost::hash_combine(seed, u[0]);
-		boost::hash_combine(seed, u[1]);
-		return seed;
-	}
+
+struct vertex_hash : std::unary_function<vertex_descriptor, std::size_t> {
+    std::size_t operator()(vertex_descriptor const &u) const {
+        std::size_t seed = 0;
+        boost::hash_combine(seed, u[0]);
+        boost::hash_combine(seed, u[1]);
+        return seed;
+    }
 };
 
 typedef boost::graph_traits<grid>::vertices_size_type vertices_size_type;
 typedef boost::unordered_set<vertex_descriptor, vertex_hash> vertex_set;
 typedef boost::vertex_subset_complement_filter<grid, vertex_set>::type filtered_grid;
 
-typedef enum heuristic_type { EUCLIDEAN, NORM1 } heuristic_type;
+typedef enum heuristic_type {
+    EUCLIDEAN, NORM1
+} heuristic_type;
 
 class MAP;
-std::ostream& operator<<(std::ostream& os, const MAP& map);
 
-struct found_goal {};
+std::ostream &operator<<(std::ostream &os, const MAP &map);
+
+struct found_goal {
+};
 
 //class euclidean_heuristic: public boost::astar_heuristic<filtered_grid, double> {
 //public:
@@ -62,14 +67,13 @@ struct found_goal {};
 
 class heuristicCompute : public boost::astar_heuristic<filtered_grid, double> {
 public:
-    heuristicCompute(heuristic_type type, vertex_descriptor goal):m_goal(goal), m_type(type) {};
-    double computeHeuristic (vertex_descriptor v) {
+    heuristicCompute(heuristic_type type, vertex_descriptor goal) : m_goal(goal), m_type(type) {};
+
+    double computeHeuristic(vertex_descriptor v) {
         double returnValue = 0.0;
-        if (m_type == NORM1)
-        {
+        if (m_type == NORM1) {
             returnValue = std::abs(m_goal[0] - v[0]) + std::abs(m_goal[1] - v[1]);
-        } else if (m_type == EUCLIDEAN)
-        {
+        } else if (m_type == EUCLIDEAN) {
             returnValue = sqrt(pow(double(m_goal[0]) - double(v[0]), 2) + pow(double(m_goal[1]) - double(v[1]), 2));
         }
         return returnValue;
@@ -81,10 +85,10 @@ private:
 };
 
 
+struct astar_goal_visitor : public boost::default_astar_visitor {
+    astar_goal_visitor(vertex_descriptor goal) : m_goal(goal) {};
 
-struct astar_goal_visitor: public boost::default_astar_visitor {
-    astar_goal_visitor(vertex_descriptor goal):m_goal(goal) {};
-    void examine_vertex(vertex_descriptor u, const filtered_grid&) {
+    void examine_vertex(vertex_descriptor u, const filtered_grid &) {
         if (u == m_goal)
             throw found_goal();
     }
@@ -94,77 +98,91 @@ private:
 };
 
 class MAP {
-	public:
-		MAP(const std::string &map_filename);
-		~MAP();
-		int get_map_h() const { return map_h; };
-		int get_map_w() const { return map_w; };
-		void add_dynamic_circle(int x, int y, float f_r);
-		void clear_dynamic_barriers();
+public:
+    MAP(const std::string &map_filename);
+    ~MAP();
 
-		bool solve(vertex_descriptor source, vertex_descriptor dest);
-		bool solve(int x_source, int y_source,
-					int x_dest, int y_dest) {
-			return solve(get_vertex(x_source, y_source), 
-							get_vertex(x_dest, y_dest));
-		}
-		void solve_smooth();
+    int get_map_h() const { return map_h; };
 
-		bool solution_contains(vertex_descriptor u) const {
-			for (const auto &el: solution) {
-				if (el == u)
-					return true;
-			}
-			return false;
-		}
-		bool smooth_solution_contains(vertex_descriptor u) const {
-			for (const auto &el: smooth_solution) {
-				if (el == u)
-					return true;
-			}
-			return false;
-		}
-		bool has_barrier(vertex_descriptor u) const {
-			return 	(barriers.find(u) != barriers.end());
-		}
-		
-		bool has_dynamic_barrier(vertex_descriptor u) const {
-			return 	(dynamic_barriers.find(u) != dynamic_barriers.end());
-		}
+    int get_map_w() const { return map_w; };
+    void add_dynamic_circle(int x, int y, float f_r);
+    void clear_dynamic_barriers();
 
-		void generate_bmp(std::string path);
-		vertex_descriptor find_nearest_valid(vertex_descriptor u);
-		vertex_descriptor find_nearest_valid(int x, int y) {
-			return find_nearest_valid(get_vertex(x, y));
-		};
+    bool solve(vertex_descriptor source, vertex_descriptor dest);
 
-		vertex_descriptor get_vertex(int x, int y);
-		double get_smooth_solution_length() { return smooth_solution_length; };
-		double get_solution_length() { return smooth_solution_length; };
-		std::vector<vertex_descriptor> get_solution() { return solution; };
-		std::vector<vertex_descriptor> get_smooth_solution() { return smooth_solution; };
-		bool solved() const {return !solution.empty();}
-		void set_heuristic_mode(heuristic_type mode) { h_mode = mode; };
-	private:
-		int map_w, map_h;
-		grid create_map(std::size_t x, std::size_t y);
-		filtered_grid create_barrier_map();
-		bool get_direct_distance(vertex_descriptor& v, vertex_descriptor& goal, 
-									double &d);
-		void clear_solution() {
-			solution.clear();
-			solution_length = 0;
-			smooth_solution.clear();
-		}
+    bool solve(int x_source, int y_source,
+               int x_dest, int y_dest) {
+        return solve(get_vertex(x_source, y_source),
+                     get_vertex(x_dest, y_dest));
+    }
 
-		bitmap_image image;
-		grid *map;
-		filtered_grid *map_barrier;
-		vertex_set barriers, static_barriers, dynamic_barriers;
-		std::vector<vertex_descriptor> solution, smooth_solution;
-		vertex_descriptor v_start, v_end;
-		heuristic_type h_mode;
-		double solution_length, smooth_solution_length;
+    void solve_smooth();
+
+    bool solution_contains(vertex_descriptor u) const {
+        for (const auto &el: solution) {
+            if (el == u)
+                return true;
+        }
+        return false;
+    }
+
+    bool smooth_solution_contains(vertex_descriptor u) const {
+        for (const auto &el: smooth_solution) {
+            if (el == u)
+                return true;
+        }
+        return false;
+    }
+
+    bool has_barrier(vertex_descriptor u) const {
+        return (barriers.find(u) != barriers.end());
+    }
+
+    bool has_dynamic_barrier(vertex_descriptor u) const {
+        return (dynamic_barriers.find(u) != dynamic_barriers.end());
+    }
+
+    void generate_bmp(std::string path);
+    vertex_descriptor find_nearest_valid(vertex_descriptor u);
+
+    vertex_descriptor find_nearest_valid(int x, int y) {
+        return find_nearest_valid(get_vertex(x, y));
+    };
+
+    vertex_descriptor get_vertex(int x, int y);
+
+    double get_smooth_solution_length() { return smooth_solution_length; };
+
+    double get_solution_length() { return smooth_solution_length; };
+
+    std::vector<vertex_descriptor> get_solution() { return solution; };
+
+    std::vector<vertex_descriptor> get_smooth_solution() { return smooth_solution; };
+
+    bool solved() const { return !solution.empty(); }
+
+    void set_heuristic_mode(heuristic_type mode) { h_mode = mode; };
+private:
+    int map_w, map_h;
+    grid create_map(std::size_t x, std::size_t y);
+    filtered_grid create_barrier_map();
+    bool get_direct_distance(vertex_descriptor &v, vertex_descriptor &goal,
+                             double &d);
+
+    void clear_solution() {
+        solution.clear();
+        solution_length = 0;
+        smooth_solution.clear();
+    }
+
+    bitmap_image image;
+    grid *map;
+    filtered_grid *map_barrier;
+    vertex_set barriers, static_barriers, dynamic_barriers;
+    std::vector<vertex_descriptor> solution, smooth_solution;
+    vertex_descriptor v_start, v_end;
+    heuristic_type h_mode;
+    double solution_length, smooth_solution_length;
 };
 
 #endif
