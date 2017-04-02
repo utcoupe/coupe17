@@ -31,9 +31,16 @@ module.exports = (function () {
 		var networkInterfaces = os.networkInterfaces();
 		try {
 			/** @type {string} */
-			this.ip = networkInterfaces["ra0"][0].address || networkInterfaces["Wi-Fi"][0].address || "127.0.0.1";
+			if (!!networkInterfaces["ra0"]){
+				this.ip = networkInterfaces["ra0"][0].address;
+			} else if (!!networkInterfaces["wlan0"]){
+				this.ip = networkInterfaces["wlan0"][0].address;
+			} else if (!!networkInterfaces["Wi-Fi"]){
+				this.ip = networkInterfaces["Wi-Fi"][0].address;
+			}
 		}
 		catch(e) {
+			logger.warn("Error looking for ip address, fallback to loopback address.");
 			this.ip = "127.0.0.1";
 		}
 		/** @type {string} */
@@ -151,7 +158,11 @@ module.exports = (function () {
 				} else {
 					// The order is valid
 					// logger.info("Data " +data.name+ " from " +data.from+ " to " +data.to);
-					this.server.to('webclient').to(data.to).emit('order', data);
+					if (data.name == "hokuyo.polar_raw_data") {
+						this.server.to(data.to).emit('order', data);
+					} else {
+						this.server.to('webclient').to(data.to).emit('order', data);
+					}
 				}
 			}.bind(this));
 		}.bind(this));
