@@ -12,6 +12,10 @@
 	<button class="btn" ng-show="our_color=='blue'" ng-click="our_color='yellow'">Yellow</button>
 	</p> -->
 	<li>
+		<span>Serveur websocket</span>
+		<button type="button" class="btn" ng-class="{activeButton: utcoupe.isServerVerbose}" ng-click="toogleVerbose()">Verbose</button>
+	</li>
+	<li>
 		<span class="utcoupe" ng-class="{launched: utcoupe.ia}" >IA</span>
 		<button type="button" class="btn" ng-hide="utcoupe.ia" ng-click="launch('ia')">Lancer</button> 
 		<button type="button" class="btn" ng-show="utcoupe.ia" ng-click="stop('ia')">Arrêter</button> <br/>
@@ -58,8 +62,8 @@
 		<span class="utcoupe" ng-class="{launched: utcoupe.hokuyo}" >Hokuyo</span>
 		<button type="button" class="btn" ng-hide="utcoupe.hokuyo" ng-click="launch('hokuyo')">Lancer</button> 
 		<button type="button" class="btn" ng-show="utcoupe.hokuyo" ng-click="stop('hokuyo')">Arrêter</button> 
-		<button type="button" class="btn" ng-show="utcoupe.hokuyo" ng-click="startC('hokuyo')">Lancer le C</button> 
-		<button type="button" class="btn" ng-show="utcoupe.hokuyo" ng-click="stopC('hokuyo')">Stopper le C</button> 
+		<button type="button" class="btn" ng-show="utcoupe.hokuyo" ng-click="startC()">Lancer le C</button> 
+		<button type="button" class="btn" ng-show="utcoupe.hokuyo" ng-click="stopC()">Stopper le C</button> 
 		<br /><br />
 	</li>
 	<div ng-include="'pages/logger/logger.tpl.html'"></div>

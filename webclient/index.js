@@ -23,11 +23,15 @@ angular.module('app').controller('IndexCtrl', ['$rootScope', '$scope', 'UTCoupe'
 		Client.send('server', 'server.stop', u);
 	}
 
-	$scope.startC = function(u) {
+	$scope.toogleVerbose = function() {
+		Client.send('server', 'server.verbose', {});
+	}
+
+	$scope.startC = function() {
 		Client.send("hokuyo", "start", {});
 	}
 
-	$scope.stopC = function(u) {
+	$scope.stopC = function() {
 		Client.send("hokuyo", "stop", {});
 	}
 }]);
@@ -38,7 +42,8 @@ angular.module('app').service('UTCoupe', ['$rootScope', 'Client', function($root
 		'pr': false,
 		'gr': false,
 		'lidar': false,
-		'hokuyo': false
+		'hokuyo': false,
+		'isServerVerbose': false
 	};
 	this.init = function () {
 		Client.order(function (from, name, data) {
@@ -49,6 +54,11 @@ angular.module('app').service('UTCoupe', ['$rootScope', 'Client', function($root
 				this.utcoupe.pr = data.pr;
 				this.utcoupe.lidar = data.lidar;
 				this.utcoupe.hokuyo = data.hokuyo;
+				if($rootScope.act_page == 'index') {
+					$rootScope.$apply();
+				}
+			} else if(name == 'serverVerbosity') {
+				this.utcoupe.isServerVerbose = data.isServerVerbose;
 				if($rootScope.act_page == 'index') {
 					$rootScope.$apply();
 				}
