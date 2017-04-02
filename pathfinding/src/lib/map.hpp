@@ -41,30 +41,6 @@ std::ostream &operator<<(std::ostream &os, const MAP &map);
 struct found_goal {
 };
 
-//class euclidean_heuristic: public boost::astar_heuristic<filtered_grid, double> {
-//public:
-//    euclidean_heuristic(vertex_descriptor goal):m_goal(goal) {};
-//    double operator()(vertex_descriptor v) {
-//        return sqrt(pow(double(m_goal[0]) - double(v[0]), 2) + pow(double(m_goal[1]) - double(v[1]), 2));
-//    }
-//
-//private:
-//    vertex_descriptor m_goal;
-//};
-//
-//class norm1_heuristic: public boost::astar_heuristic<filtered_grid, double> {
-//public:
-//    norm1_heuristic(vertex_descriptor goal):m_goal(goal) {};
-//    double operator()(vertex_descriptor v) {
-//        return abs(m_goal[0] - v[0]) + abs(m_goal[1] - v[1]);
-//    }
-//
-//private:
-//    vertex_descriptor m_goal;
-//};
-
-
-
 class heuristicCompute : public boost::astar_heuristic<filtered_grid, double> {
 public:
     heuristicCompute(heuristic_type type, vertex_descriptor goal) : m_goal(goal), m_type(type) {};
@@ -145,17 +121,9 @@ public:
     void generate_bmp(std::string path);
     vertex_descriptor find_nearest_valid(vertex_descriptor u);
 
-    vertex_descriptor find_nearest_valid(int x, int y) {
-        return find_nearest_valid(get_vertex(x, y));
-    };
-
     vertex_descriptor get_vertex(int x, int y);
 
     double get_smooth_solution_length() { return smooth_solution_length; };
-
-    double get_solution_length() { return smooth_solution_length; };
-
-    std::vector<vertex_descriptor> get_solution() { return solution; };
 
     std::vector<vertex_descriptor> get_smooth_solution() { return smooth_solution; };
 
