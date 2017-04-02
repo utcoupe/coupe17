@@ -31,7 +31,7 @@ module.exports = (function () {
 		var networkInterfaces = os.networkInterfaces();
 		try {
 			/** @type {string} */
-			this.ip = networkInterfaces["eth0"][0].address || networkInterfaces["Wi-Fi"][0].address || "127.0.0.1";
+			this.ip = networkInterfaces["ra0"][0].address || networkInterfaces["Wi-Fi"][0].address || "127.0.0.1";
 		}
 		catch(e) {
 			this.ip = "127.0.0.1";
