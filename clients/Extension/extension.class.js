@@ -19,4 +19,4 @@ class Extension extends Client {
     }
 }
 
-module.export = Extension;
+module.exports = Extension;

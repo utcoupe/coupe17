@@ -20,4 +20,4 @@ class UnitGrabber extends Extension {
     }
 }
 
-module.export = UnitGrabber;
+module.exports = UnitGrabber;

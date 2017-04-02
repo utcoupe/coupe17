@@ -20,4 +20,4 @@ class BaseConstructor extends Extension {
     }
 }
 
-module.export = BaseConstructor;
+module.exports = BaseConstructor;
