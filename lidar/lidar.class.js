@@ -13,6 +13,12 @@ module.exports = (function () {
 
 	var DELTA_T = 100; 					// ms between two data shipping
 	var DELTA_T_CHECK = 200; 			// ms between two data shipping
+	var X_MAX_ZONE = 295;
+	var X_MIN_ZONE = 0;
+	var Y_MAX_ZONE = 195;
+	var Y_MIN_ZONE = 0;
+	var CLUSTER_DISTANCE = 5;
+	var CLUSTER_K = 6;
 
 	/**
 	 * Lidar Constructor
@@ -121,7 +127,6 @@ module.exports = (function () {
 	function Spot(angle, distance){
 		this.angle = angle;
 		this.distance = distance;
-		this.filtered = true;
 		this.inTheTable = false;
 	}
 	Spot.prototype.toCartesian = function(lidar, hokName) {
@@ -179,22 +184,14 @@ module.exports = (function () {
 	Lidar.prototype.onHokuyoPolar = function (hokuyoName, polarSpots) {
 		//logger.warn("nb points :" + polarSpots.length)
 		let spots = this.createSpot(polarSpots);
+
 		this.toCartesian(hokuyoName, spots);
 
-		//clusterize
-		let clusters = this.clusterize(spots)
-		//logger.warn("nb clusters" + clusters.length);
-
-		// First Filter - Delete unused clusters and corresponding spots :
-		// too big or too small clusters
-		let filteredSpots = this.filterPolar(clusters);
-		//logger.warn("nb spots:" + filteredSpots.length);
 		// Save
 		this.lastCartSpots[hokuyoName] = {};
 		this.lastCartSpots[hokuyoName].isWorking = function() { return Date.now() - this.time <  2 * DELTA_T; }; // we had some data no long ago
 		this.lastCartSpots[hokuyoName].time = Date.now();
 		this.lastCartSpots[hokuyoName].filteredSpots = spots;
-		this.lastCartSpots[hokuyoName].clusters = clusters;
 
 
 		// If we reached the DELTAT, send newly merged data
@@ -262,11 +259,11 @@ module.exports = (function () {
             D : distance maximale entre deux points d'un même cluster
             k : la distance est calculée entre le point i et les k points précédents
         *****/
-			var clusters = [], k = 6;
+			var clusters = [], k = CLUSTER_K;
 			if(spotsIn.length < k){
 				return clusters;
 			}
-            var g = 0, D = 5;
+            var g = 0, D = CLUSTER_DISTANCE;
             var G = []; //le point Spot[i] appartient au groupe G[i]
 			var d=[];
 
@@ -321,30 +318,6 @@ module.exports = (function () {
 			clusters.shift();
 			return clusters;
 	};
-	/* Delete unused clusters in clusters
-	Return filteredSpots */
-	Lidar.prototype.filterPolar = function(clusters) {
-		let filteredClusters = [];
-		let filteredSpots = [];
-		let count = [], count1 = [], count3 = 0;
-		for(let i = 0; i < clusters.length ; i++){
-				count.push(clusters[i].spots.length);
-				clusters[i].calculCenter();
-			if (clusters[i].spots.length >= 3 && clusters[i].spots.length <= 50 || 1){
-				count3 = count3 +1;
-				count1.push(clusters[i].spots.length);
-				filteredClusters.push(clusters[i]);
-				for(let j = 0; j < clusters[i].spots.length ; j++){
-					filteredSpots.push(clusters[i].spots[j])
-					clusters[i].spots[j].filtered = false
-				}
-
-			}
-		}
-		clusters = filteredClusters;
-		logger.warn(count, count1, count3);
-		return  filteredSpots;
-	};
 
 	Lidar.prototype.toCartesian = function(hokName, spots) {
 		let hokPos = this.hokuyoPositions[hokName];
@@ -371,9 +344,8 @@ module.exports = (function () {
 		for(let pt of cartSpots){
 			//if (pt.x > 0 && pt.x < 295 && pt.y>0 && pt.y<195) {
 			//	pt.inTheTable = true;
-				if (pt.filtered == false){
 					ret.push(pt);
-				}
+
 			//}
 		}
 
@@ -390,7 +362,7 @@ module.exports = (function () {
 
 		if (workingHokuyos.length == 2) {
 			for(let spot of cartSpots.one.filteredSpot) {
-				if (spot.x > 0 && spot.x < 200 && spot.y>0 && spot.y<195) {
+				if (spot.x > X_MIN_ZONE && spot.x < 300 && spot.y>Y_MIN_ZONE && spot.y<Y_MAX_ZONE) {
 					spot.inTheTable = true
 				}
 						ret.push(spot);
@@ -398,14 +370,14 @@ module.exports = (function () {
 			}
 
 			for(let spot of cartSpots.two.filteredSpots) {
-				if (spot.x > 0 && spot.x < 200 && spot.y>0 && spot.y<195) {
+				if (spot.x > X_MIN_ZONE && spot.x < 300 && spot.y>Y_MIN_ZONE&& spot.y<Y_MAX_ZONE) {
 					spot.inTheTable = true
 				}
 						ret.push(spot);
 			}
 		} else if (workingHokuyos.length == 1) {
 			for(let spot of cartSpots[workingHokuyos[0].name].filteredSpots) {
-				if (spot.x > 0 && spot.x < 295 && spot.y>0 && spot.y<195) {
+				if (spot.x > X_MIN_ZONE && spot.x < X_MAX_ZONE && spot.y>Y_MIN_ZONE && spot.y<Y_MAX_ZONE) {
 					spot.inTheTable = true
 				}
 						ret.push(spot);
@@ -421,12 +393,15 @@ module.exports = (function () {
 		let ret = [];
 
 	 	let clusters = this.clusterize(cartSpots);
-		logger.warn("nb robots :" + clusters.length)
 		for (let i = 0 ; i < clusters.length ; i++){
-			clusters[i].calculCenter();
-			clusters[i].diagBox();
-			if (clusters[i].diag < 7 && clusters[i].diag > 3)
-			ret.push([clusters[i].x, clusters[i].y]);
+			if (clusters[i].spots.length >3){
+				clusters[i].calculCenter();
+				if(clusters[i].x > X_MIN_ZONE && clusters[i].x < X_MAX_ZONE && clusters[i].y < Y_MAX_ZONE && clusters[i].y > Y_MIN_ZONE){
+					clusters[i].diagBox();
+					if (clusters[i].diag < 10 && clusters[i].diag > 4 )
+					ret.push([clusters[i].x, clusters[i].y]);
+				}
+			}
 		}
 		/*ret = [
 			[ 150, 100 ],

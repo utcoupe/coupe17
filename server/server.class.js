@@ -15,7 +15,7 @@ module.exports = (function () {
 
 	/**
 	 * Starts a server on the port specified. Default port: 3128
-	 * 
+	 *
 	 * @exports server/server.Server
 	 * @constructor
 	 * @param {int} [server_port=3128] Server port
@@ -25,7 +25,7 @@ module.exports = (function () {
 		 * @type {int}
 		 */
 		this.server_port = server_port || 3128;
-		
+
 		// Get server IP address
 		var os = require('os');
 		var networkInterfaces = os.networkInterfaces();
@@ -45,7 +45,7 @@ module.exports = (function () {
 		 */
 		this.server = require('socket.io')();
 
-		/** 
+		/**
 		 * Create the network default object
 		 * @type {Object}
 		 * */
@@ -210,7 +210,7 @@ module.exports = (function () {
 					name: 'logger',
 					params: {
 						head: '[ERROR]['+prog+'](code:'+err.code+')',
-						text: convert.toHtml(JSON.stringify(err))						
+						text: convert.toHtml(JSON.stringify(err))
 					},
 					from: 'server'
 				});
@@ -223,7 +223,7 @@ module.exports = (function () {
 					// params: '[CLOSE]['+prog+'] '+data.toString(),
 					params: {
 						head: '[CLOSE]['+prog+'](code:'+code+')',
-						text: " "						
+						text: " "
 					},
 					from: 'server'
 				});
@@ -241,7 +241,7 @@ module.exports = (function () {
 					name: 'logger',
 					params: {
 						head: '['+prog+'][stdout]',
-						text: convert.toHtml(data.toString())						
+						text: convert.toHtml(data.toString())
 					},
 					from: 'server'
 				});
@@ -252,12 +252,12 @@ module.exports = (function () {
 					name: 'logger',
 					params: {
 						source: '['+prog+'][stderr]',
-						text: convert.toHtml(data.toString())						
+						text: convert.toHtml(data.toString())
 					},
 					from: 'server'
 				});
 			}.bind(this, prog));
-			 
+
 				// logger.debug(prog);
 				// logger.fatal(prog, '|stdout|', data.toString());
 			this.utcoupe[prog] = true;
@@ -267,7 +267,7 @@ module.exports = (function () {
 
 	/**
 	 * Stops all
-	 * 
+	 *
 	 * @param {string} prog
 	 */
 	Server.prototype.stop = function(prog) {
@@ -287,7 +287,7 @@ module.exports = (function () {
 
 	/**
 	 * sendUTCoupe
-	 * 
+	 *
 	 * @param {string} prog
 	 */
 	Server.prototype.sendUTCoupe = function(prog) {
