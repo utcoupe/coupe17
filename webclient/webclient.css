@@ -9,6 +9,10 @@ li {
 	color: green;
 }
 
+.activeButton {
+	background-color: #81E939;
+}
+
 .config {
 	color: #fff;
 	background: #000;

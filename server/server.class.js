@@ -26,6 +26,8 @@ module.exports = (function () {
 		 */
 		this.server_port = server_port || 3128;
 
+		this.verbose = false;
+
 		// Get server IP address
 		var os = require('os');
 		var networkInterfaces = os.networkInterfaces();
@@ -84,6 +86,8 @@ module.exports = (function () {
 			'hokuyo': false
 		}
 
+		this.spamList = ["hokuyo.polar_raw_data"];
+
 		// When the client is connected
 		this.server.on('connection', function (client) {
 			// When the client is disconnected
@@ -116,6 +120,7 @@ module.exports = (function () {
 				client.emit('log', "Connected to the server successfully at " + client.handshake.headers.host);
 				this.sendNetwork();
 				this.sendUTCoupe();
+				this.sendVerbosity();
 			}.bind(this));
 
 			// When the client send an order
@@ -155,10 +160,16 @@ module.exports = (function () {
 					spawn('/root/flash_all_arduinos.sh', [], {
 						detached: true
 					});
+				} else if (data.name == 'server.verbose') {
+					// Toogle verbose mode
+					this.verbose = !this.verbose;
+					logger.info("Have been asked to " + (this.verbose?"talk a lot :)":"shut up :/"));
+					this.sendVerbosity();
 				} else {
 					// The order is valid
 					// logger.info("Data " +data.name+ " from " +data.from+ " to " +data.to);
-					if (data.name == "hokuyo.polar_raw_data") {
+					if (!this.verbose &&
+						this.spamList.indexOf(data.name) != 1) {
 						this.server.to(data.to).emit('order', data);
 					} else {
 						this.server.to('webclient').to(data.to).emit('order', data);
@@ -306,6 +317,22 @@ module.exports = (function () {
 			to: 'webclient',
 			name: 'utcoupe',
 			params: this.utcoupe,
+			from: 'server'
+		});
+	}
+
+	/**
+	 * sendUTCoupe
+	 *
+	 * @param {string} prog
+	 */
+	Server.prototype.sendVerbosity = function() {
+		this.server.to('webclient').emit('order', {
+			to: 'webclient',
+			name: 'serverVerbosity',
+			params: {
+				"isServerVerbose": this.verbose
+			},
 			from: 'server'
 		});
 	}
