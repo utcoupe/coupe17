@@ -391,14 +391,33 @@ module.exports = (function () {
 
 	Lidar.prototype.findRobots = function(cartSpots) {
 		let ret = [];
-
+		let d = 10000, j=0, x, y, diff = 0;
 	 	let clusters = this.clusterize(cartSpots);
 		for (let i = 0 ; i < clusters.length ; i++){
+			clusters[i].calculCenter();
+		}
+		for (let i = 0 ; i < clusters.length ; i++){
+			j = i+1;
+			while(j < clusters.length){
+				if (j != i){
+					x = Math.abs(clusters[i].x - clusters[j].x);
+					y = Math.abs(clusters[i].y - clusters[j].y);
+					d = Math.sqrt(x*x + y*y)
+					if(d < 20){
+						clusters[i].spots = clusters[i].spots.concat(clusters[j].spots);
+						clusters.splice(j, 1);
+						diff ++;
+					}
+				}
+				j = j+1;
+			}
+		}
+		for (let i = 0 ; i < clusters.length ; i++){
+			clusters[i].calculCenter();
 			if (clusters[i].spots.length >3){
-				clusters[i].calculCenter();
 				if(clusters[i].x > X_MIN_ZONE && clusters[i].x < X_MAX_ZONE && clusters[i].y < Y_MAX_ZONE && clusters[i].y > Y_MIN_ZONE){
 					clusters[i].diagBox();
-					if (clusters[i].diag < 10 && clusters[i].diag > 4 )
+					if (clusters[i].diag < 30 && clusters[i].diag > 4 )
 					ret.push([clusters[i].x, clusters[i].y]);
 				}
 			}

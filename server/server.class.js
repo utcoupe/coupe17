@@ -37,6 +37,8 @@ module.exports = (function () {
 				this.ip = networkInterfaces["wlan0"][0].address;
 			} else if (!!networkInterfaces["Wi-Fi"]){
 				this.ip = networkInterfaces["Wi-Fi"][0].address;
+			} else {
+				this.ip = "127.0.0.1";
 			}
 		}
 		catch(e) {
