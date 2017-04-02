@@ -173,15 +173,15 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	});
 
 
-	$(document).on("click", "#rc_hok_start", function(e) {
-		Client.send("hokuyo", "start", {});
-		console.log("Message `start` sent");
-	});
+	// $(document).on("click", "#rc_hok_start", function(e) {
+	// 	Client.send("hokuyo", "start", {});
+	// 	console.log("Message `start` sent");
+	// });
 
-	$(document).on("click", "#rc_hok_stop", function(e) {
-		Client.send("hokuyo", "stop", {});
-		console.log("Message `stop` sent");
-	});
+	// $(document).on("click", "#rc_hok_stop", function(e) {
+	// 	Client.send("hokuyo", "stop", {});
+	// 	console.log("Message `stop` sent");
+	// });
 
 
 	/*$scope.rc_pr_pos_value = 0.5;
