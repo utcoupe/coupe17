@@ -121,6 +121,8 @@ module.exports = (function () {
 	function Spot(angle, distance){
 		this.angle = angle;
 		this.distance = distance;
+		this.filtered = true;
+		this.inTheTable = false;
 	}
 	Spot.prototype.toCartesian = function(lidar, hokName) {
 		let ret = [];
@@ -131,10 +133,10 @@ module.exports = (function () {
 			// x is the forward axe
 			// y is the RIGHT axe looking from the top
 			// ie : the hokuyo on the back left hand corner, oriented to 0, has the same frame as the table translated a little
-			// thus, hokuyo positive angles are at its right hand
+			// thus, hokuyo positive angles are at its left hand
 			let cartPt = [
-				this.distance * Math.cos(lidar.toRadian(this.angle)),
-				this.distance * Math.sin(lidar.toRadian(this.angle))
+				this.distance * Math.cos(lidar.toRadian(-this.angle)),
+				this.distance * Math.sin(lidar.toRadian(-this.angle))
 			]
 			// Change to table frame
 			this.x = hokPos.x + cartPt[0] * Math.cos(lidar.toRadian(hokPos.w)) + cartPt[1] * Math.sin(lidar.toRadian(hokPos.w)),
@@ -156,27 +158,42 @@ module.exports = (function () {
 		this.y = y/nb;
 
 	}
+	Cluster.prototype.diagBox = function() {
+		let Xmax = 0, Ymax = 0, Xmin = 10000, Ymin = 10000, x, y;
+		for(let i = 0 ; i < this.spots.length; i++){
+			x = this.spots[i].x;
+			y = this.spots[i].y;
+			if (Xmax < x ) Xmax = x;
+			if (Xmin > x) Xmin = x;
+			if (Ymax < x ) Ymax = y;
+			if (Ymin > x) Ymin = y;
+		}
+		x = Xmax - Xmin;
+		y = Ymax - Ymin;
+		let d = Math.sqrt(x*x +y*y);
+		this.diag = d ;
+	}
 	/**
 	 * When Hokuyo data arrives
 	 */
 	Lidar.prototype.onHokuyoPolar = function (hokuyoName, polarSpots) {
-		logger.warn("nb points :" + polarSpots.length)
+		//logger.warn("nb points :" + polarSpots.length)
 		let spots = this.createSpot(polarSpots);
 		this.toCartesian(hokuyoName, spots);
 
 		//clusterize
 		let clusters = this.clusterize(spots)
-		logger.warn("nb clusters" + clusters.length);
+		//logger.warn("nb clusters" + clusters.length);
 
 		// First Filter - Delete unused clusters and corresponding spots :
 		// too big or too small clusters
 		let filteredSpots = this.filterPolar(clusters);
-		logger.warn("nb spots:" + filteredSpots.length);
+		//logger.warn("nb spots:" + filteredSpots.length);
 		// Save
 		this.lastCartSpots[hokuyoName] = {};
 		this.lastCartSpots[hokuyoName].isWorking = function() { return Date.now() - this.time <  2 * DELTA_T; }; // we had some data no long ago
 		this.lastCartSpots[hokuyoName].time = Date.now();
-		this.lastCartSpots[hokuyoName].spots = filteredSpots;
+		this.lastCartSpots[hokuyoName].filteredSpots = spots;
 		this.lastCartSpots[hokuyoName].clusters = clusters;
 
 
@@ -190,13 +207,11 @@ module.exports = (function () {
 			//logger.warn(this.mergedSpots);
 			/* Merge very close clusters provided by two different hokuyo */
 
-
-
+			//this.toCartesian(hokuyoName, this.mergedSpots);
 			// Filter (bis)
-			//this.mergedSpots = this.filterCart(this.mergedSpots);
-
+			this.mergedFilterSpots = this.filterCart(this.mergedSpots);
 			// Find enemy robots
-			this.robotsSpots = this.findRobots(this.mergedSpots);
+			this.robotsSpots = this.findRobots(this.mergedFilterSpots);
 			this.displaySpots = this.prepareData(this.mergedSpots); //renvoie un tableau de coordonnées prêt à être affiché
 
 			// Prepare data
@@ -247,11 +262,11 @@ module.exports = (function () {
             D : distance maximale entre deux points d'un même cluster
             k : la distance est calculée entre le point i et les k points précédents
         *****/
-			var clusters = [], k = 5;
+			var clusters = [], k = 6;
 			if(spotsIn.length < k){
 				return clusters;
 			}
-            var g = 0, D = 3;
+            var g = 0, D = 5;
             var G = []; //le point Spot[i] appartient au groupe G[i]
 			var d=[];
 
@@ -315,20 +330,19 @@ module.exports = (function () {
 		for(let i = 0; i < clusters.length ; i++){
 				count.push(clusters[i].spots.length);
 				clusters[i].calculCenter();
-			if (clusters[i].spots.length >= 3 && clusters[i].spots.length <= 10
-				&& clusters[i].x <300 && clusters[i].x > 0
-				&& clusters[i].y <200 && clusters[i].y > 0){
+			if (clusters[i].spots.length >= 3 && clusters[i].spots.length <= 50 || 1){
 				count3 = count3 +1;
 				count1.push(clusters[i].spots.length);
 				filteredClusters.push(clusters[i]);
 				for(let j = 0; j < clusters[i].spots.length ; j++){
 					filteredSpots.push(clusters[i].spots[j])
+					clusters[i].spots[j].filtered = false
 				}
 
 			}
 		}
 		clusters = filteredClusters;
-		//logger.warn(count, count1, count3);
+		logger.warn(count, count1, count3);
 		return  filteredSpots;
 	};
 
@@ -355,14 +369,17 @@ module.exports = (function () {
 
 		// Keep only points in the table
 		for(let pt of cartSpots){
-			if (isInTable(pt)) {
-				ret.push(pt);
-			}
+			//if (pt.x > 0 && pt.x < 295 && pt.y>0 && pt.y<195) {
+			//	pt.inTheTable = true;
+				if (pt.filtered == false){
+					ret.push(pt);
+				}
+			//}
 		}
+
 
 		return ret;
 	};
-
 
 	Lidar.prototype.mergeSpots = function(cartSpots) {
 		let ret = [];
@@ -372,22 +389,26 @@ module.exports = (function () {
 		//logger.warn("TODO: check that cartSpots[workingHokuyos[0].name].spots works");
 
 		if (workingHokuyos.length == 2) {
-			for(let spot of cartSpots.one.spots) {
-				if(spot.x < 300 && spot.y < 200){
-					ret.push(spot);
+			for(let spot of cartSpots.one.filteredSpot) {
+				if (spot.x > 0 && spot.x < 200 && spot.y>0 && spot.y<195) {
+					spot.inTheTable = true
 				}
+						ret.push(spot);
+
 			}
 
-			for(let spot of cartSpots.two.spots) {
-				if(spot.x < 300 && spot.y < 200 ){
-					ret.push(spot);
+			for(let spot of cartSpots.two.filteredSpots) {
+				if (spot.x > 0 && spot.x < 200 && spot.y>0 && spot.y<195) {
+					spot.inTheTable = true
 				}
+						ret.push(spot);
 			}
 		} else if (workingHokuyos.length == 1) {
-			for(let spot of cartSpots[workingHokuyos[0].name].spots) {
-				if(spot.x < 300 && spot.x > 0 && spot.y < 200 && spot.y > 0){
-					ret.push(spot);
+			for(let spot of cartSpots[workingHokuyos[0].name].filteredSpots) {
+				if (spot.x > 0 && spot.x < 295 && spot.y>0 && spot.y<195) {
+					spot.inTheTable = true
 				}
+						ret.push(spot);
 			}
 		} else if (workingHokuyos.length == 0) {
 			logger.warn("Trying to merge point without active hokuyo");
@@ -395,12 +416,16 @@ module.exports = (function () {
 		return ret;
 	};
 
+
 	Lidar.prototype.findRobots = function(cartSpots) {
 		let ret = [];
-	 	let clusters = this.clusterize(cartSpots);
 
+	 	let clusters = this.clusterize(cartSpots);
+		logger.warn("nb robots :" + clusters.length)
 		for (let i = 0 ; i < clusters.length ; i++){
 			clusters[i].calculCenter();
+			clusters[i].diagBox();
+			if (clusters[i].diag < 7 && clusters[i].diag > 3)
 			ret.push([clusters[i].x, clusters[i].y]);
 		}
 		/*ret = [
@@ -413,7 +438,8 @@ module.exports = (function () {
 	Lidar.prototype.prepareData = function(spots){
 		let ret = [];
 		for(let i = 0; i < spots.length ; i++){
-			ret.push([spots[i].x, spots[i].y])
+			if (spots[i].inTheTable == true)
+				ret.push([spots[i].x, spots[i].y])
 		}
 		return ret;
 	}

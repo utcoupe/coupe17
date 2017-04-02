@@ -33,15 +33,15 @@ class HokuyoDisplay {
 		this.realH = 0;
 		this.W = 0;
 		this.H = 0;
-		this.center = {}; 
-		this.center.x = 0; 
+		this.center = {};
+		this.center.x = 0;
 		this.center.y = 0;
 		this.center.str = this.center.x + "," + this.center.y; // in the viewport frame
 		this.viewportScale = 1;
 
 		if (this.mode == this.MAIN) {
 			var maxWidth = 1000; // px
-			
+
 			this.realW = 300;
 			this.realH = 200;
 
@@ -183,8 +183,8 @@ class HokuyoDisplay {
 				var dot = this.r.circle(0, newSpot[1] * this.viewportScale, this.dotRadius).attr({
 					stroke: this.dotColor,
 					fill: this.dotColor,
-					transform:  "t," + this.center.str + "r180,0,0" + "r" + newSpot[0] + ",0,0"});
-				//  + " 0 0" +   + 
+					transform:  "t," + this.center.str + "r180,0,0" + "r" + -newSpot[0] + ",0,0"});
+				//  + " 0 0" +   +
 				this.dots.set(newSpot[0], dot);
 			}
 		}.bind(this));

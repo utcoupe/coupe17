@@ -164,6 +164,7 @@
 						bufferData = bufferData + temp[2];
 						client.send("lidar", "hokuyo.polar_raw_data", { "hokuyo": temp[0], "polarSpots" : JSON.parse(bufferData) });
 						count = 0;
+
 						// logger.warn(JSON.parse(bufferData));
 						if (logcount++ > 100) {
 							logger.info("Hokuyo correctly running");
