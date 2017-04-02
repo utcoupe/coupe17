@@ -48,7 +48,7 @@
 	var lastStatus = {
 		"status": "waiting"
 	};
-	sendChildren(lastStatus);
+	changeStatus("waiting");
 
 	logger.info("Starting with pid " + process.pid);
 
@@ -133,7 +133,7 @@
 	function start(){
 		// We just an order to start, with the flavour :P (color, number of robots)
 
-		sendChildren({"status": "starting"});
+		changeStatus("starting");
 
 		// Generates the match name (for the log file)
 		var tmp = new Date();
@@ -230,11 +230,12 @@
 						case "HI:)":
 							// send "C started" to server
 							logger.info('C Hokuyo software says "Hi !" :)');
-							sendChildren({"status": "starting"});
+							changeStatus("starting");
 							break;
 						case "DATA":
 							//logger.info('C Hokuyo software sends datas');
 							parseData(inputAr[i].substring(6));
+							changeStatus("everythingIsAwesome");
 							break;
 						case "INFO":
 							logger.info('C Hokuyo software sends information :'+inputAr[i].substring(6));
@@ -285,6 +286,10 @@
 
 		child.stderr.on('data', function(data) {
 			logger.error(data.toString());
+			sendChildren({"status": "error"});
+			setTimeout(function(){
+				sendChildren({"status": "waiting", "children":[]});
+			}, 5000);
 		});
 
 
@@ -322,6 +327,14 @@
 
 		return data;
 	}
+
+	function changeStatus(newStatus) {
+		if (newStatus != lastStatus.status) {
+			logger.info("New status : " + newStatus);
+			lastStatus.status = newStatus;
+			sendChildren(lastStatus)
+		}
+	};
 
 
 	// Sends status to server

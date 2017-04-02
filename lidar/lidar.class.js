@@ -106,7 +106,7 @@ module.exports = (function () {
 	};
 
 	Lidar.prototype.changeStatus = function(newStatus) {
-		logger.info("New status : " + newStatus);
+		logger.info("New lidar status : " + newStatus);
 		this.status = newStatus;
 		this.sendStatus(this.status);
 	};
