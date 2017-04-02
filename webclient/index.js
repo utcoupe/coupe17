@@ -34,6 +34,16 @@ angular.module('app').controller('IndexCtrl', ['$rootScope', '$scope', 'UTCoupe'
 	$scope.stopC = function() {
 		Client.send("hokuyo", "stop", {});
 	}
+
+	$scope.resumeLidar = function() {
+		Client.send("lidar", "start", {
+			"color": $scope.our_color
+		});
+	}
+
+	$scope.pauseLidar = function() {
+		Client.send("lidar", "stop", {});
+	}
 }]);
 
 angular.module('app').service('UTCoupe', ['$rootScope', 'Client', function($rootScope, Client) {
