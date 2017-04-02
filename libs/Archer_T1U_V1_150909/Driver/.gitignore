@@ -1,0 +1,12 @@
+# Gitignore for the driver Archer generated files
+
+*.o*
+*.ko*
+Module.symvers
+modules.order
+.tmp_versions/
+bin2h
+mt7650u_sta_util.mod.c
+mt7650u_sta.mod.c
+mt7650u_sta_net.mod.c
+

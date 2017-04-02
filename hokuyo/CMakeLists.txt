@@ -1,33 +1,18 @@
-#Configuration du projet
+PROJECT(hokuyo)
 cmake_minimum_required(VERSION 2.8)
-project(hokuyo_client)
 
 FIND_PACKAGE(SDL REQUIRED)
+
 SET(CMAKE_C_FLAGS "-std=gnu99 -Wall -Werror")
 
-set(EXECUTABLE_OUTPUT_PATH bin/)
-set(EXEC_NAME hokuyo)
+SET(EXECUTABLE_OUTPUT_PATH $ENV{UTCOUPE_WORKSPACE}/bin/)
 
-#Configurationdel'exécutable
+file(GLOB_RECURSE SRC_FILES	src/*)
 
-file(
-	GLOB_RECURSE
-	source_files
-	src/*
-)
+add_executable(${PROJECT_NAME}	${SRC_FILES})
 
-add_executable(
-	${EXEC_NAME}
-	${source_files}
-)
+#TODO c_urg by find_package
+INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIR} /usr/local/include/c_urg)
 
-
-INCLUDE_DIRECTORIES( ${SDL_INCLUDE_DIR} )
-include_directories( /usr/local/include/c_urg )
-target_link_libraries( hokuyo
-	#libjansson
-	c_urg 
-	c_urg_connection 
-	c_urg_system 
-	SDL 
-	m )
+#TODO urg_libraries instead of each urg library by hand
+target_link_libraries(${PROJECT_NAME} c_urg c_urg_connection c_urg_system SDL m )

@@ -18,8 +18,17 @@ angular.module('app').controller('IndexCtrl', ['$rootScope', '$scope', 'UTCoupe'
 			EPR_d: $scope.EPR_d
 		});
 	}
+
 	$scope.stop = function(u) {
 		Client.send('server', 'server.stop', u);
+	}
+
+	$scope.startC = function(u) {
+		Client.send("hokuyo", "start", {});
+	}
+
+	$scope.stopC = function(u) {
+		Client.send("hokuyo", "stop", {});
 	}
 }]);
 
