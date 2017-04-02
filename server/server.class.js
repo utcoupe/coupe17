@@ -193,6 +193,7 @@ module.exports = (function () {
 					this.progs[prog] = spawn('node', ['./clients/gr/main.js']);
 				break;
 				case 'hokuyo':
+					// this.progs[prog] = spawn('ssh', ['raspi', './hokuyo/main.js']);
 					this.progs[prog] = spawn('node', ['./hokuyo/main.js']);
 				break;
 				case 'lidar':
@@ -272,12 +273,13 @@ module.exports = (function () {
 	Server.prototype.stop = function(prog) {
 		if (prog == "pr") {
 			this.progs[prog] = spawn('ssh', ['igep', 'pkill', 'node']);
-		} else if (prog == "hokuyo") {
-			this.progs[prog] = spawn('ssh', ['raspi', 'pkill', 'node']);
 		}
-		if(this.utcoupe[prog]) {
-			this.progs[prog].kill();
-			logger.info("stopped "+prog);
+		// else if (prog == "hokuyo") {
+		// 	this.progs[prog] = spawn('ssh', ['raspi', 'pkill', 'node']);
+		// }
+		if(!!this.utcoupe[prog]) {
+			logger.info("Killing "+prog);
+			this.progs[prog].kill("SIGINT");
 			this.utcoupe[prog] = false;
 		}
 		this.sendUTCoupe();

@@ -29,9 +29,12 @@
 	var server = process.argv[2] || config.server;
 	var command = process.argv[3] || config.hokuyo_command;
 
+	if (!process.env.UTCOUPE_WORKSPACE) {
+		process.env.UTCOUPE_WORKSPACE = config.UTCOUPE_WORKSPACE;
+	}
 
 	if (!process.env.UTCOUPE_WORKSPACE) {
-		logger.error("Missing UTCOUPE_WORKSPACE environment variable. Make sure to call 'sudo -E node ...'");
+		logger.warn("Missing UTCOUPE_WORKSPACE environment variable. Make sure to call 'sudo -E node ...' or to fill UTCOUPE_WORKSPACE in config.js");
 		process.exit(1);
 	}
 
@@ -49,6 +52,15 @@
 
 	logger.info("Starting with pid " + process.pid);
 
+	// Exit handlers
+	//do something when app is closing
+	// process.on('exit', exit); // doesn't seem to work, don't know why... https://nodejs.org/api/process.html#process_event_exit
+	// catches ctrl+c event
+	process.on('SIGINT', exit);
+	// process.on('SIGTERM', quitC); // SIGTERM impossible to catch
+	//catches uncaught exceptions
+	//process.on('uncaughtException', uException);
+
 	client.order(function(from, name, params){
 		var now = Date.now();
 		logger.info("Time since last order : "+(now - lastT));
@@ -64,14 +76,13 @@
 						logger.info("Receive order to start");
 						start();
 					} else
-						logger.error("ALready started !");
+						logger.error("Already started !");
 					break;
 				case "shutdown":
 					quitC("stop");
 					spawn('sudo', ['halt']);
 					break;
 				case "stop":
-					started = false;
 					quitC("stop");
 					break;
 				case "sync_git":
@@ -95,6 +106,13 @@
 		});
 	}
 
+	function exit(code) {
+		logger.info("Closing Hokuyo C client");
+		quitC(code);
+		logger.info("Exiting");
+		process.exit();
+	}
+
 	function quitC(code){
 		if(!!child){
 			logger.info("Closing child "+child.pid+" at "+code);
@@ -105,6 +123,7 @@
 			logger.info("Father's pid : " + process.pid);
 			// process.kill(process.pid, 'SIGINT');
 		}
+		started = false;
 	}
 
 	function uException(code){
@@ -122,17 +141,10 @@
 		var now = Date.now() - lastT;
 		matchLogger(match_name, now);
 		now = lastT;
+		var logcount = 101;
 
 		// If there's a child, kill it
 		quitC("start");
-
-		// Exit handlers
-		//do something when app is closing
-		process.on('exit', quitC);
-		// catches ctrl+c event
-		// process.on('SIGINT', quitC);
-		//catches uncaught exceptions
-		//process.on('uncaughtException', uException);
 
 		// Functions
 		function parseData(string) {
@@ -152,7 +164,11 @@
 						bufferData = bufferData + temp[2];
 						client.send("lidar", "hokuyo.polar_raw_data", { "hokuyo": temp[0], "polarSpots" : JSON.parse(bufferData) });
 						count = 0;
-						logger.warn(JSON.parse(bufferData));
+						// logger.warn(JSON.parse(bufferData));
+						if (logcount++ > 100) {
+							logger.info("Hokuyo correctly running");
+							logcount = 0;
+						}
 					}
 				}
 			}
