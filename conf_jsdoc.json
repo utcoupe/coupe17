@@ -14,6 +14,7 @@
             "clients",
             "clients/Asserv",
             "clients/Robot",
+            "clients/Extension",
             "simulateur/afficheur",
             "simulateur",
             "webclient/pages/simulateur/simulateur.js"],
