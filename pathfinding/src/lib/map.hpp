@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 #include <boost/graph/astar_search.hpp>
 #include <boost/graph/grid_graph.hpp>
@@ -35,27 +36,51 @@ std::ostream& operator<<(std::ostream& os, const MAP& map);
 
 struct found_goal {};
 
-class euclidean_heuristic: public boost::astar_heuristic<filtered_grid, double> {
+//class euclidean_heuristic: public boost::astar_heuristic<filtered_grid, double> {
+//public:
+//    euclidean_heuristic(vertex_descriptor goal):m_goal(goal) {};
+//    double operator()(vertex_descriptor v) {
+//        return sqrt(pow(double(m_goal[0]) - double(v[0]), 2) + pow(double(m_goal[1]) - double(v[1]), 2));
+//    }
+//
+//private:
+//    vertex_descriptor m_goal;
+//};
+//
+//class norm1_heuristic: public boost::astar_heuristic<filtered_grid, double> {
+//public:
+//    norm1_heuristic(vertex_descriptor goal):m_goal(goal) {};
+//    double operator()(vertex_descriptor v) {
+//        return abs(m_goal[0] - v[0]) + abs(m_goal[1] - v[1]);
+//    }
+//
+//private:
+//    vertex_descriptor m_goal;
+//};
+
+
+
+class heuristicCompute : public boost::astar_heuristic<filtered_grid, double> {
 public:
-    euclidean_heuristic(vertex_descriptor goal):m_goal(goal) {};
-    double operator()(vertex_descriptor v) {
-        return sqrt(pow(double(m_goal[0]) - double(v[0]), 2) + pow(double(m_goal[1]) - double(v[1]), 2));
+    heuristicCompute(heuristic_type type, vertex_descriptor goal):m_goal(goal), m_type(type) {};
+    double computeHeuristic (vertex_descriptor v) {
+        double returnValue = 0.0;
+        if (m_type == NORM1)
+        {
+            returnValue = std::abs(m_goal[0] - v[0]) + std::abs(m_goal[1] - v[1]);
+        } else if (m_type == EUCLIDEAN)
+        {
+            returnValue = sqrt(pow(double(m_goal[0]) - double(v[0]), 2) + pow(double(m_goal[1]) - double(v[1]), 2));
+        }
+        return returnValue;
     }
 
 private:
     vertex_descriptor m_goal;
+    heuristic_type m_type;
 };
 
-class norm1_heuristic: public boost::astar_heuristic<filtered_grid, double> {
-public:
-    norm1_heuristic(vertex_descriptor goal):m_goal(goal) {};
-    double operator()(vertex_descriptor v) {
-        return abs(m_goal[0] - v[0]) + abs(m_goal[1] - v[1]);
-    }
 
-private:
-    vertex_descriptor m_goal;
-};
 
 struct astar_goal_visitor: public boost::default_astar_visitor {
     astar_goal_visitor(vertex_descriptor goal):m_goal(goal) {};

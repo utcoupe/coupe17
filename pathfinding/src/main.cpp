@@ -137,11 +137,11 @@ string command_calc_path(string& command, MAP &map) {
     // Check if the path is valid
     if (start != start_valid) {
         path.insert(path.begin(), start);
-        distance += euclidean_heuristic(start)(start_valid);
+        distance += heuristicCompute(heuristicMode, start).computeHeuristic(start_valid);
     }
     if (end != end_valid) {
         path.push_back(end);
-        distance += euclidean_heuristic(end)(end_valid);
+        distance += heuristicCompute(heuristicMode, end).computeHeuristic(end_valid);
     }
     // Create the string representing the path
     for (auto &point: path) {

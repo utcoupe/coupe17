@@ -83,21 +83,27 @@ bool MAP::solve(vertex_descriptor source, vertex_descriptor dest) {
 	astar_goal_visitor visitor(v_end);
 
 	try {
-	if (h_mode == NORM1) {
-		norm1_heuristic heuristic(v_end);
-		astar_search(*map_barrier, v_start, heuristic,
+//	if (h_mode == NORM1) {
+//		norm1_heuristic heuristic(v_end);
+//		astar_search(*map_barrier, v_start, heuristic,
+//					 boost::weight_map(weight).
+//					 predecessor_map(pred_pmap).
+//					 distance_map(dist_pmap).
+//					 visitor(visitor) );
+//	} else if (h_mode == EUCLIDEAN) {
+//		euclidean_heuristic heuristic(v_end);
+//		astar_search(*map_barrier, v_start, heuristic,
+//					 boost::weight_map(weight).
+//					 predecessor_map(pred_pmap).
+//					 distance_map(dist_pmap).
+//					 visitor(visitor) );
+//	}
+        heuristicCompute heuristic(h_mode, v_end);
+        astar_search(*map_barrier, v_start, heuristic,
 					 boost::weight_map(weight).
 					 predecessor_map(pred_pmap).
 					 distance_map(dist_pmap).
 					 visitor(visitor) );
-	} else if (h_mode == EUCLIDEAN) {
-		euclidean_heuristic heuristic(v_end);
-		astar_search(*map_barrier, v_start, heuristic,
-					 boost::weight_map(weight).
-					 predecessor_map(pred_pmap).
-					 distance_map(dist_pmap).
-					 visitor(visitor) );
-	}
 	} catch(found_goal fg) {
 	// Walk backwards from the goal through the predecessor chain adding
 	// vertices to the solution path.
@@ -141,7 +147,7 @@ vertex_descriptor MAP::find_nearest_valid(vertex_descriptor u) {
 				for (int y=(long)u[1]-dist; y<=(long)u[1]+dist; ++y) {
 					if (y < 0 || y > map_h) continue;
 					vertex_descriptor v = get_vertex(x, y);
-					if (norm1_heuristic(u)(v) == dist) {
+					if (heuristicCompute(h_mode, u).computeHeuristic(v) == dist) {
 						v_this_dist.push_back(v);
 					}
 				}
@@ -205,8 +211,8 @@ bool MAP::get_direct_distance(vertex_descriptor& v, vertex_descriptor& goal, dou
 		}
 		m = (double)dy / dx;
 		c = v[1] - m*v[0];
-		for (int x=v[0]; x!=(long)goal[0]; x+=inc) {
-			int y = round(m*x+c);
+		for (int x=(int)v[0]; x!=(long)goal[0]; x+=inc) {
+			int y = (int)round(m*x+c);
 			if (has_barrier(get_vertex(x, y))) {
 				d = 0;
 				return false;
@@ -221,15 +227,15 @@ bool MAP::get_direct_distance(vertex_descriptor& v, vertex_descriptor& goal, dou
 		}
 		m = (double)dx / dy;
 		c = v[0] - m*v[1];
-		for (int y=v[1]; y!=(long)goal[1]; y+=inc) {
-			int x = round(m*y+c);
+		for (int y=(int)v[1]; y!=(long)goal[1]; y+=inc) {
+			int x = (int)round(m*y+c);
 			if (has_barrier(get_vertex(x, y))) {
 				d = 0;
 				return false;
 			}
 		}
 	}
-	d = euclidean_heuristic(goal)(v);
+    d = heuristicCompute(h_mode, goal).computeHeuristic(v);
 	return true;
 }
 
