@@ -163,7 +163,7 @@ public:
 
     void set_heuristic_mode(heuristic_type mode) { h_mode = mode; };
 private:
-    int map_w, map_h;
+    unsigned int map_w, map_h;
     grid create_map(std::size_t x, std::size_t y);
     filtered_grid create_barrier_map();
     bool get_direct_distance(vertex_descriptor &v, vertex_descriptor &goal,

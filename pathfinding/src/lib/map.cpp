@@ -8,11 +8,11 @@ MAP::MAP(const std::string &map_filename) :
     map_h = image.height();
     map_w = image.width();
 
-    map = new grid(create_map(map_w, map_h));
+    map = new grid(create_map((size_t)map_w, (size_t)map_h));
     map_barrier = new filtered_grid(create_barrier_map());
 
-    for (int y = 0; y < map_h; y++) {
-        for (int x = 0; x < map_w; x++) {
+    for (unsigned int y = 0; y < map_h; y++) {
+        for (unsigned int x = 0; x < map_w; x++) {
             unsigned char r, g, b;
             int true_y = map_h - y - 1;
             image.get_pixel(x, y, r, g, b);
@@ -32,12 +32,14 @@ MAP::~MAP() {
 }
 
 void MAP::add_dynamic_circle(int x, int y, float f_r) {
-    int r = ceil(f_r);
+    int r = (int)ceil(f_r);
+    //todo test pow integer versus std using double
     int r2 = pow(r, 2);
     for (int p_x = x - r; p_x <= x + r; p_x++) {
         if (p_x < 0 || p_x >= map_w) {
             continue;
         }
+        //todo test pow integer versus std using double
         int y_length = ceil(sqrt(r2 - pow(x - p_x, 2)));
         for (int p_y = y - y_length; p_y <= y + y_length; p_y++) {
             if (p_y < 0 || p_y >= map_h) {
@@ -83,21 +85,6 @@ bool MAP::solve(vertex_descriptor source, vertex_descriptor dest) {
     astar_goal_visitor visitor(v_end);
 
     try {
-//	if (h_mode == NORM1) {
-//		norm1_heuristic heuristic(v_end);
-//		astar_search(*map_barrier, v_start, heuristic,
-//					 boost::weight_map(weight).
-//					 predecessor_map(pred_pmap).
-//					 distance_map(dist_pmap).
-//					 visitor(visitor) );
-//	} else if (h_mode == EUCLIDEAN) {
-//		euclidean_heuristic heuristic(v_end);
-//		astar_search(*map_barrier, v_start, heuristic,
-//					 boost::weight_map(weight).
-//					 predecessor_map(pred_pmap).
-//					 distance_map(dist_pmap).
-//					 visitor(visitor) );
-//	}
         heuristicCompute heuristic(h_mode, v_end);
         astar_search(*map_barrier, v_start, heuristic,
                      boost::weight_map(weight).
@@ -142,9 +129,9 @@ vertex_descriptor MAP::find_nearest_valid(vertex_descriptor u) {
     while (has_barrier(nearest)) {
         if (v_this_dist.size() == 0) {
             ++dist;
-            for (int x = (long) u[0] - dist; x <= (long) u[0] + dist; ++x) {
+            for (int x = (int) u[0] - dist; x <= (long) u[0] + dist; ++x) {
                 if (x < 0 || x > map_w) continue;
-                for (int y = (long) u[1] - dist; y <= (long) u[1] + dist; ++y) {
+                for (int y = (int) u[1] - dist; y <= (long) u[1] + dist; ++y) {
                     if (y < 0 || y > map_h) continue;
                     vertex_descriptor v = get_vertex(x, y);
                     if (heuristicCompute(h_mode, u).computeHeuristic(v) == dist) {
@@ -162,8 +149,8 @@ vertex_descriptor MAP::find_nearest_valid(vertex_descriptor u) {
 void MAP::generate_bmp(string path) {
     bitmap_image img(map_w, map_h);
     for (int true_y = 0; true_y < map_h; true_y++) {
-        for (int x = 0; x < map_w; x++) {
-            int y = map_h - true_y - 1;
+        for (unsigned int x = 0; x < map_w; x++) {
+            unsigned int y = map_h - true_y - 1;
             vertex_descriptor u = {{(vertices_size_type) x, (vertices_size_type) true_y}};
             if (solution_contains(u))
                 img.set_pixel(x, y, 0, 255, 0);
@@ -177,16 +164,16 @@ void MAP::generate_bmp(string path) {
     draw.pen_width(3);
     draw.pen_color(50, 50, 255);
     for (auto &p: smooth_solution) {
-        draw.plot_pen_pixel(p[0], map_h - p[1] - 1);
+        draw.plot_pen_pixel((int) p[0], (int) (map_h - p[1] - 1));
     }
     draw.pen_width(1);
     draw.pen_color(255, 0, 0);
     for (unsigned int i = 1; i < smooth_solution.size(); i++) {
         int x1, x2, y1, y2;
-        x1 = smooth_solution[i - 1][0];
-        x2 = smooth_solution[i][0];
-        y1 = map_h - smooth_solution[i - 1][1] - 1;
-        y2 = map_h - smooth_solution[i][1] - 1;
+        x1 = (int) smooth_solution[i - 1][0];
+        x2 = (int) smooth_solution[i][0];
+        y1 = (int) (map_h - smooth_solution[i - 1][1] - 1);
+        y2 = (int) (map_h - smooth_solution[i][1] - 1);
         draw.line_segment(x1, y1, x2, y2);
     }
     img.save_image(path);
