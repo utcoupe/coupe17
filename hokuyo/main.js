@@ -167,7 +167,7 @@
 
 						// logger.warn(JSON.parse(bufferData));
 						if (logcount++ > 100) {
-							logger.info("Hokuyo correctly running");
+							logger.info("Hokuyo " + temp[0] + " correctly running");
 							logcount = 0;
 						}
 					}
