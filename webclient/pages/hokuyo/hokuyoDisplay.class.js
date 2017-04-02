@@ -13,6 +13,7 @@ class HokuyoDisplay {
 		this.div = $('#' + this.parentId);
 
 		this.isBusy = false; 	// lock
+		this.isBusy = false;
 
 		if (reinitColor) {
 			Raphael.getColor.reset();
@@ -205,6 +206,8 @@ class HokuyoDisplay {
 			return;
 		}
 
+		this.isBusy = true;
+
 		// console.log(hokuyos);
 
 		// For each hokuyo
@@ -246,6 +249,8 @@ class HokuyoDisplay {
 					transform:  "t," + this.center.str + "s" + this.viewportScale + "," + this.viewportScale + ",0,0",
 					"fill-opacity": .4}) );
 		}
+
+		this.isBusy = false;
 
 	}
 }

@@ -143,7 +143,9 @@ angular.module('app').service('Hokuyo', ['$rootScope', '$sce', 'Client',
 					// console.log("Received all");
 
 					// Show
-					this.displays.main.updateAll(data.hokuyos, data.robotsSpots, data.cartesianSpots);
+					if (!this.displays.main.isBusy) {
+						this.displays.main.updateAll(data.hokuyos, data.robotsSpots, data.cartesianSpots);
+					}
 				} else if (name == 'lidar.robots'
 					&& !!this.displays.main) {
 					// this.displays.main.updateRobots(data.robots);
