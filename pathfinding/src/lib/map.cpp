@@ -31,17 +31,17 @@ MAP::~MAP() {
     delete map_barrier;
 }
 
-void MAP::add_dynamic_circle(int x, int y, float f_r) {
-    int r = (int)ceil(f_r);
+void MAP::add_dynamic_circle(unsigned int x, unsigned int y, float f_r) {
+    unsigned int r = (unsigned int)ceil(f_r);
     //todo test pow integer versus std using double
     int r2 = pow(r, 2);
-    for (int p_x = x - r; p_x <= x + r; p_x++) {
+    for (unsigned int p_x = x - r; p_x <= x + r; p_x++) {
         if (p_x < 0 || p_x >= map_w) {
             continue;
         }
         //todo test pow integer versus std using double
         int y_length = ceil(sqrt(r2 - pow(x - p_x, 2)));
-        for (int p_y = y - y_length; p_y <= y + y_length; p_y++) {
+        for (unsigned int p_y = y - y_length; p_y <= y + y_length; p_y++) {
             if (p_y < 0 || p_y >= map_h) {
                 continue;
             }
@@ -129,9 +129,9 @@ vertex_descriptor MAP::find_nearest_valid(vertex_descriptor u) {
     while (has_barrier(nearest)) {
         if (v_this_dist.size() == 0) {
             ++dist;
-            for (int x = (int) u[0] - dist; x <= (long) u[0] + dist; ++x) {
+            for (unsigned int x = (unsigned int) u[0] - dist; x <= (unsigned int) u[0] + dist; ++x) {
                 if (x < 0 || x > map_w) continue;
-                for (int y = (int) u[1] - dist; y <= (long) u[1] + dist; ++y) {
+                for (unsigned int y = (unsigned int) u[1] - dist; y <= (unsigned int) u[1] + dist; ++y) {
                     if (y < 0 || y > map_h) continue;
                     vertex_descriptor v = get_vertex(x, y);
                     if (heuristicCompute(h_mode, u).computeHeuristic(v) == dist) {
@@ -148,7 +148,7 @@ vertex_descriptor MAP::find_nearest_valid(vertex_descriptor u) {
 
 void MAP::generate_bmp(string path) {
     bitmap_image img(map_w, map_h);
-    for (int true_y = 0; true_y < map_h; true_y++) {
+    for (unsigned int true_y = 0; true_y < map_h; true_y++) {
         for (unsigned int x = 0; x < map_w; x++) {
             unsigned int y = map_h - true_y - 1;
             vertex_descriptor u = {{(vertices_size_type) x, (vertices_size_type) true_y}};
