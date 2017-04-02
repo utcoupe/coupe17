@@ -361,7 +361,7 @@ module.exports = (function () {
 		//logger.warn("TODO: check that cartSpots[workingHokuyos[0].name].spots works");
 
 		if (workingHokuyos.length == 2) {
-			for(let spot of cartSpots.one.filteredSpot) {
+			for(let spot of cartSpots.one.filteredSpots) {
 				if (spot.x > X_MIN_ZONE && spot.x < 300 && spot.y>Y_MIN_ZONE && spot.y<Y_MAX_ZONE) {
 					spot.inTheTable = true
 				}
