@@ -1,5 +1,5 @@
 /**
- * \file 	map_test.c
+ * \file 	map_test.cpp
  * \author	Quentin Chateau
  * \author	Thomas Fuhrmann <tomesman@gmail.com>
  * \brief 	Main file for the program to test the pathfinding
