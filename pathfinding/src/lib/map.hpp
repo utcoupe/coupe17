@@ -78,9 +78,8 @@ public:
     MAP(const std::string &map_filename);
     ~MAP();
 
-    int get_map_h() const { return map_h; };
-
-    int get_map_w() const { return map_w; };
+    unsigned int get_map_h() const { return map_h; };
+    unsigned int get_map_w() const { return map_w; };
     void add_dynamic_circle(unsigned int x, unsigned int y, float f_r);
     void clear_dynamic_barriers();
 

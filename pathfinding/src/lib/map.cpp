@@ -245,12 +245,12 @@ filtered_grid MAP::create_barrier_map() {
 std::ostream &operator<<(std::ostream &output, const MAP &m) {
     output << "Grid size : " << m.get_map_w() << "x" << m.get_map_h() << std::endl;
     // Header
-    for (int i = 0; i < m.get_map_w() + 2; i++)
+    for (unsigned int i = 0; i < m.get_map_w() + 2; i++)
         output << BARRIER;
     output << std::endl;
     // Body
-    for (int y = 0; y < m.get_map_h(); y++) {
-        for (int x = 0; x < m.get_map_w(); x++) {
+    for (unsigned int y = 0; y < m.get_map_h(); y++) {
+        for (unsigned int x = 0; x < m.get_map_w(); x++) {
             // Put a barrier on the left-hand side.
             if (x == 0)
                 output << BARRIER;
@@ -272,7 +272,7 @@ std::ostream &operator<<(std::ostream &output, const MAP &m) {
         output << std::endl;
     }
     // Footer
-    for (int i = -1; i < m.get_map_w() + 2; i++)
+    for (unsigned int i = -1; i < m.get_map_w() + 2; i++)
         output << BARRIER;
     return output;
 }
