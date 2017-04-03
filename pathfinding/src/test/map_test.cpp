@@ -9,10 +9,10 @@
  * This program is kind of interactive.
  * When launched, you have to enter the path of the bmp map file to use (with relative or absolute path).
  * Then you have to enter the points defining the start point and the end point :
- * x_start (in mm)
- * y_start (in mm)
- * x_end (in mm)
- * y_end (in mm)
+ * x_start (in pixel)
+ * y_start (in pixel)
+ * x_end (in pixel)
+ * y_end (in pixel)
  * The test program will return the found path solution (if there is one) and the computing time.
  */
 
@@ -29,13 +29,13 @@ int main() {
     std::cout << "Select source and destination :" << std::endl;
     clock_t teu, tn1, t = clock();
     unsigned int x_s, y_s, x_e, y_e;
-    std::cout << "x_start (in mm) :" << std::endl;
+    std::cout << "x_start (in pixel) :" << std::endl;
     std::cin >> x_s;
-    std::cout << "y_start (in mm) :" << std::endl;
+    std::cout << "y_start (in pixel) :" << std::endl;
     std::cin >> y_s;
-    std::cout << "x_end (in mm) :" << std::endl;
+    std::cout << "x_end (in pixel) :" << std::endl;
     std::cin >> x_e;
-    std::cout << "y_end (in mm) :" << std::endl;
+    std::cout << "y_end (in pixel) :" << std::endl;
     std::cin >> y_e;
 
     // EUCLIDEAN

@@ -63,8 +63,8 @@ void parseOptions(int argc, char **argv);
 
 /**
  * Checks if the parameter point is in the map
- * @param x X coordinate (in mm)
- * @param y Y coordinate (in mm)
+ * @param x X coordinate (in pixel)
+ * @param y Y coordinate (in pixel)
  * @param map The map object to use as base
  * @return True if the coordinate is valid, otherwise false
  */
