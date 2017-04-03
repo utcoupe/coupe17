@@ -1,3 +1,12 @@
+/**
+ * \file 	map.cpp
+ * \author	Quentin Chateau
+ * \author	Thomas Fuhrmann <tomesman@gmail.com>
+ * \brief 	This file defines the map and its relatives objects
+ * \date  	03/04/2017
+ * \copyright Copyright (c) 2017 UTCoupe All rights reserved.
+ */
+
 #include "map.hpp"
 
 using namespace std;

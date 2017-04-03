@@ -1,5 +1,5 @@
 /**
- * \file 	main.c
+ * \file 	main.cpp
  * \author	Quentin Chateau
  * \author	Thomas Fuhrmann <tomesman@gmail.com>
  * \brief 	Main file of the pathfinding project.

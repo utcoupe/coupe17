@@ -1,3 +1,12 @@
+/**
+ * \file 	map.hpp
+ * \author	Quentin Chateau
+ * \author	Thomas Fuhrmann <tomesman@gmail.com>
+ * \brief 	This file defines the map and its relatives objects
+ * \date  	03/04/2017
+ * \copyright Copyright (c) 2017 UTCoupe All rights reserved.
+ */
+
 #ifndef MAP_H
 #define MAP_H
 
@@ -14,6 +23,8 @@
 
 #include "bitmap_image.hpp"
 
+class MAP;
+
 typedef boost::grid_graph<2> grid;
 typedef boost::graph_traits<grid>::vertex_descriptor vertex_descriptor;
 
@@ -26,6 +37,9 @@ struct vertex_hash : std::unary_function<vertex_descriptor, std::size_t> {
     }
 };
 
+struct found_goal {
+};
+
 typedef boost::graph_traits<grid>::vertices_size_type vertices_size_type;
 typedef boost::unordered_set<vertex_descriptor, vertex_hash> vertex_set;
 typedef boost::vertex_subset_complement_filter<grid, vertex_set>::type filtered_grid;
@@ -34,12 +48,7 @@ typedef enum heuristic_type {
     EUCLIDEAN, NORM1
 } heuristic_type;
 
-class MAP;
-
 std::ostream &operator<<(std::ostream &os, const MAP &map);
-
-struct found_goal {
-};
 
 class heuristicCompute : public boost::astar_heuristic<filtered_grid, double> {
 public:
@@ -73,6 +82,13 @@ private:
     vertex_descriptor m_goal;
 };
 
+/**
+ * The map object computes paths based on an internal map.
+ * The inputs of it is a bitmap file defining the area where to compute path (called static map).
+ * In this picture, all black pixels are the forbidden areas and the white ones are allowed areas.
+ * Based on this static map, some dynamic objects can be added. Each dynamic object defines an other forbidden area.
+ * Then, with this dynamic map, the map object tries to compute a valid path between a start and end point.
+ */
 class MAP {
 public:
     MAP(const std::string &map_filename);
