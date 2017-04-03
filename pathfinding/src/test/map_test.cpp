@@ -1,20 +1,41 @@
+/**
+ * \file 	map_test.c
+ * \author	Quentin Chateau
+ * \author	Thomas Fuhrmann <tomesman@gmail.com>
+ * \brief 	Main file for the program to test the pathfinding
+ * \date  	03/04/2017
+ * \copyright Copyright (c) 2017 UTCoupe All rights reserved.
+ *
+ * This program is kind of interactive.
+ * When launched, you have to enter the path of the bmp map file to use (with relative or absolute path).
+ * Then you have to enter the points defining the start point and the end point :
+ * x_start (in mm)
+ * y_start (in mm)
+ * x_end (in mm)
+ * y_end (in mm)
+ * The test program will return the found path solution (if there is one) and the computing time.
+ */
+
 #include <iostream>
 #include <time.h>
-
 #include "../lib/map.hpp"
 
 int main() {
     std::string path;
-    std::cout << "Path to bmp :" << std::endl;
+    std::cout << "Path to bmp (relative or absolute) :" << std::endl;
     std::cin >> path;
     MAP map(path);
     std::cout << "Map is " << map.get_map_w() << "x" << map.get_map_h() << std::endl;
-    std::cout << "Select source and destination" << std::endl;
+    std::cout << "Select source and destination :" << std::endl;
     clock_t teu, tn1, t = clock();
-    int x_s, y_s, x_e, y_e;
+    unsigned int x_s, y_s, x_e, y_e;
+    std::cout << "x_start (in mm) :" << std::endl;
     std::cin >> x_s;
+    std::cout << "y_start (in mm) :" << std::endl;
     std::cin >> y_s;
+    std::cout << "x_end (in mm) :" << std::endl;
     std::cin >> x_e;
+    std::cout << "y_end (in mm) :" << std::endl;
     std::cin >> y_e;
 
     // EUCLIDEAN
@@ -22,7 +43,6 @@ int main() {
     map.solve(x_s, y_s, x_e, y_e);
     map.solve_smooth();
     teu = clock() - t;
-
     std::cout << std::endl << "EUCLIDEAN" << std::endl;
     std::cout << "Smooth solution length : " << map.get_smooth_solution_length() << std::endl;
     printf("Time : %f seconds.\n", ((float) teu) / CLOCKS_PER_SEC);
@@ -36,7 +56,6 @@ int main() {
     map.solve(x_s, y_s, x_e, y_e);
     map.solve_smooth();
     tn1 = clock() - t;
-
     std::cout << std::endl << "NORM1" << std::endl;
     std::cout << "Smooth solution length : " << map.get_smooth_solution_length() << std::endl;
     printf("Time : %f seconds.\n", ((float) tn1) / CLOCKS_PER_SEC);
