@@ -21,7 +21,6 @@
 #include <vector>
 #include <chrono>
 #include <tclap/CmdLine.h>
-
 #include "lib/map.hpp"
 
 #define FAILED_STR "FAIL\n"
@@ -114,7 +113,7 @@ void addDynamicObject(string &command, MAP &map) {
  *         If not valid, returns FAILED value
  */
 string commandCalcPath(string &command, MAP &map) {
-    int x_s, y_s, x_e, y_e;
+    unsigned int x_s, y_s, x_e, y_e;
     vertex_descriptor start, end, start_valid, end_valid;
     vector<vertex_descriptor> path;
     double distance;
