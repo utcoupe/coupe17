@@ -234,7 +234,7 @@ void parseOptions(int argc, char **argv) {
         ValueArg<string> mapArg("m", "map", "Path to the map used to compute pathfinding.", true, "", "string");
         cmd.add(mapArg);
 
-        ValueArg<uint8_t> heuristicArg("h", "heuristic",
+        ValueArg<uint8_t> heuristicArg("e", "heuristic",
                                        "Heuristic mode for pathfinding computing (EUCLIDIEAN = 0, NORM1 = 1).", false,
                                        1, "uint8_t");
         cmd.add(heuristicArg);
