@@ -171,7 +171,7 @@ module.exports = (function () {
 					// The order is valid
 					// logger.info("Data " +data.name+ " from " +data.from+ " to " +data.to);
 					if (!this.verbose &&
-						this.spamList.indexOf(data.name) != 1) {
+						this.spamList.indexOf(data.name) != -1) {
 						this.server.to(data.to).emit('order', data);
 					} else {
 						this.server.to('webclient').to(data.to).emit('order', data);

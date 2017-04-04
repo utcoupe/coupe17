@@ -56,6 +56,8 @@
 		<span class="utcoupe" ng-class="{launched: utcoupe.lidar}" >Lidar</span>
 		<button type="button" class="btn" ng-hide="utcoupe.lidar" ng-click="launch('lidar')">Lancer</button> 
 		<button type="button" class="btn" ng-show="utcoupe.lidar" ng-click="stop('lidar')">Arrêter</button> 
+		<button type="button" class="btn" ng-show="utcoupe.lidar" ng-click="resumeLidar()">Reprendre avec couleur</button> 
+		<button type="button" class="btn" ng-show="utcoupe.lidar" ng-click="pauseLidar()">Pause</button> 
 		<br /><br />
 	</li>
 	<li>
