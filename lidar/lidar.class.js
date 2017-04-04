@@ -38,20 +38,29 @@ module.exports = (function () {
 		this.sendStatus = sendStatus;
 		this.statusTimer;
 
-
 		this.lastSignOfLife = {};		// of each hokuyo
 
 		this.hokuyoPositions = {
 			one: {
-	 			"x": -6.2,
-	 			"y": -6.2,
-	 			"w": 0
+	 			"x": -6.2, //-6.2
+	 			"y": -6.2,	//-6.2
+	 			"w": 0 ,	//0
+				"decalage" : [],
+				"init" : 3
 	 		},
 			two: {
-	 			"x": 306.2,
-	 			"y": 100,
-	 			"w": 180
+	 			"x": 306.2, //306.2
+	 			"y": 100,	//100
+	 			"w": 180 ,	//180
+				"decalage" : [],
+				"init" : 0
 	 		}
+		}
+		this.rocketPositions = {
+			one : {
+				"x" : 185,
+				"y" : 4
+			}
 		}
 
 		// If other color
@@ -178,16 +187,31 @@ module.exports = (function () {
 		let d = Math.sqrt(x*x +y*y);
 		this.diag = d ;
 	}
+	Cluster.prototype.toCartesian = function(lidar, hokName) {
+		let ret = [];
+		let hokPos = lidar.hokuyoPositions[hokName];
+			let cartPt = [
+				this.distance * Math.cos(lidar.toRadian(-this.angle)),
+				this.distance * Math.sin(lidar.toRadian(-this.angle))
+			]
+			// Change to table frame
+			this.x = hokPos.x + cartPt[0] * Math.cos(lidar.toRadian(hokPos.w)) + cartPt[1] * Math.sin(lidar.toRadian(hokPos.w)),
+			this.y = hokPos.y + cartPt[0] * Math.sin(lidar.toRadian(hokPos.w)) + cartPt[1] * Math.cos(lidar.toRadian(hokPos.w))
+
+	}
 	/**
 	 * When Hokuyo data arrives
 	 */
 	Lidar.prototype.onHokuyoPolar = function (hokuyoName, polarSpots) {
 		//logger.warn("nb points :" + polarSpots.length)
 		let spots = this.createSpot(polarSpots);
-
 		this.toCartesian(hokuyoName, spots);
 
+		if (this.hokuyoPositions[hokuyoName].init != 0){
+			this.calibration(spots, hokuyoName)
+		}
 		// Save
+
 		this.lastCartSpots[hokuyoName] = {};
 		this.lastCartSpots[hokuyoName].isWorking = function() { return Date.now() - this.time <  2 * DELTA_T; }; // we had some data no long ago
 		this.lastCartSpots[hokuyoName].time = Date.now();
@@ -331,22 +355,9 @@ module.exports = (function () {
 
 	Lidar.prototype.filterCart = function(cartSpots) {
 		let ret = [];
-
-		function isInTable (p) {
-			var ret = p[0] > 0
-				&& p[0] < 300
-				&& p[1] > 0
-				&& p[1] < 200;
-			return ret;
-		}
-
 		// Keep only points in the table
 		for(let pt of cartSpots){
-			//if (pt.x > 0 && pt.x < 295 && pt.y>0 && pt.y<195) {
-			//	pt.inTheTable = true;
 					ret.push(pt);
-
-			//}
 		}
 
 
@@ -438,6 +449,67 @@ module.exports = (function () {
 		return ret;
 	}
 
+	/***
+	*Fixes small hokuyo angulation postionning error
+	*by using the rockets positions on the play aera
+	***/
+	Lidar.prototype.calibration = function(spots, hokName){
+		let clusters = this.clusterize(spots);
+		let hokPos = this.hokuyoPositions[hokName];
+		let angle;
+		let detected = false;
+		function isNear(lidar, cluster, rocketName, d){
+			let x = lidar.rocketPositions[rocketName].x;
+			let y = lidar.rocketPositions[rocketName].y;
+
+			//logger.warn([cluster.x, lidar.rocketPositions["one"].x]);
+			if (cluster.x > x - d
+				&& cluster.x < x + d
+				&& cluster.y > y - d
+				&& cluster.y < y + d){
+					logger.warn("fusee detectee")
+					return true;
+				}
+				else return false;
+		}
+		function angleGap(lidar, cluster, rocketName, hokName){
+			var tab1 = lidar.toPolar(cluster, hokName);
+			var tab2 = lidar.toPolar(lidar.rocketPositions[rocketName], hokName);
+			//logger.warn([tab1[0], tab2[0]])
+			return (tab2[0] - tab1 [0])
+		}
+		for (let i = 0; i < clusters.length ; i++){
+			clusters[i].calculCenter();
+			if (isNear(this, clusters[i], "one", 35) == true){
+				angle = angleGap(this, clusters[i], "one", hokName)
+				hokPos.decalage.push(angle)
+				detected = true;
+			}
+		}
+		hokPos.init = hokPos.init - 1 ;
+		if (hokPos.init == 0 && detected == true){
+			let a = 0;
+			let nb = hokPos.decalage.length
+			for( let i = 0; i < nb; i++){
+				a = a + hokPos.decalage[i];
+			}
+			logger.warn("Recalibrage de l'hokuyo " + hokName + " : " + a/nb);
+			hokPos.w = hokPos.w + a/nb
+		}
+
+	}
+
+	Lidar.prototype.toPolar = function(object, hokName){
+		let ret = [];
+		let hokPos = this.hokuyoPositions[hokName];
+			let x = object.x - hokPos.x
+			let y = object.y - hokPos.y
+			let distance = Math.sqrt(x*x + y*y);
+			let angle = this.toDegree(Math.atan2(y, x) - this.toRadian(hokPos.w))
+
+			return [angle, distance];
+	}
+
 	Lidar.prototype.toRadian = function(angleInDegree) {
 		let angleInRadian;
 
@@ -449,7 +521,7 @@ module.exports = (function () {
 	Lidar.prototype.toDegree = function(angleInRadian) {
 		let angleInDegree;
 
-		angleInDegree = angleInRadian * 180 / Math.PI;
+		angleInDegree = angleInRadian* 180 / Math.PI;
 
 		return angleInDegree;
 	};
