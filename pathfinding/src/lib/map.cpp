@@ -138,10 +138,10 @@ vertex_descriptor MAP::find_nearest_valid(vertex_descriptor u) {
     while (has_barrier(nearest)) {
         if (v_this_dist.size() == 0) {
             ++dist;
-            for (unsigned int x = (unsigned int) u[0] - dist; x <= (unsigned int) u[0] + dist; ++x) {
-                if (x < 0 || x > map_w) continue;
-                for (unsigned int y = (unsigned int) u[1] - dist; y <= (unsigned int) u[1] + dist; ++y) {
-                    if (y < 0 || y > map_h) continue;
+            for (int x = (int)((unsigned int) u[0] - dist); x <= (int)((unsigned int) u[0] + dist); ++x) {
+                if (x < 0 || x > (int)map_w) continue;
+                for (int y = (int)((unsigned int) u[1] - dist); y <= (int)((unsigned int) u[1] + dist); ++y) {
+                    if (y < 0 || y > (int)map_h) continue;
                     vertex_descriptor v = get_vertex(x, y);
                     if (heuristicCompute(h_mode, u).computeHeuristic(v) == dist) {
                         v_this_dist.push_back(v);
@@ -149,6 +149,7 @@ vertex_descriptor MAP::find_nearest_valid(vertex_descriptor u) {
                 }
             }
         }
+        //todo segfault when C;0;0;44;32, because no nearest vertex found
         nearest = v_this_dist.back();
         v_this_dist.pop_back();
     }
