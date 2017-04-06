@@ -5,6 +5,8 @@
  * @requires module:clients/Extension/extension
  */
 
+"use strict";
+
 const Extension = require('extension.class.js');
 
 /**

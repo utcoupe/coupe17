@@ -5,6 +5,8 @@
  * @see {@link clients/fifo.Fifo}
  */
 
+"use strict";
+
 module.exports = (function () {
 	var logger = require('log4js').getLogger('Fifo');
 

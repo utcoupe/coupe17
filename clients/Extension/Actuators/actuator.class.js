@@ -4,6 +4,8 @@
  * @module clients/Extension/Actuators/actuator
  */
 
+"use strict";
+
 /**
  * Classe abstraite représentant un actuator
  * 

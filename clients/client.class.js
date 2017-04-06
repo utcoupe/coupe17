@@ -5,6 +5,8 @@
  * @requires module:server/socket_client
  */
 
+"use strict";
+
 
 /**
  * Client abstrait

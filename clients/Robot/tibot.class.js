@@ -5,6 +5,8 @@
  * @requires module:clients/Robot/robot
  */
 
+"use strict";
+
 const Robot = require('robot.class.js');
 
 /**

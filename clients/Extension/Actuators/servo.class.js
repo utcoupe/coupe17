@@ -5,6 +5,8 @@
  * @requires clients/Extension/Actuators/actuator
  */
 
+"use strict";
+
 const Actuator = require('actuator.class.js');
 
 /**
