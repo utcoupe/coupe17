@@ -3,21 +3,16 @@
 
 ### Configurer l'environnement de développement
 
-Installer tous les logiciels requis (compilation, installation, etc.) :
+Un script d'installation automatique est disponible. Allez dans le dossier coupe17, et lancer simplement :
 ```
-sudo apt install git build-essential python nodejs npm nodejs-legacy cmake libboost-dev libsdl1.2-dev
+source ./scripts/installation_utcoupe_setup.sh
 ```
 
-Une fois dans le dossier, pour installer les dépendances JavaScript :
+Si c'est votre première installation, répondez "y" à toutes les questions.
+
+Une fois terminé, pour installer les dépendances JavaScript :
 ```
 npm install
-```
-
-Il faut aussi compiler le pathfinding pour l'IA :
-```
-cd pathfinding/
-cmake CMakeLists.txt && make
-cd ../
 ```
 
 ### Lancer le projet
@@ -56,6 +51,8 @@ La documentation officielle de JSDoc est disponible [ici](http://usejsdoc.org).
 ### Configurer les Raspberry Pi
 
 Une image fonctionnelle est disponible, il est préférable de partir de cette image.
+
+Note : le script d'installation effectue ces opérations tout seul en détectant le système sur lequel il est lancé.
 
 Sinon, il y a quelques subtilités pour installer tous les logiciels UTCoupe sur la Raspberry Pi.
 
