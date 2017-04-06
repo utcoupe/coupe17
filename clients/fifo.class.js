@@ -7,23 +7,28 @@
 
 "use strict";
 
-module.exports = (function () {
-	var logger = require('log4js').getLogger('Fifo');
+/**
+ * First In First Out class
+ * 
+ * @class Fifo
+ * @memberof module:clients/fifo
+ */
+class Fifo {
 
 	/**
 	 * Fifo Constructor
-	 * 
-	 * @memberof module:clients/fifo
-	 * @constructor
 	 */
-	function Fifo() {
+	constructor() {
+		this.logger = require('log4js').getLogger('Fifo');
 		this.clean();
 	}
 
 	/**
 	 * Clean
+	 * 
+	 * @param {function} callback
 	 */
-	Fifo.prototype.clean = function(callback) {
+	clean (callback) {
 		/** fifo */
 		this.fifo = [];
 		/** @type {boolean} */
@@ -33,7 +38,7 @@ module.exports = (function () {
 	/**
 	 * Order finished
 	 */
-	Fifo.prototype.orderFinished = function() {
+	orderFinished () {
 		this.order_in_progress = false;
 		this.nextOrder();
 	}
@@ -44,7 +49,7 @@ module.exports = (function () {
 	 * @param {Object} callback
 	 * @param {string} [name]
 	 */
-	Fifo.prototype.newOrder = function(callback, name) {
+	newOrder (callback, name) {
 		if (name === undefined)
 			name = "";
 		this.fifo.push({callback: callback, name: name});
@@ -54,16 +59,15 @@ module.exports = (function () {
 	/**
 	 * Next Order
 	 */
-	Fifo.prototype.nextOrder = function() {
+	nextOrder () {
 		if(!this.order_in_progress && this.fifo.length > 0) {
 			// logger.debug(this.fifo.length);
 			this.order_in_progress = true;
-			object = this.fifo.shift();
+			var object = this.fifo.shift();
 			// logger.debug("Calling : "+object.name);
 			object.callback();
 		}
 	}
+}
 
-
-	return Fifo;
-})();
+module.exports = Fifo;
