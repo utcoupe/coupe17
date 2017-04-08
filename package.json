@@ -24,7 +24,6 @@
     "utcoupe": "node utcoupe/utcoupe.js",
     "serve": "http-server",
     "doc": "node_modules/.bin/jsdoc -c conf_jsdoc.json",
-    "preinstall": "scripts/install_utcoupe_setup.sh"
   },
   "repository": {
     "type": "git",
