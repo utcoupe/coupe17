@@ -62,7 +62,7 @@ class Robot extends Object3d
      */
     showPath(newPath)
     {
-        console.log(newPath);
+        //console.log(newPath);
         var idVertice = 0;
         while(idVertice < newPath.length && idVertice < PATH_MAX_POINTS)
         {
