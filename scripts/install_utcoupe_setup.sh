@@ -38,7 +38,7 @@ function env_setup() {
 	if [ -z "$UTCOUPE_WORKSPACE" ]; then
 		green_echo "Env variable is not set."
 		echo "export UTCOUPE_WORKSPACE=$PWD" >> $HOME/.bashrc
-		exec bash
+		source $HOME/.bashrc
 	fi
 }
 
