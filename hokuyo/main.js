@@ -35,7 +35,7 @@
 
 	var client = new SocketClient({
 		server_ip: server,
-		type: "hokuyo",
+		type: "hokuyo"
 	});
 
 	var started = false;
@@ -168,10 +168,6 @@
 					}
 				}
 			}
-
-			// Send all robots
-
-
 		}
 
 		function parseInfo(string) {
@@ -247,7 +243,6 @@
 			}
 		}
 
-
 		// Execute C program
 		var command = process.env.UTCOUPE_WORKSPACE + "/bin/hokuyo";
 		var args = []; // [color];
@@ -286,7 +281,6 @@
 			}, 5000);
 		});
 
-
 		child.on('close', function(code) {
 			started = false;
 			if (code == 0)
@@ -299,6 +293,7 @@
 				sendChildren({"status": "waiting", "children":[]});
 		});
 	}
+
 	function getStatus(){
 		var data = {
 			"status": "",
@@ -328,8 +323,7 @@
 			lastStatus.status = newStatus;
 			sendChildren(lastStatus)
 		}
-	};
-
+	}
 
 	// Sends status to server
 	function sendChildren(status){
