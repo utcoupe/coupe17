@@ -5,6 +5,8 @@
  * @requires module:clients/Asserv/Asserv
  */
 
+"use strict";
+
 const Asserv = require('Asserv.class.js');
 
 /**

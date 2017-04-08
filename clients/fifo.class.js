@@ -2,47 +2,51 @@
  * First In First Out module
  * 
  * @module clients/fifo
- * @see {@link clients/fifo.Fifo}
  */
 
-module.exports = (function () {
-	var logger = require('log4js').getLogger('Fifo');
+"use strict";
+
+/**
+ * First In First Out class
+ * 
+ * @memberof module:clients/fifo
+ */
+class Fifo {
 
 	/**
-	 * Fifo Constructor
-	 * 
-	 * @memberof module:clients/fifo
-	 * @constructor
+	 * Construit une nouvelle FiFo vide.
 	 */
-	function Fifo() {
+	constructor() {
+		this.logger = require('log4js').getLogger('Fifo');
 		this.clean();
 	}
 
 	/**
-	 * Clean
+	 * Vide la file et remet order_in_progress à faux
 	 */
-	Fifo.prototype.clean = function(callback) {
-		/** fifo */
+	clean () {
+		/** @type {Array<{callback: function, name: String}>} */
 		this.fifo = [];
 		/** @type {boolean} */
 		this.order_in_progress = false;
 	}
 
 	/**
-	 * Order finished
+	 * Fonction à appeler lorsque un ordre est terminé. Cette fonction invoque directement l'ordre suivant (si il existe)
 	 */
-	Fifo.prototype.orderFinished = function() {
+	orderFinished () {
 		this.order_in_progress = false;
 		this.nextOrder();
 	}
 
 	/**
-	 * New Order
+	 * Ajoute un ordre à la file par le biais d'une fonction. Nommer l'ordre ne sert que pour le débuggage.
+	 * La fonction invoque automatiquement nextOrder().
 	 * 
 	 * @param {Object} callback
 	 * @param {string} [name]
 	 */
-	Fifo.prototype.newOrder = function(callback, name) {
+	newOrder (callback, name) {
 		if (name === undefined)
 			name = "";
 		this.fifo.push({callback: callback, name: name});
@@ -50,18 +54,18 @@ module.exports = (function () {
 	}
 
 	/**
-	 * Next Order
+	 * Si un ordre n'est pas déjà en cours et si la fifo n'est pas vide,
+	 * cette fonction enlève et éxécute la prochaine fonction de la file.
 	 */
-	Fifo.prototype.nextOrder = function() {
+	nextOrder () {
 		if(!this.order_in_progress && this.fifo.length > 0) {
 			// logger.debug(this.fifo.length);
 			this.order_in_progress = true;
-			object = this.fifo.shift();
+			var object = this.fifo.shift();
 			// logger.debug("Calling : "+object.name);
 			object.callback();
 		}
 	}
+}
 
-
-	return Fifo;
-})();
+module.exports = Fifo;

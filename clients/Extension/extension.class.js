@@ -5,6 +5,8 @@
  * @requires module:clients/client
  */
 
+"use strict";
+
 const Client = require('../client.class.js');
 
 /**

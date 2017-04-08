@@ -4,6 +4,8 @@
  * @module clients/Asserv/Asserv
  */
 
+"use strict";
+
 /**
  * Class Asserv.
  * 
