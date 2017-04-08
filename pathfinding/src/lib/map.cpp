@@ -149,7 +149,7 @@ vertex_descriptor MAP::find_nearest_valid(vertex_descriptor u) {
                 }
             }
         }
-        //todo segfault when C;0;0;44;32, because no nearest vertex found
+        //todo return bool to know if a nearest has been found ?
         nearest = v_this_dist.back();
         v_this_dist.pop_back();
     }

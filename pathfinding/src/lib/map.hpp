@@ -57,7 +57,7 @@ public:
     double computeHeuristic(vertex_descriptor v) {
         double returnValue = 0.0;
         if (m_type == NORM1) {
-            returnValue = std::abs(m_goal[0] - v[0]) + std::abs(m_goal[1] - v[1]);
+            returnValue = std::abs((double)m_goal[0] - (double)v[0]) + std::abs((double)m_goal[1] - (double)v[1]);
         } else if (m_type == EUCLIDEAN) {
             returnValue = sqrt(pow(double(m_goal[0]) - double(v[0]), 2) + pow(double(m_goal[1]) - double(v[1]), 2));
         }
