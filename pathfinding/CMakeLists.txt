@@ -6,9 +6,10 @@ FIND_PACKAGE(Boost REQUIRED)
 SET(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Werror")
 SET(TCLAP_INCLUDE_DIR ../libs/tclap-1.2.1/include)
 
-if(DEFINED $ENV{UTCOUPE_WORKSPACE})
+if(DEFINED ENV{UTCOUPE_WORKSPACE})
     SET(EXECUTABLE_OUTPUT_PATH $ENV{UTCOUPE_WORKSPACE}/bin/)
 else()
+	message("[PATHFINDING] No UTCOUPE_WORKSPACE env variable set... Add exec file in pathfinding/bin folder.")
     SET(EXECUTABLE_OUTPUT_PATH ../bin/)
 endif()
 
