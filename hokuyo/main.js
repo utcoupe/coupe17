@@ -27,14 +27,9 @@
 	var nth = 0;
 
 	var server = process.argv[2] || config.server;
-	var command = process.argv[3] || config.hokuyo_command;
 
 	if (!process.env.UTCOUPE_WORKSPACE) {
-		process.env.UTCOUPE_WORKSPACE = config.UTCOUPE_WORKSPACE;
-	}
-
-	if (!process.env.UTCOUPE_WORKSPACE) {
-		logger.warn("Missing UTCOUPE_WORKSPACE environment variable. Make sure to call 'sudo -E node ...' or to fill UTCOUPE_WORKSPACE in config.js");
+		logger.warn("Missing UTCOUPE_WORKSPACE environment variable... Please make sur you have launched the install script");
 		process.exit(1);
 	}
 
@@ -254,7 +249,6 @@
 
 
 		// Execute C program
-		// var command = "/home/pi/coupe15/hokuyo/bin/hokuyo";
 		var command = process.env.UTCOUPE_WORKSPACE + "/bin/hokuyo";
 		var args = []; // [color];
 		// var options = // default : { cwd: undefined, env: process.env};
