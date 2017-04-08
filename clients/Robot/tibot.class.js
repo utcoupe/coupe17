@@ -32,30 +32,6 @@ class Tibot extends Robot{
 			super();
 	}
 
-	devicesDetected(struct){
-		// Verify content
-
-		if (!struct.others)
-			this.logger.warn("Missing others Mega");
-
-		// if (!struct.servos)
-		// 	logger.warn("Missing servos Nano");
-
-		if (!struct.asserv)
-			this.logger.warn("Missing asserv Nano");
-
-		if (!struct.ax12)
-			this.logger.warn("Missing USB2AX");
-
-		// Connect to what's detected
-		//this.acts.connectTo(struct);
-
-		// Send struct to server
-		//TODO DO AFTER acts done this.sendChildren(acts.getStatus());
-		this.sendChildren("ok"); //TODO Check it
-
-	}
-
 	/**
 	 * Push the order (enfiler)
 	 *

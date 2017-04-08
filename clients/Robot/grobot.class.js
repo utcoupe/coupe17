@@ -25,22 +25,6 @@ class Grobot extends Robot{
       super();
   }
 
-
-	 devicesDetected(struct){
-    // Verify content
-		if (!struct.servos)
-			logger.warn("Missing servos Nano");
-		if (!struct.asserv)
-			logger.warn("Missing asserv Nano");
-
-		// Connect to what's detected
-		this.acts.connectTo(struct);
-
-		// Send struct to server
-
-		this.sendChildren(acts.getStatus());
-	}
-
 			/**
 	 * Push the order (enfiler)
 	 *

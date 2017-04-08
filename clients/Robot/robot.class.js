@@ -54,20 +54,17 @@ class Robot extends Client{
 
 			this.acts = new (require('../Extension/Actuators/actuator.class.js'))(this.client, this.sendChildren);
 
-			// new (require('./detect.class.js'))(devicesDetected);
+			//TODO replace devicedetected
+			//this.detect = null; this.detect = new (require('./detect.class.js'))(devicesDetected);
+						//ADD it tmp, to replace the previos one
+						var struct = {
+							others: false,
+							asserv: false,
+							ax12: false,
+							servos: false
+						};
 
-			//this.detect = null; //See what to do with this one
-			//ADD it tmp
-			var struct = {
-				others: false,
-				asserv: false,
-				ax12: false,
-				servos: false
-			};
-
-
-			this.devicesDetected(struct); //TODO Replace it
-
+						this.devicesDetected(struct); //TODO Replace it
 
 			this.queue = [];
 			this.orderInProgress = false;
@@ -84,7 +81,16 @@ class Robot extends Client{
 			status: "starting",
 			children:[]
 		});
-		//this.detect = new (require('./detect.class.js'))(this.devicesDetected);
+			var struct = {
+				others: false,
+				asserv: false,
+				ax12: false,
+				servos: false
+			};
+
+			//MUST ADD IT
+			this.devicesDetected(struct); //TODO Replace it by the following
+			//this.detect = new (require('./detect.class.js'))(this.devicesDetected);
 
 	}
 
@@ -121,6 +127,61 @@ class Robot extends Client{
 		this.client.send("ia", "isOkAnswer", this.lastStatus);
 		this.client.send("server", "server.childrenUpdate", this.lastStatus);
 	}
+
+		devicesDetected(struct){
+		// Verify content
+
+		if (!struct.others)
+			this.logger.warn("Missing others Mega");
+
+		// if (!struct.servos)
+		// 	logger.warn("Missing servos Nano");
+
+		if (!struct.asserv)
+			this.logger.warn("Missing asserv Nano");
+
+		if (!struct.ax12)
+			this.logger.warn("Missing USB2AX");
+
+		// Connect to what's detected
+		//TODO IMPLEMENT IT WITH ACTUATORS
+		//this.acts.connectTo(struct);
+
+		// Send struct to server
+		//TODO DO AFTER actuators done
+		//this.sendChildren(acts.getStatus());
+		//This une replace the acts.getStatus()
+				var data = {
+					"status": "",
+					"children": []
+				};
+
+				data.status = "everythingIsAwesome";
+				//Code of actuators.getStatus()
+						/*if(others && !!others.ready)
+							data.children.push("Arduino others");
+						else
+							data.status = "ok";
+
+						if(ax12 && !!ax12.ready)
+							data.children.push("USB2AX");
+						else
+							data.status = "ok";
+
+						if(asserv && !!asserv.ready)
+							data.children.push("Arduino asserv");
+						else
+							data.status = "error";
+					*/
+						//data.children.push("Arduino others");
+						//data.children.push("USB2AX");
+				data.status = "ok";
+				data.children.push("Arduino asserv");
+
+				this.sendChildren(data);
+
+	}
+
 
 }
 
