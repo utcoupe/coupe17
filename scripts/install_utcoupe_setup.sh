@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ### The goal of this script is to install all UTCoupe specific packages to have a working setup.
 ### This script is called automatically when you run a npm install.
@@ -40,6 +40,13 @@ function env_setup() {
 		echo "export UTCOUPE_WORKSPACE=$PWD" >> $HOME/.bashrc
 		source $HOME/.bashrc
 	fi
+	if ! id -Gn $USER | grep -qw "dialout"; then
+        sudo usermod -a -G dialout $USER
+	fi
+	if [ ! -d "/var/log/utcoupe" ]; then
+		sudo mkdir /var/log/utcoupe
+	fi
+	sudo chown $USER:$USER /var/log/utcoupe
 }
 
 ### Compile and install the UTCoupe libraries
