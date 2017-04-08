@@ -51,7 +51,7 @@ int main(int argc, char **argv){
 	hok1.urg = 0;
 
 	// Open log file
-	logfile = fopen("/var/log/hokuyo.log", "a+");
+	logfile = fopen("/var/log/utcoupe/hokuyo.log", "a+");
 //	logfile = stderr;
 	if (logfile == NULL) {
 		fprintf(stderr, "Can't open log file (what do you think about beeing a sudoer ? :P )\n");
