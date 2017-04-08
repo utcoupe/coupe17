@@ -37,6 +37,7 @@ class Grobot extends Robot{
 		this.acts.connectTo(struct);
 
 		// Send struct to server
+
 		this.sendChildren(acts.getStatus());
 	}
 
@@ -57,7 +58,7 @@ class Grobot extends Robot{
 			});
 			// logger.info("Order added to queue ! : ");
 			// logger.info(queue);
-			executeNextOrder();
+			this.executeNextOrder();
 		}
 	}
 
@@ -65,14 +66,16 @@ class Grobot extends Robot{
 	 * Execute order
 	 */
 	 executeNextOrder(){
-		if ((queue.length > 0) && (!orderInProgress)){
-			var order = queue.shift();
+		if ((this.queue.length > 0) && (!this.orderInProgress)){
+			var order = this.queue.shift();
 			this.orderInProgress = order.name;
 
-			this.logger.info("Going to do '" + orderInProgress + "' "+order.params.toString());
-			this.acts.orderHandler(order.from, order.name, order.params, actionFinished);
+			this.logger.info("Going to do '" + this.orderInProgress + "' "+order.params.toString());
 
-			executeNextOrder();
+      //TODO DECOMMENT IT AFTER acts done
+      //this.acts.orderHandler(order.from, order.name, order.params, this.actionFinished);
+
+			this.executeNextOrder();
 		}
 	}
 
@@ -83,7 +86,7 @@ class Grobot extends Robot{
 		this.logger.info(orderInProgress + " just finished !");
 
 		this.orderInProgress = false;
-		executeNextOrder();
+		this.executeNextOrder();
 	}
 
 
@@ -93,7 +96,7 @@ class Grobot extends Robot{
 	 * @todo do something when app is closing
 	 */
 	 quit () {
-		logger.info("Please wait while exiting...");
+		this.logger.info("Please wait while exiting...");
 		// acts.quit();
 		process.exit(0);
 	}

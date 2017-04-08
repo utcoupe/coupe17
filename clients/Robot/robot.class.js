@@ -55,7 +55,19 @@ class Robot extends Client{
 			this.acts = new (require('../Extension/Actuators/actuator.class.js'))(this.client, this.sendChildren);
 
 			// new (require('./detect.class.js'))(devicesDetected);
-			this.detect = null; //See what to do with this one
+
+			//this.detect = null; //See what to do with this one
+			//ADD it tmp
+			var struct = {
+				others: false,
+				asserv: false,
+				ax12: false,
+				servos: false
+			};
+
+
+			this.devicesDetected(struct); //TODO Replace it
+
 
 			this.queue = [];
 			this.orderInProgress = false;

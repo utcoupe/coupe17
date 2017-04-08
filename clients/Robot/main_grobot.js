@@ -39,7 +39,7 @@
         grobot.start();
       break;
       default:
-        addOrder2Queue(from, name, params);
+        grobot.addOrder2Queue(from, name, params);
     }
   });
 

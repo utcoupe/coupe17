@@ -34,6 +34,7 @@ class Tibot extends Robot{
 
 	devicesDetected(struct){
 		// Verify content
+
 		if (!struct.others)
 			this.logger.warn("Missing others Mega");
 
@@ -47,10 +48,12 @@ class Tibot extends Robot{
 			this.logger.warn("Missing USB2AX");
 
 		// Connect to what's detected
-		this.acts.connectTo(struct);
+		//this.acts.connectTo(struct);
 
 		// Send struct to server
-		this.sendChildren(acts.getStatus());
+		//TODO DO AFTER acts done this.sendChildren(acts.getStatus());
+		this.sendChildren("ok"); //TODO Check it
+
 	}
 
 	/**
@@ -65,9 +68,9 @@ class Tibot extends Robot{
 		// 	logger.info(n+" : Begin");
 		// 	acts.orderHandler(f, n, p, actionFinished);
 		// } else
-		if(queue.length < 100){
+		if(this.queue.length < 100){
 			// Adds the order to the queue
-			queue.push({
+			this.queue.push({
 				from: f,
 				name: n,
 				params: p
@@ -75,7 +78,7 @@ class Tibot extends Robot{
 			// logger.info("Order added to queue ! : ");
 			// logger.info(queue);
 
-			executeNextOrder();
+			this.executeNextOrder();
 		}
 	}
 
@@ -83,20 +86,22 @@ class Tibot extends Robot{
 	 * Execute order
 	 */
 	executeNextOrder(){
-		if ((queue.length > 0) && (!orderInProgress)) {
-			var order = queue.shift();
+		if ((this.queue.length > 0) && (!this.orderInProgress)) {
+			var order = this.queue.shift();
 			if(order.name == "send_message") {
 				// logger.debug("Send message %s", order.params.name);
-				client.send('ia', order.params.name, order.params || {});
-				executeNextOrder();
+				this.client.send('ia', order.params.name, order.params || {});
+				this.executeNextOrder();
 			} else {
-				orderInProgress = order.name;
+				this.orderInProgress = order.name;
 
-				logger.info(orderInProgress+" : Begin");
-				// logger.debug(order.params);
-				acts.orderHandler(order.from, order.name, order.params, actionFinished);
+				this.logger.info(this.orderInProgress+" : Begin");
+				//logger.debug(order.params);
 
-				// executeNextOrder();
+				//TODO DECOMMENT IT AFTER acts done
+				//this.acts.orderHandler(order.from, order.name, order.params, this.actionFinished);
+
+				this.executeNextOrder();
 			}
 		}
 	}
@@ -105,11 +110,11 @@ class Tibot extends Robot{
 	 * Launch the next order
 	 */
 	actionFinished(){
-		if(orderInProgress !== false) {
-			logger.info(orderInProgress + " : End");
+		if(this.orderInProgress !== false) {
+			this.logger.info(orderInProgress + " : End");
 
-			orderInProgress = false;
-			executeNextOrder();
+			this.orderInProgress = false;
+			this.executeNextOrder();
 		}
 	}
 

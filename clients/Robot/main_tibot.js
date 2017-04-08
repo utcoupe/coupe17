@@ -42,7 +42,7 @@
 				tibot.start();
 			break;
 			default:
-				addOrder2Queue(from, name, params);
+				tibot.addOrder2Queue(from, name, params);
 		}
 	});
 
