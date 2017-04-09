@@ -3,17 +3,16 @@
 ### The goal of this script is to install all UTCoupe specific packages to have a working setup.
 ### This script is called automatically when you run a npm install.
 
-function green_echo () {
+function green_echo() {
 	echo -e "\033[32m$1\033[0m"
 }
 
-function red_echo () {
+function red_echo() {
 	echo -e "\033[31m$1\033[0m"
 }
 
 # Globals
 ARCH=$(uname -m)
-
 
 ### Install the linux packages
 function apt_install() {
@@ -24,12 +23,23 @@ function apt_install() {
 	if [ "$ARCH" = "x86_64" ]; then
 		green_echo "x86 architecture detected."
 		sudo apt-get install nodejs npm nodejs-legacy linux-headers-$(uname -r)
-	else
-		green_echo "Raspberry Pi system detected, remove previous npm installation to setup the used version."
+	else if [ "$ARCH" = "armv7l" ]; then
+		green_echo "Raspberry Pi 3 system detected, remove previous npm installation to setup the used version."
 		sudo apt-get install raspberrypi-kernel-headers
 		sudo apt-get remove npm nodejs nodejs-legacy
 		curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 		sudo npm install npm@3.5.2 -g
+	else if [ "$ARCH" = "armv6l" ]; then
+		sudo apt-get install raspberrypi-kernel-headers
+		sudo apt-get remove npm nodejs nodejs-legacy
+		wget https://nodejs.org/dist/v4.8.1/node-v4.8.1-linux-armv6l.tar.gz
+		tar -xvf node-v4.8.1-linux-armv6l.tar.gz 
+		cd node-v4.8.1-linux-armv6l
+		sudo cp -R * /usr/local/
+		cd ..
+		sudo rm -rf node-v4.8.1-linux-armv6l
+	else
+		red_echo "ARCH of system not corresponding to a know arch... ($ARCH)"
 	fi
 }
 
