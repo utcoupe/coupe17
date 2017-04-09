@@ -63,9 +63,9 @@
 	<li>
 		<span class="utcoupe" ng-class="{launched: utcoupe.hokuyo}" >Hokuyo</span>
 		<button type="button" class="btn" ng-hide="utcoupe.hokuyo" ng-click="launch('hokuyo')">Lancer</button> 
-		<button type="button" class="btn" ng-show="utcoupe.hokuyo" ng-click="stop('hokuyo')">Arrêter</button> 
-		<button type="button" class="btn" ng-show="utcoupe.hokuyo" ng-click="startC()">Lancer le C</button> 
-		<button type="button" class="btn" ng-show="utcoupe.hokuyo" ng-click="stopC()">Stopper le C</button> 
+		<button type="button" class="btn" ng-hide="utcoupe.hokuyo" ng-click="stop('hokuyo')">Arrêter</button>
+		<button type="button" class="btn" ng-hide="utcoupe.hokuyo" ng-click="startC()">Lancer le C</button>
+		<button type="button" class="btn" ng-hide="utcoupe.hokuyo" ng-click="stopC()">Stopper le C</button>
 		<br /><br />
 	</li>
 	<div ng-include="'pages/logger/logger.tpl.html'"></div>
