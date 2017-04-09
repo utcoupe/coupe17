@@ -1,9 +1,26 @@
+/**
+ * \file 	main.cpp
+ * \author	Quentin Chateau
+ * \author	Thomas Fuhrmann <tomesman@gmail.com>
+ * \brief 	Main file of the pathfinding project.
+ * \date  	03/04/2017
+ * \copyright Copyright (c) 2017 UTCoupe All rights reserved.
+ *
+ * The pathfinding program is communicating using string commands.
+ * The protocol is defined as follow : cmd;x1;y1;x2;y2;...\n
+ * Where cmd can be :
+ *  C : compute a path (args are x_start:y_start;x_end;y_end)
+ *  D : refresh the internal dynamic objects (args are x;y;radius)
+ * Except the cmd, all the other values are integers.
+ * The pathfinding answers a computing command with the valid path found,
+ * with respect of the format : x_start;y_start;x1;y1;...;x_end;y_end;path_length\n
+ * In this case, all values are integers, except the path_length which is float.
+ */
+
 #include <iostream>
 #include <vector>
 #include <chrono>
-
 #include <tclap/CmdLine.h>
-
 #include "lib/map.hpp"
 
 #define FAILED_STR "FAIL\n"
@@ -12,86 +29,96 @@ using namespace std;
 using namespace TCLAP;
 
 // Declaration of command line options
+/**
+ * Flag to activate the debug mode (add more verbose)
+ */
 bool debugFlag = false;
+/**
+ * Flag to activate the bmp rendering
+ */
 bool bmpRenderingFlag = false;
+/**
+ * Relative or absolute path to the map to use (bmp format)
+ */
 string mapPath = "";
+/**
+ * Heuristic mode to use to compute distance
+ */
 heuristic_type heuristicMode = NORM1;
+
+/**
+ * A dynamic object is a moving robot.
+ * The parameters are the cartesian position (in mm) and the radius of the objectf (in mm).
+ */
+typedef struct dynamic_object {
+    unsigned int x, y, r;
+} dynamic_object;
 
 /**
  * Parse the command line options and sets the corresponding global variables.
  * @param argc The number of command line arguments
  * @param argv The array of command line arguments
  */
-void parseOptions(int argc, char** argv);
+void parseOptions(int argc, char **argv);
 
-
-/*
- * Communication protocol between the IA and the pathfinding
- * cmd;x1;y1;x2;y2;....
- * Cmd =
- *  C : compute a path (args are x_start:y_start;x_end;y_end)
- *  D : refresh the internal dynamic objects (x;y;radius)
- * The pathfinding answers a computing command with the valid path found,
- * with respect of the format : x_start;y_start;x1;y1;...;x_end;y_end;path_length
+/**
+ * Checks if the parameter point is in the map
+ * @param x X coordinate (in pixel)
+ * @param y Y coordinate (in pixel)
+ * @param map The map object to use as base
+ * @return True if the coordinate is valid, otherwise false
  */
-
-// correspond to a moving robot, we know its position (x,y) and its radius (r)
-typedef struct dynamic_object {
-    int x, y, r;
-} dynamic_object;
-
-// check if we are in the map
-inline bool is_valid(int x, int y, MAP &map) {
+inline bool isValid(unsigned int x, unsigned int y, MAP &map) {
     return x >= 0 && x < map.get_map_w() && y >= 0 && y < map.get_map_h();
 }
 
-// remove the dynamic objects in the MAP and add the one given by command
-void command_add_dynamic(string& command, MAP &map) {
+/**
+ * Adds dynamic objects in the map
+ * @param command The string containing the command of the objects to add (cmd;x1;y1;x2;y2;...)
+ * @param map The map object where to add the dynamic objects
+ */
+void addDynamicObject(string &command, MAP &map) {
     vector<dynamic_object> objs;
+    // Remove the "cmd;"
     command = command.substr(2);
     if (debugFlag) {
         cout << "Objects this time :" << endl;
     }
+    // Finds and adds all the objects in command
     while (command.find(';') != string::npos) {
         dynamic_object obj;
         sscanf(command.c_str(), "%i;%i;%i", &obj.x, &obj.y, &obj.r);
         objs.push_back(obj);
-        command = command.substr(command.find(';')+1);
-        command = command.substr(command.find(';')+1);
-        command = command.substr(command.find(';')+1);
+        command = command.substr(command.find(';') + 1);
+        command = command.substr(command.find(';') + 1);
+        command = command.substr(command.find(';') + 1);
         if (debugFlag) {
             cout << obj.x << ":" << obj.y << ":" << obj.r << endl;
         }
     }
+    // Clear the dynamic barriers because there are new objects
     map.clear_dynamic_barriers();
     for (auto &obj: objs) {
         map.add_dynamic_circle(obj.x, obj.y, obj.r);
     }
 }
 
-/*
- * INPUT : 	
- * 		command : x_start;y_start;x_end;y_end\n
- *
- * OUTPUT: 	
- * 		if valid:
- * 	 		x_start;y_start;x1;y1;...;xn;xy;x_end;y_end;path_length\n
- * 			all coordinates are integers, path_length is a float 		
- * 		if invalid (no path found or parsing error):
- * 			FAILED\n
- *
- * if start point is not valid, find the nearest valid point
- * if end point is not valid, do the same, except if
- * 		the end point is in a dynamic barrier (aka a robot)
- * 		then return \n immediatly
+/**
+ * Compute a path from start point to end point
+ * If start point is not valid, find the nearest valid point
+ * if end point is not valid, do the same, except if the end point is in a dynamic barrier (aka a robot) then return \n immediatly
+ * @param command The string containing : x_start;y_start;x_end;y_end\n
+ * @param map The map object used to compute the path
+ * @return If valid, returns the path as a string (x_start;y_start;x1;y1;...;xn;xy;x_end;y_end;path_length\n) with integers values except the path_length (float)
+ *         If not valid, returns FAILED value
  */
-string command_calc_path(string& command, MAP &map) {
-    int x_s, y_s, x_e, y_e;
+string commandCalcPath(string &command, MAP &map) {
+    unsigned int x_s, y_s, x_e, y_e;
     vertex_descriptor start, end, start_valid, end_valid;
     vector<vertex_descriptor> path;
     double distance;
     stringstream answer;
-    chrono::time_point <chrono::system_clock> startChrono, endChrono;
+    chrono::time_point<chrono::system_clock> startChrono, endChrono;
     chrono::duration<double> elapsedSeconds;
 
     // Get the initial and end point and search the nearest valid point
@@ -101,7 +128,7 @@ string command_calc_path(string& command, MAP &map) {
         cerr << "Did not parse the input correctly" << endl;
         return FAILED_STR;
     }
-    if (!(is_valid(x_s, y_s, map) && is_valid(x_e, y_e, map))) {
+    if (!(isValid(x_s, y_s, map) && isValid(x_e, y_e, map))) {
         cerr << "Start or end point is not in the map" << endl;
         return FAILED_STR;
     }
@@ -123,7 +150,6 @@ string command_calc_path(string& command, MAP &map) {
     }
 
     // Ask the map to compute the path between the start and the end
-
     map.solve(start_valid, end_valid);
     if (!map.solved()) {
         cerr << "Could not find any path" << endl;
@@ -137,11 +163,11 @@ string command_calc_path(string& command, MAP &map) {
     // Check if the path is valid
     if (start != start_valid) {
         path.insert(path.begin(), start);
-        distance += euclidean_heuristic(start)(start_valid);
+        distance += heuristicCompute(heuristicMode, start).computeHeuristic(start_valid);
     }
     if (end != end_valid) {
         path.push_back(end);
-        distance += euclidean_heuristic(end)(end_valid);
+        distance += heuristicCompute(heuristicMode, end).computeHeuristic(end_valid);
     }
     // Create the string representing the path
     for (auto &point: path) {
@@ -162,7 +188,7 @@ string command_calc_path(string& command, MAP &map) {
 
 int main(int argc, char **argv) {
     // Parse the command line options
-    parseOptions(argc,argv);
+    parseOptions(argc, argv);
 
     if (debugFlag) {
         cout << "Loading map " << mapPath << endl;
@@ -186,10 +212,10 @@ int main(int argc, char **argv) {
         cin >> command;
         switch (command[0]) {
             case 'D':
-                command_add_dynamic(command, map);
+                addDynamicObject(command, map);
                 break;
             case 'C':
-                answer = command_calc_path(command, map);
+                answer = commandCalcPath(command, map);
                 cout << answer;
                 cout.flush();
                 break;
@@ -201,26 +227,28 @@ int main(int argc, char **argv) {
     cout << "Communication with system failed, stop the pathfinding" << endl;
 }
 
-void parseOptions(int argc, char** argv) {
+void parseOptions(int argc, char **argv) {
     try {
         CmdLine cmd("Command description message", ' ', "0.1");
 
-        ValueArg<string> mapArg("m","map","Path to the map used to compute pathfinding.",true,"","string");
+        ValueArg<string> mapArg("m", "map", "Path to the map used to compute pathfinding.", true, "", "string");
         cmd.add(mapArg);
 
-        ValueArg<uint8_t> heuristicArg("h","heuristic","Heuristic mode for pathfinding computing (EUCLIDIEAN = 0, NORM1 = 1).",false,1,"uint8_t");
+        ValueArg<uint8_t> heuristicArg("e", "heuristic",
+                                       "Heuristic mode for pathfinding computing (EUCLIDIEAN = 0, NORM1 = 1).", false,
+                                       1, "uint8_t");
         cmd.add(heuristicArg);
 
-        ValueArg<bool> debugArg("d","debug","Set the debug flag.",false,false,"bool");
+        ValueArg<bool> debugArg("d", "debug", "Set the debug flag.", false, false, "bool");
         cmd.add(debugArg);
 
-        ValueArg<bool> renderingArg("r","rendering","Set the rendering flag.",false,false,"bool");
+        ValueArg<bool> renderingArg("r", "rendering", "Set the rendering flag.", false, false, "bool");
         cmd.add(renderingArg);
 
         cmd.parse(argc, argv);
 
         mapPath = mapArg.getValue();
-        heuristicMode = (heuristic_type)heuristicArg.getValue();
+        heuristicMode = (heuristic_type) heuristicArg.getValue();
         debugFlag = debugArg.getValue();
         bmpRenderingFlag = renderingArg.getValue();
     } catch (ArgException &e) { // catch any exceptions
