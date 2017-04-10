@@ -11,13 +11,15 @@
  * @requires module:ia/gr
  * @requires module:ia/pr
  * @requires module:ia/export_simulator
+ * @requires module:ia/lidar
  * @see {@link ia/ia.Ia}
  */
 
 module.exports = (function () {
 	"use strict";
-	var log4js = require('log4js');
-	var logger = log4js.getLogger('ia.ia'); 
+	const log4js = require('log4js');
+	const logger = log4js.getLogger('ia.ia'); 
+	const EventEmitter = require('events');
 	var log_counter = 0;
 
 	/**
@@ -42,23 +44,24 @@ module.exports = (function () {
 	 * @param EGR_d EGR diameter
 	 * @param EGPR_d EPR diameter
 	 */
-	function Ia(color, nb_erobots, EGR_d, EPR_d) {
-		var we_have_hats = true;
-		if(!color) {
+	function Ia(color, we_have_hats/*, nb_erobots, EGR_d, EPR_d*/) {
+		if(color === null) {
 			logger.error('Please give a color to ia');
 		}
-		if(!nb_erobots) {
-			logger.error('Please give the number of ennemis robots');
+		if(we_have_hats === null) {
+			logger.error('Please say true if we have something on our robots detectable by the lidars');
 		}
-		if(!we_have_hats) {
-			logger.error('Please say true if we have something on our robots detectable by the Hokuyos');
-		}
-		if(!EGR_d) {
-			logger.error('Please give the EGR diameter');
-		}
-		if(!EPR_d) {
-			logger.error('Please give the EPR diameter');
-		}
+
+		// if(!nb_erobots) {
+		// 	logger.error('Please give the number of ennemis robots');
+		// }
+		// if(!EGR_d) {
+		// 	logger.error('Please give the EGR diameter');
+		// }
+		// if(!EPR_d) {
+		// 	logger.error('Please give the EPR diameter');
+		// }
+
 		/**
 		 * Color of the IA team
 		 */
@@ -66,8 +69,8 @@ module.exports = (function () {
 		/**
 		 * Number of robots controlled by the IA
 		 */
-		this.nb_erobots = nb_erobots || 2;
-		logger.info("Launching a "+this.color+" AI with "+this.nb_erobots+" ennemies.");
+		// this.nb_erobots = nb_erobots || 2;
+		logger.info("Launching a "+this.color+" AI"/*"" with "+this.nb_erobots+" ennemies."*/);
 		
 		/** Socket client */
 		this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip: require('../config.js').server });
@@ -76,26 +79,36 @@ module.exports = (function () {
 		/** Pathfinding */
 		this.pathfinding = new (require('./pathfinding.class.js'))(this);
 		/** Data */
-		this.data = new (require('./data.class.js'))(this, this.nb_erobots, EGR_d, EPR_d);
+		this.data = new (require('./data.class.js'))(this/*, this.nb_erobots, EGR_d, EPR_d*/);
 		/** Actions */
 		this.actions = new (require('./actions.class.js'))(this);
 		/** Grand robot */
 		this.gr = new (require('./gr.class.js'))(this, this.color);
 		/** Petit robot */
 		this.pr = new (require('./pr.class.js'))(this, this.color);
-		// this.hokuyo = new (require('./hokuyo.class.js'))(this, {
-		// 	color: this.color,
-		// 	nb_erobots: parseInt(this.nb_erobots),
-		// 	we_have_hats: (we_have_hats === "true")
-		// });
+
+		this.lidar = new (require('./lidar.class.js'))(this, {
+			color: this.color,
+			/*
+			nb_erobots: parseInt(this.nb_erobots),
+			*/
+			we_have_hats: (we_have_hats === "true")
+		});
+		this.lidar.events.on("error", (err) => {
+			logger.error("Error in Lidar:");
+			logger.error(err);
+		})
+
 		/** Export simulator */
 		this.export_simulator = new (require('./export_simulator.class.js'))(this);
 
 		this.client.send("server", "server.iaColor", {color: this.color});
 
 		this.client.order(function(from, name, params) {
-			var classe = name.split('.')[0];
-				// logger.debug(this[classe]);
+			var orderName = name.split('.');
+			var classe = orderName.shift();
+			var orderSubname = orderName.join('.');
+
 			if(classe == 'ia') {
 				switch(name) {
 					case 'ia.jack':
@@ -105,13 +118,15 @@ module.exports = (function () {
 						this.stop();
 					break;
 					case 'ia.hok':
+					logger.debug("TODO ia : change for new lidar interface");
 						if ((log_counter++ % 15) == 0) {
 							logger.debug(params);
 						}
 						this.pr.updatePos(params);
 					break;
 					case 'ia.hokfailed':
-						 logger.fatal("HOKUYO NOT WORKING, UNPLUG AND REPLUG USB");
+						logger.debug("TODO ia : change for new lidar interface");
+						logger.fatal("lidar NOT WORKING, UNPLUG AND REPLUG USB");
 						this.pr.updatePos(params);
 					break;
 					default:
@@ -120,19 +135,14 @@ module.exports = (function () {
 			} else if(!!this[classe]) {
 				// logger.debug("Order to class: "+classe);
 				if(!this[classe].parseOrder) {
-					logger.warn("Attention, pas de fonction parseOrder dans ia."+classe);
+					logger.warn("Warning, no parseOrder function in ia."+classe);
 				} else {
-					this[classe].parseOrder(from, name, params);
+					this[classe].parseOrder(from, orderSubname, params);
 				}
 			} else {
-				logger.warn("Sous client inconnu: "+classe);
+				logger.warn("IA component "+classe+" unknown");
 			}
 		}.bind(this));
-
-		// temp //
-		// this.gr.start();
-		// this.jack();
-		//////////
 	}
 
 	/**
@@ -144,11 +154,9 @@ module.exports = (function () {
 		if(!this.timer.match_started) {
 			logger.info("Démarrage du match");
 			this.timer.start();
-			setTimeout(function() {
-				this.gr.start();
-			}.bind(this), 10000);
 			this.pr.start();
-			// this.hokuyo.start();
+			this.gr.start();
+			// this.lidar.start();
 		} else {
 			logger.warn("Match déjà lancé");
 		}
@@ -161,7 +169,7 @@ module.exports = (function () {
 		logger.fatal('Stop IA');
 		this.gr.stop();
 		this.pr.stop();
-		// this.hokuyo.stop();
+		// this.lidar.stop();
 		setTimeout(process.exit, 1000);
 	};
 

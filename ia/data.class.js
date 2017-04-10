@@ -20,7 +20,7 @@ module.exports = (function () {
 	 * @param EGR_d
 	 * @param EPR_d 
 	 */
-	function Data(ia, nb_erobots, EGR_d, EPR_d) {
+	function Data(ia, /*nb_erobots,*/ EGR_d, EPR_d) {
 		/** balle */
 		this.balle = [];
 		/** chargeur */
@@ -39,8 +39,8 @@ module.exports = (function () {
 		this.dynamic = []; //used for laid stacks
 		/** depot */
 		this.depot = [];
-		/** nb_erobot */
-		this.nb_erobots = nb_erobots;
+		// /** nb_erobot */
+		// this.nb_erobots = nb_erobots;
 
 		/** dots */
 		this.dots = [];
@@ -171,7 +171,7 @@ module.exports = (function () {
 	 */
 	Data.prototype.parseOrder = function(from, name, param){
 		switch(name){
-			case "data.add_dynamic" :
+			case "add_dynamic" :
 				if(!!param.pos && !!param.pos.x && !!param.pos.y && !!param.d){
 					this.dynamic.push(param);
 					logger.info("added dynamic from :"+from+" params:"+JSON.stringify(param));

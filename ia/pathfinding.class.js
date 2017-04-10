@@ -10,7 +10,8 @@ module.exports = (function () {
 
 	var Path = require('path');
 
-	var programm = Path.normalize("./bin/pathfinding");
+	// var program = Path.normalize("./bin/pathfinding");
+	var program = Path.normalize("./pathfinding/bin/pathfinding");
 	var image = Path.normalize("./pathfinding/img/map-20mm-yellow.bmp");
 	var RATIO = 20;
 	var SEPARATOR = ";";
@@ -40,12 +41,12 @@ module.exports = (function () {
 		});
 
 
-		var instance = Child_process.spawn(programm, [ image ]);*/
-		var instance = Child_process.spawn("bash", ["-c", "pkill pathfinding;"+programm+" -m "+image]);
+		var instance = Child_process.spawn(program, [ image ]);*/
+		var instance = Child_process.spawn("bash", ["-c", "pkill pathfinding;"+program+" -m "+image]);
 
 		instance.on('error', function(err) {
 			if(err.code === 'ENOENT'){
-				logger.fatal("pathfinding programm executable not found! Is it compiled ? :) Was looking in \""+Path.resolve(programm)+"\"");
+				logger.fatal("pathfinding program executable not found! Is it compiled ? :) Was looking in \""+Path.resolve(program)+"\"");
 				process.exit();
 			}
 			logger.error("c++ subprocess terminated with error:", err);

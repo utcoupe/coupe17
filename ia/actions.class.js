@@ -119,11 +119,11 @@ module.exports = (function () {
 	 */
 	Actions.prototype.parseOrder = function (from, name, params) {
 		switch(name) {
-			case 'actions.action_finished':
+			case 'action_finished':
 			// logger.debug('received action_finished');
 				this.actionFinished();
 			break;
-			case 'actions.path_finished':
+			case 'path_finished':
 			logger.debug('received path_finished');
 				this.ia.pr.path = [];
 			break;
