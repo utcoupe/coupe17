@@ -321,7 +321,7 @@
 		if (newStatus != lastStatus.status) {
 			logger.info("New status : " + newStatus);
 			lastStatus.status = newStatus;
-			sendChildren(lastStatus)
+			sendChildren(lastStatus);
 		}
 	}
 
@@ -330,7 +330,10 @@
 		lastStatus = status;
 
 		client.send("server", "server.childrenUpdate", lastStatus);
-		client.send("ia", "hokuyo.nb_hokuyo", { nb: nb_active_hokuyos });
+		client.send("ia", "lidar.status", {
+			nb: nb_active_hokuyos,
+			status: lastStatus.status
+		});
 	}
 
 	function isOk(){
