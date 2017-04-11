@@ -49,6 +49,12 @@ class Robot{
 		/** Team color */
 		this.color = color;
 	}
+
+	detectCollision(){
+		logger.debug("TODO: detect collision");
+
+		return false;
+	}
 }
 
 module.exports = Robot;
