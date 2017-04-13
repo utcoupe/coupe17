@@ -18,9 +18,11 @@ class Robot extends Object3d
      * 
      * @param {Object} params 
      * @param {String} ressourcesPath
-     * @param {Function} onCreateFinished
+     * @param {Function} onCreateFinished Fonction appelée losrque le robot a fini d'être initialisé
+     * @param {Number} radius Rayon du robot (utilisé pour enlever les objets)
+     * @param {Function} autotrash Fonction appelée pour supprimer des objets proches
      */
-    constructor (params, ressourcesPath, onCreateFinished)
+    constructor (params, ressourcesPath, onCreateFinished, radius, autotrash)
     {
         // On appelle le constructeur parent
         super(params, ressourcesPath);
@@ -30,6 +32,19 @@ class Robot extends Object3d
          * @const
          */
         this.PATH_MAX_POINTS = 3;
+
+        /**
+         * Rayons représentant le robot sur le plan (xOz)
+         * @type {Number}
+         */
+        this.radius = radius;
+
+        /**
+         * Fonction appelée sur le controlleur lorsque le robot bouge,
+         * avec en paramètre la position et le rayon du robot
+         * @type {Function}
+         */
+        this.autoTrash = autotrash;
 
         this.initPath(onCreateFinished);
     }
@@ -78,5 +93,18 @@ class Robot extends Object3d
             idVertice++;
         }
         this.pathLine.geometry.verticesNeedUpdate = true;
+    }
+
+    /**
+     * Met à jour la position et la rotation de l'objet 3D.
+     * Si certains paramètres ne sont pas définis, ils ne seront pas modifiés.
+     * Supprime automatiquement les objets proches.
+     * 
+     * @param {Object} params Paramètres divers de l'objet 3D
+     */
+    updateParams (params)
+    {
+        super.updateParams(params);
+        this.autoTrash(this.position, this.radius);
     }
 }

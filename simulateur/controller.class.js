@@ -13,8 +13,7 @@
 /**
  * Gère le simulateur
  */
-class Controller
-{
+class Controller {
     /**
      * Constructeur du controlleur
      * 
@@ -23,8 +22,7 @@ class Controller
      * @param {String} configPath Chemin d'accès au fichier de coniguration relatif à {@link Controller.ressourcesPath}
      * @param {String} ressourcesPath Chemin d'accès aux ressources appelées par le simulateur
      */
-    constructor (configPath, ressourcesPath)
-    {
+    constructor(configPath, ressourcesPath) {
         /**
          * Chemin d'accès au fichier contenant la configuration du simulateur.
          * @see Controller#ressourcesPath
@@ -37,7 +35,7 @@ class Controller
          * @type {String}
          */
         this.ressourcesPath = ressourcesPath;
-        
+
         // A charger dynamiquement du fichier
         /**
          * Id de la balise qui contiendra le simulateur.
@@ -45,11 +43,23 @@ class Controller
          * */
         this.container = document.getElementById("simulateur_container");
 
-        /** @type {Map<Object3d>} */
+        /** @type {Map<String, Object3d>} */
         this.objects3d = new Map();
 
         /** @type {Array<external:THREE.DirectionalLight>} */
         this.directionLights = [];
+
+        /**
+         * @type {Number}
+         * @const
+         */
+        this.RADIUS_PR = 0.1;
+
+        /**
+         * @type {Number}
+         * @const
+         */
+        this.RADIUS_GR = 0.2;
     }
 
     /**
@@ -57,8 +67,7 @@ class Controller
      * @see {@link Controller#configPath}
      * @see {@link Controller#ressourcesPath}
      */
-    loadParameters()
-    {
+    loadParameters() {
         getParsedJSONFromFile(
             this.ressourcesPath + this.configPath,
             (objects) => { this.create3dObjects(objects) }
@@ -71,35 +80,36 @@ class Controller
      * @param {Array<Object>} objects liste de tous les objets à créer
      * @see {@link Controller#ressourcesPath}
      */
-    create3dObjects(objects)
-    {
+    create3dObjects(objects) {
         console.log("Creating the 3D objects...");
-        for(var idObject = 0; idObject < objects.length; idObject++)
-        {
+        for (var idObject = 0; idObject < objects.length; idObject++) {
             var name = objects[idObject].name;
             //console.log("Creating " + name);
-            switch(objects[idObject].type)
-            {
-                case "pr" :
-                    this.objects3d.set(
-                        name,
-                        new Robot(objects[idObject],
+            switch (objects[idObject].type) {
+            case "pr":
+                this.objects3d.set(
+                    name,
+                    new Robot(objects[idObject],
                         this.ressourcesPath,
-                        (pathLine) => {this.scene.add(pathLine);}
+                        (pathLine) => { this.scene.add(pathLine); },
+                        this.RADIUS_PR,
+                        this.autotrash.bind(this)
                     ));
-                    break;
+                break;
 
-                case "gr" :
-                    this.objects3d.set(
-                        name,
-                        new Robot(objects[idObject],
+            case "gr":
+                this.objects3d.set(
+                    name,
+                    new Robot(objects[idObject],
                         this.ressourcesPath,
-                        (pathLine) => {this.scene.add(pathLine);}
+                        (pathLine) => { this.scene.add(pathLine); },
+                        this.RADIUS_GR,
+                        this.autotrash.bind(this)
                     ));
-                    break;
+                break;
 
-                default:
-                    this.objects3d.set(name, new Object3d(objects[idObject], this.ressourcesPath));
+            default:
+                this.objects3d.set(name, new Object3d(objects[idObject], this.ressourcesPath));
             }
             this.objects3d.get(name).loadMesh((scene) => {
                 this.scene.add(scene);
@@ -110,26 +120,25 @@ class Controller
     /**
      * Crée le moteur de rendu
      */
-    createRenderer()
-    {
+    createRenderer() {
         // hauteur de la zone de rendu
         var height = Math.max(
-            $('body').height() - $('#div_menu').outerHeight() - 2*$('#simu_before').outerHeight(),
+            $('body').height() - $('#div_menu').outerHeight() - 2 * $('#simu_before').outerHeight(),
             200
         );
         //alert($('body').height() - $('#div_menu').outerHeight() - 2*$('#simu_before').outerHeight());
         // largeur de la zone de rendu
-		var width = $('#simulateur_container').width();
+        var width = $('#simulateur_container').width();
 
         /** @type {external:THREE.Scene} */
         this.scene = new THREE.Scene();
         /** @type {external:THREE.PerspectiveCamera} */
-        this.camera = new THREE.PerspectiveCamera(45,width/height,0.1,10);
+        this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10);
 
         /** @type {external:THREE.WebGLRenderer} */
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setSize(width, height);
-	    this.renderer.setClearColor(0x272525,0.5);
+        this.renderer.setClearColor(0x272525, 0.5);
         this.container.appendChild(this.renderer.domElement);
 
         /** @type {external:THREE.OrbitControls} */
@@ -145,10 +154,10 @@ class Controller
         // Permet de changer la taille du canva de THREE en fonction de la taille de la fenêtre
         window.addEventListener('resize', () => {
             var HEIGHT = Math.max(
-                $('body').height() - $('#div_menu').outerHeight() - 2*$('#simu_before').outerHeight(),
+                $('body').height() - $('#div_menu').outerHeight() - 2 * $('#simu_before').outerHeight(),
                 200
             );
-		    var WIDTH = $('#simulateur_container').width();
+            var WIDTH = $('#simulateur_container').width();
             this.renderer.setSize(WIDTH, HEIGHT);
             this.camera.aspect = WIDTH / HEIGHT;
             this.camera.updateProjectionMatrix();
@@ -161,20 +170,19 @@ class Controller
     /**
      * Crée et insert des lumières directionnelles dans la scène
      */
-    createLights()
-    {
+    createLights() {
         var largeurTable = 2;
         var longueurTable = 3;
         var heightLights = 2;
         // Les lumières sont disposés haut-dessus des quattres coins du plateau, avec un offset de 1
         var posLights = [
-            new Position(-largeurTable/2, heightLights, -longueurTable/2),
-            new Position(largeurTable*3/2, heightLights, -longueurTable/2),
-            new Position(-largeurTable/2, heightLights, longueurTable*3/2),
-            new Position(largeurTable*3/2, heightLights, longueurTable*3/2)
+            new Position(-largeurTable / 2, heightLights, -longueurTable / 2),
+            new Position(largeurTable * 3 / 2, heightLights, -longueurTable / 2),
+            new Position(-largeurTable / 2, heightLights, longueurTable * 3 / 2),
+            new Position(largeurTable * 3 / 2, heightLights, longueurTable * 3 / 2)
         ];
 
-        posLights.forEach(function(pos) {
+        posLights.forEach(function (pos) {
             var light = new THREE.DirectionalLight(0xffffff, 1);
             light.position.set(pos.x, pos.y, pos.z);
             light.intensity = 0.5;
@@ -186,20 +194,18 @@ class Controller
     /**
      * Crée une boucle et met à jour le rendu à 60fps
      */
-    render()
-    {
+    render() {
         requestAnimationFrame(() => {
             this.render();
         });
         this.renderer.render(this.scene, this.camera);
     }
 
-    test()
-    {
-        var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-        var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-        var cube = new THREE.Mesh( geometry, material );
-        this.scene.add( cube );
+    test() {
+        var geometry = new THREE.BoxGeometry(1, 1, 1);
+        var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        var cube = new THREE.Mesh(geometry, material);
+        this.scene.add(cube);
 
         this.camera.position.z = 5;
     }
@@ -211,39 +217,33 @@ class Controller
      * 
      * @param {String} view Vue désirée
      */
-    selectView(view)
-    {
+    selectView(view) {
         console.log("Changement de vue : " + view);
-        if(view == "front")
-        {
+        if (view == "front") {
             this.controls.reset();
             this.camera.position.set(1, 1.5, 3.5);
             this.camera.rotation.set(-0.5, 0, 0);
             this.controls.target.set(1, 0, 1);
         }
-        else if(view == "top")
-        {
+        else if (view == "top") {
             this.controls.reset();
             this.camera.position.set(1, 3, 1);
             this.camera.rotation.set(-1.6, 0, 0);
             this.controls.target.set(1, 0, 1);
         }
-        else if (view == "behind")
-        {
+        else if (view == "behind") {
             this.controls.reset();
             this.camera.position.set(1.5, 1, -1.5);
             this.camera.rotation.set(-2.5, 0, 3.0);
             this.controls.target.set(1, 0, 1);
         }
-        else if (view == "left")
-        {
+        else if (view == "left") {
             this.controls.reset();
             this.camera.position.set(-0.8, 1.5, 1);
             this.camera.rotation.set(-1.6, -1, -1.6);
             this.controls.target.set(1, 0, 1);
         }
-        else if (view == "right")
-        {
+        else if (view == "right") {
             this.controls.reset();
             this.camera.position.set(4, 0.5, 1);
             this.camera.rotation.set(-1.5, 1.5, 1.5);
@@ -258,10 +258,29 @@ class Controller
      * 
      * @param {Object} params 
      */
-    updateObjects(params)
-    {
-        params.forEach(function(object3d) {
+    updateObjects(params) {
+        params.forEach(function (object3d) {
             this.objects3d.get(object3d.name).updateParams(object3d);
         }, this);
+    }
+
+    /**
+     * Fonction destinée a être appelée par les robots pour enlever (mettre invisible) des éléments du simulateur
+     * 
+     * @param {any} pos 
+     * @param {any} radius
+     */
+    autotrash(pos, radius) {
+        /*if (!this.objects3d) // Pour que la fonction ne soit pas lancée lorsque la table n'est pas construite
+            return;*/
+        var blacklist = ["pr", "gr", "plateau"];
+        this.objects3d.forEach(function (object3d) {
+            if (blacklist.indexOf(object3d.type) == -1) {
+                if (object3d.position.get2dDistance(pos) <= radius) {
+                    //console.log("Make invisible : " + object3d.name);
+                    object3d.mesh.traverse( function ( object ) { object.visible = false; } );
+                }
+            }
+        }, this)
     }
 }

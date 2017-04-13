@@ -1153,5 +1153,20 @@
             "y": 0,
             "z": 0
         }
+    },
+    {
+        "name": "roche01",
+        "source": "3d/roche.dae",
+        "pos":{
+            "x": 2.85,
+            "y": 0,
+            "z": 1.5
+        },
+        "type": "roche",
+        "rotation":{
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
     }
 ]
