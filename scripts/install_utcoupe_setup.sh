@@ -35,18 +35,32 @@ function apt_install() {
 
 ### Setup the variable environment to taget the UTCoupe main folder
 function env_setup() {
+	# Add the UTCOUPE_WORKSPACE env variable
 	if [ -z "$UTCOUPE_WORKSPACE" ]; then
 		green_echo "Env variable is not set."
 		echo "export UTCOUPE_WORKSPACE=$PWD" >> $HOME/.bashrc
 		source $HOME/.bashrc
 	fi
+	# Add a file where to find UTCOUPE_WORKSPACE for node launched at startup
+	if [ ! -f "/etc/default/utcoupe" ]; then
+		sudo touch "/etc/default/utcoupe"
+		sudo echo "UTCOUPE_WORKSPACE=$PWD" >> /etc/default/utcoupe
+	fi
+	# Add the current user to the dialout group (to r/w in /dev files)
 	if ! id -Gn $USER | grep -qw "dialout"; then
         sudo usermod -a -G dialout $USER
 	fi
+	# Create the utcoupe folder where log files are stored
 	if [ ! -d "/var/log/utcoupe" ]; then
 		sudo mkdir /var/log/utcoupe
 	fi
+	# Change the ownership of the utcoupe log folder
 	sudo chown $USER:$USER /var/log/utcoupe
+	# Install the hokuyo automatic startup script (only for raspberry pi zero)
+	if [ "$ARCH" = "armv6l" ]; then
+		sudo install $UTCOUPE_WORKSPACE/scripts/utcoupe_hokuyo.sh /etc/init.d/
+		sudo update-rc.d utcoupe_hokuyo.sh defaults 99
+	fi
 }
 
 ### Compile and install the UTCoupe libraries
