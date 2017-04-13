@@ -31,16 +31,16 @@ class Position
 
 
     /**
-     * Calcule la distance sur 2 dimentions par rapport à la position passée en paramètre (x et y)
+     * Calcule la distance sur 2 dimentions par rapport à la position passée en paramètre (x et z)
      * 
      * @param {Position} pos
      * @returns {Number}
      */
     get2dDistance(pos)
     {
-        deltaX = this.x - pos.x;
-        deltaY = this.y - pos.y;
-        return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2))
+        var deltaX = this.x - pos.x;
+        var deltaZ = this.z - pos.z;
+        return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaZ, 2))
     }
 
     /**
@@ -51,9 +51,9 @@ class Position
      */
     get3dDistance(pos)
     {
-        deltaX = this.x - pos.x;
-        deltaY = this.y - pos.y;
-        deltaY = this.z - pos.z;
+        var deltaX = this.x - pos.x;
+        var deltaY = this.y - pos.y;
+        var deltaZ = this.z - pos.z;
         return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2) + Math.pow(deltaZ, 2))
     }
 
