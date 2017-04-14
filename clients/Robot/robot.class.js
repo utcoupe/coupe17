@@ -52,6 +52,8 @@ class Robot extends Client{
 			};
 			this.sendChildren(this.lastStatus);
 
+			var fifo = new (require('../fifo.class.js'))();
+
 			this.acts = new (require('../Extension/Actuators/actuator.class.js'))(this.client, this.sendChildren);
 
 			//TODO replace devicedetected
@@ -81,6 +83,7 @@ class Robot extends Client{
 			status: "starting",
 			children:[]
 		});
+			//Hack, NOT LIKE THIS normally
 			var struct = {
 				others: false,
 				asserv: false,
@@ -134,8 +137,8 @@ class Robot extends Client{
 		if (!struct.others)
 			this.logger.warn("Missing others Mega");
 
-		// if (!struct.servos)
-		// 	logger.warn("Missing servos Nano");
+		if (!struct.servos)
+			this.logger.warn("Missing servos Nano");
 
 		if (!struct.asserv)
 			this.logger.warn("Missing asserv Nano");
@@ -146,6 +149,18 @@ class Robot extends Client{
 		// Connect to what's detected
 		//TODO IMPLEMENT IT WITH ACTUATORS
 		//this.acts.connectTo(struct);
+						//HACK, do in acts normaly. See how integrate it
+						if (!struct.asserv) {
+									this.logger.fatal("Lancement de l'asserv pr en mode simu !");
+									this.asserv = new (require('../Asserv/AsservSimu.class.js'))(this.client, 'pr', this.fifo);
+								} else {
+									this.asserv = new (require('../Asserv/AsservReal.class.js'))(
+										new SerialPort(struct.asserv, {
+											baudrate: 57600,
+											parser:SerialPort.parsers.readline('\n')
+										}), this.client, 'pr', this.sendStatus, this.fifo
+									);
+								}
 
 		// Send struct to server
 		//TODO DO AFTER actuators done

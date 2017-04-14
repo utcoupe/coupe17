@@ -1,6 +1,6 @@
 /**
  * Module exportant la classe abstraite Asserve
- * 
+ *
  * @module clients/Asserv/Asserv
  */
 
@@ -8,15 +8,15 @@
 
 /**
  * Class Asserv.
- * 
+ *
  * @memberof module:clients/Asserv/Asserv
  */
 class Asserv{
 	/**
 	 * Creates an instance of Asserv.
-	 * @param {any} client 
-	 * @param {any} who 
-	 * @param {any} fifo 
+	 * @param {any} client
+	 * @param {any} who
+	 * @param {any} fifo
 	 */
 	constructor(client, who, fifo){
 		/** @type {Log4js} */
@@ -37,24 +37,24 @@ class Asserv{
 
 	/**
 	 * Convert Angle
-	 * 
+	 *
 	 * @param {int} a Angle
 	 */
 	// Attention, c'est une fonction a la base, pas une methode
 	convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
-	
+
 	/**
 	 * Set Angle
-	 * 
+	 *
 	 * @param {int} a Angle
 	 */
 	setA(a) {
-		this.pos.a = convertA(a);
+		this.pos.a = this.convertA(a);
 	}
 
 	/**
 	 * Position ?
-	 * 
+	 *
 	 * @param {Object} pos
 	 */
 	Pos(pos) {
@@ -65,7 +65,7 @@ class Asserv{
 
 	/**
 	 * Sets Position
-	 * 
+	 *
 	 * @param {Object} pos
 	 * @param {Object} callback
 	 */
@@ -73,7 +73,7 @@ class Asserv{
 
 	/**
 	 * Gets Position
-	 * 
+	 *
 	 * @param {Object} pos
 	 */
 	getPos(pos) {
@@ -90,7 +90,7 @@ class Asserv{
 
 	/**
 	 * Calage X
-	 * 
+	 *
 	 * @param {int} x
 	 * @param {int} a Angle
 	 * @param {Object} callback
@@ -99,7 +99,7 @@ class Asserv{
 
 	/**
 	 * Calage Y
-	 * 
+	 *
 	 * @param {int} y
 	 * @param {int} a Angle
 	 * @param {Object} callback
@@ -108,7 +108,7 @@ class Asserv{
 
 	/**
 	 * Set Vitesse
-	 * 
+	 *
 	 * @param {int} v Speed
 	 * @param {float} r Rotation
 	 * @param {Object} callback
@@ -117,7 +117,7 @@ class Asserv{
 
 	/**
 	 * Speed ?
-	 * 
+	 *
 	 * @param {int} l
 	 * @param {int} a Angle
 	 * @param {int} ms
@@ -127,7 +127,7 @@ class Asserv{
 
 	/**
 	 * Pulse Width Modulation
-	 * 
+	 *
 	 * @param {int} left
 	 * @param {int} right
 	 * @param {int} ms
@@ -137,7 +137,7 @@ class Asserv{
 
 	/**
 	 * Go X Y
-	 * 
+	 *
 	 * @param {int} x
 	 * @param {int} y
 	 * @param {string} sens
@@ -148,7 +148,7 @@ class Asserv{
 
 	/**
 	 * Simu Go Angle
-	 * 
+	 *
 	 * @param {int} a Angle
 	 * @param {Object} callback
 	 * @param {boolean} no_fifo
@@ -157,7 +157,7 @@ class Asserv{
 
 	/**
 	 * Set P I D
-	 * 
+	 *
 	 * @param {int} p
 	 * @param {int} i
 	 * @param {int} d

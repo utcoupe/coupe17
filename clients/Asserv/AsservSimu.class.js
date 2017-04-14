@@ -1,17 +1,17 @@
 /**
  * Module Asservissement en mode simulateur
- * 
+ *
  * @module clients/Asserv/AsservSimu
  * @requires module:clients/Asserv/Asserv
  */
 
 "use strict";
 
-const Asserv = require('Asserv.class.js');
+const Asserv = require('./Asserv.class.js');
 
 /**
  * Classe héritant de l'asservissement, mode simulateur
- * 
+ *
  * @memberof module:clients/Asserv/AsservSimu
  * @extends {clients/Asserv/Asserv.Asserv}
  */
@@ -27,13 +27,13 @@ class AsservSimu extends Asserv{
 		this.getPos();
 	}
 
-	SIMU_DIST(dt, vitesse) { return (vitesse*SIMU_FACTOR_VIT)*dt; }
+	SIMU_DIST(dt, vitesse) { return (vitesse*this.SIMU_FACTOR_VIT)*dt; }
 	SIMU_DIST_ROT(a) { return Math.abs(a)*100; } // Rayon aproximatif de 10cm
-	SIMU_ROT_TIME(a, vitesse) { return SIMU_DIST_ROT(a)/(vitesse*SIMU_FACTOR_VIT*SIMU_FACTOR_A); }
+	SIMU_ROT_TIME(a, vitesse) { return this.SIMU_DIST_ROT(a)/(vitesse*this.SIMU_FACTOR_VIT*this.SIMU_FACTOR_A); }
 
 	/**
 	 * New Order
-	 * 
+	 *
 	 * @param {Object} callback
 	 * @param {int} ms
 	 * @param {boolean} no_fifo
@@ -46,9 +46,9 @@ class AsservSimu extends Asserv{
 		if(delay_order_finished === undefined) delay_order_finished = 0;
 
 		function nextOrder() {
-			timeouts.push(setTimeout(function() {
+			this.timeouts.push(setTimeout(function() {
 				callback();
-				timeouts.push(setTimeout(function() {
+				this.timeouts.push(setTimeout(function() {
 					this.fifo.orderFinished();
 				}.bind(this), delay_order_finished));
 			}.bind(this), ms));
@@ -59,13 +59,13 @@ class AsservSimu extends Asserv{
 			this.fifo.newOrder(nextOrder.bind(this));
 		} else {
 			// logger.debug('no_fifo');
-			timeouts.push(setTimeout(callback, ms));//.call(this));
+			this.timeouts.push(setTimeout(callback, ms));//.call(this));
 		}
 	}
 
 	/**
 	 * Sets Position
-	 * 
+	 *
 	 * @param {Object} pos
 	 * @param {Object} callback
 	 */
@@ -80,15 +80,15 @@ class AsservSimu extends Asserv{
 	 * Clean
 	 */
 	clean(){
-		logger.debug('cleaning %d timeouts', timeouts.length);
-		while(timeouts.length > 0) {
-			clearTimeout(timeouts.shift());
+		logger.debug('cleaning %d this.timeouts', this.timeouts.length);
+		while(this.timeouts.length > 0) {
+			clearTimeout(this.timeouts.shift());
 		}
 	}
 
 	/**
 	 * Avancer plot
-	 * 
+	 *
 	 * @param {Object} callback
 	 */
 	avancerPlot(callback) {
@@ -97,7 +97,7 @@ class AsservSimu extends Asserv{
 
 	/**
 	 * Set vitesse
-	 * 
+	 *
 	 * @param {int} v Speed
 	 * @param {int} r rotation
 	 * @param {Object} callback
@@ -110,7 +110,7 @@ class AsservSimu extends Asserv{
 
 	/**
 	 * Calage X
-	 * 
+	 *
 	 * @param {int} x
 	 * @param {int} a Angle
 	 * @param {Object} callback
@@ -120,7 +120,7 @@ class AsservSimu extends Asserv{
 	}
 	/**
 	 * Calage Y
-	 * 
+	 *
 	 * @param {int} y
 	 * @param {int} a Angle
 	 * @param {Object} callback
@@ -131,7 +131,7 @@ class AsservSimu extends Asserv{
 
 	/**
 	 * Simu Speed
-	 * 
+	 *
 	 * @param {int} vit Speed
 	 * @param {int} x
 	 * @param {int} y
@@ -151,7 +151,7 @@ class AsservSimu extends Asserv{
 
 	/**
 	 * Speed ?
-	 * 
+	 *
 	 * @param {int} l
 	 * @param {int} a Angle
 	 * @param {int} ms
@@ -160,17 +160,17 @@ class AsservSimu extends Asserv{
 	speed(l, a, ms,callback) {
 		this.newOrder(function() {
 			// this.simu.pwm(callback, l/3, l/3, ms);
-			for(var t = 0; t < ms; t += 1000/FPS) {
-				timeouts.push(setTimeout(this.simu_speed(l, this.pos.x, this.pos.y, this.pos.a, t), t));
+			for(var t = 0; t < ms; t += 1000/this.FPS) {
+				this.timeouts.push(setTimeout(this.simu_speed(l, this.pos.x, this.pos.y, this.pos.a, t), t));
 			}
-			timeouts.push(setTimeout(this.simu_speed(l, this.pos.x, this.pos.y, this.pos.a, ms), ms));
-			timeouts.push(setTimeout(callback, ms));
+			this.timeouts.push(setTimeout(this.simu_speed(l, this.pos.x, this.pos.y, this.pos.a, ms), ms));
+			this.timeouts.push(setTimeout(callback, ms));
 		}.bind(this), 0, false, ms);
 	};
 
 	/**
 	 * Simu Pulse Width Modulation
-	 * 
+	 *
 	 * @param {int} x
 	 * @param {int} y
 	 * @param {int} a Angle
@@ -189,7 +189,7 @@ class AsservSimu extends Asserv{
 
 	/**
 	 * Pulse Width Modulation
-	 * 
+	 *
 	 * @param {string} left
 	 * @param {string} right
 	 * @param {int} ms
@@ -198,17 +198,17 @@ class AsservSimu extends Asserv{
 	pwm(left, right, ms, callback) {
 		this.newOrder(function() {
 			var pwm = (left+right)/2;
-			for(var t = 0; t < ms; t += 1000/FPS) {
-				timeouts.push(setTimeout(this.simu_pwm(pwm, this.pos.x, this.pos.y, this.pos.a, t), t));
+			for(var t = 0; t < ms; t += 1000/this.FPS) {
+				this.timeouts.push(setTimeout(this.simu_pwm(pwm, this.pos.x, this.pos.y, this.pos.a, t), t));
 			}
-			timeouts.push(setTimeout(this.simu_pwm(pwm, this.pos.x, this.pos.y, this.pos.a, ms), ms));
-			timeouts.push(setTimeout(callback, ms));
+			this.timeouts.push(setTimeout(this.simu_pwm(pwm, this.pos.x, this.pos.y, this.pos.a, ms), ms));
+			this.timeouts.push(setTimeout(callback, ms));
 		}.bind(this), 0, false, ms);
 	}
 
 	/**
 	 * Simu Go X Y
-	 * 
+	 *
 	 * @param {int} x
 	 * @param {int} y
 	 */
@@ -222,7 +222,7 @@ class AsservSimu extends Asserv{
 
 	/**
 	 * Go X Y
-	 * 
+	 *
 	 * @param {int} x
 	 * @param {int} y
 	 * @param {string} sens
@@ -230,15 +230,15 @@ class AsservSimu extends Asserv{
 	 * @param {boolean} no_fifo
 	 */
 	goxy(x, y, sens, callback, no_fifo) {
-		
+
 			var dx = x-this.pos.x;
 			var dy = y-this.pos.y;
 			var dist = Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
-			var tf = (dist / (this.vitesse*SIMU_FACTOR_VIT))*1000; // *1000 s->ms
+			var tf = (dist / (this.vitesse*this.SIMU_FACTOR_VIT))*1000; // *1000 s->ms
 
-			angle_avant = convertA(Math.atan2(dy,dx)-this.pos.a);
-			angle_arriere = convertA(angle_avant+Math.PI);
-
+			var angle_avant = this.convertA(Math.atan2(dy,dx)-this.pos.a);
+			var angle_arriere = this.convertA(angle_avant+Math.PI);
+			var angle_depart;
 			if(sens == "avant") angle_depart = angle_avant
 			else if(sens == "arriere") angle_depart = angle_arriere;
 			else if (Math.abs(angle_avant) < Math.abs(angle_arriere)) angle_depart = angle_avant;
@@ -253,18 +253,18 @@ class AsservSimu extends Asserv{
 
 			this.goa(angle_depart+this.pos.a, function() {
 				this.newOrder(function() {
-					for(var t = 0; t < tf; t += 1000/FPS) {
-						timeouts.push(setTimeout(this.simu_goxy(this.pos.x+dx*t/tf, this.pos.y+dy*t/tf), t));
+					for(var t = 0; t < tf; t += 1000/this.FPS) {
+						this.timeouts.push(setTimeout(this.simu_goxy(this.pos.x+dx*t/tf, this.pos.y+dy*t/tf), t));
 					}
-					timeouts.push(setTimeout(this.simu_goxy(x, y), tf));
-					timeouts.push(setTimeout(callback, tf));
+					this.timeouts.push(setTimeout(this.simu_goxy(x, y), tf));
+					this.timeouts.push(setTimeout(callback, tf));
 				}.bind(this), 0, no_fifo, tf);
 			}.bind(this), no_fifo);
 	}
 
 	/**
 	 * Simu Go Angle
-	 * 
+	 *
 	 * @param {int} a Angle
 	 */
 	simu_goa(a) {
@@ -276,32 +276,32 @@ class AsservSimu extends Asserv{
 
 	/**
 	 * Simu Go Angle
-	 * 
+	 *
 	 * @param {int} a Angle
 	 * @param {Object} callback
 	 * @param {boolean} no_fifo
 	 */
 	goa(a, callback, no_fifo){
-		a = convertA(a);
-		da = convertA(a-this.pos.a);
+		a = this.convertA(a);
+		var da = this.convertA(a-this.pos.a);
 		// logger.debug("depart:", this.pos.a);
 		// logger.debug("arrivee:", a);
 		// logger.debug("delta:", da);
 
-		var tf = SIMU_ROT_TIME(da, this.vitesse)*1000; // *1000 s->ms
+		var tf = this.SIMU_ROT_TIME(da, this.vitesse)*1000; // *1000 s->ms
 		this.newOrder(function() {
-			for(var t = 0; t < tf; t += 1000/FPS) {
+			for(var t = 0; t < tf; t += 1000/this.FPS) {
 				// logger.debug(this.pos.a+da*t/tf);
-				timeouts.push(setTimeout(this.simu_goa(this.pos.a+da*t/tf), t));
+				this.timeouts.push(setTimeout(this.simu_goa(this.pos.a+da*t/tf), t));
 			}
-			timeouts.push(setTimeout(this.simu_goa(a), tf));
-			timeouts.push(setTimeout(callback, tf));
+			this.timeouts.push(setTimeout(this.simu_goa(a), tf));
+			this.timeouts.push(setTimeout(callback, tf));
 		}.bind(this), 0, no_fifo, tf);
 	}
 
 	/**
 	 * Set P I D
-	 * 
+	 *
 	 * @param {int} p
 	 * @param {int} i
 	 * @param {int} d

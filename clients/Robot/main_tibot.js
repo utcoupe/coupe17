@@ -19,19 +19,21 @@
 	var tibot = new Tibot('pr');
 	//tibot.sendChildren(tibot.lastStatus);
 	tibot.start();
-//	tibot.logger('Started tibot');
+	tibot.logger.info('Started tibot');
 
 	// On message
 	tibot.client.order(function (from, name, params){
-		// logger.info("Recieved an order "+name);
+		tibot.logger.info("Recieved an order "+name);
 		switch (name){
 			case "collision":
 				tibot.queue = [];
-				tibot.acts.clean();
+				//TODO DO it with new actuators
+				//tibot.acts.clean();
 				tibot.orderInProgress = false;
 			break;
 			case "stop":
-				tibot.acts.clean();
+				//TODO DO it with new actuators
+				//tibot.acts.clean();
 				tibot.logger.fatal("Stop " + tibot.robotName);
 				process.exit();
 			break;

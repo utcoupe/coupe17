@@ -1,17 +1,17 @@
 /**
  * Classe implémentant l'asservissement en mode réel.
- * 
+ *
  * @module clients/Asserv/AsservReal
  * @requires module:clients/Asserv/Asserv
  */
 
 "use strict";
 
-const Asserv = require('Asserv.class.js');
+const Asserv = require('./Asserv.class.js');
 
 /**
  * Classe implémentant l'asservissement en mode réel
- * 
+ *
  * @memberof module:clients/Asserv/AsservReal
  * @extends {clients/Asserv/Asserv.Asserv}
  */
@@ -51,7 +51,7 @@ class AsservReal extends Asserv{
 
 	/**
 	 * Convert color x
-	 * 
+	 *
 	 * @param {int} x
 	 */
 	convertColorX(x) {
@@ -64,7 +64,7 @@ class AsservReal extends Asserv{
 
 	/**
 	 * Convert color y
-	 * 
+	 *
 	 * @param {int} y
 	 */
 	convertColorY(y) {
@@ -77,7 +77,7 @@ class AsservReal extends Asserv{
 
 	/**
 	 * Convert color Angle
-	 * 
+	 *
 	 * @param {int} a
 	 */
 	convertColorA(a) {
@@ -90,7 +90,7 @@ class AsservReal extends Asserv{
 
 	/**
 	 * Sets Position
-	 * 
+	 *
 	 * @param {Object} pos
 	 * @param {Object} callback
 	 */
@@ -107,7 +107,7 @@ class AsservReal extends Asserv{
 
 	/**
 	 * Set position calage
-	 * 
+	 *
 	 * @param {Object} pos
 	 * @param {Object} callback
 	 */
@@ -124,7 +124,7 @@ class AsservReal extends Asserv{
 
 		/**
 	 * Calage X
-	 * 
+	 *
 	 * @param {int} x
 	 * @param {int} a Angle
 	 * @param {Object} callback
@@ -139,7 +139,7 @@ class AsservReal extends Asserv{
 	}
 	/**
 	 * Calage Y
-	 * 
+	 *
 	 * @param {int} y
 	 * @param {int} a Angle
 	 * @param {Object} callback
@@ -155,21 +155,21 @@ class AsservReal extends Asserv{
 	// For float
 	/**
 	 * My write float
-	 * 
+	 *
 	 * @param {float} f
 	 */
 	myWriteFloat(f){ return Math.round(f*COMMANDS.FLOAT_PRECISION); }
-	
+
 	/**
 	 * My Parse float
-	 * 
+	 *
 	 * @param {float} f
 	 */
 	myParseFloat(f){ return parseInt(f)/COMMANDS.FLOAT_PRECISION;  }
 
 		/**
 	 * Parse Command
-	 * 
+	 *
 	 * @param {string} data
 	 */
 	parseCommand(data){
@@ -184,7 +184,7 @@ class AsservReal extends Asserv{
 				a: this.convertColorA(myParseFloat(datas.shift()))
 			});
 
-			
+
 			this.sendPos();
 
 			// logger.debug(lastFinishedId);
@@ -215,10 +215,10 @@ class AsservReal extends Asserv{
 			logger.warn("Command return from Arduino to unknown cmd="+cmd);
 		}
 	}
-	
+
 	/**
 	 * Sends Command
-	 * 
+	 *
 	 * @param {string} cmd
 	 * @param {string} args
 	 * @param {int} wait_for_id
@@ -248,7 +248,7 @@ class AsservReal extends Asserv{
 
 	/**
 	 * Set Vitesse
-	 * 
+	 *
 	 * @param {int} v Speed
 	 * @param {float} r Rotation
 	 * @param {Object} callback
@@ -263,7 +263,7 @@ class AsservReal extends Asserv{
 
 	/**
 	 * Speed ?
-	 * 
+	 *
 	 * @param {int} l
 	 * @param {int} a Angle
 	 * @param {int} ms
@@ -280,7 +280,7 @@ class AsservReal extends Asserv{
 
 	/**
 	 * Set Acceleration
-	 * 
+	 *
 	 * @param {int} acc
 	 * @param {Object} callback
 	 */
@@ -293,7 +293,7 @@ class AsservReal extends Asserv{
 
 	/**
 	 * Clean
-	 * 
+	 *
 	 * @param {Object} callback
 	 */
 	clean(callback){
@@ -302,7 +302,7 @@ class AsservReal extends Asserv{
 
 	/**
 	 * Pulse Width Modulation
-	 * 
+	 *
 	 * @param {int} left
 	 * @param {int} right
 	 * @param {int} ms
@@ -314,12 +314,12 @@ class AsservReal extends Asserv{
 			parseInt(right),
 			parseInt(ms)
 		], true, callback);
-		
+
 	}
 
 		/**
 	 * Go X Y
-	 * 
+	 *
 	 * @param {int} x
 	 * @param {int} y
 	 * @param {string} sens
@@ -330,7 +330,7 @@ class AsservReal extends Asserv{
 		if(sens == "avant") sens = 1;
 		else if(sens == "arriere") sens = -1;
 		else sens = 0;
-		
+
 		this.sendCommand(COMMANDS.GOTO, [
 			parseInt(this.convertColorX(x)),
 			parseInt(this.convertColorY(y)),
@@ -340,7 +340,7 @@ class AsservReal extends Asserv{
 
 	/**
 	 * Go Angle
-	 * 
+	 *
 	 * @param {int} a
 	 * @param {Object} callback
 	 * @param {boolean} no_fifo
