@@ -20,14 +20,16 @@ const SILENCE_TIMEOUT = 500;					// ms
  */
 class Lidar {
 
-	constructor(ia, we_have_hats) {
+	constructor(ia, params) {
 		class Events extends EventEmitter{}
 		this.events = new Events();
 
 		/** IA */
 		this.ia = ia;
+		// /** Our color */
+		// this.color = params.color;
 		/** We have */
-		this.we_have_hats = we_have_hats;
+		this.we_have_hats = params.we_have_hats;
 		/** Number of hokuyo */
 		this.nb_hokuyo = 0;
 		/** Status of Lidar */
@@ -36,6 +38,9 @@ class Lidar {
 		this.last_lidar_data = 0;
 		/** */
 		this.status_timer = null;
+
+		this.emergencyStopped_silence = false;
+		this.emergencyStopped_mayday = false;
 
 		/** nb d'itération depuis laquelle on a perdu un robot */
 		this.nb_lost = 0;
@@ -51,9 +56,13 @@ class Lidar {
 		clearTimeout(this.status_timer);
 
 		let deltaT = this.ia.timer.get() - this.last_lidar_data;
-		if (deltaT > SILENCE_TIMEOUT) {
-			this.mayday("Haven't heard Lidar since " + deltaT + "ms", "all");
+		if (!this.emergencyStopped_silence && deltaT > SILENCE_TIMEOUT) {
+			this.mayday("Haven't heard Lidar since " + deltaT + "ms");
 			// Caution, will spam every 200ms !
+		}
+
+		if (this.emergencyStopped_silence && deltaT < SILENCE_TIMEOUT) {
+			this.resume("Lidar node talks again");
 		}
 
 		this.status_timer = setTimeout( function(){
@@ -65,7 +74,7 @@ class Lidar {
 	 * Starts the hokuyo
 	 */
 	start() {
-		logger.info("La classe hokuyo a besoin de données de LiDAR...");
+		logger.info("Lidar AI component started, waiting for LiDAR node data...");
 		// this.ia.client.send("hokuyo", "start", {color:this.params.color}); // must have been already done
 
 		logger.debug("TODO: hokuyo, keep track of living hokuyos according to data coming from LiDAR");
@@ -80,26 +89,84 @@ class Lidar {
 		clearTimeout(timeout);
 	};
 
-	mayday(reason, who = "all"){
+	mayday(reason){
+		this.emergencyStopped_mayday = true;
 		logger.warn("TODO Lidar: throw status using events");
 		logger.error("Mayday called, the given reason is :");
 		logger.error(reason);
-		switch (who){
-			case "gr":
-				this.emit("stopGr", reason);
-			break;
-			case "pr":
-				this.emit("stopPr", reason);
-			break;
-			default:
-				this.emit("stopAll", reason);
-			break;
-		}
+		this.emit("emergencyStop", reason);
 	}
 
-	deleteOurRobots(robots){
-		logger.debug("TODO: deleteOurRobots");
+
+	resume(reason){
+		this.emergencyStopped_mayday = false;
+		logger.warn("Reusme called, the given reason is :");
+		logger.warn(reason);
+		this.emit("endOfEmergencyStop", reason);
+	}
+
+	deleteOurRobots(spots){
+		logger.debug("TODO: verify deleteOurRobots");
 		
+		var pr_dist = Infinity;
+		var pr_i = -1;
+		var gr_dist = Infinity;
+		var gr_i = -1;
+
+		// logger.debug("Pos PR");
+		// logger.debug(this.ia.pr.pos);
+		// logger.debug("Pos GR");
+		// logger.debug(gr_pos_with_offset);
+
+		var pr_temp_dist, gr_temp_dist;
+
+		for (let i = 0; i < dots.length; i++) {
+			pr_temp_dist = this.getDistance(dots[i], this.ia.pr.pos);
+			gr_temp_dist = this.getDistance(dots[i], this.ia.gr.pos);
+			// logger.debug("Pr le pt :");
+			// logger.debug(dots[i]);
+			// logger.debug(pr_temp_dist);
+			// logger.debug(gr_temp_dist);
+
+			// Find closest spot to each robot
+			if ((pr_dist > pr_temp_dist) && (pr_temp_dist < this.ia.pr.size.d * PR_GR_COEF)){
+				pr_dist = pr_temp_dist;
+				pr_i = i;
+			}
+
+			if ((gr_dist > gr_temp_dist) && (gr_temp_dist < this.ia.gr.size.d * PR_GR_COEF)){
+				gr_dist = gr_temp_dist;
+				gr_i = i;
+			}
+		}
+		
+		if (pr_i != -1) {
+			// logger.debug("Deleting PR:");
+			// logger.debug(dots[pr_i]);
+			// logger.debug(this.ia.pr.pos);
+
+			// Remove PR spot from list of hokuyo spots
+			dots.splice(pr_i,1);
+
+			if (pr_i < gr_i) {
+				gr_i = gr_i -1;
+			}
+		} else {
+			logger.warn("On a pas trouvé le PR parmis les points de l'Hokuyo");
+		}
+
+		if (gr_i != -1) {
+			// logger.debug("Deleting GR:");
+			// logger.debug(dots[gr_i]);
+			// logger.debug(gr_pos_with_offset);
+			// logger.debug(this.getDistance(dots[gr_i], gr_pos_with_offset));
+
+			// Remove GR spot from list of hokuyo spots
+			dots.splice(gr_i,1);
+		} else {
+			logger.warn("On a pas trouvé le GR parmis les points de l'Hokuyo");
+		}
+		// logger.debug(dots);
 	}
 
 	onAllSpot(dots){
@@ -109,15 +176,10 @@ class Lidar {
 			robots = this.deleteOurRobots(robots);
 		}
 
-		if (this.ia.pr.detectCollision(robots)) {
-			mayday("Pr detected collision", "pr");
-		}
-
-		if (this.ia.gr.detectCollision(robots)) {
-			mayday("Gr detected collision", "gr");
-		}
+		this.ia.pr.detectCollision(robots);
+		this.ia.gr.detectCollision(robots);
 		
-		logger.debug("TODO: update last_lidar_data");
+		logger.debug("TODO: check update last_lidar_data");
 		this.last_lidar_data = this.ia.timer.get();
 
 		// Status loop
@@ -135,7 +197,14 @@ class Lidar {
 				&& this.lidar_status != "everythingIsAwesome"))
 		{
 			var reason = "LiDAR status " + this.lidar_status + " with " + this.nb_hokuyo + " active hokuyo(s) doesn't allow us to continue";
-			mayday(reason, "all");
+			mayday(reason);
+		}
+
+		if (this.emergencyStopped_mayday
+			&& this.nb_hokuyo > 0
+			&& (this.lidar_status == "ok"
+				|| this.lidar_status == "everythingIsAwesome")) {
+			resume("Hokuyo(s) alive");
 		}
 	}
 

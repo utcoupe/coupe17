@@ -48,6 +48,7 @@ module.exports = (function () {
 		if(color === null) {
 			logger.error('Please give a color to ia');
 		}
+
 		if(we_have_hats === null) {
 			logger.error('Please say true if we have something on our robots detectable by the lidars');
 		}
@@ -66,11 +67,19 @@ module.exports = (function () {
 		 * Color of the IA team
 		 */
 		this.color = color || "yellow";
+
+
+		/**
+		 * Do we have something on the robots ?
+		 */
+		// logger.debug(typeof we_have_hats);
+		this.we_have_hats = we_have_hats || false;
+
 		/**
 		 * Number of robots controlled by the IA
 		 */
 		// this.nb_erobots = nb_erobots || 2;
-		logger.info("Launching a "+this.color+" AI"/*"" with "+this.nb_erobots+" ennemies."*/);
+		logger.info("Launching a "+this.color+" AI considering that we " + (this.we_have_hats ? "DO" : "DON'T") + " have something on our robots"/*"" with "+this.nb_erobots+" ennemies."*/);
 		
 		/** Socket client */
 		this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip: require('../config.js').server });
@@ -92,17 +101,30 @@ module.exports = (function () {
 			/*
 			nb_erobots: parseInt(this.nb_erobots),
 			*/
-			we_have_hats: (we_have_hats === "true")
+			we_have_hats: this.we_have_hats
 		});
 		this.lidar.events.on("error", (err) => {
 			logger.error("Error in Lidar:");
 			logger.error(err);
 		})
+		this.lidar.events.on("emergencyStop", (reason) => {
+			logger.error("Emergency Stop by Lidar");
+			this.pr.pause();
+			this.gr.pause();
+		})
+		this.lidar.events.on("endOfEmergencyStop", (reason) => {
+			logger.warn("End Emergency Stop by Lidar");
+			this.pr.resume();
+			this.gr.resume();
+		})
 
 		/** Export simulator */
 		this.export_simulator = new (require('./export_simulator.class.js'))(this);
 
-		this.client.send("server", "server.iaColor", {color: this.color});
+		this.client.send("server", "server.iaParams", {
+			color: this.color,
+			we_have_hats: this.we_have_hats
+		});
 
 		this.client.order(function(from, name, params) {
 			var orderName = name.split('.');
@@ -156,7 +178,7 @@ module.exports = (function () {
 			this.timer.start();
 			this.pr.start();
 			this.gr.start();
-			// this.lidar.start();
+			this.lidar.start();
 		} else {
 			logger.warn("Match déjà lancé");
 		}
@@ -169,7 +191,7 @@ module.exports = (function () {
 		logger.fatal('Stop IA');
 		this.gr.stop();
 		this.pr.stop();
-		// this.lidar.stop();
+		this.lidar.stop();
 		setTimeout(process.exit, 1000);
 	};
 
