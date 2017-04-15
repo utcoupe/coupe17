@@ -135,8 +135,9 @@ module.exports = (function () {
 					this.network[client.type][client.id].children = data.params.children || "";
 					// console.log(this.network);
 					this.sendNetwork();
-				} else if (data.name == 'server.iaColor') {
+				} else if (data.name == 'server.iaParams') {
 					this.network[client.type][client.id].color = data.params.color || "";
+					this.network[client.type][client.id].we_have_hats = data.params.we_have_hats;
 					this.sendNetwork();
 				} else if (data.name == 'server.sync_all_git') {
 					logger.info("Starting to sync all git repositories");
@@ -184,7 +185,7 @@ module.exports = (function () {
 		if(!this.utcoupe[prog]) {
 			switch(prog) {
 				case 'ia':
-					this.progs[prog] = spawn('node', ['./ia/main.js', params.color, params.nb_erobots, params.EGR_d, params.EPR_d]);
+					this.progs[prog] = spawn('node', ['./ia/main.js', params.color, params.we_have_hats/*, params.nb_erobots, params.EGR_d, params.EPR_d*/]);
 				break;
 				case 'pr':
 					this.progs[prog] = spawn('ssh', ['igep', '/root/main.sh']);
