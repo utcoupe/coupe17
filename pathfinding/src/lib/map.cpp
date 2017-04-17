@@ -23,10 +23,9 @@ MAP::MAP(const std::string &map_filename) :
     for (unsigned int y = 0; y < map_h; y++) {
         for (unsigned int x = 0; x < map_w; x++) {
             unsigned char r, g, b;
-            int true_y = map_h - y - 1;
             image.get_pixel(x, y, r, g, b);
             if (b < 127) {
-                vertex_descriptor u = get_vertex(x, true_y);
+                vertex_descriptor u = get_vertex(x, y);
                 static_barriers.insert(u);
             }
         }
@@ -158,10 +157,9 @@ vertex_descriptor MAP::find_nearest_valid(vertex_descriptor u) {
 
 void MAP::generate_bmp(string path) {
     bitmap_image img(map_w, map_h);
-    for (unsigned int true_y = 0; true_y < map_h; true_y++) {
+    for (unsigned int y = 0; y < map_h; y++) {
         for (unsigned int x = 0; x < map_w; x++) {
-            unsigned int y = map_h - true_y - 1;
-            vertex_descriptor u = {{(vertices_size_type) x, (vertices_size_type) true_y}};
+            vertex_descriptor u = {{(vertices_size_type) x, (vertices_size_type) y}};
             if (solution_contains(u))
                 img.set_pixel(x, y, 0, 255, 0);
             else if (has_barrier(u))
@@ -174,7 +172,7 @@ void MAP::generate_bmp(string path) {
     draw.pen_width(3);
     draw.pen_color(50, 50, 255);
     for (auto &p: smooth_solution) {
-        draw.plot_pen_pixel((int) p[0], (int) (map_h - p[1] - 1));
+        draw.plot_pen_pixel((int) p[0], (int) p[1]);
     }
     draw.pen_width(1);
     draw.pen_color(255, 0, 0);
@@ -182,8 +180,8 @@ void MAP::generate_bmp(string path) {
         int x1, x2, y1, y2;
         x1 = (int) smooth_solution[i - 1][0];
         x2 = (int) smooth_solution[i][0];
-        y1 = (int) (map_h - smooth_solution[i - 1][1] - 1);
-        y2 = (int) (map_h - smooth_solution[i][1] - 1);
+        y1 = (int) (smooth_solution[i - 1][1]);
+        y2 = (int) (smooth_solution[i][1]);
         draw.line_segment(x1, y1, x2, y2);
     }
     img.save_image(path);
