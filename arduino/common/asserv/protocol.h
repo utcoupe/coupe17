@@ -1,12 +1,3 @@
-/**
- * \file	protocol.h
- * \author	UTCoupe2015
- * \author	Thomas Fuhrmann <tomesman@gmail.com>
- * \brief   Contains the protocol of communication between the Arduino and the main system
- * \date	03/12/2016
- * \copyright Copyright (c) 2016 UTCoupe All rights reserved.
- */
-
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
@@ -27,8 +18,6 @@
 //  therefore any number refered as 
 //  "decimal" is actually an int
 //  multiplied by FLOAT_PRECISION
-
-//TODO : section for ASSERV_ORDER and OTHERS_ORDERS
 
 // BEGIN_ORDERS - Do not remove this comment
 #define	GOTOA 		'c' 	// x(int);y(int);a(decimal);direction(int) - (mm and radian), direction is optionnal : 1 is forward, -1 is backward, 0 is any
@@ -79,14 +68,11 @@
 #define MAX_AUTOSEND_SIZE (24)
 #endif
 
-//todo check if it can be called by c++ ?
 #ifdef __cplusplus
-//extern "C" int ProtocolExecuteCmd(char data);
-extern "C" void protocolExecuteCmd(char* command);
+extern "C" int ProtocolExecuteCmd(char data);
 extern "C" void ProtocolAutoSendStatus(int bytes_left);
 #else
-//int ProtocolExecuteCmd(char data);
-void protocolExecuteCmd(char* command);
+int ProtocolExecuteCmd(char data);
 void ProtocolAutoSendStatus(int bytes_left);
 #endif
 
