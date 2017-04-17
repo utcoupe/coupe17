@@ -1,8 +1,3 @@
-"use strict";
-
-var log4js = require('log4js');
-var logger;
-
 /**
  * Actions Module
  * 
@@ -10,7 +5,10 @@ var logger;
  * @see {@link ia/actions.Actions}
  */
 
-class Actions{
+module.exports = (function () {
+	"use strict";
+	var log4js = require('log4js');
+	var logger = log4js.getLogger('ia.actions');
 	/**
 	 * Actions Constructor
 	 * 
@@ -18,26 +16,18 @@ class Actions{
 	 * @constructor
 	 * @param ia
 	 */
-	constructor(ia, robot) {
-
-		// this.__dist_startpoints_plot = 120;
-		// this.__nb_startpoints_plot = 16;
-
-
+	function Actions(ia) {
 		/** IA */
 		this.ia = ia;
+		/** Team color */
+		this.color = ia.color;
 
-		/** Robot we are affected to */
-		this.robot = robot;
-
-		logger = log4js.getLogger('ia.' + this.robot.name + '.actions');
-
+		/** done */
+		this.done = {};
 		/** Tasks to do*/
 		this.todo = {};
 		/** Tasks in progress */
 		this.inprogress = null;
-		/** Done */
-		this.done = {};
 		/** killed */
 		this.killed = {};
 
@@ -47,18 +37,27 @@ class Actions{
 		this.todo = this.importActions(ia.data);
 	}
 
-	// /**
-	//  * Convert Angle
-	//  * 
-	//  * @param {int} a Angle
-	//  */
-	// function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
+	var __dist_startpoints_plot = 120;
+	var __nb_startpoints_plot = 16;
+	/**
+	 * Convert Angle
+	 * 
+	 * @param {int} a Angle
+	 */
+	function convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
 
 	/**
 	 * Collision
 	 */
-	collision () {
+	Actions.prototype.collision = function() {
 		if(this.inprogress !== null) {
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// Décommenter la ligne, juste pour tester
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			this.todo[this.inprogress.name] = this.inprogress;
 			this.inprogress = null;
 		}
@@ -69,7 +68,7 @@ class Actions{
 	 * 
 	 * @param {Object} data
 	 */
-	importActions(data) {
+	Actions.prototype.importActions = function (data) {
 		var req;
 
 		try {
@@ -101,7 +100,7 @@ class Actions{
 				// }
 			}
 			else if((actions[i].object !== null) && (actions[i].type == "clap")) {
-				if(this.ia.color != "blue") {
+				if(this.color != "blue") {
 					var a = actions[i].startpoints[0].a;
 					actions[i].startpoints[0].a = (a < 0) ? -Math.PI - a : Math.PI - a;
 				}
@@ -118,7 +117,7 @@ class Actions{
 	 * @param {string} name Name of the action
 	 * @param {Object} params Parameters of the action
 	 */
-	parseOrder (from, name, params) {
+	Actions.prototype.parseOrder = function (from, name, params) {
 		switch(name) {
 			case 'action_finished':
 			// logger.debug('received action_finished');
@@ -126,7 +125,7 @@ class Actions{
 			break;
 			case 'path_finished':
 			logger.debug('received path_finished');
-				this.robot.path = [];
+				this.ia.pr.path = [];
 			break;
 			default:
 				logger.warn('Ordre inconnu dans ia.gr: '+name);
@@ -139,7 +138,7 @@ class Actions{
 	 * 
 	 * @param {string} action_name
 	 */
-	kill (action_name){
+	Actions.prototype.kill = function (action_name){
 		// If action doesn't exist
 		if (!!action_name && this.exists(action_name)){
 			this.killed[action_name] = this.todo[action_name];
@@ -152,7 +151,7 @@ class Actions{
 	 * 
 	 * @param {string} action_name
 	 */
-	exists (action_name){
+	Actions.prototype.exists = function (action_name){
 		if (!this.todo[action_name]){
 			if (!this.killed[action_name] && !this.inprogress[action_name] && !this.done[action_name])
 				logger.warn("Action named '"+ action_name +"' doesn't exist");
@@ -169,7 +168,7 @@ class Actions{
 	 * 
 	 * @param {string} action_name
 	 */
-	isDone (action_name){
+	Actions.prototype.isDone = function (action_name){
 		return !action_name || this.done.hasOwnProperty(action_name);
 	};
 
@@ -182,7 +181,7 @@ class Actions{
 	 * @param {Object} B.x
 	 * @param {object} B.y
 	 */
-	norm2Points(A, B) {
+	function norm2Points(A, B) {
 		return Math.sqrt(Math.pow(A.x-B.x, 2) + Math.pow(A.y-B.y, 2));
 	}
 	/**
@@ -193,8 +192,8 @@ class Actions{
 	 * @param {int} pos.y
 	 * @param {string} an Action name
 	 */
-	getNormAction(pos, an) {
-		return this.norm2Points(pos, this.todo[an].object.pos);
+	Actions.prototype.getNormAction = function(pos, an) {
+		return norm2Points(pos, this.todo[an].object.pos);
 	};
 	
 	/**
@@ -202,7 +201,7 @@ class Actions{
 	 * 
 	 * @param {string} an Action name
 	 */
-	getPriorityAction(an) {
+	Actions.prototype.getPriorityAction = function(an) {
 		return this.todo[an].object.status == "lost" ? -1000 : this.todo[an].priority;
 	};
 	
@@ -211,7 +210,7 @@ class Actions{
 	 * 
 	 * @param {Object} action
 	 */
-	isDoable(action) {
+	Actions.prototype.isDoable = function(action) {
 		// Verifies some things about the action
 
 		if (!!action.dependency && !this.isDone(action.dependency)){
@@ -223,18 +222,18 @@ class Actions{
 			// Depends on the robot content
 
 			if ((action.dependencyRobotContent.gobelet !== undefined) &&
-				(this.robot.content.gobelet !== action.dependencyRobotContent.gobelet)){
+				(this.ia.pr.content.gobelet !== action.dependencyRobotContent.gobelet)){
 				// The cup holder position isn't consistent with needed state
 				return false;
 			}
 
 			// If there's a constraint about the current number of cylinders
 			if ((action.dependencyRobotContent.invPlot !== undefined)  &&
-				(this.robot.content.nb_plots < action.dependencyRobotContent.invPlot)){
+				(this.ia.pr.content.nb_plots < action.dependencyRobotContent.invPlot)){
 				return false;
 			}
 			if ((action.dependencyRobotContent.subPlot !== undefined)  &&
-				(this.robot.content.nb_plots > action.dependencyRobotContent.subPlot)){
+				(this.ia.pr.content.nb_plots > action.dependencyRobotContent.subPlot)){
 				return false;
 			}
 		 
@@ -252,7 +251,7 @@ class Actions{
 	 * 
 	 * @param callback
 	 */
-	doNextAction(callback) {
+	Actions.prototype.doNextAction = function(callback) {
 		this.valid_id_do_action++;
 		var actions_todo = [];
 
@@ -264,7 +263,7 @@ class Actions{
 		}, this);
 
 		// Tri par priorité puis par norme
-		var pos = this.robot.pos;
+		var pos = this.ia.pr.pos;
 		actions_todo.sort(function(a, b) {
 			return (this.getPriorityAction(b) - this.getPriorityAction(a)) || (this.getNormAction(pos, a) - this.getNormAction(pos, b));
 		}.bind(this));
@@ -285,7 +284,7 @@ class Actions{
 	 * @param {int} pos.y
 	 * @param {Object} startpoints
 	 */
-	getNearestStartpoint(pos, startpoints) {
+	Actions.prototype.getNearestStartpoint = function(pos, startpoints) {
 		var min_dist = Infinity;
 		var nearest = null;
 
@@ -308,7 +307,7 @@ class Actions{
 	 * @param {Object} actions
 	 * @param {int} id
 	 */
-	pathDoAction(callback, actions, id) {
+	Actions.prototype.pathDoAction = function(callback, actions, id) {
 		if(id != this.valid_id_do_action) {
 			logger.Debug('id different');
 			return;
@@ -316,10 +315,10 @@ class Actions{
 		// Va choisir l'action la plus proche, demander le path et faire doAction
 		if(actions.length > 0) {
 			var action = this.todo[actions.shift()];
-			var startpoint = this.getNearestStartpoint(this.robot.pos, action.startpoints);
-			this.ia.pathfinding.getPath(this.robot.pos, startpoint, function(path) {
+			var startpoint = this.getNearestStartpoint(this.ia.pr.pos, action.startpoints);
+			this.ia.pathfinding.getPath(this.ia.pr.pos, startpoint, function(path) {
 				if(path !== null) {
-					this.robot.path = path;
+					this.ia.pr.path = path;
 					this.doAction(callback, action, startpoint, id);
 				} else {
 					logger.debug("path not found");
@@ -345,7 +344,7 @@ class Actions{
 	 * @param {int} startpoint.y
 	 * @param {int} id
 	 */
-	doAction (callback, action, startpoint, id) {
+	Actions.prototype.doAction = function (callback, action, startpoint, id) {
 		if(id != this.valid_id_do_action)
 			return;
 		this.callback = callback;
@@ -355,7 +354,7 @@ class Actions{
 		delete this.todo[action.name];
 
 		logger.debug('Action en cours %s (%d;%d;%d)', action.name, startpoint.x, startpoint.y, startpoint.a);
-		this.robot.path.map(function(checkpoint) {
+		this.ia.pr.path.map(function(checkpoint) {
 			this.ia.client.send('pr', "goxy", {
 				x: checkpoint.x,
 				y: checkpoint.y,
@@ -391,7 +390,7 @@ class Actions{
 	/**
 	 * Action Finished
 	 */
-	actionFinished () {
+	Actions.prototype.actionFinished = function () {
 		if(this.inprogress !== null) {
 			this.done[this.inprogress.name] = this.inprogress;
 			logger.info('Action %s est finie !', this.inprogress.name);
@@ -402,6 +401,5 @@ class Actions{
 		}
 	};
 	
-}
-
-module.exports = Actions;
+	return Actions;
+})();

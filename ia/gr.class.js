@@ -23,6 +23,35 @@ class Gr extends Robot{
 
 	constructor(ia, color){
 		super(ia, color);
+		
+		/** Robot name */
+		this.name = "gr";
+
+		/** Size of the robot */
+		this.size = {
+			l: 290,
+			L: 290,
+			d: 420
+		};
+
+		/** Initial position */
+		this.initialPos = {
+			x: 142,
+			y: 1000,
+			a: 0,
+		}
+
+		/** This robot content */
+		this.content = {
+			balls: false
+		};
+
+		/** Robot actions */
+		this.actions = new (this.ia.actions)(this.ia, this);
+	}
+
+	funnyAction () {
+		logger.debug("TODO: funny action");
 	}
 }
 

@@ -39,7 +39,7 @@ module.exports = (function () {
 	 * 
 	 * @exports ia/ia.Ia
 	 * @constructor
-	 * @param {string} color=yellow
+	 * @param {string} color=blue
 	 * @param {int} nb_erobots=2 Number of robots in a team
 	 * @param EGR_d EGR diameter
 	 * @param EGPR_d EPR diameter
@@ -66,7 +66,7 @@ module.exports = (function () {
 		/**
 		 * Color of the IA team
 		 */
-		this.color = color || "yellow";
+		this.color = color || "blue";
 
 
 		/**
@@ -89,8 +89,9 @@ module.exports = (function () {
 		this.pathfinding = new (require('./pathfinding.class.js'))(this);
 		/** Data */
 		this.data = new (require('./data.class.js'))(this/*, this.nb_erobots, EGR_d, EPR_d*/);
-		/** Actions */
-		this.actions = new (require('./actions.class.js'))(this);
+		// /** Actions */ // now instantiated in robot IA components
+		// this.actions = new (require('./actions.class.js'))(this);
+		this.actions = require('./actions.class.js');
 		/** Grand robot */
 		this.gr = new (require('./gr.class.js'))(this, this.color);
 		/** Petit robot */
@@ -189,6 +190,7 @@ module.exports = (function () {
 	 */
 	Ia.prototype.stop = function() {
 		logger.fatal('Stop IA');
+		this.gr.funnyAction();
 		this.gr.stop();
 		this.pr.stop();
 		this.lidar.stop();

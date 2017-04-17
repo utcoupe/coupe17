@@ -8,8 +8,6 @@
 module.exports = (function () {
 	"use strict";
 	var logger = require('log4js').getLogger('ia.pr');
-	var GR_OFFSET = 110;
-	var PR_GR_COEF = 1;
 
 	/**
 	 * Pr Constructor
@@ -42,8 +40,7 @@ module.exports = (function () {
 			nb_plots: 0,
 			gobelet:false
 		};
-		/** We have hats on the top */
-		this.we_have_hats = false;
+
 		/** Team color */
 		this.color = color;
 	}
@@ -138,7 +135,7 @@ module.exports = (function () {
 				params.y = borne(params.y, 0, 2000);
 				this.pos = params;
 			break;
-			case 'getpos':
+			case 'getInitalpos':
 				this.sendInitialPos();
 			break;
 			case 'placer':

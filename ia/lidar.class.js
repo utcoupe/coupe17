@@ -107,77 +107,113 @@ class Lidar {
 
 	deleteOurRobots(spots){
 		logger.debug("TODO: verify deleteOurRobots");
-		
-		var pr_dist = Infinity;
-		var pr_i = -1;
-		var gr_dist = Infinity;
-		var gr_i = -1;
 
-		// logger.debug("Pos PR");
-		// logger.debug(this.ia.pr.pos);
-		// logger.debug("Pos GR");
-		// logger.debug(gr_pos_with_offset);
-
-		var pr_temp_dist, gr_temp_dist;
-
-		for (let i = 0; i < dots.length; i++) {
-			pr_temp_dist = this.getDistance(dots[i], this.ia.pr.pos);
-			gr_temp_dist = this.getDistance(dots[i], this.ia.gr.pos);
-			// logger.debug("Pr le pt :");
-			// logger.debug(dots[i]);
-			// logger.debug(pr_temp_dist);
-			// logger.debug(gr_temp_dist);
-
-			// Find closest spot to each robot
-			if ((pr_dist > pr_temp_dist) && (pr_temp_dist < this.ia.pr.size.d * PR_GR_COEF)){
-				pr_dist = pr_temp_dist;
-				pr_i = i;
-			}
-
-			if ((gr_dist > gr_temp_dist) && (gr_temp_dist < this.ia.gr.size.d * PR_GR_COEF)){
-				gr_dist = gr_temp_dist;
-				gr_i = i;
-			}
+		for(var i in dots) {
+			if(this.norm(dots[i][0], dots[i][1], this.ia.pr.pos.x, this.ia.pr.pos.y) < 150 ||
+				this.norm(dots[i][0], dots[i][1], this.ia.gr.pos.x, this.ia.gr.pos.y) < 150)
+			dots.splice(i, 1);
 		}
 		
-		if (pr_i != -1) {
-			// logger.debug("Deleting PR:");
-			// logger.debug(dots[pr_i]);
-			// logger.debug(this.ia.pr.pos);
+		// var pr_dist = Infinity;
+		// var pr_i = -1;
+		// var gr_dist = Infinity;
+		// var gr_i = -1;
 
-			// Remove PR spot from list of hokuyo spots
-			dots.splice(pr_i,1);
+		// // logger.debug("Pos PR");
+		// // logger.debug(this.ia.pr.pos);
+		// // logger.debug("Pos GR");
+		// // logger.debug(gr_pos_with_offset);
 
-			if (pr_i < gr_i) {
-				gr_i = gr_i -1;
-			}
-		} else {
-			logger.warn("On a pas trouvé le PR parmis les points de l'Hokuyo");
-		}
+		// var pr_temp_dist, gr_temp_dist;
 
-		if (gr_i != -1) {
-			// logger.debug("Deleting GR:");
-			// logger.debug(dots[gr_i]);
-			// logger.debug(gr_pos_with_offset);
-			// logger.debug(this.getDistance(dots[gr_i], gr_pos_with_offset));
+		// for (let i = 0; i < dots.length; i++) {
+		// 	pr_temp_dist = this.getDistance(dots[i], this.ia.pr.pos);
+		// 	gr_temp_dist = this.getDistance(dots[i], this.ia.gr.pos);
+		// 	// logger.debug("Pr le pt :");
+		// 	// logger.debug(dots[i]);
+		// 	// logger.debug(pr_temp_dist);
+		// 	// logger.debug(gr_temp_dist);
 
-			// Remove GR spot from list of hokuyo spots
-			dots.splice(gr_i,1);
-		} else {
-			logger.warn("On a pas trouvé le GR parmis les points de l'Hokuyo");
-		}
-		// logger.debug(dots);
+		// 	// Find closest spot to each robot
+		// 	if ((pr_dist > pr_temp_dist) && (pr_temp_dist < this.ia.pr.size.d * PR_GR_COEF)){
+		// 		pr_dist = pr_temp_dist;
+		// 		pr_i = i;
+		// 	}
+
+		// 	if ((gr_dist > gr_temp_dist) && (gr_temp_dist < this.ia.gr.size.d * PR_GR_COEF)){
+		// 		gr_dist = gr_temp_dist;
+		// 		gr_i = i;
+		// 	}
+		// }
+		
+		// if (pr_i != -1) {
+		// 	// logger.debug("Deleting PR:");
+		// 	// logger.debug(dots[pr_i]);
+		// 	// logger.debug(this.ia.pr.pos);
+
+		// 	// Remove PR spot from list of hokuyo spots
+		// 	dots.splice(pr_i,1);
+
+		// 	if (pr_i < gr_i) {
+		// 		gr_i = gr_i -1;
+		// 	}
+		// } else {
+		// 	logger.warn("On a pas trouvé le PR parmis les points de l'Hokuyo");
+		// }
+
+		// if (gr_i != -1) {
+		// 	// logger.debug("Deleting GR:");
+		// 	// logger.debug(dots[gr_i]);
+		// 	// logger.debug(gr_pos_with_offset);
+		// 	// logger.debug(this.getDistance(dots[gr_i], gr_pos_with_offset));
+
+		// 	// Remove GR spot from list of hokuyo spots
+		// 	dots.splice(gr_i,1);
+		// } else {
+		// 	logger.warn("On a pas trouvé le GR parmis les points de l'Hokuyo");
+		// }
+		// // logger.debug(dots);
 	}
 
 	onAllSpot(dots){
+		if (!this.ia.timer.match_started) {
+			logger.warn("We are receiving data but match hasn't started yet");
+			return;
+		}
+
 		var robots = dots.robotsSpots;
 
 		if (this.we_have_hats) {
 			robots = this.deleteOurRobots(robots);
 		}
 
+		// Tell the robots about the ennemy pos, and let them react accordingly
 		this.ia.pr.detectCollision(robots);
 		this.ia.gr.detectCollision(robots);
+
+		// Update data
+		this.ia.data.dots = dots.map(function(val) {
+			return {
+				pos: {
+					x: val[0],
+					y: val[1],
+				},
+				d: 320
+			}
+		});
+		if (dots.length > 0) {
+			this.ia.data.erobot[0].pos= {
+				x: dots[0][0],
+				y: dots[0][1]
+			};
+
+			if (dots.length > 1) {
+				this.ia.data.erobot[1].pos= {
+					x: dots[1][0],
+					y: dots[1][1]
+				};
+			};
+		};
 		
 		logger.debug("TODO: check update last_lidar_data");
 		this.last_lidar_data = this.ia.timer.get();

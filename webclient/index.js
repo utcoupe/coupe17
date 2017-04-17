@@ -8,11 +8,11 @@ angular.module('app').controller('IndexCtrl', ['$rootScope', '$scope', 'UTCoupe'
 	if (!!$scope.network
 		&& !!$scope.network.ia
 		&& Object.keys($scope.network.ia).length > 0) {
-		$scope.our_color = $scope.network.ia[Object.keys($scope.network.ia)[0]].color || 'yellow';
+		$scope.our_color = $scope.network.ia[Object.keys($scope.network.ia)[0]].color || 'blue';
 		console.log($scope.network.ia[Object.keys($scope.network.ia)[0]].color);
 		$scope.we_have_hats = $scope.network.ia[Object.keys($scope.network.ia)[0]].we_have_hats || false;
 	} else {
-		$scope.our_color = 'yellow';
+		$scope.our_color = 'blue';
 		// $scope.nb_erobots = 2;
 		// $scope.EGR_d = 300;
 		// $scope.EPR_d = 150;

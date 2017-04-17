@@ -32,7 +32,7 @@ module.exports = (function () {
 		setTimeout(function() {
 			logger.fatal("TIME OVER");
 			this.ia.stop();
-		}.bind(this), 89000);
+		}.bind(this), 84000); 	// the match ends at 1'24 (84 seconds)
 	};
 
 
