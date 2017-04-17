@@ -40,16 +40,12 @@ class Lidar {
 		this.status_timer = null;
 
 		this.emergencyStopped_silence = false;
-		this.emergencyStopped_mayday = false;
+		this.emergencyStopped_status = false;
 
 		/** nb d'itération depuis laquelle on a perdu un robot */
 		this.nb_lost = 0;
 
 		logger.debug("TODO: hokuyo, adapt to LiDAR data");
-		logger.debug("TODO: hokuyo, adapt to new robot inheritance");
-
-		// Status loop
-		this.updateStatus();
 	}
 
 	updateStatus() {
@@ -58,11 +54,13 @@ class Lidar {
 		let deltaT = this.ia.timer.get() - this.last_lidar_data;
 		if (!this.emergencyStopped_silence && deltaT > SILENCE_TIMEOUT) {
 			this.mayday("Haven't heard Lidar since " + deltaT + "ms");
+			this.emergencyStopped_silence = true;
 			// Caution, will spam every 200ms !
 		}
 
 		if (this.emergencyStopped_silence && deltaT < SILENCE_TIMEOUT) {
 			this.resume("Lidar node talks again");
+			this.emergencyStopped_silence = false;
 		}
 
 		this.status_timer = setTimeout( function(){
@@ -79,6 +77,9 @@ class Lidar {
 
 		logger.debug("TODO: hokuyo, keep track of living hokuyos according to data coming from LiDAR");
 		// timeout = setTimeout(function() {this.timedOut(); }.bind(this) , LOST_TIMEOUT*1000);
+
+		// Status loop
+		this.updateStatus();
 	};
 
 	/**
@@ -86,23 +87,22 @@ class Lidar {
 	 */
 	stop() {
 		this.ia.client.send("hokuyo", "stop", {});
-		clearTimeout(timeout);
+		clearTimeout(this.status_timer);
 	};
 
 	mayday(reason){
-		this.emergencyStopped_mayday = true;
-		logger.warn("TODO Lidar: throw status using events");
+		this.emergencyStopped_status = true;
+		// logger.warn("TODO Lidar: throw status using events");
 		logger.error("Mayday called, the given reason is :");
 		logger.error(reason);
-		this.emit("emergencyStop", reason);
+		this.events.emit("emergencyStop", reason);
 	}
 
 
 	resume(reason){
-		this.emergencyStopped_mayday = false;
 		logger.warn("Reusme called, the given reason is :");
 		logger.warn(reason);
-		this.emit("endOfEmergencyStop", reason);
+		this.events.emit("endOfEmergencyStop", reason);
 	}
 
 	deleteOurRobots(spots){
@@ -234,13 +234,15 @@ class Lidar {
 		{
 			var reason = "LiDAR status " + this.lidar_status + " with " + this.nb_hokuyo + " active hokuyo(s) doesn't allow us to continue";
 			mayday(reason);
+			this.emergencyStopped_status = true;
 		}
 
-		if (this.emergencyStopped_mayday
+		if (this.emergencyStopped_status
 			&& this.nb_hokuyo > 0
 			&& (this.lidar_status == "ok"
 				|| this.lidar_status == "everythingIsAwesome")) {
 			resume("Hokuyo(s) alive");
+			this.emergencyStopped_status = false;
 		}
 	}
 

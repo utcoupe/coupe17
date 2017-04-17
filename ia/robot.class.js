@@ -6,6 +6,9 @@
 
 "use strict";
 
+const log4js = require('log4js');
+const logger = log4js.getLogger('ia.robot');
+
 /**
  * Robot générique de l'IA
  *
@@ -55,6 +58,10 @@ class Robot{
 		
 		/** Team color */
 		this.color = color;
+
+		/** Robot actions */
+		this.actions = null;
+		this.Actions = require('./actions.class.js');
 	}
 
 	detectCollision(){
@@ -109,9 +116,52 @@ class Robot{
 		this.path = [];
 		this.ia.client.send(this.name, "collision");
 
-		logger.debug("TODO : Dafuk ?");
-		this.ia.actions.collision();
+		this.actions.collision();
 		this.loop();
+	}
+
+	/**
+	 * Start
+	 */
+	start () {
+		// this.ia.client.send(this.name, "ouvrir_ax12");
+		this.loop();
+	}
+
+	/**
+	 * Loop
+	 */
+	loop () {
+		// Called every time we have finished an action
+		logger.debug(this.name + ' doing next action');
+		this.actions.doNextAction(function() {
+			this.loop();
+		}.bind(this));
+	}
+
+	/**
+	 * Pause
+	 */
+	pause () {
+		logger.debug("TODO: pause robots (collision OR stop order ???)");
+		this.path = [];
+		this.ia.client.send(this.name, "collision");
+		this.actions.collision();
+	}
+
+	/**
+	 * Resume
+	 */
+	resume () {
+		logger.debug("TODO: resume robots");
+		this.loop();
+	}
+
+	/**
+	 * Stop
+	 */
+	stop () {
+		this.ia.client.send(this.name, 'stop');
 	}
 
 
@@ -125,6 +175,8 @@ class Robot{
 			a: this.initialPos.a,
 			color: this.color
 		});
+
+		logger.debug("TODO: send init sequence of movements");
 	};
 
 	parseOrder (from, name, params) {

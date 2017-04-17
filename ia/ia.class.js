@@ -91,7 +91,6 @@ module.exports = (function () {
 		this.data = new (require('./data.class.js'))(this/*, this.nb_erobots, EGR_d, EPR_d*/);
 		// /** Actions */ // now instantiated in robot IA components
 		// this.actions = new (require('./actions.class.js'))(this);
-		this.actions = require('./actions.class.js');
 		/** Grand robot */
 		this.gr = new (require('./gr.class.js'))(this, this.color);
 		/** Petit robot */

@@ -1,7 +1,6 @@
 "use strict";
 
 var log4js = require('log4js');
-var logger;
 
 /**
  * Actions Module
@@ -23,14 +22,13 @@ class Actions{
 		// this.__dist_startpoints_plot = 120;
 		// this.__nb_startpoints_plot = 16;
 
-
 		/** IA */
 		this.ia = ia;
 
 		/** Robot we are affected to */
 		this.robot = robot;
 
-		logger = log4js.getLogger('ia.' + this.robot.name + '.actions');
+		this.logger = log4js.getLogger('ia.' + this.robot.name + '.actions');
 
 		/** Tasks to do*/
 		this.todo = {};
@@ -76,36 +74,46 @@ class Actions{
 			req = require('./actions.json');
 		}
 		catch(err) {
-		    logger.fatal("Erreur lors de l'importation des actions dans l'IA: "+err);
+		    this.logger.fatal("Erreur lors de l'importation des actions dans l'IA: "+err);
 		}
-		var actions = req.actions;
+		var actions = {};
+
+		// Delete actions that doesn't belong to this robot
+		for (let action_name in req.actions){
+			if (req.actions[action_name].owner == this.robot.name) {
+				// logger.debug(actions[action_name].owner + " != " + this.robot.name);
+				actions[action_name] = req.actions[action_name];
+			}
+		}
+		this.logger.info(Object.keys(actions).length + " actions imported");
 
 		// Link "object" with exiting thing in the Data class
 		Object.keys(actions).forEach(function(i) {
 			actions[i].object = data.getObjectRef(actions[i].objectname);
 			actions[i].name = i;
 
-			if ((actions[i].object !== null) && (actions[i].type == "plot") && (actions[i].startpoints.length === 0)) {
-				actions[i].startpoints.push({
-					x: actions[i].object.pos.x,
-					y: actions[i].object.pos.y
-				});
-				// var temp;
-				// for(var j = 0; j < __nb_startpoints_plot; j++) {
-				// 	temp = j*2*Math.PI/__nb_startpoints_plot;
-				// 	actions[i].startpoints.push({
-				// 		x: actions[i].object.pos.x + __dist_startpoints_plot * Math.cos(temp),
-				// 		y: actions[i].object.pos.y + __dist_startpoints_plot * Math.sin(temp),
-				// 		a: convertA(temp+Math.PI)
-				// 	});
-				// }
-			}
-			else if((actions[i].object !== null) && (actions[i].type == "clap")) {
-				if(this.ia.color != "blue") {
-					var a = actions[i].startpoints[0].a;
-					actions[i].startpoints[0].a = (a < 0) ? -Math.PI - a : Math.PI - a;
-				}
-			}
+			// Automatically create startpoints for objects that need it
+			// if ((actions[i].object !== null) && (actions[i].type == "plot") && (actions[i].startpoints.length === 0)) {
+			// 	actions[i].startpoints.push({
+			// 		x: actions[i].object.pos.x,
+			// 		y: actions[i].object.pos.y
+			// 	});
+			// 	// var temp;
+			// 	// for(var j = 0; j < __nb_startpoints_plot; j++) {
+			// 	// 	temp = j*2*Math.PI/__nb_startpoints_plot;
+			// 	// 	actions[i].startpoints.push({
+			// 	// 		x: actions[i].object.pos.x + __dist_startpoints_plot * Math.cos(temp),
+			// 	// 		y: actions[i].object.pos.y + __dist_startpoints_plot * Math.sin(temp),
+			// 	// 		a: convertA(temp+Math.PI)
+			// 	// 	});
+			// 	// }
+			// }
+			// else if((actions[i].object !== null) && (actions[i].type == "clap")) {
+			// 	if(this.ia.color != "blue") {
+			// 		var a = actions[i].startpoints[0].a;
+			// 		actions[i].startpoints[0].a = (a < 0) ? -Math.PI - a : Math.PI - a;
+			// 	}
+			// }
 		}.bind(this));
 
 		return actions;
@@ -125,11 +133,11 @@ class Actions{
 				this.actionFinished();
 			break;
 			case 'path_finished':
-			logger.debug('received path_finished');
+				this.logger.debug('received path_finished');
 				this.robot.path = [];
 			break;
 			default:
-				logger.warn('Ordre inconnu dans ia.gr: '+name);
+				this.logger.warn('Ordre inconnu dans ia.' + this.robot.name + ': '+name);
 		}
 	};
 
@@ -155,9 +163,9 @@ class Actions{
 	exists (action_name){
 		if (!this.todo[action_name]){
 			if (!this.killed[action_name] && !this.inprogress[action_name] && !this.done[action_name])
-				logger.warn("Action named '"+ action_name +"' doesn't exist");
+				this.logger.warn("Action named '"+ action_name +"' doesn't exist");
 			else
-				logger.warn("Action named '"+ action_name +"' already killed in progress or done !");
+				this.logger.warn("Action named '"+ action_name +"' already killed in progress or done !");
 			return false;
 		} else {
 			return true;
@@ -269,8 +277,9 @@ class Actions{
 			return (this.getPriorityAction(b) - this.getPriorityAction(a)) || (this.getNormAction(pos, a) - this.getNormAction(pos, b));
 		}.bind(this));
 
+		// Print possible actions
 		for(var i in actions_todo) {
-			logger.debug('[%d] %s (%d)', this.todo[actions_todo[i]].priority, actions_todo[i], this.getNormAction(pos, actions_todo[i]));
+			this.logger.debug('[%d] %s (%d)', this.todo[actions_todo[i]].priority, actions_todo[i], parseInt(this.getNormAction(pos, actions_todo[i])));
 		}
 
 		// Va choisir l'action la plus proche, demander le path et faire doAction
@@ -290,7 +299,7 @@ class Actions{
 		var nearest = null;
 
 		for (var i = 0; i < startpoints.length; i++) {
-			var dist = norm2Points(pos, startpoints[i]);
+			var dist = this.norm2Points(pos, startpoints[i]);
 
 			if (dist < min_dist){
 				min_dist = dist;
@@ -310,25 +319,27 @@ class Actions{
 	 */
 	pathDoAction(callback, actions, id) {
 		if(id != this.valid_id_do_action) {
-			logger.Debug('id different');
+			this.logger.Debug('id different');
 			return;
 		}
 		// Va choisir l'action la plus proche, demander le path et faire doAction
 		if(actions.length > 0) {
-			var action = this.todo[actions.shift()];
+			var actionName = actions.shift();
+			var action = this.todo[actionName];
 			var startpoint = this.getNearestStartpoint(this.robot.pos, action.startpoints);
+			this.logger.debug("Asking path to " + actionName);
 			this.ia.pathfinding.getPath(this.robot.pos, startpoint, function(path) {
 				if(path !== null) {
 					this.robot.path = path;
 					this.doAction(callback, action, startpoint, id);
 				} else {
-					logger.debug("path not found");
+					this.logger.debug("Path to " + actionName + " not found");
 					// Si le pathfinding foire, on fait la deuxième action la plus importante
 					this.pathDoAction(callback, actions, id);
 				}
 			}.bind(this));
 		} else {
-			logger.debug("all paths not found");
+			this.logger.debug("all paths not found");
 			setTimeout(function() {
 				this.doNextAction(callback);
 			}.bind(this), 500);
@@ -354,28 +365,28 @@ class Actions{
 		this.inprogress = action;
 		delete this.todo[action.name];
 
-		logger.debug('Action en cours %s (%d;%d;%d)', action.name, startpoint.x, startpoint.y, startpoint.a);
+		this.logger.debug('Action en cours %s (%d;%d;%d)', action.name, startpoint.x, startpoint.y, startpoint.a);
 		this.robot.path.map(function(checkpoint) {
-			this.ia.client.send('pr', "goxy", {
+			this.ia.client.send(this.robot.name, "goxy", {
 				x: checkpoint.x,
 				y: checkpoint.y,
 				sens: action.sens
 			});
 		}, this);
 		if(!!startpoint.a) {
-			this.ia.client.send('pr', "goa", {
+			this.ia.client.send(this.robot.name, "goa", {
 				a: startpoint.a
 			});
 		}
 
-		this.ia.client.send('pr', "send_message", {
+		this.ia.client.send(this.robot.name, "send_message", {
 			name: "actions.path_finished"
 		});
 		// 1 order for 1 action
 		// action.orders.forEach(function (order, index, array){
-		this.ia.client.send('pr', action.orders[0].name, action.orders[0].params);
+		this.ia.client.send(this.robot.name, action.orders[0].name, action.orders[0].params);
 		// }.bind(this));
-		this.ia.client.send('pr', "send_message", {
+		this.ia.client.send(this.robot.name, "send_message", {
 			name: "actions.action_finished"
 		});
 
@@ -394,10 +405,10 @@ class Actions{
 	actionFinished () {
 		if(this.inprogress !== null) {
 			this.done[this.inprogress.name] = this.inprogress;
-			logger.info('Action %s est finie !', this.inprogress.name);
+			this.logger.info('Action %s est finie !', this.inprogress.name);
 			this.inprogress = null;
 			var temp = this.callback;
-			this.callback = function() {logger.warn('callback vide'); };
+			this.callback = function() {this.logger.warn('callback vide'); };
 			temp();
 		}
 	};

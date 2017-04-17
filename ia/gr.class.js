@@ -47,7 +47,7 @@ class Gr extends Robot{
 		};
 
 		/** Robot actions */
-		this.actions = new (this.ia.actions)(this.ia, this);
+		this.actions = new (this.Actions)(this.ia, this);
 	}
 
 	funnyAction () {

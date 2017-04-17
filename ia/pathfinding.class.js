@@ -67,7 +67,7 @@ module.exports = (function () {
 		var stdout = Byline.createStream(instance.stdout);
 		stdout.setEncoding('utf8')
 		stdout.on('data', function(data) {
-			logger.debug("Received: "+data);
+			logger.debug("Pathfinding just gave : "+data);
 			parse(data);
 		});
 
@@ -100,7 +100,7 @@ module.exports = (function () {
 
 			var str = ["C"].concat( vecMultiply(start, 1/RATIO) ).concat( vecMultiply(end, 1/RATIO) ).join(SEPARATOR) + "\n";
 			instance.stdin.write( str );
-			logger.info("Sending:"+str);
+			logger.info("Query to pathfinding: "+str);
 		};
 
 		/**

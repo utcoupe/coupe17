@@ -47,8 +47,18 @@ class Pr extends Robot{
 		};
 
 		/** Robot actions */
-		this.actions = new (this.ia.actions)(this.ia, this);
+		this.actions = new (this.Actions)(this.ia, this);
 	}
+
+	// /**
+	//  * Place
+	//  */
+	// place  () {
+	// 	// logger.debug('place');
+	// 	this.sendInitialPos();
+	// 	this.ia.client.send('pr', 'placer');
+	// };
+
 
 	parseOrder (from, name, params) {
 		var orderNameParts = name.split('.');
