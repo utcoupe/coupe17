@@ -44,11 +44,11 @@ function env_setup() {
 	# Add a file where to find UTCOUPE_WORKSPACE for node launched at startup
 	if [ ! -f "/etc/default/utcoupe" ]; then
 		sudo touch "/etc/default/utcoupe"
-		sudo echo "UTCOUPE_WORKSPACE=$PWD" >> /etc/default/utcoupe
+		sudo sh -c "echo 'UTCOUPE_WORKSPACE=$PWD' >> /etc/default/utcoupe"
 	fi
 	# Add the current user to the dialout group (to r/w in /dev files)
 	if ! id -Gn $USER | grep -qw "dialout"; then
-        sudo usermod -a -G dialout $USER
+	        sudo usermod -a -G dialout $USER
 	fi
 	# Create the utcoupe folder where log files are stored
 	if [ ! -d "/var/log/utcoupe" ]; then
@@ -57,7 +57,7 @@ function env_setup() {
 	# Change the ownership of the utcoupe log folder
 	sudo chown $USER:$USER /var/log/utcoupe
 	# Install the hokuyo automatic startup script (only for raspberry pi zero)
-	if [ "$ARCH" = "armv6l" ]; then
+	if [ ! -f "/etc/init.d/utcoupe_hokuyo.sh" ] && [ "$ARCH" = "armv6l" ]; then
 		sudo install $UTCOUPE_WORKSPACE/scripts/utcoupe_hokuyo.sh /etc/init.d/
 		sudo update-rc.d utcoupe_hokuyo.sh defaults 99
 	fi
@@ -121,8 +121,16 @@ function launch_script() {
 	fi
 }
 
+# Verify that the script is launched from the good place
+if [ ! "${PWD##*/}" = "coupe17" ]; then
+	red_echo "You have to launch this script from UTCoupe main directory : ./script/${0##*/}"
+	exit 1
+fi
+
+# Ask the user if he wants launch the script
 printf "Launch install script ? [Y/n]?"
 read answer
 if [ "$answer" = "" ] || [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
 	launch_script
 fi
+

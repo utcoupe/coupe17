@@ -1,30 +1,28 @@
-#!/bin/sh
+#!/bin/bash
 ### BEGIN INIT INFO
 # Provides:		utcoupe_hokuyo
-# Default-Start		2 3 4 5
-# Default-Stop		0 1 6
-# Short-Description:	Starts the utcoupe node client for the hokuyo
+# Required-Start:
+# Required-Stop:
+# Default-Start:	2 3 4 5
+# Default-Stop:		0 1 6
+# Short-Description:	UTCoupe node client for the hokuyo
 ### END INIT INFO
-#/etc/init.d/utcoupe_hokuyo
 
-#export PATH=$PATH:/usr/local/bin
-#export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules
+PID_FILE=/var/log/utcoupe/utcoupe_hokuyo_deamon.pid
 
-PID_FILE=/var/log/utcoupe/utcoupe_hokuyo.pid
-
-function start_hokuyo {
+start_hokuyo() {
 	echo -n "Starting the utcoupe_hokuyo node client..."
-	exec forever --sourceDir=$UTCOUPE_WORKSPACE/hokuyo -p $PID_FILE main.js
+	UTCOUPE_WORKSPACE=$UTCOUPE_WORKSPACE start-stop-daemon --start -m --pidfile $PID_FILE --background --exec /usr/local/bin/node -- $UTCOUPE_WORKSPACE/hokuyo/main.js
 	echo "done."
 }
 
-function stop_hokuyo {
+stop_hokuyo() {
 	echo -n "Terminating the utcoupe_hokuyo node client...."
-	exec forever stop --sourceDir=$UTCOUPE_WORKSPACE/hokuyo main.js
+	start-stop-daemon -K -v -p $PID_FILE --exec /usr/local/bin/node
 	echo "done."
 }
 
-# Retrieves the UTCOUPE_WORKSPACE value
+# Retrieves the UTCOUPE_WORKSPACE env variable
 [ -f /etc/default/utcoupe ] && . /etc/default/utcoupe
 if [ -z "$UTCOUPE_WORKSPACE" ] ;  then
   echo "UTCOUPE_WORKSPACE is not set, please set it in /etc/default/utcoupe" >&2
