@@ -39,14 +39,14 @@
 			break;
 
 			// useless //
-			case "start":
-				tibot.queue = [];
-				tibot.start();
-			break;
+			// case "start":
+			// 	tibot.queue = [];
+			// 	tibot.start();
+			// break;
 			default:
 				tibot.addOrder2Queue(from, name, params);
 		}
 	});
 
-	//tibot.logger('ENDED tibot');
+	tibot.logger.info('Ending of init tibot');
 })();

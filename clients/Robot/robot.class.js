@@ -33,7 +33,7 @@ class Robot extends Client{
 
 		if (robotName )
 		{
-			this.logger = require('log4js').getLogger(robotName);
+			this.logger = this.Log4js.getLogger(robotName);
 
 			this.logger.info("Started NodeJS client with pid " + process.pid);
 
@@ -59,14 +59,14 @@ class Robot extends Client{
 			//TODO replace devicedetected
 			//this.detect = null; this.detect = new (require('./detect.class.js'))(devicesDetected);
 						//ADD it tmp, to replace the previos one
-						var struct = {
-							others: false,
-							asserv: false,
-							ax12: false,
-							servos: false
-						};
+						// var struct = {
+						// 	others: false,
+						// 	asserv: false,
+						// 	ax12: false,
+						// 	servos: false
+						// };
 
-						this.devicesDetected(struct); //TODO Replace it
+						// this.devicesDetected(struct); //TODO Replace it
 
 			this.queue = [];
 			this.orderInProgress = false;
@@ -131,73 +131,78 @@ class Robot extends Client{
 		this.client.send("server", "server.childrenUpdate", this.lastStatus);
 	}
 
-		devicesDetected(struct){
-		// Verify content
+	devicesDetected(struct){
+	// Verify content
 
-		if (!struct.others)
-			this.logger.warn("Missing others Mega");
+	if (!struct.others)
+		this.logger.warn("Missing others Mega");
 
-		if (!struct.servos)
-			this.logger.warn("Missing servos Nano");
+	if (!struct.servos)
+		this.logger.warn("Missing servos Nano");
 
-		if (!struct.asserv)
-			this.logger.warn("Missing asserv Nano");
+	if (!struct.asserv)
+		this.logger.warn("Missing asserv Nano");
 
-		if (!struct.ax12)
-			this.logger.warn("Missing USB2AX");
+	if (!struct.ax12)
+		this.logger.warn("Missing USB2AX");
 
-		// Connect to what's detected
-		//TODO IMPLEMENT IT WITH ACTUATORS
-		//this.acts.connectTo(struct);
-						//HACK, do in acts normaly. See how integrate it
-						if (!struct.asserv) {
-									this.logger.fatal("Lancement de l'asserv pr en mode simu !");
-									this.asserv = new (require('../Asserv/AsservSimu.class.js'))(this.client, 'pr', this.fifo);
-								} else {
-									this.asserv = new (require('../Asserv/AsservReal.class.js'))(
-										new SerialPort(struct.asserv, {
-											baudrate: 57600,
-											parser:SerialPort.parsers.readline('\n')
-										}), this.client, 'pr', this.sendStatus, this.fifo
-									);
-								}
+	// Connect to what's detected
+	//TODO IMPLEMENT IT WITH ACTUATORS
+	//this.acts.connectTo(struct);
+					//HACK, do in acts normaly. See how integrate it
+					if (!struct.asserv) {
+								this.logger.fatal("Lancement de l'asserv pr en mode simu !");
+								this.asserv = new (require('../Asserv/AsservSimu.class.js'))(this.client, 'pr', this.fifo);
+							} else {
+								this.asserv = new (require('../Asserv/AsservReal.class.js'))(
+									new SerialPort(struct.asserv, {
+										baudrate: 57600,
+										parser:SerialPort.parsers.readline('\n')
+									}), this.client, 'pr', this.sendStatus, this.fifo
+								);
+							}
 
-		// Send struct to server
-		//TODO DO AFTER actuators done
-		//this.sendChildren(acts.getStatus());
-		//This une replace the acts.getStatus()
-				var data = {
-					"status": "",
-					"children": []
-				};
+	// Send struct to server
+	//TODO DO AFTER actuators done
+	//this.sendChildren(acts.getStatus());
+	//This une replace the acts.getStatus()
+			var data = {
+				"status": "",
+				"children": []
+			};
 
-				data.status = "everythingIsAwesome";
-				//Code of actuators.getStatus()
-						/*if(others && !!others.ready)
-							data.children.push("Arduino others");
-						else
-							data.status = "ok";
+			data.status = "everythingIsAwesome";
+			//Code of actuators.getStatus()
+					/*if(others && !!others.ready)
+						data.children.push("Arduino others");
+					else
+						data.status = "ok";
 
-						if(ax12 && !!ax12.ready)
-							data.children.push("USB2AX");
-						else
-							data.status = "ok";
+					if(ax12 && !!ax12.ready)
+						data.children.push("USB2AX");
+					else
+						data.status = "ok";
 
-						if(asserv && !!asserv.ready)
-							data.children.push("Arduino asserv");
-						else
-							data.status = "error";
-					*/
-						//data.children.push("Arduino others");
-						//data.children.push("USB2AX");
-				data.status = "ok";
-				data.children.push("Arduino asserv");
+					if(asserv && !!asserv.ready)
+						data.children.push("Arduino asserv");
+					else
+						data.status = "error";
+				*/
+					//data.children.push("Arduino others");
+					//data.children.push("USB2AX");
+			data.status = "ok";
+			data.children.push("Arduino asserv");
 
-				this.sendChildren(data);
+			this.sendChildren(data);
 
 	}
 
-
+	/**
+	 * Sends Position
+	 */
+	sendPos() {
+		this.client.send('ia', this.who+'.pos', this.asserv.sendPos());
+	}
 }
 
 module.exports = Robot;

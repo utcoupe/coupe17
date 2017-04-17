@@ -81,47 +81,48 @@ class Tibot extends Robot{
 
 			// Asserv HACK
 			//var callback = this.actionFinished
-					switch (order.name){
-							case "pwm":
-								this.asserv.pwm(order.params.left, order.params.right, order.params.ms, this.actionFinished());
-							break;
-							case "setvit":
-								this.asserv.setVitesse(order.params.v, order.params.r, this.actionFinished());
-							break;
-							case "clean":
-								this.asserv.clean(this.actionFinished());
-							break;
-							case "goa":
-								this.asserv.goa(order.params.a, this.actionFinished(), true);
-							break;
-							case "goxy":
-								this.asserv.goxy(order.params.x, order.params.y, order.params.sens, this.actionFinished(), true);
-							break;
-							case "setpos":
-								this.asserv.setPos(order.params, this.actionFinished());
-							break;
-							case "setacc":
-								this.asserv.setAcc(order.params.acc, this.actionFinished());
-							break;
-							case "setpid":
-								this.asserv.setPid(order.params.p, order.params.i, order.params.d, this.actionFinished());
-							break;
-							case "sync_git":
-								spawn('/root/sync_git.sh', [], {
-									detached: true
-								});
-							break;
-								this.executeNextOrder();
-							}
+				switch (order.name){
+					case "pwm":
+						this.asserv.pwm(order.params.left, order.params.right, order.params.ms, this.actionFinished());
+					break;
+					case "setvit":
+						this.asserv.setVitesse(order.params.v, order.params.r, this.actionFinished());
+					break;
+					case "clean":
+						this.asserv.clean(this.actionFinished());
+					break;
+					case "goa":
+						this.asserv.goa(order.params.a, this.actionFinished(), true);
+					break;
+					case "goxy":
+						this.asserv.goxy(order.params.x, order.params.y, order.params.sens, this.actionFinished(), true);
+					break;
+					case "setpos":
+						this.asserv.setPos(order.params, this.actionFinished());
+					break;
+					case "setacc":
+						this.asserv.setAcc(order.params.acc, this.actionFinished());
+					break;
+					case "setpid":
+						this.asserv.setPid(order.params.p, order.params.i, order.params.d, this.actionFinished());
+					break;
+					case "sync_git":
+						spawn('/root/sync_git.sh', [], {
+							detached: true
+						});
+					break;
+					default:
+						this.executeNextOrder();
+				}
+			}
 		}
 	}
-}
 
 	/**
 	 * Launch the next order
 	 */
 	actionFinished(){
-		this.logger.info("actionFinished" + this.orderInProgress);
+		this.logger.info("actionFinished : " + this.orderInProgress);
 		if(this.orderInProgress !== false) {
 			this.logger.info(this.orderInProgress + " : End");
 
