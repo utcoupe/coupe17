@@ -44,6 +44,7 @@ class Tibot extends Robot{
 		// 	logger.info(n+" : Begin");
 		// 	acts.orderHandler(f, n, p, actionFinished);
 		// } else
+		this.logger.info("addOrder2Queue f : " + f + " n : " + n + " p : " + p);
 		if(this.queue.length < 100){
 			// Adds the order to the queue
 			this.queue.push({
@@ -51,8 +52,8 @@ class Tibot extends Robot{
 				name: n,
 				params: p
 			});
-			// logger.info("Order added to queue ! : ");
-			// logger.info(queue);
+			this.logger.info("Order added to queue ! : ");
+			this.logger.info(this.queue);
 
 			this.executeNextOrder();
 		}
@@ -71,23 +72,58 @@ class Tibot extends Robot{
 			} else {
 				this.orderInProgress = order.name;
 
-				this.logger.info(this.orderInProgress+" : Begin");
-				//logger.debug(order.params);
+				this.logger.info(this.orderInProgress+" : Begin , 	executeNextOrder");
+				this.logger.debug(order.params);
 
 				//TODO DECOMMENT IT AFTER acts done
 				//this.acts.orderHandler(order.from, order.name, order.params, this.actionFinished);
 
-				this.executeNextOrder();
-			}
+
+			// Asserv HACK
+			//var callback = this.actionFinished
+					switch (order.name){
+							case "pwm":
+								this.asserv.pwm(order.params.left, order.params.right, order.params.ms, this.actionFinished());
+							break;
+							case "setvit":
+								this.asserv.setVitesse(order.params.v, order.params.r, this.actionFinished());
+							break;
+							case "clean":
+								this.asserv.clean(this.actionFinished());
+							break;
+							case "goa":
+								this.asserv.goa(order.params.a, this.actionFinished(), true);
+							break;
+							case "goxy":
+								this.asserv.goxy(order.params.x, order.params.y, order.params.sens, this.actionFinished(), true);
+							break;
+							case "setpos":
+								this.asserv.setPos(order.params, this.actionFinished());
+							break;
+							case "setacc":
+								this.asserv.setAcc(order.params.acc, this.actionFinished());
+							break;
+							case "setpid":
+								this.asserv.setPid(order.params.p, order.params.i, order.params.d, this.actionFinished());
+							break;
+							case "sync_git":
+								spawn('/root/sync_git.sh', [], {
+									detached: true
+								});
+							break;
+								this.executeNextOrder();
+							}
 		}
 	}
+}
 
 	/**
 	 * Launch the next order
 	 */
 	actionFinished(){
+		this.logger.info("actionFinished" + this.orderInProgress);
 		if(this.orderInProgress !== false) {
-			this.logger.info(orderInProgress + " : End");
+			this.logger.info(this.orderInProgress + " : End");
 
 			this.orderInProgress = false;
 			this.executeNextOrder();
