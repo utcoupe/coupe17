@@ -76,7 +76,7 @@ class Asserv{
 	 *
 	 * @param {Object} pos
 	 */
-	getPos(pos) {
+	getInitPos(pos) {
 		this.client.send('ia', this.who+'.getpos');
 	}
 

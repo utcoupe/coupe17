@@ -44,7 +44,7 @@ class AsservReal extends Asserv{
 		}.bind(this));
 
 		setTimeout(function() {
-			this.getPos();
+			this.getInitPos();
 		}.bind(this), 2000);
 	}
 

@@ -24,7 +24,7 @@ class AsservSimu extends Asserv{
 		this.timeouts = [];
 		this.pos = {x:0,y:0,a:0};
 		this.vitesse = 800;
-		this.getPos();
+		this.getInitPos();
 	}
 
 	SIMU_DIST(dt, vitesse) { return (vitesse*this.SIMU_FACTOR_VIT)*dt; }
