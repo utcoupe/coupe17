@@ -1,0 +1,5 @@
+scons
+avr-binutils
+avr-libc
+avr-gcc
+avrdude
