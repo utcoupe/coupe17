@@ -7,7 +7,7 @@
 
 "use strict";
 
-const Asserv = require('Asserv.class.js');
+const Asserv = require('./Asserv.class.js');
 
 /**
  * Classe implémentant l'asservissement en mode réel
@@ -18,7 +18,7 @@ const Asserv = require('Asserv.class.js');
 class AsservReal extends Asserv{
 	constructor(sp, client, who, sendStatus, fifo){
 		super(client, who, fifo);
-		this.COMMANDS = require('./defineParser.js')('./arduino/asserv/protocol.h');
+		//this.COMMANDS = require('./defineParser.js')('./arduino/asserv/protocol.h');
 		this.DETECT_SERIAL_TIMEOUT = 100; //ms, -1 to disable
 		this.ready = true;
 		this.sendStatus = sendStatus;
