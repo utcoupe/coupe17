@@ -23,17 +23,17 @@ function apt_install() {
 	if [ "$ARCH" = "x86_64" ]; then
 		green_echo "x86 architecture detected."
 		sudo apt-get install nodejs npm nodejs-legacy linux-headers-$(uname -r)
-	else if [ "$ARCH" = "armv7l" ]; then
+	elif [ "$ARCH" = "armv7l" ]; then
 		green_echo "Raspberry Pi 3 system detected, remove previous npm installation to setup the used version."
 		sudo apt-get install raspberrypi-kernel-headers
 		sudo apt-get remove npm nodejs nodejs-legacy
 		curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 		sudo npm install npm@3.5.2 -g
-	else if [ "$ARCH" = "armv6l" ]; then
+	elif [ "$ARCH" = "armv6l" ]; then
 		sudo apt-get install raspberrypi-kernel-headers
 		sudo apt-get remove npm nodejs nodejs-legacy
 		wget https://nodejs.org/dist/v4.8.1/node-v4.8.1-linux-armv6l.tar.gz
-		tar -xvf node-v4.8.1-linux-armv6l.tar.gz 
+		tar -xvf node-v4.8.1-linux-armv6l.tar.gz
 		cd node-v4.8.1-linux-armv6l
 		sudo cp -R * /usr/local/
 		cd ..
@@ -45,11 +45,18 @@ function apt_install() {
 
 ### Setup the variable environment to taget the UTCoupe main folder
 function env_setup() {
-	# Add the UTCOUPE_WORKSPACE env variable
+	# Add the UTCOUPE_WORKSPACE env variable, default consider as bash shell
 	if [ -z "$UTCOUPE_WORKSPACE" ]; then
 		green_echo "Env variable is not set."
-		echo "export UTCOUPE_WORKSPACE=$PWD" >> $HOME/.bashrc
-		source $HOME/.bashrc
+		if [ "$SHELL" = "/bin/zsh" ]; then
+			echo "export UTCOUPE_WORKSPACE=$PWD" >> $HOME/.zshrc
+			printf "Warning :\n"
+			printf "Please \"source ~/.zshrc\" and run again this script if necessary\n"
+			exit 1
+		else
+			echo "export UTCOUPE_WORKSPACE=$PWD" >> $HOME/.bashrc
+            source $HOME/.bashrc
+		fi
 	fi
 	# Add a file where to find UTCOUPE_WORKSPACE for node launched at startup
 	if [ ! -f "/etc/default/utcoupe" ]; then
@@ -103,6 +110,7 @@ function compile_hokuyo() {
 }
 
 function launch_script() {
+
 	env_setup
 	
 	printf "Install apt missing packets ? [Y/n]?"
