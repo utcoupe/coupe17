@@ -193,8 +193,10 @@ module.exports = (function () {
 		this.gr.funnyAction();
 		this.pr.stop();
 		this.lidar.stop();
-		setTimeout(this.gr.stop, 500);
-		setTimeout(process.exit, 1000);
+		setTimeout(function(){
+			this.gr.stop();
+		}.bind(this), 1000);
+		setTimeout(process.exit, 4000);
 	};
 
 	return Ia;

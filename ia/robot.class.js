@@ -161,6 +161,7 @@ class Robot{
 	 * Stop
 	 */
 	stop () {
+		// logger.debug("Closing " + this.name);
 		this.ia.client.send(this.name, 'stop');
 	}
 
