@@ -179,8 +179,55 @@ class Robot{
 		logger.debug("TODO: send init sequence of movements");
 	};
 
+
+	/**
+	 * Update the received position
+	 */
+	onPos (params) {
+
+		function borne(x, min, max) {
+			return x > max ? max : x < min ? min : x;
+		}
+
+		params.x = borne(params.x, 0, 3000);
+		params.y = borne(params.y, 0, 2000);
+		this.pos = params;
+	};
+
+
+	/**
+	 * On message, try to treat it. If not possible, let the child class deal with it
+	 */
 	parseOrder (from, name, params) {
-		logger.error("Make sure to override robot.parseOrder function !");
+		var orderNameParts = name.split('.');
+		var name = orderNameParts.shift();
+		var orderSubname = orderNameParts.join('.');
+
+		switch(name) {
+			case 'collision':
+				// Manual collision
+				this.collision();
+			break;
+			case 'pos':
+				// Asserv told us our position
+				this.onPos(params);
+			break;
+			case 'getinitpos':
+				// Robot si asking its initial position
+				this.sendInitialPos();
+			break;
+			// case 'placer':
+			// 	this.place();
+			// break;
+			case 'actions':
+				this.actions.parseOrder(from, orderSubname, params);
+			break;
+			default:
+				return false; // we have treated this message, let the child class deal with it
+			break;
+		}
+
+		return true; // we correctly treated this message
 	};
 }
 

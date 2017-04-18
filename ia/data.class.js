@@ -20,25 +20,19 @@ module.exports = (function () {
 	 * @param EGR_d
 	 * @param EPR_d 
 	 */
-	function Data(ia, /*nb_erobots,*/ EGR_d, EPR_d) {
-		/** balle */
-		this.balle = [];
-		/** chargeur */
-		this.chargeur = [];
-		/** clap */
-		this.clap = [];
-		/** plot */
-		this.plot = [];
+	function Data(ia/*, nb_erobots, EGR_d, EPR_d*/) {
+		/** balls */
+		this.balls = [];
+		/** rocket */
+		this.rocket = [];
+		/** module */
+		this.module = [];
 		/** erobot */
 		this.erobot = [];
-		/** gobelet */
-		this.gobelet = [];
-		/** pile */
-		this.pile = {};
-		/** dynamic */
-		this.dynamic = []; //used for laid stacks
-		/** depot */
-		this.depot = [];
+		/** mountedModules */
+		this.mountedModules = [];
+		/** throwBalls */
+		this.throwBalls = [];
 		// /** nb_erobot */
 		// this.nb_erobots = nb_erobots;
 
@@ -50,28 +44,28 @@ module.exports = (function () {
 		this.erobot = [{ // big robot on position 0
 				name: "gr",
 				pos:{
-					x:3200,
-					y:1000
+					x:3100,
+					y:200
 				},
 				speed:{ // in mm/sec
 					x:0,
 					y:0,
 				},
 				lastUpdate: 0, // time in ms from the beining of the match
-				d: EGR_d || 320,
+				d: 320,
 				status: "lost"
 			},{ // small robot on position 1
 				name: "pr",
 				pos:{
 					x:3500,
-					y:1000
+					y:200
 				},
 				speed:{
 					x:0,
 					y:0
 				},
 				lastUpdate: 0,
-				d: EPR_d || 200,
+				d: 200,
 				status: "lost"
 			}];
 	}
@@ -82,13 +76,20 @@ module.exports = (function () {
 	Data.prototype.importObjects = function () {
 		var ret = require('./objects.json');
 
-		this.balle = ret.balle;
-		this.chargeur = ret.chargeur;
-		this.clap = ret.clap;
-		this.plot = ret.plot;
-		this.gobelet = ret.gobelet;
-		this.pile = ret.pile;
-		this.depot = ret.depot;
+		// this.balle = ret.balle;
+		// this.chargeur = ret.chargeur;
+		// this.clap = ret.clap;
+		// this.plot = ret.plot;
+		// this.gobelet = ret.gobelet;
+		// this.pile = ret.pile;
+		// this.depot = ret.depot;
+
+		this.balls = ret.balls;
+		this.module = ret.module;
+		this.mountedModules = ret.mountedModules;
+		this.rocket = ret.rocket;
+		this.throwBalls = ret.throwBalls;
+
 		return ret;
 	};
 
@@ -108,7 +109,7 @@ module.exports = (function () {
 			return null;
 		}
 
-		if (!this[actName[0]][actName[1]]){
+		if (!this[actName[0]] || !this[actName[0]][actName[1]]){
 			logger.warn("L'objet "+actName[0]+" de type "+actName[1]+" est inconnu.");
 			return null;
 		}

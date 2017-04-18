@@ -1,3 +1,0 @@
-choix pour IA
-- est-ce qu'on donne à lia le nb et le diam des robots ennemis ?
-- est-ce que si on détecte moins de robot ennemis qu'il n'y en a on s'arrête ou osef ? (le robot ennemi s'est vautré)

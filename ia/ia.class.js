@@ -121,6 +121,7 @@ module.exports = (function () {
 		/** Export simulator */
 		this.export_simulator = new (require('./export_simulator.class.js'))(this);
 
+		// Send this AI color to the server
 		this.client.send("server", "server.iaParams", {
 			color: this.color,
 			we_have_hats: this.we_have_hats
@@ -140,7 +141,7 @@ module.exports = (function () {
 						this.stop();
 					break;
 					case 'ia.hok':
-					logger.debug("TODO ia : change for new lidar interface");
+						logger.debug("TODO ia : change for new lidar interface");
 						if ((log_counter++ % 15) == 0) {
 							logger.debug(params);
 						}
@@ -190,9 +191,9 @@ module.exports = (function () {
 	Ia.prototype.stop = function() {
 		logger.fatal('Stop IA');
 		this.gr.funnyAction();
-		this.gr.stop();
 		this.pr.stop();
 		this.lidar.stop();
+		setTimeout(this.gr.stop, 500);
 		setTimeout(process.exit, 1000);
 	};
 

@@ -53,6 +53,25 @@ class Gr extends Robot{
 	funnyAction () {
 		logger.debug("TODO: funny action");
 	}
+	
+	parseOrder (from, name, params) {
+		if (super.parseOrder(from, name, params)) { return; }
+		var orderNameParts = name.split('.');
+		var name = orderNameParts.shift();
+		var orderSubname = orderNameParts.join('.');
+
+		switch(name) {
+			// case 'module++':
+			// 	this.content.nb_modules += 1;
+			// break;
+			// case 'module--':
+			// 	this.content.nb_modules -= 1;
+			// break;
+			default:
+				logger.warn('Unknown order in ia.pr: '+name);
+			break;
+		}
+	};
 }
 
 module.exports = Gr;

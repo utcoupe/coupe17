@@ -61,42 +61,21 @@ class Pr extends Robot{
 
 
 	parseOrder (from, name, params) {
+		if (super.parseOrder(from, name, params)) { return; }
 		var orderNameParts = name.split('.');
 		var name = orderNameParts.shift();
 		var orderSubname = orderNameParts.join('.');
 
-		function borne(x, min, max) {
-			return x > max ? max : x < min ? min : x;
-		}
-
 		switch(name) {
-			case 'collision':
-				// Manual collision
-				this.collision();
-			break;
-			// Asserv
-			case 'pos':
-				params.x = borne(params.x, 0, 3000);
-				params.y = borne(params.y, 0, 2000);
-				this.pos = params;
-			break;
-			case 'getinitpos':
-				this.sendInitialPos();
-			break;
-			// case 'placer':
-			// 	this.place();
-			// break;
 			case 'module++':
 				this.content.nb_modules += 1;
 			break;
 			case 'module--':
 				this.content.nb_modules -= 1;
 			break;
-			case 'actions':
-				this.actions.parseOrder(from, orderSubname, params);
-			break;
 			default:
 				logger.warn('Unknown order in ia.pr: '+name);
+			break;
 		}
 	};
 }
