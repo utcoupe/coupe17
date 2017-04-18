@@ -14,7 +14,7 @@ function red_echo() {
 ARCH=$(uname -m)
 
 ### Install the linux packages
-function apt_install() {
+function install_apt() {
 	green_echo "Install missing packages..."
 	sudo apt-get install git build-essential python cmake libboost-dev libsdl1.2-dev
 
