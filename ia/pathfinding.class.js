@@ -192,7 +192,7 @@ module.exports = (function () {
 		var objects = [{
 			pos: this.ia.gr.pos,
 			d: this.ia.gr.size.d
-		}].concat(this.ia.data.dots).concat(this.ia.data.dynamic);
+		}].concat(this.ia.data.dots)/*.concat(this.ia.data.dynamic)*/;
 
 
 		// logger.debug(objects);

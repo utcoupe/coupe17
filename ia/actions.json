@@ -1,220 +1,286 @@
 {
-	"__comment": "\nAdd durations, priority\nAdd actions without objects",
+	"__comment": "\nUse duration ?\nDetermine priorities\nFront of robots ? -> angles\nDuplicate uncolored actions, mirror colored",
 	"actions":{
-		"faire_les_claps_1":{
-			"type": "clap",
+		"take_4_modules_rear":{
+			"type": "module",
 			"owner": "pr",
-			"objectname": "clap__1",
+			"objectname": "rocket__rear_left_12>15",
 			"startpoints": [{
-				"x": 140,
-				"y": 140,
-				"a": 3.1416
+				"x": 1150,
+				"y": 100,
+				"a": -1.5707
 			}],
-			"sens": "osef",
-			"priority": 18,
+			"direction": "osef",
+			"priority": 100,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
-				"name": "clap_1",
+				"name": "take_4",
 				"params": {}
 				}],
 			"kill": null
 		},
-		"faire_les_claps_3":{
-			"type": "clap",
+		"take_4_modules_border":{
+			"type": "module",
 			"owner": "pr",
-			"objectname": "clap__3",
+			"objectname": "rocket__front_left_20>23",
 			"startpoints": [{
-				"x": 730,
-				"y": 140,
-				"a": 3.1416
+				"x": 38,
+				"y": 1350,
+				"a": -3.1415
 			}],
-			"sens": "osef",
-			"priority": 17,
+			"direction": "osef",
+			"priority": 99,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
-				"name": "clap_3",
+				"name": "take_4",
 				"params": {}
 				}],
 			"kill": null
 		},
-		"prendre_gobelet_et_2_plots_front_left":{
-			"type": "gobelet",
+		"take_module_01":{
+			"type": "module",
 			"owner": "pr",
-			"objectname": "gobelet__front_left",
-			"startpoints": [
-			{
-				"x": 450,
-				"y": 350,
-				"a": 0
-			}],
-			"sens": "arriere",
-			"priority": 19,
+			"objectname": "module__mod_lun01",
+			"startpoints": [],
+			"direction": "osef",
+			"priority": 98,
 			"dependency": "",
-			"dependencyRobotContent": {
-				"gobelet": false,
-				"subPlot": 2,
-				"invPlot": 0
-				},
 			"duration": 1,
 			"orders":[{
-				"name": "prendre_gobelet_et_2_plots_front",
+				"name": "take_1",
 				"params": {}
 				}],
 			"kill": null
 		},
-		"prendre_plot_middle_left1":{
-			"type": "plot",
+		"take_module_02":{
+			"type": "module",
 			"owner": "pr",
-			"objectname": "plot__middle_left1",
+			"objectname": "module__mod_lun01",
+			"startpoints": [],
+			"direction": "osef",
+			"priority": 97,
+			"dependency": "",
+			"duration": 1,
+			"orders":[{
+				"name": "take_1",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"take_module_06":{
+			"type": "module",
+			"owner": "pr",
+			"objectname": "module__mod_lun06",
+			"startpoints": [],
+			"direction": "osef",
+			"priority": 96,
+			"dependency": "",
+			"duration": 1,
+			"orders":[{
+				"name": "take_1",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"take_module_07":{
+			"type": "module",
+			"owner": "pr",
+			"objectname": "module__mod_lun07",
+			"startpoints": [],
+			"direction": "osef",
+			"priority": 95,
+			"dependency": "",
+			"duration": 1,
+			"orders":[{
+				"name": "take_1",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"take_module_08":{
+			"type": "module",
+			"owner": "pr",
+			"objectname": "module__mod_lun08",
+			"startpoints": [],
+			"direction": "osef",
+			"priority": 94,
+			"dependency": "",
+			"duration": 1,
+			"orders":[{
+				"name": "take_1",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"drop_module_border":{
+			"type": "drop_module",
+			"owner": "pr",
+			"objectname": "mountedModules__left",
 			"startpoints": [{
-				"x": 200,
-				"y": 200,
-				"a": 0
+				"x": 150,
+                "y": 925,
+                "a": 3.1415
 			}],
-			"sens": "avant",
-			"priority": 21, 
+			"direction": "osef",
+			"priority": 93,
 			"dependency": "",
-			"dependencyRobotContent": {
-				"subPlot": 3,
-				"invPlot": 0
-				},
 			"duration": 1,
 			"orders":[{
-				"name": "prendre_plot",
+				"name": "drop_border",
 				"params": {}
 				}],
 			"kill": null
 		},
-		"prendre_plot_middle_left2":{
-			"type": "plot",
+		"drop_module_middle_left_1":{
+			"type": "drop_module",
+			"owner": "pr",
+			"objectname": "mountedModules__middle_left",
+			"startpoints": [{
+				"x": 1020,
+                "y": 1350,
+                "a": -0.7853
+			}],
+			"direction": "osef",
+			"priority": 92,
+			"dependency": "",
+			"duration": 1,
+			"orders":[{
+				"name": "drop_middle_1",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"drop_module_middle_left_2":{
+			"type": "drop_module",
+			"owner": "pr",
+			"objectname": "mountedModules__middle_left",
+			"startpoints": [{
+				"x": 1120,
+                "y": 1450,
+                "a": 2.3561
+			}],
+			"direction": "osef",
+			"priority": 92,
+			"dependency": "",
+			"duration": 1,
+			"orders":[{
+				"name": "drop_middle_2",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"drop_module_middle_center_1":{
+			"type": "drop_module",
+			"owner": "pr",
+			"objectname": "mountedModules__middle_center",
+			"startpoints": [{
+				"x": 1450,
+                "y": 1250,
+                "a": 0
+			}],
+			"direction": "osef",
+			"priority": 91,
+			"dependency": "",
+			"duration": 1,
+			"orders":[{
+				"name": "drop_middle_1",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"drop_module_middle_center_2":{
+			"type": "drop_module",
+			"owner": "pr",
+			"objectname": "mountedModules__middle_center",
+			"startpoints": [{
+				"x": 1550,
+                "y": 1350,
+                "a": 3.1415
+			}],
+			"direction": "osef",
+			"priority": 90,
+			"dependency": "",
+			"duration": 1,
+			"orders":[{
+				"name": "drop_middle_2",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"drop_module_middle_right_1":{
+			"type": "drop_module",
+			"owner": "pr",
+			"objectname": "mountedModules__middle_right",
+			"startpoints": [{
+				"x": 1880,
+                "y": 1350,
+                "a": 0.7853
+			}],
+			"direction": "osef",
+			"priority": 89,
+			"dependency": "",
+			"duration": 1,
+			"orders":[{
+				"name": "drop_middle_1",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"drop_module_middle_right_2":{
+			"type": "drop_module",
+			"owner": "pr",
+			"objectname": "mountedModules__middle_right",
+			"startpoints": [{
+				"x": 1980,
+                "y": 1450,
+                "a": -2.3561
+			}],
+			"direction": "osef",
+			"priority": 88,
+			"dependency": "",
+			"duration": 1,
+			"orders":[{
+				"name": "drop_middle_2",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"catch_balls_front":{
+			"type": "catch_balls",
 			"owner": "gr",
-			"objectname": "plot__middle_left2",
+			"objectname": "balls__front_left",
 			"startpoints": [{
-				"x": 200,
-				"y": 200,
-				"a": 0
+				"x": 350,
+                "y": 1650,
+                "a": 1.5707
 			}],
-			"sens": "avant",
-			"priority": 20, 
+			"direction": "osef",
+			"priority": 87,
 			"dependency": "",
-			"dependencyRobotContent": {
-				},
 			"duration": 1,
 			"orders":[{
-				"name": "prendre_plot",
+				"name": "catch_balls_front",
 				"params": {}
 				}],
 			"kill": null
 		},
-		"pousser_plot_middle_left3":{
-			"type": "plot",
-			"owner": "pr",
-			"objectname": "plot__middle_left3",
-			"startpoints": [{
-				"x": 200,
-				"y": 200,
-				"a": 0
-			}],
-			"sens": "avant",
-			"priority": 21,  
-			"dependency": "",
-			"dependencyRobotContent": {
-				"subPlot": 3,
-				"invPlot": 0
-				},
-			"duration": 1,
-			"orders":[{
-				"name": "pousser_plot",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"deposer_pile_gobelet_gauche":{
-			"type": "depot_pile",
-			"owner": "pr",
-			"objectname": "pile__left",
-			"startpoints": [{
-					"x": 700,
-					"y": 1000,
-					"a": 3.1416
-				}],
-			"sens": "avant",
-			"priority": 14,
-			"dependency": "",
-			"dependencyRobotContent": {
-				"invPlot": 1
-				},
-			"duration": 1,
-			"orders":[{
-				"name": "deposer_pile_et_gobelet",
-				"params": {}
-				}],
-			"kill": null
-		},
-		"prendre_plot_rear_left":{
-			"type": "plot",
-			"owner": "pr",
-			"objectname": "plot__rear_left",
+		"catch_balls_small":{
+			"type": "catch_balls",
+			"owner": "gr",
+			"objectname": "balls__small_left",
 			"startpoints": [{
 				"x": 650,
-				"y": 1450,
-				"a": 0
+                "y": 540,
+                "a": 2.3561
 			}],
-			"sens": "avant",
-			"priority": 13,
-			"dependency": "deposer_pile_gobelet_gauche",
-			"dependencyRobotContent": {
-				"subPlot": 3
-				},
+			"direction": "osef",
+			"priority": 87,
+			"dependency": "",
 			"duration": 1,
 			"orders":[{
-				"name": "prendre_plot_rear_left_calage",
-				"params": {}
-			}],
-			"kill": null
-		},
-		"prendre_2_plots_stairs_left":{
-			"type": "plot",
-			"owner": "pr",
-			"objectname": "plot__stairs_left2",
-			"startpoints": [{
-				"x": 705,
-				"y": 1640,
-				"a": 0
-			}],
-			"sens": "avant",
-			"priority": 12,
-			"dependency": "prendre_plot_rear_left",
-			"dependencyRobotContent": {
-				"subPlot": 2
-				},
-			"duration": 2,
-				"orders":[{
-				"name": "prendre_2_plots_stairs",
-				"params": {}
-			}],
-			"kill": null
-		},
-		"deposer_pile_gauche_2":{
-			"type": "depot_pile",
-			"owner": "pr",
-			"objectname": "pile__left2",
-			"startpoints": [{
-				"x": 700,
-				"y": 1000,
-				"a": -1.5708
-			}],
-			"sens": "avant",
-			"priority": 9,
-			"dependency": "deposer_pile_gobelet_gauche",
-			"dependencyRobotContent": {
-				"invPlot": 1
-				},
-			"duration": 1,
-			"orders":[{
-				"name": "deposer_pile_left_2",
+				"name": "catch_balls_small",
 				"params": {}
 				}],
 			"kill": null

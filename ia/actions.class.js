@@ -127,6 +127,7 @@ class Actions{
 	 * @param {Object} params Parameters of the action
 	 */
 	parseOrder (from, name, params) {
+		logger.debug("parseOrder: verify this function");
 		switch(name) {
 			case 'action_finished':
 			// logger.debug('received action_finished');
@@ -148,6 +149,7 @@ class Actions{
 	 * @param {string} action_name
 	 */
 	kill (action_name){
+		logger.debug("kill: verify this function");
 		// If action doesn't exist
 		if (!!action_name && this.exists(action_name)){
 			this.killed[action_name] = this.todo[action_name];
@@ -365,12 +367,12 @@ class Actions{
 		this.inprogress = action;
 		delete this.todo[action.name];
 
-		this.logger.debug('Action en cours %s (%d;%d;%d)', action.name, startpoint.x, startpoint.y, startpoint.a);
+		this.logger.debug('Current action : %s (%d;%d;%d)', action.name, startpoint.x, startpoint.y, startpoint.a);
 		this.robot.path.map(function(checkpoint) {
 			this.ia.client.send(this.robot.name, "goxy", {
 				x: checkpoint.x,
 				y: checkpoint.y,
-				sens: action.sens
+				direction: action.direction
 			});
 		}, this);
 		if(!!startpoint.a) {
@@ -391,6 +393,7 @@ class Actions{
 		});
 
 		// // Set object to "done" ! XXX
+		this.logger.debug("Set object to 'done' !");
 
 		// // Change action and its "to be killed" actions to state done
 
