@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 
+#TODO upload
+#TODO output in bin folder
+
 set(CMAKE_TOOLCHAIN_FILE /home/tfuhrman/dev/tools/arduino-cmake/cmake/ArduinoToolchain.cmake) # Arduino Toolchain
 
 # target are : arduino_r_t with r = pr/gr and t = asserv/others
@@ -9,19 +12,28 @@ project(arduino C CXX)
 set(ARDUINO_DEFAULT_BOARD mega2560)
 set(ARDUINO_DEFAULT_PORT /dev/ttyACM0)
 
-set(TARGET_ROBOT gr)
-set(TARGET_PROGRAM asserv)
+SET(TARGET_ARDUINO "mega2560" CACHE STRING "User defined arduino target")
+SET(TARGET_ROBOT "gr" CACHE STRING "User defined robot")
+SET(TARGET_PROGRAM "asserv" CACHE STRING "User defined program")
 
-file(GLOB_RECURSE SRC_FILES	${TARGET_ROBOT}/${TARGET_PROGRAM}/*.cpp common/${TARGET_PROGRAM}/*.c common/${TARGET_PROGRAM}/*.cpp)
-#file(GLOB_RECURSE HDR_FILES	${TARGET_ROBOT}/${TARGET_PROGRAM}/*.h common/${TARGET_PROGRAM}/*.h)
+#set(TARGET_ROBOT gr)
+#set(TARGET_PROGRAM asserv)
 
-include_directories(${TARGET_ROBOT}/${TARGET_PROGRAM} common/${TARGET_PROGRAM})
+file(GLOB_RECURSE SRC_FILES	${TARGET_ROBOT}/${TARGET_PROGRAM}/*.cpp)
+include_directories(${TARGET_ROBOT}/${TARGET_PROGRAM})
 
-generate_arduino_firmware(${PROJECT_NAME}_${TARGET_ROBOT}_${TARGET_PROGRAM}
-    SRCS ${SRC_FILES}
+# Asserv special stuff
+set(EXTRA_SRC_FILES "")
+if (TARGET_PROGRAM STREQUAL "asserv")
+	message("asserv program detected")
+	file(GLOB_RECURSE EXTRA_SRC_FILES common/${TARGET_PROGRAM}/*.c common/${TARGET_PROGRAM}/*.cpp)
+endif()
+
+generate_arduino_firmware(${TARGET_ROBOT}_${TARGET_PROGRAM}_${TARGET_ARDUINO}
+    SRCS ${SRC_FILES} ${EXTRA_SRC_FILES}
 #    HDRS ${HDR_FILES}
 #	LIBS HardwareSerial
     PORT ${ARDUINO_DEFAULT_PORT}
-    BOARD ${ARDUINO_DEFAULT_BOARD}
+    BOARD ${TARGET_ARDUINO}
 )
 
