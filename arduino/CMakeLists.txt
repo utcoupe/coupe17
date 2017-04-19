@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
 #TODO upload
-#TODO output in bin folder
 
 set(CMAKE_TOOLCHAIN_FILE /home/tfuhrman/dev/tools/arduino-cmake/cmake/ArduinoToolchain.cmake) # Arduino Toolchain
 
@@ -15,6 +14,8 @@ set(ARDUINO_DEFAULT_PORT /dev/ttyACM0)
 SET(TARGET_ARDUINO "mega2560" CACHE STRING "User defined arduino target")
 SET(TARGET_ROBOT "gr" CACHE STRING "User defined robot")
 SET(TARGET_PROGRAM "asserv" CACHE STRING "User defined program")
+
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../bin)
 
 #set(TARGET_ROBOT gr)
 #set(TARGET_PROGRAM asserv)
