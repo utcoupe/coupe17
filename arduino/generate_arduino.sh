@@ -5,9 +5,22 @@ USER_ROBOT=""
 USER_PROGRAM=""
 
 function generate_cmake() {
+	rm -rf build
 	mkdir -p build
 	cd build
 	cmake ../ -DTARGET_ARDUINO:STRING=$USER_TARGET -DTARGET_ROBOT:STRING=$USER_ROBOT -DTARGET_PROGRAM:STRING=$USER_PROGRAM
+}
+
+function compile_program() {
+	if [ ! "${PWD##*/}" = "build" ]; then
+		printf "Not in the right place for build..."
+	fi
+	make
+}
+
+function upload_program() {
+	#TODO check if an arduino is present
+	make upload	
 }
 
 function ask_user() {
@@ -39,3 +52,5 @@ function ask_user() {
 # "Main"
 ask_user
 generate_cmake
+compile_program
+upload_program

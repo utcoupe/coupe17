@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
 
-#TODO upload
-
 set(CMAKE_TOOLCHAIN_FILE /home/tfuhrman/dev/tools/arduino-cmake/cmake/ArduinoToolchain.cmake) # Arduino Toolchain
 
 # target are : arduino_r_t with r = pr/gr and t = asserv/others
