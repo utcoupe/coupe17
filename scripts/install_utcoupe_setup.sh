@@ -15,7 +15,7 @@ function red_echo() {
 ARCH=$(uname -m)
 
 ### Install the linux packages
-function apt_install() {
+function install_apt() {
 	green_echo "Install missing packages..."
 	sudo apt-get install git build-essential python cmake libboost-dev libsdl1.2-dev
 
@@ -23,13 +23,13 @@ function apt_install() {
 	if [ "$ARCH" = "x86_64" ]; then
 		green_echo "x86 architecture detected."
 		sudo apt-get install nodejs npm nodejs-legacy linux-headers-$(uname -r)
-	else if [ "$ARCH" = "armv7l" ]; then
+	elif [ "$ARCH" = "armv7l" ]; then
 		green_echo "Raspberry Pi 3 system detected, remove previous npm installation to setup the used version."
 		sudo apt-get install raspberrypi-kernel-headers
 		sudo apt-get remove npm nodejs nodejs-legacy
 		curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 		sudo npm install npm@3.5.2 -g
-	else if [ "$ARCH" = "armv6l" ]; then
+	elif [ "$ARCH" = "armv6l" ]; then
 		sudo apt-get install raspberrypi-kernel-headers
 		sudo apt-get remove npm nodejs nodejs-legacy
 		wget https://nodejs.org/dist/v4.8.1/node-v4.8.1-linux-armv6l.tar.gz
