@@ -6,7 +6,7 @@
  * @requires config
  * @requires clients/pr/actuators
  * @requires clients/pr/detect
- * @requires tibot.class.js
+ * @requires grobot.class.js
  */
 (function () {
 
@@ -17,10 +17,11 @@
   //grobot.sendChildren(tibot.grobot);
 
 	grobot.start();
+  grobot.logger.info('Started grobot');
 
   // On message
   grobot.client.order(function (from, name, params){
-    // logger.info("Recieved an order "+name);
+    grobot.logger.info("Recieved an order "+name);
     switch (name){
       case "collision":
         grobot.queue = [];
@@ -42,5 +43,5 @@
         grobot.addOrder2Queue(from, name, params);
     }
   });
-
+  grobot.logger.info('Ending of init grobot');
 })();

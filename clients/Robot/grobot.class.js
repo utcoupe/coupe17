@@ -19,20 +19,20 @@ const Robot = require('./robot.class.js');
 class Grobot extends Robot{
 
 	constructor(Robotname){
-    if (Robotname)
-      super(Robotname);
-    else
-      super();
-  }
+	    if (Robotname)
+	      super(Robotname);
+	    else
+	      super();
+  	}
 
-			/**
-	 * Push the order (enfiler)
-	 *
-	 * @param {string} f from
-	 * @param {string} n name
-	 * @param {Object} p parameters
-	 */
-	 addOrder2Queue(f, n, p){
+	/**
+	* Push the order (enfiler)
+	*
+	* @param {string} f from
+	* @param {string} n name
+	* @param {Object} p parameters
+	*/
+	addOrder2Queue(f, n, p){
 		if(this.queue.length < 50) {
 			// Adds the order to the queue
 			this.queue.push({
@@ -40,46 +40,18 @@ class Grobot extends Robot{
 				name: n,
 				params: p
 			});
-			// logger.info("Order added to queue ! : ");
-			// logger.info(queue);
+			this.logger.info("Order added to queue ! : ");
+			this.logger.info(this.queue);
 			this.executeNextOrder();
 		}
 	}
-
-	/**
-	 * Execute order
-	 */
-	 executeNextOrder(){
-		if ((this.queue.length > 0) && (!this.orderInProgress)){
-			var order = this.queue.shift();
-			this.orderInProgress = order.name;
-
-			this.logger.info("Going to do '" + this.orderInProgress + "' "+order.params.toString());
-
-      //TODO DECOMMENT IT AFTER acts done
-      //this.acts.orderHandler(order.from, order.name, order.params, this.actionFinished);
-
-			this.executeNextOrder();
-		}
-	}
-
-	/**
-	 * Launch the next order
-	 */
-	actionFinished(){
-		this.logger.info(orderInProgress + " just finished !");
-
-		this.orderInProgress = false;
-		this.executeNextOrder();
-	}
-
 
 	/**
 	 * Tries to exit
 	 *
 	 * @todo do something when app is closing
 	 */
-	 quit () {
+	quit () {
 		this.logger.info("Please wait while exiting...");
 		// acts.quit();
 		process.exit(0);
