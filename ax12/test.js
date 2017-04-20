@@ -18,12 +18,12 @@ var MARGE_POS = 40;
 var MARGE_POS_MVT = 5;
 
 var ax12s = {
-	'2':{
-		id: 2,
+	'253':{
+		id: 253,
 		obj: 0, pos: 0, arrived: false
 	},
-	'3':{
-		id: 3,
+	'254':{
+		id: 254,
 		obj: 0, pos: 0, arrived: false
 	}
 };
@@ -36,7 +36,7 @@ function loopAX12() {
 			ax12s[i].arrived = false;
 			speed = libusb2ax.dxl_read_word(ax12s[i].id, P_SPEED);
 			// Si il bouge pas, on renvoie l'ordre
-			if(speed == 0) {
+			if(speed > 2) {
 				console.log("ordre"+i);
 				libusb2ax.dxl_write_word(ax12s[i].id, P_GOAL_POSITION_L, ax12s[i].obj);
 			}
@@ -48,6 +48,7 @@ function loopAX12() {
 			if(!ax12s[i].arrived) {
 				ax12s[i].arrived = true;
 				logger.info(new Date().getTime()+" "+ax12s[i].id+" arrivé !");
+				t = !t;
 			}
 		}
 	}
@@ -58,12 +59,14 @@ function degToAx12(deg) {
 	return parseInt((deg+150)*1024/300);
 }
 function openAx12Down() {
-	ax12s['2'].obj = degToAx12(0);
-	ax12s['3'].obj = degToAx12(0);
+	for(let key of Object.keys(ax12s)){
+		ax12s[key].obj = degToAx12(0);
+	}
 }
 function closeAx12Down() {
-	ax12s['2'].obj = degToAx12(-80);
-	ax12s['3'].obj = degToAx12(80);
+	for(let key of Object.keys(ax12s)){
+		ax12s[key].obj = degToAx12(80);
+	}
 }
 
 if(libusb2ax.dxl_initialize(0, 1) <= 0) {
@@ -81,7 +84,6 @@ function loop() {
 	} else {
 		openAx12Down();
 	}
-	t = !t;
 	setTimeout(loop, 3000);
 }
 loop();
