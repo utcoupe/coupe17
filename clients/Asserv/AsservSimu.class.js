@@ -230,7 +230,7 @@ class AsservSimu extends Asserv{
 	 * @param {boolean} no_fifo
 	 */
 	goxy(x, y, sens, callback, no_fifo) {
-
+			
 			var dx = x-this.pos.x;
 			var dy = y-this.pos.y;
 			var dist = Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));

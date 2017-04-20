@@ -112,6 +112,7 @@ class Tibot extends Robot{
 						});
 					break;
 					default:
+						this.actionFinished();
 						this.executeNextOrder();
 				}
 			}
