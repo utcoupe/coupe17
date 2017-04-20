@@ -1,3 +1,6 @@
+/*
+ * @namespace Simu
+ */
 var Simu = Simu || {};
 
 var	PILES_MAX = 2,

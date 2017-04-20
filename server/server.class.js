@@ -2,6 +2,11 @@
  * Server module
  * @module server/server
  * @requires module:ia/main
+ * @requires log4js
+ * @requires child_process
+ * @requires ansi-to-html
+ * @requires os
+ * @requires socket.io
  * @see {@link server/server.Server}
  */
 module.exports = (function () {
@@ -11,7 +16,6 @@ module.exports = (function () {
 	var spawn = require('child_process').spawn;
 	var Convert = require('ansi-to-html');
 	var convert = new Convert({newLine: true});
-	var spawn = require('child_process').spawn;
 
 	/**
 	 * Starts a server on the port specified. Default port: 3128

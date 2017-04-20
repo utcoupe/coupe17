@@ -2,6 +2,7 @@
  * Grand Robot Module
  * 
  * @module ia/gr
+ * @requires log4js
  * @see {@link ia/gr.Gr}
  */
 

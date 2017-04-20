@@ -1,3 +1,6 @@
+/**
+ * Convertit les distances
+ */
 function convertir_dist(x){
 	x = x * 1000;
 	return x;

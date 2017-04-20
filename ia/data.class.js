@@ -2,6 +2,7 @@
  * Data Module
  * 
  * @module ia/data
+ * @requires log4js
  * @see {@link ia/data.Data}
  */
 

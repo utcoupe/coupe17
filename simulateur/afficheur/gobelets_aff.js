@@ -1,7 +1,18 @@
+/*
+ * @namespace Simu
+ */
 var Simu = Simu || {};
 
 
-
+/**
+ * Affiche les gobelets
+ * 
+ * @memberof Simu
+ * @param {Number} x
+ * @param {Number} y
+ * @param {Number} z
+ * @param {String} coul
+ */
 Simu.afficherGobelet = function afficherGobelet(x,y,z,coul){
     /*  Entrees :
             x, y, z
@@ -23,7 +34,15 @@ Simu.afficherGobelet = function afficherGobelet(x,y,z,coul){
     }
 
 
-
+/**
+ * Affiche les popcorns
+ * 
+ * @memberof Simu
+ * @param {Number} x
+ * @param {Number} y
+ * @param {Number} z
+ * @param {String} coul
+ */
 Simu.afficherPopcorn =  function afficherPopcorn(x,y,z,coul)
 {
     /*  Entrees :

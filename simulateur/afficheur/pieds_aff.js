@@ -1,7 +1,17 @@
-
+/*
+ * @namespace Simu
+ */
 var Simu = Simu || {};
 
-
+/**
+ * Affiche les pieds
+ * 
+ * @memberof Simu
+ * @param {Number} x
+ * @param {Number} y
+ * @param {Number} z
+ * @param {String} coul
+ */
 Simu.afficherPied = function afficherPied(x,y,z,coul)
 {
   /*  Entrees :

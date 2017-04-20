@@ -2,6 +2,7 @@
  * Petit Robot Module
  * 
  * @module ia/pr
+ * @requires log4js
  * @see {@Link ia/pr.Pr}
  */
 
