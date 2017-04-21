@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8)
 
 set(CMAKE_TOOLCHAIN_FILE /home/tfuhrman/dev/tools/arduino-cmake/cmake/ArduinoToolchain.cmake) # Arduino Toolchain
 
+set(ARDUINO_CXX_FLAGS    "${ARDUINO_C_FLAGS} -std=c++11")
+
 # target are : arduino_r_t with r = pr/gr and t = asserv/others
 project(arduino C CXX)
 
@@ -19,17 +21,22 @@ SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../bin)
 #set(TARGET_PROGRAM asserv)
 
 file(GLOB_RECURSE SRC_FILES	${TARGET_ROBOT}/${TARGET_PROGRAM}/*.cpp)
-include_directories(${TARGET_ROBOT}/${TARGET_PROGRAM})
+include_directories(${TARGET_ROBOT}/${TARGET_PROGRAM} common/${TARGET_PROGRAM} common/libs/os48)
 
-# Asserv special stuff
-set(EXTRA_SRC_FILES "")
-if (TARGET_PROGRAM STREQUAL "asserv")
-	message("asserv program detected")
-	file(GLOB_RECURSE EXTRA_SRC_FILES common/${TARGET_PROGRAM}/*.c common/${TARGET_PROGRAM}/*.cpp)
-endif()
+#asserv or others extra common stuff
+#set(EXTRA_SRC_FILES "")
+file(GLOB_RECURSE EXTRA_SRC_FILES common/${TARGET_PROGRAM}/*.c common/${TARGET_PROGRAM}/*.cpp)
+#if (TARGET_PROGRAM STREQUAL "asserv")
+#	message("asserv program detected")
+#	file(GLOB_RECURSE EXTRA_SRC_FILES common/${TARGET_PROGRAM}/*.c common/${TARGET_PROGRAM}/*.cpp)
+#endif()
+
+#get os48 files
+#TODO create os48 static lib in another CMake file
+file(GLOB_RECURSE OS48_SRC_FILES common/libs/os48/*.cpp)
 
 generate_arduino_firmware(${TARGET_ROBOT}_${TARGET_PROGRAM}_${TARGET_ARDUINO}
-    SRCS ${SRC_FILES} ${EXTRA_SRC_FILES}
+    SRCS ${SRC_FILES} ${EXTRA_SRC_FILES} ${OS48_SRC_FILES}
 #    HDRS ${HDR_FILES}
 #	LIBS HardwareSerial
     PORT ${ARDUINO_DEFAULT_PORT}

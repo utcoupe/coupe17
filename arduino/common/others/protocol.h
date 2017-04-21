@@ -1,0 +1,52 @@
+//
+// Created by tfuhrman on 20/04/17.
+//
+
+#ifndef OTHERS_PROTOCOL_H
+#define OTHERS_PROTOCOL_H
+
+//#include <String>
+
+#include "parameters.h"
+
+class String;
+
+// BEGIN_ORDERS - Do not remove this comment
+#define START               'S'     //no args, start the program
+#define HALT                'h'     //no args, halt the program
+#define PARAMETER           'p'     //id_servo(int);position(int);value(int), respond TODO, position = open or close
+#define MODULE_ROTATE       'r'     //c(int) = 0 (whatever color), 1 (blue), 2 (yellow), respond TODO
+#define PR_MODULE_ARM       0       //servo controlling the arm which gets the module
+#define PR_MODULE_DROP_R    1       //right servo controlling the drop of the module
+#define PR_MODULE_DROP_L    2       //left servo controlling the drop of the module
+#define PR_MODULE_ROTATE    3       //continuous rotation servo to turn modules
+// END_ORDERS - Do not remove this comment
+
+enum SERVO_POSITION {
+    OPEN = 0,
+    CLOSE
+};
+
+enum MODULE_COLOR {
+    WHATEVER = 0,
+    BLUE,
+    YELLOW
+};
+
+struct servoInformation {
+    int servoId;
+    SERVO_POSITION position;
+    int value;
+};
+
+extern servoInformation servoData[];
+
+//todo move to cpp file ?
+static const unsigned int servoMapping[4][2] = {{PR_MODULE_ARM, PR_MODULE_ARM_PIN},
+                                                {PR_MODULE_DROP_R, PR_MODULE_DROP_R_PIN},
+                                                {PR_MODULE_DROP_L, PR_MODULE_DROP_L_PIN},
+                                                {PR_MODULE_ROTATE, PR_MODULE_ROTATE_PIN},};
+
+void parseAndExecuteOrder(const String& order);
+
+#endif //OTHERS_PROTOCOL_H
