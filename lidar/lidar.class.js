@@ -258,7 +258,7 @@ module.exports = (function () {
 		// For each active hokuyo, add hokuyo information to return value
 		for (let hokName in lastData){
 			// logger.debug(Date.now() - lastData[hokName].time + " -> " + ((Date.now() - lastData[hokName].time < 2 * DELTA_T)?"ok":"not ok"));
-			if (lastData[hokName].isWorking) {
+			if (lastData[hokName].isWorking()) {
 				hokuyos.push({
 					"name": hokName,
 					"position": this.hokuyoPositions[hokName]

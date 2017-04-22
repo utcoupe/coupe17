@@ -6,14 +6,15 @@ class HokuyoDisplay {
 		this.ONE = "one";
 		this.TWO = "two";
 
-		this.dotRadius = 1; 	// cm
+		this.dotRadius = 1; 			// cm
 
 		this.parentId = parentId;
 		this.mode = mode;
 		this.div = $('#' + this.parentId);
 
-		this.isBusy = false; 	// lock
-		this.isBusy = false;
+		this.isBusy = false; 			// lock
+
+		this.clearMainTimeout = null; 	// timeout in case we don't receive data for a while
 
 		if (reinitColor) {
 			Raphael.getColor.reset();
@@ -208,6 +209,10 @@ class HokuyoDisplay {
 
 		this.isBusy = true;
 
+		if (!!this.clearMainTimeout) {
+			clearTimeout(this.clearMainTimeout);
+		}
+
 		// console.log(hokuyos);
 
 		// For each hokuyo
@@ -252,5 +257,18 @@ class HokuyoDisplay {
 
 		this.isBusy = false;
 
+		this.clearMainTimeout = setTimeout(clearMain, 1000);
+	}
+
+	clearMain() {
+		// For each object
+		for(let hok of this.hokuyos) {
+			hok.remove();
+		}
+
+		// For each object
+		for(let obj of this.objects) {
+			obj.remove();
+		}
 	}
 }
