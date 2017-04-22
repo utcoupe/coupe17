@@ -48,6 +48,8 @@ struct servoInformation {
 
 extern servoInformation servoData[];
 
+extern unsigned char flagArduinoConnected;
+
 //todo move to cpp file ?
 static const unsigned int servoMapping[4][2] = {{PR_MODULE_ARM, PR_MODULE_ARM_PIN},
                                                 {PR_MODULE_DROP_R, PR_MODULE_DROP_R_PIN},

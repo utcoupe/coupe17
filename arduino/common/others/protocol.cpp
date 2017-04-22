@@ -19,17 +19,39 @@ servoInformation servoData[7]= {{PR_MODULE_ARM, OPEN, 90},
              {PR_MODULE_ROTATE, OPEN, 90},
 };
 
+unsigned char flagArduinoConnected = 0;
+
 //order is order;id_servo;params
 void parseAndExecuteOrder(const String& order) {
     static char receivedOrder[15];
     order.toCharArray(receivedOrder, order.length());
     char orderChar = receivedOrder[ORDER_INDEX];
-//    uint16_t order_id = (uint16_t)(receivedOrder[ID_INDEX+1] << 8) + (uint16_t)(receivedOrder[ID_INDEX]);
     uint16_t order_id = (uint16_t) atoi(&receivedOrder[ID_INDEX]);
     SerialSender::SerialSend(SERIAL_INFO, "order : %c, id : %d", orderChar, order_id);
-//    String order_id_s = String((int)order_id);
-//    SerialSender::SerialSend(SERIAL_INFO, order_id_s);
-//    SerialSender::SerialSend(SERIAL_INFO, order);
+    switch (orderChar) {
+        case START:
+            SerialSender::SerialSend(SERIAL_INFO, "Arduino %s has started (%d)", ARDUINO_ID, order_id);
+            flagArduinoConnected = 1;
+            break;
+        case HALT:
+            SerialSender::SerialSend(SERIAL_INFO, "Arduino %s has stopped (%d)", ARDUINO_ID, order_id);
+            flagArduinoConnected = 0;
+            break;
+        case PARAMETER:
+            //todo
+            break;
+        case MODULE_ROTATE:
+            //todo
+            break;
+        case SERVO_OPEN:
+            //todo
+            break;
+        case SERVO_CLOSE:
+            //todo
+            break;
+        default:
+            SerialSender::SerialSend(SERIAL_INFO, "Order %c is wrong !", orderChar);
+    }
 }
 
 /*

@@ -17,18 +17,18 @@ os48::TaskTimer* main_task = NULL;
 os48::Task* serial_send_task = NULL;
 os48::Task* serial_read_task = NULL;
 
+//todo debug level as a parameter
+
 bool mainTask() {
-    while (!flagConnected) {
-        SerialSender::SerialSend(SERIAL_INFO, "%s", ARDUINO_ID);
-//        Serial.println(ARDUINO_ID);
-        Serial.flush();
-        delay(1000);
-    }
-    while (1) {
-        SerialSender::SerialSend(SERIAL_INFO, "Started up !");
-//        Serial.println("Started Up!");
-        Serial.flush();
-        delay(1000);
+    while (true) {
+        if (!flagArduinoConnected) {
+            SerialSender::SerialSend(SERIAL_INFO, "%s", ARDUINO_ID);
+            Serial.flush();
+            delay(1000);
+        } else {
+            //todo something useful...
+            delay(1000);
+        }
     }
 }
 
