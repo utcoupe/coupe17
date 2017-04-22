@@ -106,75 +106,19 @@ class Lidar {
 		this.events.emit("endOfEmergencyStop", reason);
 	}
 
+	getDistance (spot1, spot2) {
+		return Math.sqrt(Math.pow(spot1.x - spot2.x, 2) + Math.pow(spot1.y - spot2.y, 2));
+	};
+
 	deleteOurRobots(spots){
-		logger.debug("TODO: verify deleteOurRobots");
-
-		for(var i in dots) {
-			if(this.norm(dots[i][0], dots[i][1], this.ia.pr.pos.x, this.ia.pr.pos.y) < this.ia.pr.size.d/2 ||
-				this.norm(dots[i][0], dots[i][1], this.ia.gr.pos.x, this.ia.gr.pos.y) < this.ia.gr.size.d/2)
-			dots.splice(i, 1);
-			logger.debug("Found one of our robots at [" + dots[i][0] + ", " + dots[i][1] + "]");
+		for(var i in spots) {
+			if(this.getDistance( { x: spots[i][0], y:spots[i][1] }, this.ia.pr.pos) < this.ia.pr.size.d/2 ||
+				this.getDistance( { x: spots[i][0], y:spots[i][1] }, this.ia.gr.pos) < this.ia.gr.size.d/2) {
+				// logger.debug("Found one of our robots at [" + spots[i][0] + ", " + spots[i][1] + "]");
+				spots.splice(i, 1);
+			}
 		}
-		
-		// var pr_dist = Infinity;
-		// var pr_i = -1;
-		// var gr_dist = Infinity;
-		// var gr_i = -1;
-
-		// // logger.debug("Pos PR");
-		// // logger.debug(this.ia.pr.pos);
-		// // logger.debug("Pos GR");
-		// // logger.debug(gr_pos_with_offset);
-
-		// var pr_temp_dist, gr_temp_dist;
-
-		// for (let i = 0; i < dots.length; i++) {
-		// 	pr_temp_dist = this.getDistance(dots[i], this.ia.pr.pos);
-		// 	gr_temp_dist = this.getDistance(dots[i], this.ia.gr.pos);
-		// 	// logger.debug("Pr le pt :");
-		// 	// logger.debug(dots[i]);
-		// 	// logger.debug(pr_temp_dist);
-		// 	// logger.debug(gr_temp_dist);
-
-		// 	// Find closest spot to each robot
-		// 	if ((pr_dist > pr_temp_dist) && (pr_temp_dist < this.ia.pr.size.d * PR_GR_COEF)){
-		// 		pr_dist = pr_temp_dist;
-		// 		pr_i = i;
-		// 	}
-
-		// 	if ((gr_dist > gr_temp_dist) && (gr_temp_dist < this.ia.gr.size.d * PR_GR_COEF)){
-		// 		gr_dist = gr_temp_dist;
-		// 		gr_i = i;
-		// 	}
-		// }
-		
-		// if (pr_i != -1) {
-		// 	// logger.debug("Deleting PR:");
-		// 	// logger.debug(dots[pr_i]);
-		// 	// logger.debug(this.ia.pr.pos);
-
-		// 	// Remove PR spot from list of hokuyo spots
-		// 	dots.splice(pr_i,1);
-
-		// 	if (pr_i < gr_i) {
-		// 		gr_i = gr_i -1;
-		// 	}
-		// } else {
-		// 	logger.warn("On a pas trouvé le PR parmis les points de l'Hokuyo");
-		// }
-
-		// if (gr_i != -1) {
-		// 	// logger.debug("Deleting GR:");
-		// 	// logger.debug(dots[gr_i]);
-		// 	// logger.debug(gr_pos_with_offset);
-		// 	// logger.debug(this.getDistance(dots[gr_i], gr_pos_with_offset));
-
-		// 	// Remove GR spot from list of hokuyo spots
-		// 	dots.splice(gr_i,1);
-		// } else {
-		// 	logger.warn("On a pas trouvé le GR parmis les points de l'Hokuyo");
-		// }
-		// // logger.debug(dots);
+		return spots;
 	}
 
 	/**

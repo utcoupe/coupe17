@@ -72,8 +72,7 @@ module.exports = (function () {
 		/**
 		 * Do we have something on the robots ?
 		 */
-		// logger.debug(typeof we_have_hats);
-		this.we_have_hats = we_have_hats || false;
+		this.we_have_hats = we_have_hats;
 
 		/**
 		 * Number of robots controlled by the IA

@@ -102,7 +102,7 @@ class Robot{
 
 				// distance to each estimated position of the ennemi robots
 				minDist = Infinity;//this.getDistance(dots[0], segPoint);
-
+				
 				for(var k = 0; k < dots.length; k++) {
 					distSegmentPtToHokEcho = this.getDistance(dots[k], segPoint);
 					if (distSegmentPtToHokEcho < minDist) {
