@@ -65,21 +65,28 @@ class Robot{
 	}
 
 	detectCollision(){
-		let collision = false;
+		let segmentsCollision = []; // keeps the collision on every segment of the path
+		let currentSegmentIdx = -Infinity; // index of the segment we are currently the closest to
+		let shortestDistToRobot = Infinity; // distance to the susmentionned segment
 		
 		logger.debug("TODO: detect collision");
 		var pf = this.path;
 		var minDist;
-		// for each path segment
+
+		var SEGMENT_DELTA_D = 30; // (mm) between 2 iterations on a segment to detect colision
+
+		// For each path segment
 		var complete_path = [this.pos].concat(this.path);
-		for (var i = 0; i < complete_path.length-1 && !collision; (i++) ) {
+		for (let i = 0; i < complete_path.length-1; (i++) ) {
 			var segment = [complete_path[i], complete_path[i+1]]; // so segment[0][0] is the x value of the beginning of the segment
 			var segLength = this.getDistance({x:segment[0].x , y:segment[0].y }, {x:segment[1].x , y:segment[1].y });
 			var nthX = (segment[1].x-segment[0].x)*SEGMENT_DELTA_D/segLength; // segment X axis length nth 
 			var nthY = (segment[1].y-segment[0].y)*SEGMENT_DELTA_D/segLength;
+			
+			var distSegmentPtToHokEcho, distSegmentPtToRobot;
 
 			// for each X cm of the segment
-			for (var j = 0; (j*SEGMENT_DELTA_D) < segLength && !collision; (j++)) {
+			for (var j = 0; (j*SEGMENT_DELTA_D) < segLength; (j++)) {
 
 				var segPoint = {
 					x: segment[0].x + nthX*j,
@@ -87,20 +94,37 @@ class Robot{
 				};
 
 				// distance to each estimated position of the ennemi robots
-				minDist = 10000;//this.getDistance(dots[0], segPoint);
+				minDist = Infinity;//this.getDistance(dots[0], segPoint);
 
 				for(var k = 0; k < dots.length; k++) {
-					var tmp = this.getDistance(dots[k], segPoint);
-					if (tmp < minDist) {
-						minDist = tmp;
+					distSegmentPtToHokEcho = this.getDistance(dots[k], segPoint);
+					if (distSegmentPtToHokEcho < minDist) {
+						minDist = distSegmentPtToHokEcho;
+					}
+
+					distSegmentPtToRobot = this.getDistance(this.pos, segPoint);
+					if (distSegmentPtToRobot < shortestDistToRobot) {
+						shortestDistToRobot = distSegmentPtToRobot;
+						currentSegmentIdx = i;
 					}
 				}
 
-				// if one of the dist < security diameter, there will be a collision
+				// if one of the dist < security diameter, there might be a collision (if this ith segment is ahead of us)
 				if (minDist < 450) {
-					collision = true;
+					segmentsCollision.push(true);
+				} else {
+					segmentsCollision.push(false);
 				}
 				
+			}
+		}
+
+		let collision = false;
+
+		// For each path segment THAT IS AHEAD !
+		for (let i = currentSegmentIdx; i < complete_path.length-1 && !collision; (i++) ) {
+			if (segmentsCollision[i]) {
+				collision = true;
 			}
 		}
 
