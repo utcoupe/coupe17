@@ -30,10 +30,13 @@ module.exports = (function () {
 	 * Start timer
 	 */
 	Timer.prototype.start = function() {
+		logger.warn("Match starts !");
+
 		this.t0 = Date.now();
 		this.match_started = true; // le match commence
 		setTimeout(function() {
 			logger.fatal("TIME OVER");
+			this.match_started = false;
 			this.ia.stop();
 		}.bind(this), 84000); 	// the match ends at 1'24 (84 seconds)
 	};

@@ -35,11 +35,23 @@ class Pr extends Robot{
 		};
 
 		/** Initial position */
-		this.initialPos = {
-			x: 142,
-			y: 1000,
-			a: 0,
+		if (this.ia.color == "blue") {
+			this.initialPos = {
+				x: 900,
+				y: 175,
+				a: 1.5707,
+			}
+		} else {
+			this.initialPos = {
+				x: 2100,
+				y: 175,
+				a: 1.5707,
+			}
 		}
+
+		this.pos.x = this.initialPos.x;
+		this.pos.y = this.initialPos.y;
+		this.pos.a = this.initialPos.a;
 
 		/** This robot content */
 		this.content = {

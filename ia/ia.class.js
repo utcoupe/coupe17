@@ -140,18 +140,6 @@ module.exports = (function () {
 					case 'ia.stop':
 						this.stop();
 					break;
-					case 'ia.hok':
-						logger.debug("TODO ia : change for new lidar interface");
-						if ((log_counter++ % 15) == 0) {
-							logger.debug(params);
-						}
-						this.pr.updatePos(params);
-					break;
-					case 'ia.hokfailed':
-						logger.debug("TODO ia : change for new lidar interface");
-						logger.fatal("lidar NOT WORKING, UNPLUG AND REPLUG USB");
-						this.pr.updatePos(params);
-					break;
 					default:
 						logger.warn("Ordre pour l'ia inconnu : "+name);
 				}
@@ -175,7 +163,6 @@ module.exports = (function () {
 	 */
 	Ia.prototype.jack = function() {
 		if(!this.timer.match_started) {
-			logger.info("Démarrage du match");
 			this.timer.start();
 			this.pr.start();
 			this.gr.start();

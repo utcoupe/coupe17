@@ -279,10 +279,10 @@ class Actions{
 			return (this.getPriorityAction(b) - this.getPriorityAction(a)) || (this.getNormAction(pos, a) - this.getNormAction(pos, b));
 		}.bind(this));
 
-		// Print possible actions
-		for(var i in actions_todo) {
-			this.logger.debug('[%d] %s (%d)', this.todo[actions_todo[i]].priority, actions_todo[i], parseInt(this.getNormAction(pos, actions_todo[i])));
-		}
+		// // Print possible actions
+		// for(var i in actions_todo) {
+		// 	this.logger.debug('[%d] %s (%d)', this.todo[actions_todo[i]].priority, actions_todo[i], parseInt(this.getNormAction(pos, actions_todo[i])));
+		// }
 
 		// Va choisir l'action la plus proche, demander le path et faire doAction
 		this.pathDoAction(callback, actions_todo, this.valid_id_do_action, otherRobotPos);
@@ -329,7 +329,7 @@ class Actions{
 			var actionName = actions.shift();
 			var action = this.todo[actionName];
 			var startpoint = this.getNearestStartpoint(this.robot.pos, action.startpoints);
-			this.logger.debug("Asking path to " + actionName);
+			this.logger.debug("Asking path to " + actionName + ' at [' + startpoint.x + ", " + startpoint.y + ']');
 			this.ia.pathfinding.getPath(this.robot.pos, startpoint, otherRobotPos, function(path) {
 				if (this.robot.paused) {
 					this.logger.warn("Path returned but robot has been paused meanwhile, abort");
@@ -417,7 +417,14 @@ class Actions{
 			this.callback = function() {this.logger.warn('callback vide'); };
 			temp();
 		}
-	};
+	}
+
+	/**
+	* the enemy went there, don't do that !
+	*/
+	killObjects (dots) {
+		// this.logger.debug("TODO: kill objects/actions by which the enemy went");
+	}
 	
 }
 
