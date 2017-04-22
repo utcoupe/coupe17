@@ -98,22 +98,22 @@ function launch_script() {
 		install_apt
 	fi
 	
-	printf "Compile urg library (mandatory for hokuyo) ? [Y/n]?"
-	read answer
-	if [ "$answer" = "" ] || [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
-		compile_urg
-	fi
-	
 	printf "Compile archer library (mandatory for 5 GHz usb wifi key) ? [Y/n]?"
 	read answer
 	if [ "$answer" = "" ] || [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
 		compile_archer
 	fi
 	
-	printf "Compile UTCoupe exe (pathfinding and hokuyo) ? [Y/n]?"
+	printf "Compile pathfinding ? [Y/n]?"
 	read answer
 	if [ "$answer" = "" ] || [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
 		compile_pathfinding
+	fi
+	
+	printf "Compiled hokuyo (+ urg mandatory library) ? [Y/n]?"
+	read answer
+	if [ "$answer" = "" ] || [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
+		compile_urg
 		compile_hokuyo
 	fi
 }
