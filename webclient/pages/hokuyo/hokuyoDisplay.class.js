@@ -257,7 +257,7 @@ class HokuyoDisplay {
 
 		this.isBusy = false;
 
-		this.clearMainTimeout = setTimeout(clearMain, 1000);
+		this.clearMainTimeout = setTimeout(this.clearMain, 1000);
 	}
 
 	clearMain() {
