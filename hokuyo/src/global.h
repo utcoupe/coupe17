@@ -16,7 +16,7 @@
 #define MAX_CLUSTERS 50 // nombre maxi de clusters
 #define MAX_ROBOTS 4 // au cas où qu'on précise pas à l'appel du programme
 #define BORDER_MARGIN 50
-#define TIMEOUT 1000
+#define TIMEOUT 100
 
 
 #define CONE_DIAM_MAX 690 // à modifier en fonction du cône utilisé

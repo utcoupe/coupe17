@@ -24,8 +24,9 @@ FILE* logfile;
 
 void exit_handler() {
 	fprintf(logfile, "\n%sClosing lidar(s), please wait...\n", PREFIX);
-	/*if (hok1.urg != 0)
+	if (hok1.urg != 0)
 		urg_disconnect(hok1.urg);
+	/*
 	if (hok2.urg != 0)
 		urg_disconnect(hok2.urg); */
 
