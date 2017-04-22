@@ -52,7 +52,9 @@ class Lidar {
 		clearTimeout(this.status_timer);
 
 		let deltaT = this.ia.timer.get() - this.last_lidar_data;
-		if (!this.emergencyStopped_silence && deltaT > SILENCE_TIMEOUT) {
+		if (!this.emergencyStopped_silence
+			&& !this.emergencyStopped_status
+			&& deltaT > SILENCE_TIMEOUT) {
 			this.mayday("Haven't heard Lidar since " + deltaT + "ms");
 			this.emergencyStopped_silence = true;
 			// Caution, will spam every 200ms !
@@ -108,9 +110,10 @@ class Lidar {
 		logger.debug("TODO: verify deleteOurRobots");
 
 		for(var i in dots) {
-			if(this.norm(dots[i][0], dots[i][1], this.ia.pr.pos.x, this.ia.pr.pos.y) < 150 ||
-				this.norm(dots[i][0], dots[i][1], this.ia.gr.pos.x, this.ia.gr.pos.y) < 150)
+			if(this.norm(dots[i][0], dots[i][1], this.ia.pr.pos.x, this.ia.pr.pos.y) < this.ia.pr.size.d/2 ||
+				this.norm(dots[i][0], dots[i][1], this.ia.gr.pos.x, this.ia.gr.pos.y) < this.ia.gr.size.d/2)
 			dots.splice(i, 1);
+			logger.debug("Found one of our robots at [" + dots[i][0] + ", " + dots[i][1] + "]");
 		}
 		
 		// var pr_dist = Infinity;
@@ -177,13 +180,11 @@ class Lidar {
 	/**
 	* on data coming from Lidar node (old name : pr.updatePos())
 	*/
-	onAllSpot(dots){
+	onAllSpot(robots){
 		if (!this.ia.timer.match_started) {
-			logger.warn("We are receiving data but match hasn't started yet");
+			// logger.warn("We are receiving data but match hasn't started yet");
 			return;
 		}
-
-		var robots = dots.robotsSpots;
 
 		if (this.we_have_hats) {
 			robots = this.deleteOurRobots(robots);
@@ -193,8 +194,12 @@ class Lidar {
 		this.ia.pr.detectCollision(robots);
 		this.ia.gr.detectCollision(robots);
 
+		// Tell the robots about the ennemy pos, and let them react accordingly
+		this.ia.pr.actions.killObjects(robots);
+		this.ia.gr.actions.killObjects(robots);
+
 		// Update data
-		this.ia.data.dots = dots.map(function(val) {
+		this.ia.data.dots = robots.map(function(val) {
 			return {
 				pos: {
 					x: val[0],
@@ -203,21 +208,21 @@ class Lidar {
 				d: 320
 			}
 		});
-		if (dots.length > 0) {
+		if (robots.length > 0) {
 			this.ia.data.erobot[0].pos= {
-				x: dots[0][0],
-				y: dots[0][1]
+				x: robots[0][0],
+				y: robots[0][1]
 			};
 
-			if (dots.length > 1) {
+			if (robots.length > 1) {
 				this.ia.data.erobot[1].pos= {
-					x: dots[1][0],
-					y: dots[1][1]
+					x: robots[1][0],
+					y: robots[1][1]
 				};
 			};
 		};
 		
-		logger.debug("TODO: check update last_lidar_data");
+		// logger.debug("TODO: check update last_lidar_data");
 		this.last_lidar_data = this.ia.timer.get();
 
 		// Status loop
@@ -230,21 +235,26 @@ class Lidar {
 		/** Status of Lidar */
 		this.lidar_status = params.status;
 
-		if (this.nb_hokuyo <= 0
-			|| (this.lidar_status != "ok"
-				&& this.lidar_status != "everythingIsAwesome"))
-		{
-			var reason = "LiDAR status " + this.lidar_status + " with " + this.nb_hokuyo + " active hokuyo(s) doesn't allow us to continue";
-			mayday(reason);
-			this.emergencyStopped_status = true;
-		}
+		if (this.ia.timer.match_started) {		
+			if (!this.emergencyStopped_silence
+				&&
+					(this.nb_hokuyo <= 0
+					|| (this.lidar_status != "ok"
+						&& this.lidar_status != "everythingIsAwesome"))
+				)
+			{
+				var reason = "LiDAR status " + this.lidar_status + " with " + this.nb_hokuyo + " active hokuyo(s) doesn't allow us to continue";
+				this.mayday(reason);
+				this.emergencyStopped_status = true;
+			}
 
-		if (this.emergencyStopped_status
-			&& this.nb_hokuyo > 0
-			&& (this.lidar_status == "ok"
-				|| this.lidar_status == "everythingIsAwesome")) {
-			resume("Hokuyo(s) alive");
-			this.emergencyStopped_status = false;
+			if (this.emergencyStopped_status
+				&& this.nb_hokuyo > 0
+				&& (this.lidar_status == "ok"
+					|| this.lidar_status == "everythingIsAwesome")) {
+				this.resume("Hokuyo(s) alive");
+				this.emergencyStopped_status = false;
+			}
 		}
 	}
 
@@ -258,7 +268,7 @@ class Lidar {
 	parseOrder(from, name, params) {
 		switch (name){
 			case "all":
-				this.onAllSpot(params.dots);
+				this.onAllSpot(params.robotsSpots);
 				// this.updatePos(params.dots);
 				break;
 			case "status":

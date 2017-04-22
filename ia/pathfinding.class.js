@@ -104,7 +104,7 @@ module.exports = (function () {
 
 			var str = ["C"].concat( vecMultiply(start, 1/RATIO) ).concat( vecMultiply(end, 1/RATIO) ).join(SEPARATOR) + "\n";
 			instance.stdin.write( str );
-			logger.info("Query to pathfinding: "+str);
+			logger.info("Query to pathfinding from [" + start[0] + ", " + start[1] + "] to [" + end[0] + ", " + end[1] + "]: " + str);
 		};
 
 		/**
@@ -165,8 +165,9 @@ module.exports = (function () {
 			if (this.pendingQueries.length > 2) {
 				logger.warn("Pathfinding queue is getting long (more than 2 requests waiting)");
 			}
-
+			// logger.debug("Queued !");
 			this.pendingQueries.push(queryParams);
+			// logger.debug(this.pendingQueries);
 		} else {
 			this.prepareAndDoQuery(queryParams);
 		}
@@ -194,7 +195,7 @@ module.exports = (function () {
 
 			let nextQuery = this.pendingQueries.shift();
 			if (!!nextQuery) {
-				this.prepareAndDoQuery(params);
+				this.prepareAndDoQuery(nextQuery);
 			}
 		}.bind(this), 1000);
 		this.sendQuery([params.start.x, params.start.y], [params.end.x, params.end.y], function(path){
@@ -214,7 +215,7 @@ module.exports = (function () {
 
 			let nextQuery = this.pendingQueries.shift();
 			if (!!nextQuery) {
-				this.prepareAndDoQuery(params);
+				this.prepareAndDoQuery(nextQuery);
 			}
 		}.bind(this));
 	};
