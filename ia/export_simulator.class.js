@@ -29,38 +29,40 @@ module.exports = (function () {
 		color = this.ia.color;
 	}
 
-	/**
-	 * Convert x, depends on the team color
-	 * 
-	 * @param {int} x
-	 */
-	function convertX(x) {
-		if(color == "yellow") {
-			return (x-1500)/1000;
-		} else {
-			return (1500-x)/1000;
-		}
-	}
-	/**
-	 * Convert y
-	 * 
-	 * @param {int} y
-	 */
-	function convertY(y) {
-		return (1000-y)/1000;
-	}
-	/**
-	 * Convert Angle, depends on the team color
-	 * 
-	 * @param {int} a Angle
-	 */
-	function convertA(a) {
-		if(color == "yellow") {
-			return a;
-		} else {
-			return (a < 0) ? -Math.PI - a : Math.PI - a;
-		}
-	}
+	// /**
+	//  * Convert x, depends on the team color
+	//  * 
+	//  * @param {int} x
+	//  */
+	// function convertX(x) {
+	// 	if(color == "yellow") {
+	// 		return (x-1500)/1000;
+	// 	} else {
+	// 		return (1500-x)/1000;
+	// 	}
+	// }
+	// /**
+	//  * Convert y
+	//  * 
+	//  * @param {int} y
+	//  */
+	// function convertY(y) {
+	// 	return (1000-y)/1000;
+	// }
+
+	// /**
+	//  * Convert Angle, depends on the team color
+	//  * 
+	//  * @param {int} a Angle
+	//  */
+	// function convertA(a) {
+	// 	if(color == "yellow") {
+	// 		return a;
+	// 	} else {
+	// 		return (a < 0) ? -Math.PI - a : Math.PI - a;
+	// 	}
+	// }
+
 	/**
 	 * Start
 	 */
@@ -82,25 +84,30 @@ module.exports = (function () {
 		
 		data.robots = {
 			gr: {
-				x: convertX(this.ia.gr.pos.x),
-				y: convertY(this.ia.gr.pos.y),
-				a: convertA(this.ia.gr.pos.a)
+				x: this.ia.gr.pos.x, // convertX(this.ia.gr.pos.x),
+				y: this.ia.gr.pos.y, // convertY(this.ia.gr.pos.y),
+				a: this.ia.gr.pos.a, // convertA(this.ia.gr.pos.a)
+				path: [this.ia.gr.pos].concat(this.ia.gr.path).map(function(pos){
+					// return [convertX(pos.x), convertY(pos.y)];
+					return [pos.x, pos.y];
+				})
 			},
 			pr: {
-				x: convertX(this.ia.pr.pos.x),
-				y: convertY(this.ia.pr.pos.y),
-				a: convertA(this.ia.pr.pos.a),
+				x: this.ia.pr.pos.x, // convertX(this.ia.pr.pos.x),
+				y: this.ia.pr.pos.y, // convertY(this.ia.pr.pos.y),
+				a: this.ia.pr.pos.a, // convertA(this.ia.pr.pos.a),
 				path: [this.ia.pr.pos].concat(this.ia.pr.path).map(function(pos){
-					return [convertX(pos.x), convertY(pos.y)];
+					// return [convertX(pos.x), convertY(pos.y)];
+					return [pos.x, pos.y];
 				})
 			},
 			egr: {
-				x: convertX(this.ia.data.erobot[0].pos.x),
-				y: convertY(this.ia.data.erobot[0].pos.y),
+				x: this.ia.data.erobot[0].pos.x, // convertX(this.ia.data.erobot[0].pos.x),
+				y: this.ia.data.erobot[0].pos.y // convertY(this.ia.data.erobot[0].pos.y),
 			},
 			epr: {
-				x: convertX(this.ia.data.erobot[1].pos.x),
-				y: convertY(this.ia.data.erobot[1].pos.y)
+				x: this.ia.data.erobot[1].pos.x, // convertX(this.ia.data.erobot[1].pos.x),
+				y: this.ia.data.erobot[1].pos.y // convertY(this.ia.data.erobot[1].pos.y)
 			}
 		};
 		// data.dynamic = this.ia.data.dynamic.map(function(o){
