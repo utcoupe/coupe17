@@ -24,7 +24,7 @@ os48::Sync SerialSender::senderSync;
 //}
 
 SerialSender::SerialSender() {
-    SERIAL_MAIN.begin(BAUDRATE, SERIAL_TYPE);
+    Serial.begin(BAUDRATE, SERIAL_TYPE);
 }
 
 void SerialSender::SerialSend(SerialSendEnum level, const char* data, va_list args) {
@@ -149,8 +149,8 @@ void SerialSender::SerialSendTask() {
             {
                 dataToPrint = dataToSend.pop();
             }
-            SERIAL_MAIN.println(dataToPrint);
-            SERIAL_MAIN.flush();
+            Serial.println(dataToPrint);
+            Serial.flush();
         }
     }
 }
