@@ -4,9 +4,9 @@ IA des robots
 ## Ordres de l'IA aux robots
 
 ### Ordres communs
-- `collision` ou `stop` ?
 - `send_message`
 	- `name` : demande d'envoyer un message avec un certain nom à l'ia
+	- `params` : paramètres à envoyer en pj du message
 - `asserv.`... :
 	- ...`set_pos` : définir la position actuelle
 		- `x`
@@ -17,22 +17,29 @@ IA des robots
 		- `y`
 		- `direction` (`avant`, `arrière`, `osef`) : si le sens de déplacement importe
 	- ...`goa` : tourner le robot pour prendre cet angle
-- `do_start_sequence` : demande de fermer et ouvrir tous les actionneurs avant le départ
+- `do_start_sequence` : demande de se placer, fermer et ouvrir tous les actionneurs avant le départ
+- `collision` : stopper le robot, vider les files
+- `pause`: stopper le robot, concerver les files et l'action en cours
+- `resume` : reprendre l'ordre en cours au moment du pause
+- `stop` : stopper le robot définitivement
+
 
 ### vers PR
 - `take_module`
 	- différence entre fusée et module seul ?
-- `drop_module`
+- `prepare_module` : engage un module dans les servos de drop
 	- `color` (`yellow`, `blue`, `null`) : tourner le module avant de le poser (`null` : on ne le tourne pas)
+- `drop_module` : laisse tomber un module une fois préparé
 	- `pushTowards` (`left`, `right`, `don't`) : pousser le module une fois posé
 
 ### vers GR
-- `funny_action`
-- `swallow_balls`
+- `funny_action` : lancer la fusée
+- `swallow_balls` : démarrer l'aspirateur de balles
 	- est-ce qu'on aspire pas les balles en permanence ?
 - `throw_balls`
 	- `duration` : temps en ms d'allumage des moteur
 	- `speed` : vitesse du canon (unité à définir)
+- `open_trunk` : ouvrir le coffre à balles
 
 
 ## Ancienne architecture
