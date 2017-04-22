@@ -19,62 +19,8 @@ QueueList<String> SerialSender::dataToSend;
 //os48::Scheduler* SerialSender::scheduler = os48::Scheduler::get();
 os48::Sync SerialSender::senderSync;
 
-//void SerialSendC(SerialSendEnum level, String data) {
-//    SerialSender::SerialSend(level, data);
-//}
-
 SerialSender::SerialSender() {
     Serial.begin(BAUDRATE, SERIAL_TYPE);
-}
-
-void SerialSender::SerialSend(SerialSendEnum level, const char* data, va_list args) {
-    int i, j, count = 0;
-    String serialData, tmpString = "";
-    if (level <= DEBUG_LEVEL) {
-        for (i = 0, j = 0; data[i] != '\0'; i++) {
-            if (data[i] == '%') {
-                count++;
-
-                tmpString = CharArrayToString((data + j), i - j);
-                serialData.concat(tmpString);
-
-                switch (data[++i]) {
-                    case 'i':
-                    case 'd':
-                        tmpString = String(va_arg(args, int));
-                        break;
-                    case 'l':
-                        tmpString = String(va_arg(args, long));
-                        break;
-                    case 'f': //tmpString = String(va_arg(args, float), 4);
-                        break;
-                    case 'c':
-                        tmpString = String((char) va_arg(args, int));
-                        break;
-                    case 's':
-                        tmpString = String(va_arg(args, char *));
-                        break;
-                    case '%':
-                        Serial.print("%");
-                        break;
-                    default:;
-                };
-                serialData.concat(tmpString);
-                j = i + 1;
-            }
-        };
-
-        if (i > j) {
-            tmpString = CharArrayToString((data + j), i - j);
-            serialData.concat(tmpString);
-        }
-
-        OS48_NO_CS_BLOCK
-        {
-            dataToSend.push(serialData);
-        }
-        senderSync.releaseOne();
-    }
 }
 
 void SerialSender::SerialSend(SerialSendEnum level, String data) {
@@ -120,11 +66,11 @@ void SerialSender::SerialSend(SerialSendEnum level, const char* str, ...) {
                         Serial.print("%");
                         break;
                     default:;
-                };
+                }
                 serialData.concat(tmpString);
                 j = i + 1;
             }
-        };
+        }
         va_end(argv);
 
         if (i > j) {
@@ -158,7 +104,7 @@ void SerialSender::SerialSendTask() {
 String SerialSender::CharArrayToString(const char * str, unsigned char size) {
     String returnedString = "";
     if (str && size > 0 && size < 51) {
-        char tmpBuffer[50];
+        static char tmpBuffer[50];
         memcpy(tmpBuffer, str, size);
         tmpBuffer[size] = '\0';
         returnedString = String(tmpBuffer);

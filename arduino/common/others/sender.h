@@ -38,7 +38,6 @@ public:
     //to be used everywhere
     //todo check why its only working with minimal 1 variadic argument
     static void SerialSend(SerialSendEnum level, const char* data, ...);
-    static void SerialSend(SerialSendEnum level, const char* data, va_list args);
     static void SerialSend(SerialSendEnum level, String data);
     //to be used in the task
     static void SerialSendTask();

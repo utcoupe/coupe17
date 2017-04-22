@@ -2,7 +2,12 @@
 // Created by tfuhrman on 21/04/17.
 //
 
+#include <Arduino.h>
+
+#include <stdio.h>
+#include <stdint.h>
 #include "protocol.h"
+#include "sender.h"
 
 //todo find a way for the size
 servoInformation servoData[7]= {{PR_MODULE_ARM, OPEN, 90},
@@ -14,8 +19,17 @@ servoInformation servoData[7]= {{PR_MODULE_ARM, OPEN, 90},
              {PR_MODULE_ROTATE, OPEN, 90},
 };
 
+//order is order;id_servo;params
 void parseAndExecuteOrder(const String& order) {
-
+    static char receivedOrder[15];
+    order.toCharArray(receivedOrder, order.length());
+    char orderChar = receivedOrder[ORDER_INDEX];
+//    uint16_t order_id = (uint16_t)(receivedOrder[ID_INDEX+1] << 8) + (uint16_t)(receivedOrder[ID_INDEX]);
+    uint16_t order_id = (uint16_t) atoi(&receivedOrder[ID_INDEX]);
+    SerialSender::SerialSend(SERIAL_INFO, "order : %c, id : %d", orderChar, order_id);
+//    String order_id_s = String((int)order_id);
+//    SerialSender::SerialSend(SERIAL_INFO, order_id_s);
+//    SerialSender::SerialSend(SERIAL_INFO, order);
 }
 
 /*

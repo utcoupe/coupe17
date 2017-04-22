@@ -7,6 +7,7 @@
 
 #include "sender.h"
 #include "parameters.h"
+#include "protocol.h"
 
 // Flag to know if a computer is connected to the arduino
 static unsigned char flagConnected = 0;
@@ -32,30 +33,33 @@ bool mainTask() {
 }
 
 void serialReadTask() {
-    static char receivedCommand[20];
+//    static char receivedCommand[20];
     String receivedString;
     while (true) {
+        //readString has a default timeout of 1s
         receivedString = Serial.readString();
         receivedString.replace("\n", "");
         if (receivedString != "") {
             if (receivedString == "S") {
                 flagConnected = true;
+            } else {
+                parseAndExecuteOrder(receivedString);
             }
-            SerialSender::SerialSend(SERIAL_INFO, receivedString);
+//            SerialSender::SerialSend(SERIAL_INFO, receivedString);
 //            Serial.println(receivedString);
-            Serial.flush();
-            delay(1000);
+//            Serial.flush();
+//            delay(1000);
         }
-        delay(50);
+//        delay(50);
     }
 }
 
 void setup() {
     Serial.begin(BAUDRATE, SERIAL_TYPE);
 
-    serial_send_task = scheduler->createTask(&SerialSender::SerialSendTask, 150);
-    main_task = scheduler->createTaskTimer(&mainTask, 250, (uint32_t)(DT*1000));
-    serial_read_task = scheduler->createTask(&serialReadTask, 100);
+    serial_send_task = scheduler->createTask(&SerialSender::SerialSendTask, 200);
+    main_task = scheduler->createTaskTimer(&mainTask, 200, (uint32_t)(DT*1000));
+    serial_read_task = scheduler->createTask(&serialReadTask, 200);
 
     scheduler->start();
 }

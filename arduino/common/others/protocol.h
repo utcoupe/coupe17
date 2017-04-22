@@ -11,11 +11,15 @@
 
 class String;
 
+//todo ack format ?
+
 // BEGIN_ORDERS - Do not remove this comment
 #define START               'S'     //no args, start the program
 #define HALT                'h'     //no args, halt the program
-#define PARAMETER           'p'     //id_servo(int);position(int);value(int), respond TODO, position = open or close
-#define MODULE_ROTATE       'r'     //c(int) = 0 (whatever color), 1 (blue), 2 (yellow), respond TODO
+#define PARAMETER           'p'     //servo_id(int);position(int);value(int), respond TODO, position = open or close
+#define MODULE_ROTATE       'r'     //color(int) = 0 (whatever color), 1 (blue), 2 (yellow), respond TODO
+#define SERVO_OPEN          'o'     //servo_id(int), respond ack when done
+#define SERVO_CLOSE         'c'     //servo_id(int), respond ack when done
 #define PR_MODULE_ARM       0       //servo controlling the arm which gets the module
 #define PR_MODULE_DROP_R    1       //right servo controlling the drop of the module
 #define PR_MODULE_DROP_L    2       //left servo controlling the drop of the module
@@ -38,6 +42,9 @@ struct servoInformation {
     SERVO_POSITION position;
     int value;
 };
+
+#define ORDER_INDEX 0
+#define ID_INDEX    2
 
 extern servoInformation servoData[];
 
