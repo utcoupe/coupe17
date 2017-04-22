@@ -59,6 +59,9 @@ class Robot{
 		/** Team color */
 		this.color = color;
 
+		/** Pause activated and asked to robot */
+		this.paused = false;
+
 		/** Robot actions */
 		this.actions = null;
 		this.Actions = require('./actions.class.js');
@@ -198,6 +201,7 @@ class Robot{
 	 */
 	pause () {
 		// Instead of deleting the current action (like collision), we just pause
+		this.paused = true;
 		this.ia.client.send(this.name, "pause");
 	}
 
@@ -205,6 +209,7 @@ class Robot{
 	 * Resume
 	 */
 	resume () {
+		this.paused = false;
 		this.ia.client.send(this.name, "resume");
 	}
 
@@ -212,6 +217,7 @@ class Robot{
 	 * Stop
 	 */
 	stop () {
+		this.paused = true;
 		// logger.debug("Closing " + this.name);
 		this.ia.client.send(this.name, 'stop');
 	}

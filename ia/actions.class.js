@@ -331,6 +331,11 @@ class Actions{
 			var startpoint = this.getNearestStartpoint(this.robot.pos, action.startpoints);
 			this.logger.debug("Asking path to " + actionName);
 			this.ia.pathfinding.getPath(this.robot.pos, startpoint, otherRobotPos, function(path) {
+				if (this.robot.paused) {
+					this.logger.warn("Path returned but robot has been paused meanwhile, abort");
+					return;
+				}
+
 				if(path !== null) {
 					this.robot.path = path;
 					this.doAction(callback, action, startpoint, id);

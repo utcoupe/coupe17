@@ -51,6 +51,7 @@ class Gr extends Robot{
 	}
 
 	funnyAction () {
+		logger.info("Doing funny action, Mars, here we are ! Yeeaahh !");
 		this.ia.client.send(this.name, 'collision');		// ask to stop + flush queues
 		this.ia.client.send(this.name, "funny_action");
 	}

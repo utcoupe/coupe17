@@ -30,7 +30,11 @@ module.exports = (function () {
 	function Pathfinding(ia) {
 		/** Ia */
 		this.ia = ia;
-		var fifo = [];
+		var callbacksFifo = [];
+
+		this.busy = false;			// true if a request to the C program has already been made and hasn't returned yet
+		this.pendingQueries = [];	// fifo queue of queries to the pathfinding
+
 
 		/*var instance_pkill = Child_process.spawn("pkill", ["pathfinding"]);
 		instance_pkill.on('error', function(err){
@@ -95,7 +99,7 @@ module.exports = (function () {
 		 * @param cb
 		 */
 		this.sendQuery = function(start, end, cb){
-			fifo.push(cb || true);
+			callbacksFifo.push(cb || true);
 
 
 			var str = ["C"].concat( vecMultiply(start, 1/RATIO) ).concat( vecMultiply(end, 1/RATIO) ).join(SEPARATOR) + "\n";
@@ -136,7 +140,7 @@ module.exports = (function () {
 				if(path.length > 0) ret = path;
 			}
 
-			var callback = fifo.shift();
+			var callback = callbacksFifo.shift();
 			callback(ret); // if(typeof callback === "function") 
 		}
 
@@ -150,13 +154,53 @@ module.exports = (function () {
 	 * @param callback
 	 */
 	Pathfinding.prototype.getPath = function (start, end, otherRobotPos, callback) {
-		this.ia.pathfinding.updateMap(otherRobotPos);
+		var queryParams = {
+			start: start,
+			end: end,
+			otherRobotPos: otherRobotPos,
+			callback: callback
+		};
+
+		if (this.busy) {
+			if (this.pendingQueries.length > 2) {
+				logger.warn("Pathfinding queue is getting long (more than 2 requests waiting)");
+			}
+
+			this.pendingQueries.push(queryParams);
+		} else {
+			this.prepareAndDoQuery(queryParams);
+		}
+	};
+
+	/**
+	 * prepareAndDoQuery
+	 * DO NOT call this from outside, call getPath instead
+	 * 
+	 * @param start
+	 * @param end
+	 * @param callback
+	 */
+	Pathfinding.prototype.prepareAndDoQuery = function(params) {
+		this.busy = true;
+
+		this.ia.pathfinding.updateMap(params.otherRobotPos);
+
+		// Leave 1000 ms to the C program to answer, then abort
 		this.timeout_getpath = setTimeout(function() {
-			callback(null);
+			logger.warn("Pathfinding failed to answer in 1s !");
+			this.busy = false;
+			params.callback(null);
 			callback = function() {};
-		}, 1000);
-		this.sendQuery([start.x, start.y], [end.x, end.y], function(path){
+
+			let nextQuery = this.pendingQueries.shift();
+			if (!!nextQuery) {
+				this.prepareAndDoQuery(params);
+			}
+		}.bind(this), 1000);
+		this.sendQuery([params.start.x, params.start.y], [params.end.x, params.end.y], function(path){
 			clearTimeout(this.timeout_getpath);
+			this.busy = false;
+
 			if(path !== null) {
 				path.shift();
 				path = path.map(function(val) {
@@ -166,7 +210,12 @@ module.exports = (function () {
 					};
 				});
 			}
-			callback(path);
+			params.callback(path);
+
+			let nextQuery = this.pendingQueries.shift();
+			if (!!nextQuery) {
+				this.prepareAndDoQuery(params);
+			}
 		}.bind(this));
 	};
 
