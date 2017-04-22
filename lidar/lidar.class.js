@@ -19,6 +19,7 @@ module.exports = (function () {
 	var Y_MIN_ZONE = 0;
 	var CLUSTER_DISTANCE = 5;
 	var CLUSTER_K = 6;
+	// var SILENCE_TIMEOUT = 300;
 
 	/**
 	 * Lidar Constructor
@@ -42,14 +43,14 @@ module.exports = (function () {
 
 		this.hokuyoPositions = {
 			one: {
-	 			"x": -6.2, //-6.2
-	 			"y": -6.2,	//-6.2
+	 			"x": -4, //-6.2
+	 			"y": -4,	//-6.2
 	 			"w": 0 ,	//0
 				"decalage" : [],
 				"init" : 3
 	 		},
 			two: {
-	 			"x": 306.2, //306.2
+	 			"x": 304, //306.2
 	 			"y": 100,	//100
 	 			"w": 180 ,	//180
 				"decalage" : [],
@@ -111,7 +112,7 @@ module.exports = (function () {
 
 		this.statusTimer = setTimeout( function(){
 			this.updateStatus();
-		}.bind(this), 200);
+		}.bind(this), 2*DELTA_T /*SILENCE_TIMEOUT*/);
 	};
 
 	Lidar.prototype.changeStatus = function(newStatus) {
