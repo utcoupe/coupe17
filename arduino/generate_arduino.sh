@@ -24,10 +24,10 @@ function upload_program() {
 }
 
 function ask_user() {
-	printf "What's the target (nano, uno, leonardo, mega2560) ?"
+	printf "What's the target (nano328, uno, leonardo, mega2560) ?"
 	read answer
 	#TODO shorter names ? (eg mega...)
-	if [ "$answer" = "nano" ] || [ "$answer" = "uno" ] || [ "$answer" = "leonardo" ] || [ "$answer" = "mega2560" ]; then
+	if [ "$answer" = "nano328" ] || [ "$answer" = "uno" ] || [ "$answer" = "leonardo" ] || [ "$answer" = "mega2560" ]; then
 		USER_TARGET="$answer"
 	fi
 	
@@ -44,7 +44,7 @@ function ask_user() {
 	fi
 	
 	if [ "$USER_ROBOT" = "" ] || [ "$USER_ROBOT" = "" ] || [ "$USER_PROGRAM" = "" ]; then
-		printf "Incorrect parameters, please relaunch the script with correct parameters..."
+		printf "Incorrect parameters, please relaunch the script with correct parameters...\n"
 		exit 1
 	fi
 }
