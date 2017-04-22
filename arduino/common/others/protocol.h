@@ -38,13 +38,13 @@ enum MODULE_COLOR {
 };
 
 struct servoInformation {
-    int servoId;
+    uint8_t servoId;
     SERVO_POSITION position;
-    int value;
+    uint8_t value;
 };
 
-#define ORDER_INDEX 0
-#define ID_INDEX    2
+#define ORDER_INDEX (uint8_t)0
+#define ID_INDEX    (uint8_t)2
 
 extern servoInformation servoData[];
 
@@ -57,5 +57,9 @@ static const unsigned int servoMapping[4][2] = {{PR_MODULE_ARM, PR_MODULE_ARM_PI
                                                 {PR_MODULE_ROTATE, PR_MODULE_ROTATE_PIN},};
 
 void parseAndExecuteOrder(const String& order);
+
+uint8_t getLog10(const uint16_t number);
+
+void changeServoParameter(const uint8_t servo_id, const SERVO_POSITION servo_position, const uint8_t servo_value);
 
 #endif //OTHERS_PROTOCOL_H
