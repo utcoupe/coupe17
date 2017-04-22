@@ -21,4 +21,7 @@
 #define HZ 100
 #define DT (1.0/HZ)
 
+//todo add an enum with the different debug levels available
+#define DEBUG_LEVEL 2
+
 #endif //PARAMETERS_H
