@@ -67,14 +67,18 @@ class Robot{
 		this.Actions = require('./actions.class.js');
 	}
 
-	detectCollision(){
+	getDistance (spot1, spot2) {
+		return Math.sqrt(Math.pow(spot1.x - spot2.x, 2) + Math.pow(spot1.y - spot2.y, 2));
+	};
+
+	detectCollision(dots){
 		let segmentsCollision = []; // keeps the collision on every segment of the path
 		let currentSegmentIdx = -Infinity; // index of the segment we are currently the closest to
 		let shortestDistToRobot = Infinity; // distance to the susmentionned segment
 		
-		logger.debug("TODO: detect collision");
+		// logger.debug("TODO: detect collision");
 		var pf = this.path;
-		var minDist;
+		var minDist, dotIdx;
 
 		var SEGMENT_DELTA_D = 30; // (mm) between 2 iterations on a segment to detect colision
 
@@ -103,6 +107,7 @@ class Robot{
 					distSegmentPtToHokEcho = this.getDistance(dots[k], segPoint);
 					if (distSegmentPtToHokEcho < minDist) {
 						minDist = distSegmentPtToHokEcho;
+						dotIdx = k;
 					}
 
 					distSegmentPtToRobot = this.getDistance(this.pos, segPoint);
@@ -132,15 +137,15 @@ class Robot{
 		}
 
 		if (collision) {
-			this.onCollision();
+			this.onCollision(dots[dotIdx]);
 		}
 	}
 
 	/**
 	 * What to do if a collision happens
 	 */
-	onCollision() {
-		logger.info('Collision');
+	onCollision(pos) {
+		logger.warn('Collision detected between an enemy and ' + this.name + ' at [' + pos[0] + ", " + pos[1] + ']');
 		this.path = [];
 		this.ia.client.send(this.name, "collision");
 
@@ -153,22 +158,14 @@ class Robot{
 	 * Send initial position
 	 */
 	sendInitialPos () {
-		this.ia.client.send(this.name, "asserv.setpos", {
-			x: this.initialPos.x,
-			y: this.initialPos.y,
-			a: this.initialPos.a
-		});
+		this.ia.client.send(this.name, "asserv.setpos", this.initialPos);
 	};
 
 	/**
 	 * Place robot before starting the match
 	 */
 	place () {
-		this.ia.client.send(this.name, "asserv.setpos", {
-			x: this.initialPos.x,
-			y: this.initialPos.y,
-			a: this.initialPos.a
-		});
+		this.ia.client.send(this.name, "asserv.setpos", this.initialPos);
 
 		this.ia.client.send(this.name, "do_start_sequence", {});
 	}

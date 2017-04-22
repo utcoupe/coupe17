@@ -230,7 +230,7 @@ class Lidar {
 		/** Status of Lidar */
 		this.lidar_status = params.status;
 
-		if (this.nb_hokuyo == 0
+		if (this.nb_hokuyo <= 0
 			|| (this.lidar_status != "ok"
 				&& this.lidar_status != "everythingIsAwesome"))
 		{
