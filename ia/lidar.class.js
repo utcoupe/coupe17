@@ -92,7 +92,6 @@ class Lidar {
 
 	mayday(reason){
 		this.emergencyStopped_status = true;
-		// logger.warn("TODO Lidar: throw status using events");
 		logger.error("Mayday called, the given reason is :");
 		logger.error(reason);
 		this.events.emit("emergencyStop", reason);
@@ -175,6 +174,9 @@ class Lidar {
 		// // logger.debug(dots);
 	}
 
+	/**
+	* on data coming from Lidar node (old name : pr.updatePos())
+	*/
 	onAllSpot(dots){
 		if (!this.ia.timer.match_started) {
 			logger.warn("We are receiving data but match hasn't started yet");

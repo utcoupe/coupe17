@@ -68,56 +68,82 @@ class Robot{
 		let collision = false;
 		
 		logger.debug("TODO: detect collision");
-		// var pf = this.path;
-		// var minDist;
-		// // for each path segment
-		// var complete_path = [this.pos].concat(this.path);
-		// for (var i = 0; i < complete_path.length-1 && !collision; (i++) ) {
-		// 	var segment = [complete_path[i], complete_path[i+1]]; // so segment[0][0] is the x value of the beginning of the segment
-		// 	var segLength = this.getDistance({x:segment[0].x , y:segment[0].y }, {x:segment[1].x , y:segment[1].y });
-		// 	var nthX = (segment[1].x-segment[0].x)*SEGMENT_DELTA_D/segLength; // segment X axis length nth 
-		// 	var nthY = (segment[1].y-segment[0].y)*SEGMENT_DELTA_D/segLength;
+		var pf = this.path;
+		var minDist;
+		// for each path segment
+		var complete_path = [this.pos].concat(this.path);
+		for (var i = 0; i < complete_path.length-1 && !collision; (i++) ) {
+			var segment = [complete_path[i], complete_path[i+1]]; // so segment[0][0] is the x value of the beginning of the segment
+			var segLength = this.getDistance({x:segment[0].x , y:segment[0].y }, {x:segment[1].x , y:segment[1].y });
+			var nthX = (segment[1].x-segment[0].x)*SEGMENT_DELTA_D/segLength; // segment X axis length nth 
+			var nthY = (segment[1].y-segment[0].y)*SEGMENT_DELTA_D/segLength;
 
-		// 	// for each X cm of the segment
-		// 	for (var j = 0; (j*SEGMENT_DELTA_D) < segLength && !collision; (j++)) {
+			// for each X cm of the segment
+			for (var j = 0; (j*SEGMENT_DELTA_D) < segLength && !collision; (j++)) {
 
-		// 		var segPoint = {
-		// 			x: segment[0].x + nthX*j,
-		// 			y: segment[0].y + nthY*j
-		// 		};
+				var segPoint = {
+					x: segment[0].x + nthX*j,
+					y: segment[0].y + nthY*j
+				};
 
-		// 		// distance to each estimated position of the ennemi robots
-		// 		minDist = 10000;//this.getDistance(dots[0], segPoint);
+				// distance to each estimated position of the ennemi robots
+				minDist = 10000;//this.getDistance(dots[0], segPoint);
 
-		// 		for(var k = 0; k < dots.length; k++) {
-		// 			var tmp = this.getDistance(dots[k], segPoint);
-		// 			if (tmp < minDist) {
-		// 				minDist = tmp;
-		// 			}
-		// 		}
+				for(var k = 0; k < dots.length; k++) {
+					var tmp = this.getDistance(dots[k], segPoint);
+					if (tmp < minDist) {
+						minDist = tmp;
+					}
+				}
 
-		// 		// if one of the dist < security diameter, there will be a collision
-		// 		if (minDist < 450) {
-		// 			collision = true;
-		// 		}
+				// if one of the dist < security diameter, there will be a collision
+				if (minDist < 450) {
+					collision = true;
+				}
 				
-		// 	}
-		// }
+			}
+		}
 
 		if (collision) {
 			this.onCollision();
 		}
 	}
 
+	/**
+	 * What to do if a collision happens
+	 */
 	onCollision() {
-		logger.debug("TODO: collision handler");
-
 		logger.info('Collision');
 		this.path = [];
 		this.ia.client.send(this.name, "collision");
 
 		this.actions.collision();
 		this.loop();
+	}
+
+
+	/**
+	 * Send initial position
+	 */
+	sendInitialPos () {
+		this.ia.client.send(this.name, "asserv.setpos", {
+			x: this.initialPos.x,
+			y: this.initialPos.y,
+			a: this.initialPos.a
+		});
+	};
+
+	/**
+	 * Place robot before starting the match
+	 */
+	place () {
+		this.ia.client.send(this.name, "asserv.setpos", {
+			x: this.initialPos.x,
+			y: this.initialPos.y,
+			a: this.initialPos.a
+		});
+
+		this.ia.client.send(this.name, "do_start_sequence", {});
 	}
 
 	/**
@@ -133,28 +159,29 @@ class Robot{
 	 */
 	loop () {
 		// Called every time we have finished an action
+
+		// Get the other robot pos not to touch it
+		let otherRobotPos = this.name == "pr" ? this.ia.gr.pos : this.ia.pr.pos;
+
 		logger.debug(this.name + ' doing next action');
 		this.actions.doNextAction(function() {
 			this.loop();
-		}.bind(this));
+		}.bind(this), otherRobotPos);
 	}
 
 	/**
-	 * Pause
+	 * Pause in case of fatal (temporary) loss
 	 */
 	pause () {
-		logger.debug("TODO: pause robots (collision OR stop order ???)");
-		this.path = [];
-		this.ia.client.send(this.name, "collision");
-		this.actions.collision();
+		// Instead of deleting the current action (like collision), we just pause
+		this.ia.client.send(this.name, "pause");
 	}
 
 	/**
 	 * Resume
 	 */
 	resume () {
-		logger.debug("TODO: resume robots");
-		this.loop();
+		this.ia.client.send(this.name, "resume");
 	}
 
 	/**
@@ -164,21 +191,6 @@ class Robot{
 		// logger.debug("Closing " + this.name);
 		this.ia.client.send(this.name, 'stop');
 	}
-
-
-	/**
-	 * Send initial position
-	 */
-	sendInitialPos () {
-		this.ia.client.send(this.name, "setpos", {
-			x: this.initialPos.x,
-			y: this.initialPos.y,
-			a: this.initialPos.a,
-			color: this.color
-		});
-
-		logger.debug("TODO: send init sequence of movements");
-	};
 
 
 	/**
@@ -217,9 +229,9 @@ class Robot{
 				// Robot si asking its initial position
 				this.sendInitialPos();
 			break;
-			// case 'placer':
-			// 	this.place();
-			// break;
+			case 'place':
+				this.place();
+			break;
 			case 'actions':
 				this.actions.parseOrder(from, orderSubname, params);
 			break;

@@ -51,7 +51,8 @@ class Gr extends Robot{
 	}
 
 	funnyAction () {
-		logger.debug("TODO: funny action");
+		this.ia.client.send(this.name, 'collision');		// ask to stop + flush queues
+		this.ia.client.send(this.name, "funny_action");
 	}
 	
 	parseOrder (from, name, params) {

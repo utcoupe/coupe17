@@ -262,7 +262,7 @@ class Actions{
 	 * 
 	 * @param callback
 	 */
-	doNextAction(callback) {
+	doNextAction(callback, otherRobotPos) {
 		this.valid_id_do_action++;
 		var actions_todo = [];
 
@@ -285,7 +285,7 @@ class Actions{
 		}
 
 		// Va choisir l'action la plus proche, demander le path et faire doAction
-		this.pathDoAction(callback, actions_todo, this.valid_id_do_action);
+		this.pathDoAction(callback, actions_todo, this.valid_id_do_action, otherRobotPos);
 	};
 
 	/**
@@ -319,7 +319,7 @@ class Actions{
 	 * @param {Object} actions
 	 * @param {int} id
 	 */
-	pathDoAction(callback, actions, id) {
+	pathDoAction(callback, actions, id, otherRobotPos) {
 		if(id != this.valid_id_do_action) {
 			this.logger.Debug('id different');
 			return;
@@ -330,20 +330,20 @@ class Actions{
 			var action = this.todo[actionName];
 			var startpoint = this.getNearestStartpoint(this.robot.pos, action.startpoints);
 			this.logger.debug("Asking path to " + actionName);
-			this.ia.pathfinding.getPath(this.robot.pos, startpoint, function(path) {
+			this.ia.pathfinding.getPath(this.robot.pos, startpoint, otherRobotPos, function(path) {
 				if(path !== null) {
 					this.robot.path = path;
 					this.doAction(callback, action, startpoint, id);
 				} else {
 					this.logger.debug("Path to " + actionName + " not found");
 					// Si le pathfinding foire, on fait la deuxième action la plus importante
-					this.pathDoAction(callback, actions, id);
+					this.pathDoAction(callback, actions, id, otherRobotPos);
 				}
 			}.bind(this));
 		} else {
 			this.logger.debug("all paths not found");
 			setTimeout(function() {
-				this.doNextAction(callback);
+				this.doNextAction(callback, otherRobotPos);
 			}.bind(this), 500);
 		}
 	};
@@ -369,14 +369,14 @@ class Actions{
 
 		this.logger.debug('Current action : %s (%d;%d;%d)', action.name, startpoint.x, startpoint.y, startpoint.a);
 		this.robot.path.map(function(checkpoint) {
-			this.ia.client.send(this.robot.name, "goxy", {
+			this.ia.client.send(this.robot.name, "asserv.goxy", {
 				x: checkpoint.x,
 				y: checkpoint.y,
 				direction: action.direction
 			});
 		}, this);
 		if(!!startpoint.a) {
-			this.ia.client.send(this.robot.name, "goa", {
+			this.ia.client.send(this.robot.name, "asserv.goa", {
 				a: startpoint.a
 			});
 		}
@@ -389,11 +389,9 @@ class Actions{
 		this.ia.client.send(this.robot.name, action.orders[0].name, action.orders[0].params);
 		// }.bind(this));
 		this.ia.client.send(this.robot.name, "send_message", {
-			name: "actions.action_finished"
+			name: "actions.action_finished",
+			action_name: action.name
 		});
-
-		// // Set object to "done" ! XXX
-		this.logger.debug("Set object to 'done' !");
 
 		// // Change action and its "to be killed" actions to state done
 

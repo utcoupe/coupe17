@@ -149,8 +149,8 @@ module.exports = (function () {
 	 * @param end
 	 * @param callback
 	 */
-	Pathfinding.prototype.getPath = function (start, end, callback) {
-		this.ia.pathfinding.updateMap();
+	Pathfinding.prototype.getPath = function (start, end, otherRobotPos, callback) {
+		this.ia.pathfinding.updateMap(otherRobotPos);
 		this.timeout_getpath = setTimeout(function() {
 			callback(null);
 			callback = function() {};
@@ -184,7 +184,7 @@ module.exports = (function () {
 	/**
 	 * Update Map
 	 */
-	Pathfinding.prototype.updateMap = function () {
+	Pathfinding.prototype.updateMap = function (otherRobotPos) {
 		//[ [x, y, r], ... ]
 
 		// var objects = [];
