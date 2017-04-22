@@ -67,7 +67,7 @@ module.exports = (function () {
 		// If other color
 		logger.warn("TODO: change Lidar color depending ours");
 
-		this.sendStatus(this.status);
+		this.sendStatus(this.status, 0);
 
 
 		// Status loop
@@ -118,7 +118,7 @@ module.exports = (function () {
 	Lidar.prototype.changeStatus = function(newStatus) {
 		logger.info("New lidar status : " + newStatus);
 		this.status = newStatus;
-		this.sendStatus(this.status);
+		this.sendStatus(this.status, this.hokuyosWorking().length);
 	};
 
 	Lidar.prototype.start = function(color) {
@@ -244,8 +244,12 @@ module.exports = (function () {
 			};
 
 			// Send it to AI
-			this.send("lidar.all", toBeSent);
-			this.lastDataSent = Date.now();
+			if(this.status == "error"){
+				logger.warn("Fell in an error while computing !");
+			} else {
+                                this.send("lidar.all", toBeSent);
+                                this.lastDataSent = Date.now();
+                        }
 		}
 
 		this.updateStatus();

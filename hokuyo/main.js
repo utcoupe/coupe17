@@ -330,10 +330,6 @@
 		lastStatus = status;
 
 		client.send("server", "server.childrenUpdate", lastStatus);
-		client.send("ia", "lidar.status", {
-			nb: nb_active_hokuyos,
-			status: lastStatus.status
-		});
 	}
 
 	function isOk(){
@@ -342,6 +338,5 @@
 
 		client.send("ia", "isOkAnswer", lastStatus);
 		client.send("server", "server.childrenUpdate", lastStatus);
-		client.send("ia", "hokuyo.nb_hokuyo", { nb: nb_active_hokuyos });
 	}
 })();
