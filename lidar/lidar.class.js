@@ -268,6 +268,8 @@ module.exports = (function () {
 					"name": hokName,
 					"position": this.hokuyoPositions[hokName]
 				});
+			} else {
+				logger.warn("Haven't heard from " + hokName + " since " + (Date.now() - lastData[hokName].time));
 			}
 		}
 
