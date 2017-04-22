@@ -48,7 +48,13 @@ module.exports = (function () {
 		}
 
 		// If other color
-		logger.warn("TODO: change Lidar color depending ours");
+		logger.warn("TODO TEST: change Lidar color depending ours");
+		if (color != "blue") {
+			this.hokuyoPositions.one.x = 3000 - this.hokuyoPositions.one.x;
+			this.hokuyoPositions.one.w = -180 - this.hokuyoPositions.one.w;
+			this.hokuyoPositions.two.x = 3000 - this.hokuyoPositions.two.x;
+			this.hokuyoPositions.two.w = -180 - this.hokuyoPositions.two.w;
+		}
 
 		this.sendStatus(this.status);
 
