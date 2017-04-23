@@ -7,13 +7,17 @@ set(ARDUINO_CXX_FLAGS    "${ARDUINO_C_FLAGS} -std=c++11")
 # target are : arduino_r_t with r = pr/gr and t = asserv/others
 project(arduino C CXX)
 
-# TODO automatic depending on user choice and program to generate
 set(ARDUINO_DEFAULT_BOARD mega2560)
-set(ARDUINO_DEFAULT_PORT /dev/ttyACM0)
 
 SET(TARGET_ARDUINO "mega2560" CACHE STRING "User defined arduino target")
 SET(TARGET_ROBOT "gr" CACHE STRING "User defined robot")
 SET(TARGET_PROGRAM "asserv" CACHE STRING "User defined program")
+
+if (TARGET_ARDUINO STREQUAL "nano328")
+	set(ARDUINO_DEFAULT_PORT /dev/ttyUSB0)
+else()
+	set(ARDUINO_DEFAULT_PORT /dev/ttyACM0)
+endif()
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../bin)
 
