@@ -49,7 +49,6 @@ void SerialSender::SerialSend(SerialSendEnum level, const char* str, ...) {
                 switch (str[++i]) {
                     case 'i':
                     case 'd':
-                        Serial.println("pourcent d");
                         tmpString = String(va_arg(argv, int));
                         break;
                     case 'l':

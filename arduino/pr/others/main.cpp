@@ -64,7 +64,7 @@ void setup() {
 //    servoAttach();
 
     serial_send_task = scheduler->createTask(&SerialSender::SerialSendTask, 200);
-    main_task = scheduler->createTaskTimer(&mainTask, 100, (uint32_t)(DT*1000));
+    main_task = scheduler->createTaskTimer(&mainTask, 200, (uint32_t)(DT*1000));
     serial_read_task = scheduler->createTask(&serialReadTask, 200);
 
     scheduler->start();
