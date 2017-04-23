@@ -8,6 +8,7 @@
 #include "sender.h"
 #include "parameters.h"
 #include "protocol.h"
+#include "servo_motors.h"
 
 // Flag to know if a computer is connected to the arduino
 static unsigned char flagConnected = 0;
@@ -27,6 +28,7 @@ bool mainTask() {
             delay(1000);
         } else {
             //todo something useful...
+            servoDemo();
             delay(1000);
         }
     }
@@ -56,6 +58,8 @@ void serialReadTask() {
 
 void setup() {
     Serial.begin(BAUDRATE, SERIAL_TYPE);
+
+    servoAttach();
 
     serial_send_task = scheduler->createTask(&SerialSender::SerialSendTask, 200);
     main_task = scheduler->createTaskTimer(&mainTask, 200, (uint32_t)(DT*1000));

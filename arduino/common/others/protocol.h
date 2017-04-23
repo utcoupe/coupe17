@@ -8,6 +8,7 @@
 //#include <String>
 
 #include "parameters.h"
+#include <stdint.h>
 
 class String;
 
@@ -50,11 +51,11 @@ extern servoInformation servoData[];
 
 extern unsigned char flagArduinoConnected;
 
-//todo move to cpp file ?
-static const unsigned int servoMapping[4][2] = {{PR_MODULE_ARM, PR_MODULE_ARM_PIN},
-                                                {PR_MODULE_DROP_R, PR_MODULE_DROP_R_PIN},
-                                                {PR_MODULE_DROP_L, PR_MODULE_DROP_L_PIN},
-                                                {PR_MODULE_ROTATE, PR_MODULE_ROTATE_PIN},};
+//todo move to cpp file ? useless ?
+//static const unsigned int servoMapping[4][2] = {{PR_MODULE_ARM, PR_MODULE_ARM_PIN},
+//                                                {PR_MODULE_DROP_R, PR_MODULE_DROP_R_PIN},
+//                                                {PR_MODULE_DROP_L, PR_MODULE_DROP_L_PIN},
+//                                                {PR_MODULE_ROTATE, PR_MODULE_ROTATE_PIN},};
 
 void parseAndExecuteOrder(const String& order);
 
