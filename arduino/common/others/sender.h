@@ -13,6 +13,7 @@
 #include "Sync.h"
 
 #include <stdarg.h>
+#include <stdint.h>
 
 #include <QueueList.h>
 
@@ -42,7 +43,7 @@ public:
     //to be used in the task
     static void SerialSendTask();
 private:
-    static String CharArrayToString(const char * str, unsigned char size);
+    static String CharArrayToString(const char * str, uint8_t size);
     static os48::Sync senderSync;
     static QueueList<String> dataToSend;
     //static os48::Scheduler* scheduler;

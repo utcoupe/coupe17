@@ -34,7 +34,7 @@ void SerialSender::SerialSend(SerialSendEnum level, String data) {
 }
 
 void SerialSender::SerialSend(SerialSendEnum level, const char* str, ...) {
-    int i, j, count = 0;
+    uint8_t i, j, count = 0;
     String serialData, tmpString = "";
     if (level <= DEBUG_LEVEL) {
         va_list argv;
@@ -49,6 +49,7 @@ void SerialSender::SerialSend(SerialSendEnum level, const char* str, ...) {
                 switch (str[++i]) {
                     case 'i':
                     case 'd':
+                        Serial.println("pourcent d");
                         tmpString = String(va_arg(argv, int));
                         break;
                     case 'l':
@@ -62,9 +63,9 @@ void SerialSender::SerialSend(SerialSendEnum level, const char* str, ...) {
                     case 's':
                         tmpString = String(va_arg(argv, char *));
                         break;
-                    case '%':
-                        Serial.print("%");
-                        break;
+//                    case '%':
+//                        Serial.print("%");
+//                        break;
                     default:;
                 }
                 serialData.concat(tmpString);
@@ -101,9 +102,9 @@ void SerialSender::SerialSendTask() {
     }
 }
 
-String SerialSender::CharArrayToString(const char * str, unsigned char size) {
+String SerialSender::CharArrayToString(const char * str, uint8_t size) {
     String returnedString = "";
-    if (str && size > 0 && size < 51) {
+    if ((str != nullptr) && (size > 0) && (size < 51)) {
         static char tmpBuffer[50];
         memcpy(tmpBuffer, str, size);
         tmpBuffer[size] = '\0';
