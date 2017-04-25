@@ -31,9 +31,9 @@ servoInformation servoData[MAX_SERVO]= {
 
 uint8_t servoValues[4][3] = {
         {90, 0, 150},   //PR_MODULE_ARM - INIT, OPEN, CLOSE
-        {255, 255, 255},   //PR_MODULE_DROP_R - INIT, OPEN, CLOSE
-        {255, 255, 255},   //PR_MODULE_DROP_L - INIT, OPEN, CLOSE
-        {255, 255, 255}    //PR_MODULE_ROTATE - INIT, OPEN, CLOSE
+        {MAX_UINT8_T_VALUE, MAX_UINT8_T_VALUE, MAX_UINT8_T_VALUE},   //PR_MODULE_DROP_R - INIT, OPEN, CLOSE
+        {MAX_UINT8_T_VALUE, MAX_UINT8_T_VALUE, MAX_UINT8_T_VALUE},   //PR_MODULE_DROP_L - INIT, OPEN, CLOSE
+        {MAX_UINT8_T_VALUE, MAX_UINT8_T_VALUE, MAX_UINT8_T_VALUE}    //PR_MODULE_ROTATE - INIT, OPEN, CLOSE
 };
 
 void servoAttach() {
@@ -69,7 +69,7 @@ void servoAction(uint8_t servo_id, SERVO_POSITION position) {
 }
 
 void servoApplyCommand(uint8_t servo_id, uint8_t value) {
-    if (value < 255) {
+    if (value < MAX_UINT8_T_VALUE) {
         switch (servo_id) {
             case PR_MODULE_ARM:
                 pr_module_arm.write(value);
@@ -82,6 +82,17 @@ void servoApplyCommand(uint8_t servo_id, uint8_t value) {
         SerialSender::SerialSend(SERIAL_INFO, "Value %d for servo %d doesn't exist...", value, servo_id);
     }
 }
+
+void servoChangeParameter(const uint8_t servo_id, const SERVO_POSITION servo_position, const uint8_t servo_value) {
+    SerialSender::SerialSend(SERIAL_INFO, "servo=%d, pos=%d, value=%d", servo_id, servo_position, servo_value);
+    //todo servo id as define
+    if ((servo_id < MAX_SERVO) && (servo_position < NB_POS) && (servo_position < MAX_UINT8_T_VALUE)) {
+        servoValues[servo_id][servo_position] = servo_value;
+    } else {
+        SerialSender::SerialSend(SERIAL_INFO, "Servo id (%d) or servo position (%d) is not correct", servo_id, servo_position);
+    }
+}
+
 
 /*pr_module_arm :
  * initial value : 90

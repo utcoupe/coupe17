@@ -103,6 +103,7 @@ void SerialSender::SerialSendTask() {
 
 String SerialSender::CharArrayToString(const char * str, uint8_t size) {
     String returnedString = "";
+    //todo size as define
     if ((str != nullptr) && (size > 0) && (size < 71)) {
         static char tmpBuffer[70];
         memcpy(tmpBuffer, str, size);

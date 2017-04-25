@@ -41,6 +41,8 @@ enum MODULE_COLOR {
     YELLOW
 };
 
+#define MAX_UINT8_T_VALUE   (uint8_t)255
+
 //
 //enum servoOrder {
 //    O_PR_MODULE_ARM_INIT = 0,
@@ -64,7 +66,5 @@ extern unsigned char flagArduinoConnected;
 void parseAndExecuteOrder(const String& order);
 
 uint8_t getLog10(const uint16_t number);
-
-void changeServoParameter(const uint8_t servo_id, const SERVO_POSITION servo_position, const uint8_t servo_value);
 
 #endif //OTHERS_PROTOCOL_H

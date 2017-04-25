@@ -42,7 +42,7 @@ void parseAndExecuteOrder(const String& order) {
             //todo try to be able to use uint8_t
             unsigned int servo_id, servo_position, servo_value;
             sscanf(receivedOrderPtr, "%u;%u;%u;", &servo_id, &servo_position, &servo_value);
-            changeServoParameter((uint8_t)servo_id, (SERVO_POSITION)servo_position, (uint8_t)servo_value);
+            servoChangeParameter((uint8_t)servo_id, (SERVO_POSITION)servo_position, (uint8_t)servo_value);
             break;
         }
         case MODULE_ROTATE:
@@ -54,7 +54,6 @@ void parseAndExecuteOrder(const String& order) {
         {
             unsigned int servo_id;
             sscanf(receivedOrderPtr, "%u;", &servo_id);
-            SerialSender::SerialSend(SERIAL_INFO, "SERVO_OPEN(%d)", servo_id);
             servoAction((uint8_t)servo_id, OPEN);
             break;
         }
@@ -62,14 +61,14 @@ void parseAndExecuteOrder(const String& order) {
         {
             unsigned int servo_id;
             sscanf(receivedOrderPtr, "%u;", &servo_id);
-            servoAction(servo_id, CLOSE);
+            servoAction((uint8_t)servo_id, CLOSE);
             break;
         }
         case SERVO_INIT:
         {
             unsigned int servo_id;
             sscanf(receivedOrderPtr, "%u;", &servo_id);
-            servoAction(servo_id, INIT);
+            servoAction((uint8_t)servo_id, INIT);
             break;
         }
         default:
@@ -83,27 +82,6 @@ uint8_t getLog10(const uint16_t number) {
     if(number>=100) return 3;
     if(number>=10) return 2;
     return 1;
-}
-
-void changeServoParameter(const uint8_t servo_id, const SERVO_POSITION servo_position, const uint8_t servo_value) {
-    SerialSender::SerialSend(SERIAL_INFO, "servo=%d, pos=%d, value=%d", servo_id, servo_position, servo_value);
-    //todo servo id as define
-    if ((servo_id < MAX_SERVO) && (servo_position <= CLOSE)) {
-        uint8_t index = 0;
-        //todo servo id...
-//        while (index < MAX_SERVO) {
-            //todo
-//            if ((servoData[index].servoId == servo_id) && (servoData[index].position == servo_position)) {
-//                servoData[index].value = servo_value;
-//                //todo
-//                // Exit the loop
-//                index = MAX_SERVO;
-//            }
-//            index++;
-//        }
-    } else {
-        SerialSender::SerialSend(SERIAL_INFO, "Servo id (%d) or servo position (%d) is not correct", servo_id, servo_position);
-    }
 }
 
 /*
