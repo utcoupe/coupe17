@@ -8,7 +8,7 @@
 //#include <String>
 
 #include "parameters.h"
-//#include <stdint.h>
+#include <stdint.h>
 
 class String;
 

@@ -9,7 +9,7 @@
 #include "sender.h"
 #include "parameters.h"
 
-#include "Sync.h"
+//#include "Sync.h"
 
 #include <QueueList.h>
 #include <Arduino.h>
@@ -17,7 +17,7 @@
 /* Initialize static members */
 QueueList<String> SerialSender::dataToSend;
 //os48::Scheduler* SerialSender::scheduler = os48::Scheduler::get();
-os48::Sync SerialSender::senderSync;
+//os48::Sync SerialSender::senderSync;
 
 SerialSender::SerialSender() {
     Serial.begin(BAUDRATE, SERIAL_TYPE);
@@ -25,11 +25,11 @@ SerialSender::SerialSender() {
 
 void SerialSender::SerialSend(SerialSendEnum level, String data) {
     if (level <= DEBUG_LEVEL && data != "") {
-        OS48_NO_CS_BLOCK
-        {
+//        OS48_NO_CS_BLOCK
+//        {
             dataToSend.push(data);
-        }
-        senderSync.releaseOne();
+//        }
+//        senderSync.releaseOne();
     }
 }
 
@@ -78,27 +78,27 @@ void SerialSender::SerialSend(SerialSendEnum level, const char* str, ...) {
             serialData.concat(tmpString);
         }
 
-        OS48_NO_CS_BLOCK
-        {
+//        OS48_NO_CS_BLOCK
+//        {
             dataToSend.push(serialData);
-        }
-        senderSync.releaseOne();
+//        }
+//        senderSync.releaseOne();
     }
 }
 
 void SerialSender::SerialSendTask() {
     String dataToPrint;
-    while (1) {
-        senderSync.wait();
+//    while (1) {
+//        senderSync.wait();
         while (!dataToSend.isEmpty()) {
-            OS48_NO_CS_BLOCK
-            {
+//            OS48_NO_CS_BLOCK
+//            {
                 dataToPrint = dataToSend.pop();
-            }
+//            }
             Serial.println(dataToPrint);
             Serial.flush();
         }
-    }
+//    }
 }
 
 String SerialSender::CharArrayToString(const char * str, uint8_t size) {
