@@ -25,7 +25,7 @@ SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../bin)
 #set(TARGET_PROGRAM asserv)
 
 file(GLOB_RECURSE SRC_FILES	${TARGET_ROBOT}/${TARGET_PROGRAM}/*.cpp)
-include_directories(${TARGET_ROBOT}/${TARGET_PROGRAM} common/${TARGET_PROGRAM} common/libs/os48)
+include_directories(${TARGET_ROBOT}/${TARGET_PROGRAM} common/${TARGET_PROGRAM})
 
 #asserv or others extra common stuff
 #set(EXTRA_SRC_FILES "")
@@ -35,12 +35,8 @@ file(GLOB_RECURSE EXTRA_SRC_FILES common/${TARGET_PROGRAM}/*.c common/${TARGET_P
 #	file(GLOB_RECURSE EXTRA_SRC_FILES common/${TARGET_PROGRAM}/*.c common/${TARGET_PROGRAM}/*.cpp)
 #endif()
 
-#get os48 files
-#TODO create os48 static lib in another CMake file
-file(GLOB_RECURSE OS48_SRC_FILES common/libs/os48/*.cpp)
-
 generate_arduino_firmware(${TARGET_ROBOT}_${TARGET_PROGRAM}_${TARGET_ARDUINO}
-    SRCS ${SRC_FILES} ${EXTRA_SRC_FILES} ${OS48_SRC_FILES}
+    SRCS ${SRC_FILES} ${EXTRA_SRC_FILES}
 #    HDRS ${HDR_FILES}
 #	LIBS HardwareSerial
     PORT ${ARDUINO_DEFAULT_PORT}

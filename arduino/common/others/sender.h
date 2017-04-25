@@ -9,9 +9,6 @@
 #ifndef ARDUINO_SENDER_H
 #define ARDUINO_SENDER_H
 
-//#include "os48.h"
-#include "Sync.h"
-
 #include <stdarg.h>
 #include <stdint.h>
 
@@ -44,9 +41,7 @@ public:
     static void SerialSendTask();
 private:
     static String CharArrayToString(const char * str, uint8_t size);
-    static os48::Sync senderSync;
     static QueueList<String> dataToSend;
-    //static os48::Scheduler* scheduler;
 };
 
 #endif //ARDUINO_SENDER_H
