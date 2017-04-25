@@ -4,8 +4,11 @@
 
 #include "servo_motors.h"
 #include "parameters.h"
+#include "sender.h"
 #include <Servo.h>
 #include <Arduino.h>
+
+void servoApplyCommand(uint8_t servo_id, uint8_t value);
 
 //todo init, min & max values for all servo
 
@@ -13,6 +16,25 @@ Servo pr_module_arm;
 Servo pr_module_drop_r;
 Servo pr_module_drop_l;
 Servo pr_module_rotate;
+
+//todo find a way for the size
+servoInformation servoData[MAX_SERVO]= {
+        {PR_MODULE_ARM, INIT, 90},
+        {PR_MODULE_ARM, OPEN, 0},
+        {PR_MODULE_ARM, CLOSE, 150},
+        {PR_MODULE_DROP_R, OPEN, 90},
+        {PR_MODULE_DROP_R, CLOSE, 90},
+        {PR_MODULE_DROP_L, OPEN, 90},
+        {PR_MODULE_DROP_L, CLOSE, 90},
+        {PR_MODULE_ROTATE, OPEN, 90},
+};
+
+uint8_t servoValues[4][3] = {
+        {90, 0, 150},   //PR_MODULE_ARM - INIT, OPEN, CLOSE
+        {255, 255, 255},   //PR_MODULE_DROP_R - INIT, OPEN, CLOSE
+        {255, 255, 255},   //PR_MODULE_DROP_L - INIT, OPEN, CLOSE
+        {255, 255, 255}    //PR_MODULE_ROTATE - INIT, OPEN, CLOSE
+};
 
 void servoAttach() {
     pr_module_arm.attach(PR_MODULE_ARM_PIN);
@@ -37,8 +59,28 @@ void open() {
     delay(400);
 }
 
-void servoAction(SERVO_POSITION position) {
+void servoAction(uint8_t servo_id, SERVO_POSITION position) {
+    //todo maximal servo id as define
+    if ((servo_id < 4) && (position < NB_POS)) {
+        servoApplyCommand(servo_id, servoValues[servo_id][position]);
+    } else {
+        SerialSender::SerialSend(SERIAL_INFO, "Servo %d doesn't exist or position %d is unknown...", servo_id, position);
+    }
+}
 
+void servoApplyCommand(uint8_t servo_id, uint8_t value) {
+    if (value < 255) {
+        switch (servo_id) {
+            case PR_MODULE_ARM:
+                pr_module_arm.write(value);
+                break;
+            default:
+                SerialSender::SerialSend(SERIAL_INFO, "Servo %d doesn't exist...", servo_id);
+                break;
+        }
+    } else {
+        SerialSender::SerialSend(SERIAL_INFO, "Value %d for servo %d doesn't exist...", value, servo_id);
+    }
 }
 
 /*pr_module_arm :

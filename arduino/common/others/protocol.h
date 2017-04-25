@@ -21,6 +21,7 @@ class String;
 #define MODULE_ROTATE       'r'     //color(int) = 0 (whatever color), 1 (blue), 2 (yellow), respond TODO
 #define SERVO_OPEN          'o'     //servo_id(int), respond ack when done
 #define SERVO_CLOSE         'c'     //servo_id(int), respond ack when done
+#define SERVO_INIT          'i'     //servo_id(int), respond ack when done
 #define PR_MODULE_ARM       0       //servo controlling the arm which gets the module
 #define PR_MODULE_DROP_R    1       //right servo controlling the drop of the module
 #define PR_MODULE_DROP_L    2       //left servo controlling the drop of the module
@@ -28,8 +29,10 @@ class String;
 // END_ORDERS - Do not remove this comment
 
 enum SERVO_POSITION {
-    OPEN = 0,
-    CLOSE
+    INIT = 0,
+    OPEN = 1,
+    CLOSE = 2,
+    NB_POS = 3
 };
 
 enum MODULE_COLOR {
@@ -38,16 +41,17 @@ enum MODULE_COLOR {
     YELLOW
 };
 
-struct servoInformation {
-    uint8_t servoId;
-    SERVO_POSITION position;
-    uint8_t value;
-};
+//
+//enum servoOrder {
+//    O_PR_MODULE_ARM_INIT = 0,
+//    O_PR_MODULE_ARM_OPEN,
+//    O_PR_MODULE_ARM_CLOSE
+//};
 
 #define ORDER_INDEX (uint8_t)0
 #define ID_INDEX    (uint8_t)2
 
-extern servoInformation servoData[];
+#define MAX_SERVO   (uint8_t)8
 
 extern unsigned char flagArduinoConnected;
 
