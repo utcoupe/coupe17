@@ -35,21 +35,27 @@ void serialRead() {
 
 void setup() {
     Serial.begin(BAUDRATE, SERIAL_TYPE);
+    Serial.setTimeout(50);
 
     servoAttach();
 }
 
 //main loop, first read an order from serial, execute the order and then send all data to send
 void loop() {
+    static bool stop = false;
     // First step, read an order from serial and execute it
     serialRead();
     if (!flagArduinoConnected) {
         SerialSender::SerialSend(SERIAL_INFO, "%s", ARDUINO_ID);
         delay(1000);
+        stop = false;
     } else {
         //todo something useful...
-//            servoDemo();
-
+        if (!stop) {
+            servoDemo();
+            stop = true;
+            open();
+        }
         delay(1000);
     }
     SerialSender::SerialSendTask();

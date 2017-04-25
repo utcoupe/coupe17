@@ -10,5 +10,6 @@
 void servoAttach();
 void servoDemo();
 void servoAction(SERVO_POSITION position);
+void open();
 
 #endif //ARDUINO_SERVO_MOTORS_H
