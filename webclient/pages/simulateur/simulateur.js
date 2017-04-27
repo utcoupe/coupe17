@@ -6,9 +6,15 @@
 angular.module('app').controller('SimulateurCtrl', ['$rootScope', '$scope', 'Client', 'Simulateur',
 	function ($rootScope, $scope, Client, Simulateur) {
 		$rootScope.act_page = 'simulateur';
-		Simulateur.controllerSimu = new Controller("3dobjects.json", "../simulateur/");
-		Simulateur.controllerSimu.createRenderer();
-		Simulateur.controllerSimu.loadParameters();
+		if (!Simulateur.controllerSimu)
+		{
+			console.warn('Création d\'un nouveau simulateur !');
+			Simulateur.controllerSimu = new Controller("3dobjects.json", "../simulateur/");
+			Simulateur.controllerSimu.createRenderer();
+			Simulateur.controllerSimu.loadParameters();
+		}
+		else
+			Simulateur.controllerSimu.updateRenderer();
 		$scope.pos_pr = new Position();
 		$scope.rot_pr = new Position();
 		$scope.pos_gr = new Position();
