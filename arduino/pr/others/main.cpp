@@ -46,6 +46,7 @@ void setup() {
 //main loop, first read an order from serial, execute the order and then send all data to send
 void loop() {
     static bool stop = false;
+    servoTimerUpdate();
     // First step, read an order from serial and execute it
     serialRead();
     if (!flagArduinoConnected) {

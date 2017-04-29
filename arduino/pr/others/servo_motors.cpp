@@ -8,6 +8,7 @@
 #include <Servo.h>
 #include <Arduino.h>
 #include "color_sensor_tcs3200.h"
+#include <Timer.h>
 
 void servoApplyCommand(uint8_t servo_id, uint8_t value);
 
@@ -17,6 +18,11 @@ Servo pr_module_arm;
 Servo pr_module_drop_r;
 Servo pr_module_drop_l;
 Servo pr_module_rotate;
+
+//todo adjust timer time
+Timer rotateTimer = Timer(200, &servoRotateCallback);
+
+MODULE_COLOR servoRotateColor;
 
 //todo find a way for the size
 servoInformation servoData[MAX_SERVO]= {
@@ -80,6 +86,7 @@ void servoApplyCommand(uint8_t servo_id, uint8_t value) {
                 break;
             case PR_MODULE_ROTATE:
                 pr_module_rotate.write(value);
+                break;
             default:
                 SerialSender::SerialSend(SERIAL_INFO, "Servo %d doesn't exist...", servo_id);
                 break;
@@ -104,12 +111,26 @@ void servoRotate(MODULE_COLOR color) {
     if (color != WHATEVER) {
         // Activate rotation
         servoAction(PR_MODULE_ROTATE, OPEN);
-        //todo add timeout to avoid infinite loop
-        while (computeColor() != color) {
-            delay(500);
-        }
-        servoAction(PR_MODULE_ROTATE, INIT);
+        servoRotateColor = color;
+        rotateTimer.Start();
     }
+}
+
+void servoRotateCallback() {
+    if (servoRotateColor != WHATEVER) {
+        if (computeColor() == servoRotateColor) {
+            // Stop the rotate servo motor
+            servoAction(PR_MODULE_ROTATE, INIT);
+            // Put the global variable to default value
+            servoRotateColor = WHATEVER;
+            //todo send a message to the IA to advertise that color is ok
+            rotateTimer.Stop();
+        }
+    }
+}
+
+void servoTimerUpdate() {
+    rotateTimer.Update();
 }
 
 

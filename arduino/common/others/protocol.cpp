@@ -49,7 +49,7 @@ void parseAndExecuteOrder(const String& order) {
         {
             unsigned int servo_color;
             sscanf(receivedOrderPtr, "%u;", &servo_color);
-            SerialSender::SerialSend(SERIAL_INFO, "Rotate order, color : %u", servo_color);
+            SerialSender::SerialSend(SERIAL_INFO, "Rotate order, color : %d", servo_color);
             servoRotate((MODULE_COLOR)servo_color);
             break;
         }
