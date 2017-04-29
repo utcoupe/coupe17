@@ -61,7 +61,7 @@ void colorSensorValuesCapture() {
 }
 
 MODULE_COLOR computeColor() {
-    uint8_t returnValue = WHATEVER;
+    MODULE_COLOR returnValue = WHATEVER;
     uint16_t rgbColorAccumulator[3] = {0, 0, 0};
     uint8_t rgbMeanValues[3] = {0, 0, 0};
     // First accumulate color sensor values to be more accurate

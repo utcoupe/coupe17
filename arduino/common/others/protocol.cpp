@@ -47,7 +47,10 @@ void parseAndExecuteOrder(const String& order) {
         }
         case MODULE_ROTATE:
         {
-            //todo
+            unsigned int servo_color;
+            sscanf(receivedOrderPtr, "%u;", &servo_color);
+            SerialSender::SerialSend(SERIAL_INFO, "Rotate order, color : %u", servo_color);
+            servoRotate((MODULE_COLOR)servo_color);
             break;
         }
         case SERVO_OPEN:

@@ -52,7 +52,7 @@ void loop() {
         SerialSender::SerialSend(SERIAL_INFO, "%s", ARDUINO_ID);
         delay(1000);
         stop = false;
-        computeColor();
+//        computeColor();
     } else {
         //todo something useful...
         if (!stop) {

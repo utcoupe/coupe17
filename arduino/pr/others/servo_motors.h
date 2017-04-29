@@ -22,5 +22,7 @@ void servoDemo();
 void servoAction(uint8_t servo_id, SERVO_POSITION position);
 void servoChangeParameter(const uint8_t servo_id, const SERVO_POSITION servo_position, const uint8_t servo_value);
 void open();
+//color is the colo to reach
+void servoRotate(MODULE_COLOR color);
 
 #endif //ARDUINO_SERVO_MOTORS_H
