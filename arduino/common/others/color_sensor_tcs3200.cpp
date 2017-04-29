@@ -60,7 +60,8 @@ void colorSensorValuesCapture() {
     }
 }
 
-void computeColor() {
+MODULE_COLOR computeColor() {
+    uint8_t returnValue = WHATEVER;
     uint16_t rgbColorAccumulator[3] = {0, 0, 0};
     uint8_t rgbMeanValues[3] = {0, 0, 0};
     // First accumulate color sensor values to be more accurate
@@ -86,13 +87,16 @@ void computeColor() {
         //todo find a way to avoid blue -> white turning in yellow...
         if (yellowColor > YELLOW_COLOR_THRESHOLD) {
             color = String("yellow");
+            returnValue = YELLOW;
         } else if ((yellowColor >> 2) < rgbMeanValues[RGB_BLUE]) {
             color = String("blue");
+            returnValue = BLUE;
         } else {
             color = String("undefined");
         }
     }
     SerialSender::SerialSend(SERIAL_INFO, color);
+    return returnValue;
 }
 
 void colorSensorFilterApply(rgbValuesName color) {
