@@ -15,6 +15,8 @@
 #define LED 12
 #define sensorOut 3
 
+#define COLOR_ACCUMULATE_NB     1
+
 #define WHITE_COLOR_THRESHOLD   650
 #define YELLOW_COLOR_THRESHOLD  270
 
@@ -56,23 +58,35 @@ void colorSensorValuesCapture() {
         rawFrequency = pulseIn(sensorOut, LOW);
         rgbValues[color_id] = constrain(map(rawFrequency, rgbMinMaxFrequency[color_id][0], rgbMinMaxFrequency[color_id][1], 255, 0), 0, 255);
     }
-    SerialSender::SerialSend(SERIAL_INFO, "RED : %d, GREEN : %d, BLUE : %d", rgbValues[RGB_RED], rgbValues[RGB_GREEN], rgbValues[RGB_BLUE]);
 }
 
 void computeColor() {
-    // First update the sensor values
-    colorSensorValuesCapture();
-    //todo accumulate on #define values
-    // Activate the LED
-    uint16_t yellowColor = rgbValues[RGB_RED] + rgbValues[RGB_GREEN];
-    uint16_t colorSum = yellowColor + rgbValues[RGB_BLUE];
+    uint16_t rgbColorAccumulator[3] = {0, 0, 0};
+    uint8_t rgbMeanValues[3] = {0, 0, 0};
+    // First accumulate color sensor values to be more accurate
+    for (uint8_t accumulator_nb = 0; accumulator_nb < COLOR_ACCUMULATE_NB; accumulator_nb++) {
+        colorSensorValuesCapture();
+        rgbColorAccumulator[RGB_RED] += rgbValues[RGB_RED];
+        rgbColorAccumulator[RGB_GREEN] += rgbValues[RGB_GREEN];
+        rgbColorAccumulator[RGB_BLUE] += rgbValues[RGB_BLUE];
+    }
+    // Get the mean of the accumulated rgb data
+    rgbMeanValues[RGB_RED] = rgbColorAccumulator[RGB_RED] / COLOR_ACCUMULATE_NB;
+    rgbMeanValues[RGB_GREEN] = rgbColorAccumulator[RGB_GREEN] / COLOR_ACCUMULATE_NB;
+    rgbMeanValues[RGB_BLUE] = rgbColorAccumulator[RGB_BLUE] / COLOR_ACCUMULATE_NB;
+    SerialSender::SerialSend(SERIAL_DEBUG, "RED : %d, GREEN : %d, BLUE : %d", rgbMeanValues[RGB_RED], rgbMeanValues[RGB_GREEN], rgbMeanValues[RGB_BLUE]);
+    // Compute the non rgb colors
+    uint16_t yellowColor = rgbMeanValues[RGB_RED] + rgbMeanValues[RGB_GREEN];
+    uint16_t colorSum = yellowColor + rgbMeanValues[RGB_BLUE];
     String color;
+    //todo return the color corresponding to the protcol
     if (colorSum > WHITE_COLOR_THRESHOLD) {
         color = String("white");
     } else {
+        //todo find a way to avoid blue -> white turning in yellow...
         if (yellowColor > YELLOW_COLOR_THRESHOLD) {
             color = String("yellow");
-        } else if ((yellowColor >> 2) < rgbValues[RGB_BLUE]) {
+        } else if ((yellowColor >> 2) < rgbMeanValues[RGB_BLUE]) {
             color = String("blue");
         } else {
             color = String("undefined");
