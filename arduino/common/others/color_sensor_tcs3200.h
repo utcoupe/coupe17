@@ -7,5 +7,6 @@
 
 void setupColorSensor();
 void colorSensorValue();
+void computeColor();
 
 #endif //ARDUINO_COLOR_SENSOR_TCS3200_H

@@ -14,8 +14,6 @@
 #define S3 7
 #define LED 12
 #define sensorOut 3
-int frequency = 0;
-int mappedFrequency = 0;
 
 uint8_t redFrequency = 0;
 uint8_t greenFrequency = 0;
@@ -38,6 +36,8 @@ void setupColorSensor() {
 }
 
 void colorSensorValue() {
+    //todo define for mapping values
+    //todo loop with arrays ?
     uint8_t readFrequency = 0;
     // Setting red filtered photodiodes to be read
     digitalWrite(S2,LOW);
@@ -45,7 +45,7 @@ void colorSensorValue() {
     // Reading the output frequency
     readFrequency = pulseIn(sensorOut, LOW);
     //Remaping the value of the frequency to the RGB Model of 0 to 255
-    redFrequency = constrain(map(readFrequency, 30,54,255,0), 0, 255);
+    redFrequency = constrain(map(readFrequency, 25,54,255,0), 0, 255);
     // Printing the value on the serial monitor
 //    Serial.print("R= ");//printing name
 //    Serial.print(frequency);//printing RED color frequency
@@ -58,7 +58,7 @@ void colorSensorValue() {
     // Reading the output frequency
     readFrequency = pulseIn(sensorOut, LOW);
     //Remaping the value of the frequency to the RGB Model of 0 to 255
-    greenFrequency = constrain(map(readFrequency, 20,100,255,0), 0, 255);
+    greenFrequency = constrain(map(readFrequency, 15,100,255,0), 0, 255);
     // Printing the value on the serial monitor
 //    Serial.print("G= ");//printing name
 //    Serial.print(frequency);//printing RED color frequency
@@ -78,8 +78,24 @@ void colorSensorValue() {
 //    Serial.println("  ");
     SerialSender::SerialSend(SERIAL_INFO, "BLU : %d", blueFrequency);
 //    delay(100);
+    computeColor();
 }
 
 void computeColor() {
-
+    uint16_t yellowColor = redFrequency + greenFrequency;
+    uint16_t colorSum = yellowColor + blueFrequency;
+    String color;
+    //todo define
+    if (colorSum > 650) {
+        color = String("white");
+    } else {
+        if (yellowColor > 270) {
+            color = String("yellow");
+        } else if ((yellowColor >> 2) < blueFrequency) {
+            color = String("blue");
+        } else {
+            color = String("undefined");
+        }
+    }
+    SerialSender::SerialSend(SERIAL_INFO, color);
 }
