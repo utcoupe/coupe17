@@ -15,9 +15,9 @@
 #define LED 12
 #define sensorOut 3
 
-#define COLOR_ACCUMULATE_NB     1
+#define COLOR_ACCUMULATE_NB     3
 
-#define WHITE_COLOR_THRESHOLD   650
+#define WHITE_COLOR_THRESHOLD   600
 #define YELLOW_COLOR_THRESHOLD  270
 
 //red, green, blue
@@ -79,7 +79,7 @@ void computeColor() {
     uint16_t yellowColor = rgbMeanValues[RGB_RED] + rgbMeanValues[RGB_GREEN];
     uint16_t colorSum = yellowColor + rgbMeanValues[RGB_BLUE];
     String color;
-    //todo return the color corresponding to the protcol
+    //todo return the color corresponding to the protocol
     if (colorSum > WHITE_COLOR_THRESHOLD) {
         color = String("white");
     } else {
