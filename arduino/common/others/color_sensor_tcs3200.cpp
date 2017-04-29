@@ -15,9 +15,20 @@
 #define LED 12
 #define sensorOut 3
 
-uint8_t redFrequency = 0;
-uint8_t greenFrequency = 0;
-uint8_t blueFrequency = 0;
+#define WHITE_COLOR_THRESHOLD   650
+#define YELLOW_COLOR_THRESHOLD  270
+
+//red, green, blue
+uint8_t rgbValues[3];
+
+//used to map rawFrequency read from sensor to a RGB value on 8 bytes
+//those data have to be calibrated to be optimal
+//the index is rgbValuesName
+uint8_t rgbMinMaxFrequency[3][2] = {
+        {25, 54},
+        {15, 100},
+        {10, 90}
+};
 
 void setupColorSensor() {
     pinMode(S0, OUTPUT);
@@ -31,71 +42,60 @@ void setupColorSensor() {
     digitalWrite(S0,HIGH);
     digitalWrite(S1,LOW);
 
-    // Activate the LED
-    digitalWrite(LED,HIGH);
+    //todo power on the led when needed and power it off
+    digitalWrite(LED, HIGH);
+
+    //todo power on color sensor when needed otherwise power it off
 }
 
-void colorSensorValue() {
-    //todo define for mapping values
-    //todo loop with arrays ?
-    uint8_t readFrequency = 0;
-    // Setting red filtered photodiodes to be read
-    digitalWrite(S2,LOW);
-    digitalWrite(S3,LOW);
-    // Reading the output frequency
-    readFrequency = pulseIn(sensorOut, LOW);
-    //Remaping the value of the frequency to the RGB Model of 0 to 255
-    redFrequency = constrain(map(readFrequency, 25,54,255,0), 0, 255);
-    // Printing the value on the serial monitor
-//    Serial.print("R= ");//printing name
-//    Serial.print(frequency);//printing RED color frequency
-//    Serial.print("  ");
-    SerialSender::SerialSend(SERIAL_INFO, "RED : %d", redFrequency);
-//    delay(100);
-    // Setting Green filtered photodiodes to be read
-    digitalWrite(S2,HIGH);
-    digitalWrite(S3,HIGH);
-    // Reading the output frequency
-    readFrequency = pulseIn(sensorOut, LOW);
-    //Remaping the value of the frequency to the RGB Model of 0 to 255
-    greenFrequency = constrain(map(readFrequency, 15,100,255,0), 0, 255);
-    // Printing the value on the serial monitor
-//    Serial.print("G= ");//printing name
-//    Serial.print(frequency);//printing RED color frequency
-//    Serial.print("  ");
-    SerialSender::SerialSend(SERIAL_INFO, "GRE : %d", greenFrequency);
-//    delay(100);
-    // Setting Blue filtered photodiodes to be read
-    digitalWrite(S2,LOW);
-    digitalWrite(S3,HIGH);
-    // Reading the output frequency
-    readFrequency = pulseIn(sensorOut, LOW);
-    //Remaping the value of the frequency to the RGB Model of 0 to 255
-    blueFrequency = constrain(map(readFrequency, 10,90,255,0), 0, 255);
-    // Printing the value on the serial monitor
-//    Serial.print("B= ");//printing name
-//    Serial.print(frequency);//printing RED color frequency
-//    Serial.println("  ");
-    SerialSender::SerialSend(SERIAL_INFO, "BLU : %d", blueFrequency);
-//    delay(100);
-    computeColor();
+void colorSensorValuesCapture() {
+    //todo IR filter ?
+    uint8_t rawFrequency = 0;
+    for (uint8_t color_id = 0; color_id < 3; color_id++) {
+        colorSensorFilterApply((rgbValuesName)color_id);
+        rawFrequency = pulseIn(sensorOut, LOW);
+        rgbValues[color_id] = constrain(map(rawFrequency, rgbMinMaxFrequency[color_id][0], rgbMinMaxFrequency[color_id][1], 255, 0), 0, 255);
+    }
+    SerialSender::SerialSend(SERIAL_INFO, "RED : %d, GREEN : %d, BLUE : %d", rgbValues[RGB_RED], rgbValues[RGB_GREEN], rgbValues[RGB_BLUE]);
 }
 
 void computeColor() {
-    uint16_t yellowColor = redFrequency + greenFrequency;
-    uint16_t colorSum = yellowColor + blueFrequency;
+    // First update the sensor values
+    colorSensorValuesCapture();
+    //todo accumulate on #define values
+    // Activate the LED
+    uint16_t yellowColor = rgbValues[RGB_RED] + rgbValues[RGB_GREEN];
+    uint16_t colorSum = yellowColor + rgbValues[RGB_BLUE];
     String color;
-    //todo define
-    if (colorSum > 650) {
+    if (colorSum > WHITE_COLOR_THRESHOLD) {
         color = String("white");
     } else {
-        if (yellowColor > 270) {
+        if (yellowColor > YELLOW_COLOR_THRESHOLD) {
             color = String("yellow");
-        } else if ((yellowColor >> 2) < blueFrequency) {
+        } else if ((yellowColor >> 2) < rgbValues[RGB_BLUE]) {
             color = String("blue");
         } else {
             color = String("undefined");
         }
     }
     SerialSender::SerialSend(SERIAL_INFO, color);
+}
+
+void colorSensorFilterApply(rgbValuesName color) {
+    switch (color) {
+        case RGB_RED:
+            digitalWrite(S2,LOW);
+            digitalWrite(S3,LOW);
+            break;
+        case RGB_GREEN:
+            digitalWrite(S2,HIGH);
+            digitalWrite(S3,HIGH);
+            break;
+        case RGB_BLUE:
+            digitalWrite(S2,LOW);
+            digitalWrite(S3,HIGH);
+            break;
+        default:
+            break;
+    }
 }
