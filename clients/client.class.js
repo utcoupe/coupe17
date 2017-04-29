@@ -7,6 +7,8 @@
 
 "use strict";
 
+const Log4js = require('log4js');
+const SocketClient = require('../server/socket_client.class.js');
 
 /**
  * Client abstrait
@@ -19,8 +21,8 @@ class Client {
 	 * @param {any} status
 	 */
 	constructor(status){
-		this.Log4js = require('log4js');
-		this.SocketClient = require('../server/socket_client.class.js');
+		this.Log4js = Log4js;
+		this.SocketClient = SocketClient;
 		this.parser = null;
 		this.status = status;
 	}

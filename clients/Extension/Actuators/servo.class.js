@@ -12,9 +12,8 @@ const Actuator = require('actuator.class.js');
 /**
  * Classe implémentant l'actuator pour le servo-moteur
  * 
- * @class Servo
  * @memberof clients/Extension/Actuators/servo
- * @extends {clients/Extension/Actuators/actuator.Actuator}
+ * @extends clients/Extension/Actuators/actuator.Actuator
  */
 class Servo extends Actuator {
     constructor () {

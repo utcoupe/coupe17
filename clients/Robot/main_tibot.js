@@ -1,12 +1,8 @@
 /**
  * Main module
  *
- * @module clients/pr/main
- * @requires server/socket_client
- * @requires config
- * @requires clients/pr/actuators
- * @requires clients/pr/detect
- * @requires tibot.class.js
+ * @module clients/tibot/main_tibot
+ * @requires clients/Robots/tibot
  */
 
  //In previous version, this "main" was encapsulated by a function (function () {})();
@@ -14,7 +10,7 @@
 (function () {
 	"use strict";
 
-	var Tibot = (require('./tibot.class.js'));
+	const Tibot = require('./tibot.class.js');
 
 	var tibot = new Tibot('pr');
 	//tibot.sendChildren(tibot.lastStatus);

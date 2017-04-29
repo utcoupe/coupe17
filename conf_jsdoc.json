@@ -15,7 +15,7 @@
             "clients/Asserv",
             "clients/Robot",
             "clients/Extension",
-            "simulateur/afficheur",
+            "clients/Extension/Actuators",
             "simulateur",
             "webclient/pages/simulateur/simulateur.js"],
         "includePattern": ".+\\.js(doc|x)?$",

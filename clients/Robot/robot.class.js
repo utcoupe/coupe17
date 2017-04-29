@@ -3,30 +3,43 @@
  *
  * @module clients/Robot/robot
  * @requires module:clients/client
+ * @requires module:server/socket_client
+ * @requires module:clients/fifo
+ * @requires module:config
+ * @requires module:clients/Asserv/AsservSimu
+ * @requires module:clients/Asserv/AsservReal
  */
 
 "use strict";
 
 const Client = require('../client.class.js');
-
-/**
- * Robot abstrait
- *
- * @class Robot
- * @memberof module:clients/Robot/robot
- * @extends {clients/client.Client}
- */
+const SocketClient = require('../../server/socket_client.class.js');
+const Fifo = require('../fifo.class.js');
+const CONFIG = require('../../config.js');
+const AsservSimu = require('../Asserv/AsservSimu.class.js');
+const AsservReal = require('../Asserv/AsservReal.class.js');
 
 
 //TODO Look if use other.class and other_simu
 //And define_parser
 //Par défault objet simulé, toujours simulé. Voir pour detect
 
+/**
+ * Robot abstrait
+ *
+ * @memberof module:clients/Robot/robot
+ * @extends module:clients/client.Client
+ */
 class Robot extends Client{
 /*	constructor(){
 		super();
 	}*/
 
+	/**
+	 * Creates an instance of Robot.
+	 * 
+	 * @param {String} robotName Identifiant réseau du robot
+	 */
 	constructor(robotName){
 		// Requires
 		super();
@@ -37,8 +50,7 @@ class Robot extends Client{
 
 			this.logger.info("Started NodeJS client with pid " + process.pid);
 
-			var SocketClient = require('../../server/socket_client.class.js');
-			var server = require('../../config.js').server;
+			var server = CONFIG.server;
 
 			this.client = new SocketClient({
 				server_ip: server,
@@ -52,8 +64,9 @@ class Robot extends Client{
 			};
 			this.sendChildren(this.lastStatus);
 
-			var fifo = new (require('../fifo.class.js'))();
+			var fifo = new Fifo();
 
+			// ??? classe abstraite !
 			this.acts = new (require('../Extension/Actuators/actuator.class.js'))(this.client, this.sendChildren);
 
 			//TODO replace devicedetected
@@ -152,9 +165,9 @@ class Robot extends Client{
 					//HACK, do in acts normaly. See how integrate it
 					if (!struct.asserv) {
 								this.logger.fatal("Lancement de l'asserv pr en mode simu !");
-								this.asserv = new (require('../Asserv/AsservSimu.class.js'))(this.client, 'pr', this.fifo);
+								this.asserv = new AsservSimu(this.client, 'pr', this.fifo);
 							} else {
-								this.asserv = new (require('../Asserv/AsservReal.class.js'))(
+								this.asserv = new AsservReal(
 									new SerialPort(struct.asserv, {
 										baudrate: 57600,
 										parser:SerialPort.parsers.readline('\n')
