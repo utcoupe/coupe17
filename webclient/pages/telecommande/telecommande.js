@@ -2,7 +2,7 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	function($rootScope, $scope, Client) {
 	$rootScope.act_page = 'telecommande';
 
-	// GIT
+	// ********************************* GIT *********************************
 	$scope.prSyncGit = function() {
 		Client.send("pr", "sync_git");
 	}
@@ -15,31 +15,176 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 		Client.send("server", "server.sync_all_git");
 	}
 
-	// Arduinos
 	$scope.serverFlashArduinos = function() {
 		Client.send("server", "server.flash_arduinos");
 	}
 
-	// PR Luc
-	$scope.prPrendrePlot = function() {
-		Client.send("pr", "prendre_plot2");
-	}
-	$scope.prMonterPlot = function() {
-		Client.send("pr", "monter_plot2");
-	}
-	$scope.prFermerTout = function() {
-		Client.send("pr", "fermer_tout");
-	}
-	$scope.prResetNbPlots = function() {
-		Client.send("pr", "reset_nb_plots");
-	}
-
-	// IA
+	// ******************************** Match ********************************
 	$scope.iaJack = function() {
 		Client.send("ia", "ia.jack");
 	}
 
-	// GR
+	$scope.iaStop = function() {
+		Client.send("ia", "ia.stop");
+	}
+
+	// ******************************** Tibot ********************************
+	$scope.tibot = {};
+
+	$scope.tibot.pwm_gauche = 50;
+	$scope.tibot.pwm_droite = 50;
+	$scope.tibot.pwm_ms = 1000;
+	$scope.tibot.a = 0;
+	$scope.tibot.x = 0;
+	$scope.tibot.y = 0;
+	$scope.tibot.set_x = 0;
+	$scope.tibot.set_y = 0;
+	$scope.tibot.set_a = 0;
+	$scope.tibot.v = 1500;
+	$scope.tibot.r = 0.4;
+	$scope.tibot.PID_P = 0.5;
+	$scope.tibot.PID_I = 50;
+	$scope.tibot.PID_D = 10;
+	$scope.tibot.acc = 750;
+
+	$scope.tibot.selectedServo = "";
+	$scope.tibot.posServo = 90;
+
+	$scope.tibot.prendreModule = function() {
+		Client.send("pr", "prendre_module");
+	}
+
+	$scope.tibot.monterModule = function() {
+		Client.send("pr", "monter_module");
+	}
+
+	$scope.tibot.deposerModule = function() {
+		Client.send("pr", "deposer_module");
+	}
+
+	$scope.tibot.resetNbModules = function() {
+		Client.send("pr", "reset_nb_modules");
+	}
+
+	$scope.tibot.fermerTout = function() {
+		Client.send("pr", "fermer_tout");
+	}
+
+	$scope.tibot.clean = function() {
+		Client.send("pr", "clean");
+	}
+
+	$scope.tibot.stop = function() {
+		Client.send("pr", "stop");
+	}
+
+	// -------- Asserv --------
+	$scope.tibot.PWM = function() {
+		Client.send("pr", "pwm", {
+			left: $scope.tibot.pwm_droite,
+			right: $scope.tibot.pwm_gauche,
+			ms: $scope.tibot.pwm_ms
+		});
+	}
+
+	$scope.tibot.goPos = function() {
+		Client.send("pr", "goxy", {
+			x: parseInt($scope.tibot.x),
+			y: parseInt($scope.tibot.y)
+		});
+	}
+
+	$scope.tibot.goAngle = function() {
+		Client.send("gr", "goa", {
+			a: parseFloat($scope.tibot.a)*Math.PI/180
+		});
+	}
+
+	$scope.tibot.goPosAngle = function() {
+		$scope.tibot.goPos();
+		$scope.tibot.goAngle();
+	}
+
+	$scope.tibot.setVit = function() {
+		Client.send("pr", "setvit",{
+				v: parseInt($scope.tibot.v),
+				r: parseFloat($scope.tibot.r)
+		});
+	}
+
+	$scope.tibot.setAcc = function() {
+		Client.send("pr", "setacc", {
+			acc: parseInt($scope.tibot.acc)
+		});
+	}
+
+	$scope.tibot.setPos = function() {
+		Client.send("pr", "setpos", {
+			x: parseInt($scope.tibot.set_x),
+			y: parseInt($scope.tibot.set_y), 
+			a: parseFloat($scope.tibot.set_a)*Math.PI/180
+		});
+	}
+
+	$scope.tibot.setPID = function() {
+		Client.send("pr", "setpid", {
+			p: parseFloat($scope.tibot.PID_P),
+			i: parseFloat($scope.tibot.PID_I), 
+			d: parseFloat($scope.tibot.PID_D)
+		});
+	}
+
+	// ------ Actuators ------
+	$scope.tibot.updateSelectedServo = function () {
+		if ($scope.tibot.selectedServo != "") {
+			Client.send("pr", "servo_goto", {
+				"servo": $scope.tibot.selectedServo,
+				"position": $scope.tibot.posServo
+			});
+		}
+	}
+
+	$scope.tibot.fermerStabilisateurs = function () {
+		Client.send("pr", "stabs_close", {
+		});
+	}
+
+	$scope.tibot.ouvrirUnPeuStabilisateurs = function () {
+		Client.send("pr", "stabs_open_chouilla", {
+		})
+	}
+
+	$scope.tibot.ouvrirStabilisateurs = function () {
+		Client.send("pr", "stabs_open", {
+		});
+	}
+
+	$scope.tibot.closeArm = function () {
+		Client.send("pr", "arm_close", {
+		});
+	}
+
+	$scope.tibot.ouvrirUnPeuArm = function () {
+		Client.send("pr", "arm_open_chouilla", {
+		});
+	}
+
+	$scope.tibot.ouvrirArm = function () {
+		Client.send("pr", "arm_open", {
+		});
+	}
+
+	$scope.tibot.closeAx12 = function () {
+		Client.send("pr", "AX12_close", {
+		});
+	}
+
+	$scope.tibot.ouvrirAx12 = function () {
+		Client.send("pr", "AX12_open", {
+		});
+	}
+
+	// ******************************** Grobot ********************************
 	$scope.gr_pwm_gauche = 50;
 	$scope.gr_pwm_droite = 50;
 	$scope.gr_pwm_ms = 1000;
@@ -74,116 +219,25 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	$scope.grSetVit = function() {
 		Client.send("gr", "setvit", {v: parseInt($scope.gr_v), r: parseFloat($scope.gr_r) });
 	};
-	// PR
-	$scope.pr_pwm_gauche = 50;
-	$scope.pr_pwm_droite = 50;
-	$scope.pr_pwm_ms = 1000;
-	$scope.pr_a = 0;
-	$scope.pr_x = 0;
-	$scope.pr_y = 0;
-	$scope.pr_set_x = 0;
-	$scope.pr_set_y = 0;
-	$scope.pr_set_a = 0;
-	$scope.pr_v = 1500;
-	$scope.pr_r = 0.4;
-	$scope.pr_PID_P = 0.5;
-	$scope.pr_PID_I = 50;
-	$scope.pr_PID_D = 10;
-	$scope.pr_acc = 750;
-	$scope.prPWM = function() {
-		Client.send("pr", "pwm", {
-			left: $scope.pr_pwm_droite,
-			right: $scope.pr_pwm_gauche,
-			ms: $scope.pr_pwm_ms
-		});
-	};
-	$scope.prGoa = function() {
-		Client.send("pr", "goa", {a: parseFloat($scope.pr_a)*Math.PI/180});
-	};
-	$scope.prGoxy = function() {
-		Client.send("pr", "goxy", {x: parseInt($scope.pr_x), y: parseInt($scope.pr_y)});
-	};
-	$scope.prGoxya = function() {
-		$scope.prGoxy();
-		$scope.prGoa();
-	};
-	$scope.prSetVit = function() {
-		Client.send("pr", "setvit", {v: parseInt($scope.pr_v), r: parseFloat($scope.pr_r) });
-	};
-	$scope.prClean = function() {
-		Client.send("pr", "clean");
-	};
-	$scope.prSetPos = function() {
-		Client.send("pr", "setpos", {
-			x: parseInt($scope.pr_set_x),
-			y: parseInt($scope.pr_set_y), 
-			a: parseFloat($scope.pr_set_a)*Math.PI/180
-		});
-	};
-	$scope.prSetPID = function() {
-		Client.send("pr", "setpid", {
-			p: parseFloat($scope.pr_PID_P),
-			i: parseFloat($scope.pr_PID_I), 
-			d: parseFloat($scope.pr_PID_D)
-		});
-	};
-	$scope.prSetAcc = function() {
-		Client.send("pr", "setacc", { acc: parseInt($scope.pr_acc) });
-	};
 
+	// ******************************** Hokuyo ********************************
+	$scope.hokuyo = {};
 
-	$(document).on("click", "#rc_pr_servo", function(e) {
-		Client.send("pr", "servo_goto", {
-			"servo": $("#rc_pr_numservo").val(),
-			"position": parseInt($("#rc_pr_servo_pos").val())});
-	});
-
-
-
-	$(document).on("click", "#rc_pr_stab_close", function(e) {
-		Client.send("pr", "stabs_close", {});
-	});
-
-	$(document).on("click", "#rc_pr_stab_chouilla", function(e) {
-		Client.send("pr", "stabs_open_chouilla", {});
-	});
-
-	$(document).on("click", "#rc_pr_stab_open", function(e) {
-		Client.send("pr", "stabs_open", {});
-	});
-
-	$(document).on("click", "#rc_pr_arm_close", function(e) {
-		Client.send("pr", "arm_close", {});
-	});
-
-	$(document).on("click", "#rc_pr_arm_chouilla", function(e) {
-		Client.send("pr", "arm_open_chouilla", {});
-	});
-
-	$(document).on("click", "#rc_pr_arm_open", function(e) {
-		Client.send("pr", "arm_open", {});
-	});
-
-	$(document).on("click", "#rc_pr_AX12_close", function(e) {
-		Client.send("pr", "AX12_close", {});
-	});
-
-	$(document).on("click", "#rc_pr_AX12_open", function(e) {
-		Client.send("pr", "AX12_open", {});
-	});
-
-
-	$(document).on("click", "#rc_hok_start", function(e) {
+	$scope.hokuyo.nbRobots = 4;
+	$scope.hokuyo.couleur = "green";
+	
+	$scope.hokuyo.start = function() {
 		Client.send("hokuyo", "start", {
-			"color": $("#rc_hok_color").val(),
-			"nbrobots": parseInt($("#rc_hok_nbrobots").val())});
+			"color": $scope.hokuyo.couleur,
+			"nbrobots": $scope.hokuyo.nbRobots
+		});
 		console.log("Message `start` sent");
-	});
+	};
 
-	$(document).on("click", "#rc_hok_stop", function(e) {
+	$scope.hokuyo.stop =  function() {
 		Client.send("hokuyo", "stop", {});
 		console.log("Message `stop` sent");
-	});
+	}
 
 
 	/*$scope.rc_pr_pos_value = 0.5;
