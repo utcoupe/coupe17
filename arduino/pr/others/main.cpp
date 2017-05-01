@@ -57,9 +57,9 @@ void loop() {
     } else {
         //todo something useful...
         if (!stop) {
-            servoDemo();
+//            servoDemo();
             stop = true;
-            open();
+//            open();
         }
         delay(1000);
     }

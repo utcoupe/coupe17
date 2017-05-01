@@ -38,8 +38,8 @@ servoInformation servoData[MAX_SERVO]= {
 
 uint8_t servoValues[4][3] = {
         {90, 0, 170},   //PR_MODULE_ARM - INIT, OPEN, CLOSE
-        {MAX_UINT8_T_VALUE, MAX_UINT8_T_VALUE, MAX_UINT8_T_VALUE},   //PR_MODULE_DROP_R - INIT, OPEN, CLOSE
-        {MAX_UINT8_T_VALUE, MAX_UINT8_T_VALUE, MAX_UINT8_T_VALUE},   //PR_MODULE_DROP_L - INIT, OPEN, CLOSE
+        {80, 180, 80},   //PR_MODULE_DROP_R - INIT, OPEN, CLOSE
+        {90, 10, 90},   //PR_MODULE_DROP_L - INIT, OPEN, CLOSE
         {90, 10, 170}    //PR_MODULE_ROTATE - INIT, OPEN, CLOSE
 };
 
@@ -83,6 +83,12 @@ void servoApplyCommand(uint8_t servo_id, uint8_t value) {
         switch (servo_id) {
             case PR_MODULE_ARM:
                 pr_module_arm.write(value);
+                break;
+            case PR_MODULE_DROP_R:
+                pr_module_drop_r.write(value);
+                break;
+            case PR_MODULE_DROP_L:
+                pr_module_drop_l.write(value);
                 break;
             case PR_MODULE_ROTATE:
                 pr_module_rotate.write(value);

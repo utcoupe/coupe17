@@ -13,8 +13,8 @@
 
 // Set the pins corresponding to the used servo motors
 #define PR_MODULE_ARM_PIN       9
-#define PR_MODULE_DROP_R_PIN    1
-#define PR_MODULE_DROP_L_PIN    1
+#define PR_MODULE_DROP_R_PIN    6
+#define PR_MODULE_DROP_L_PIN    5
 #define PR_MODULE_ROTATE_PIN    1
 
 //todo remove ?
