@@ -67,7 +67,7 @@ class Robot extends Client{
 			var fifo = new Fifo();
 
 			// ??? classe abstraite !
-			this.acts = new (require('../Extension/Actuators/actuator.class.js'))(this.client, this.sendChildren);
+			// this.acts = new (require('../Extension/Actuators/actuator.class.js'))(this.client, this.sendChildren);
 
 			//TODO replace devicedetected
 			//this.detect = null; this.detect = new (require('./detect.class.js'))(devicesDetected);
@@ -209,8 +209,8 @@ class Robot extends Client{
 			this.sendChildren(data);
 
 	}
-
-		executeNextOrder(){
+	
+	executeNextOrder(){
 		if ((this.queue.length > 0) && (!this.orderInProgress)) {
 			var order = this.queue.shift();
 			if(order.name == "send_message") {

@@ -13,6 +13,7 @@
 //TODO Find a way to replace detect
 
 const Robot = require('./robot.class.js');
+const UnitGrabber = require('../Extension/unitgrabber.class.js');
 
 /**
  * Petit Robot
@@ -27,6 +28,8 @@ class Tibot extends Robot{
 			super(Robotname);
 		else
 			super();
+		
+		this.unitGrabber = new UnitGrabber();
 	}
 
 	/**
