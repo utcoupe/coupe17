@@ -80,7 +80,7 @@ class AsservSimu extends Asserv{
 	 * Clean
 	 */
 	clean(){
-		logger.debug('cleaning %d this.timeouts', this.timeouts.length);
+		//logger.debug('cleaning %d this.timeouts', this.timeouts.length);
 		while(this.timeouts.length > 0) {
 			clearTimeout(this.timeouts.shift());
 		}
