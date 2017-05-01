@@ -67,11 +67,12 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	}
 
 	$scope.tibot.fermerTout = function() {
-		Client.send("unit_grabber", "close");
+		Client.send("pr", "fermer_tout");
 	}
 
 	$scope.tibot.ouvrirTout = function() {
-		Client.send("unit_grabber", "open");
+		Client.send("pr", "ouvrir_tout");
+		//Client.send("pr", "ouvrir_tout");
 	}
 
 	$scope.tibot.clean = function() {
@@ -139,6 +140,7 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	}
 
 	// ------ Actuators ------
+	/* coupe15
 	$scope.tibot.updateSelectedServo = function () {
 		if ($scope.tibot.selectedServo != "") {
 			Client.send("pr", "servo_goto", {
@@ -186,6 +188,17 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	$scope.tibot.ouvrirAx12 = function () {
 		Client.send("pr", "AX12_open", {
 		});
+	}*/
+
+	$scope.tibot.openUnitGrabber = function () {
+		Client.send("unit_grabber", "open");
+	}
+
+	$scope.tibot.closeUnitGrabber = function () {Client.send("unit_grabber", "close");
+	}
+
+	$scope.tibot.depositModule = function () {
+		Client.send("base_constructor", "deposit");
 	}
 
 	// ******************************** Grobot ********************************

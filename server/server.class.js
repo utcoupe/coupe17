@@ -64,7 +64,8 @@ module.exports = (function () {
 			hokuyo: {},
 			pr: {},
 			gr: {},
-			unit_grabber: {}
+			unit_grabber: {},
+			base_constructor: {}
 		};
 		/** @type {Object} */
 		this.utcoupe = {

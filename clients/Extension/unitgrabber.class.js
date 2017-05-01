@@ -24,7 +24,7 @@ class UnitGrabber extends Extension {
     }
 
     takeOrder (from, name, param) {
-        this.logger.info("UG: order received : " + name);
+        this.logger.info("Order received : " + name);
         switch (name) {
             case "open":
                 this.servos.moduleArmOpen();

@@ -71,7 +71,8 @@
 		</div>
 
 		<div>
-			<h3>Actuators</h3>
+			<h3>Extensions : </h3>
+			<!-- coupe15 
 			<p>
 				Servo (WiP):
 				<select ng-model="tibot.selectedServo">
@@ -101,6 +102,16 @@
 				AX12 :
 				<button type="button" class="btn" ng-click="tibot.closeAx12">Fermer</button>
 				<button type="button" class="btn" ng-click="tibot.ouvrirAx12">Ouvrir</button>
+			</p>
+			-->
+			<p>
+				Unit grabber :
+				<button type="button" class="btn" ng-click="tibot.openUnitGrabber()">Ouvrir</button>
+				<button type="button" class="btn" ng-click="tibot.closeUnitGrabber()">Fermer</button>
+			</p>
+			<p>
+				Base Constructor :
+				<button type="button" class="btn" ng-click="tibot.depositModule()">Déposer module</button>
 			</p>
 		</div>
 	</section>
