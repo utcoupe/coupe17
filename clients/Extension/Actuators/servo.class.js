@@ -8,6 +8,7 @@
 "use strict";
 
 const Actuator = require('./actuator.class.js');
+const Log4js = require('log4js');
 
 /**
  * Classe implémentant l'actuator pour le servo-moteur
@@ -18,6 +19,7 @@ const Actuator = require('./actuator.class.js');
 class Servo extends Actuator {
     constructor () {
         super();
+        this.logger = Log4js.getLogger("actuator");
         super.parseParameterFile(process.env.UTCOUPE_WORKSPACE + "arduino/common/others/protocol.h");
     }
 
@@ -80,10 +82,14 @@ class Servo extends Actuator {
             //todo advertise IA
         });
     }
+
+    test() {
+        console.log("i'm alive");
+    }
 }
 
 //differentiate ready and connected
 // -> at first, arduino will send ID, waiting from the node send a START
 
 // Export an object, to make it unique in the system
-module.exports = Servo();
+module.exports = new Servo();

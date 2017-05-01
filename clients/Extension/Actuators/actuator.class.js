@@ -7,7 +7,7 @@
 "use strict";
 
 const fs = require('fs');
-const sp = require('serialport');
+const SerialPort = require('serialport');
 
 /**
  * Abstract class Actuator, which goal is to be an interface between the whole Node system and the code controlling the actuators.
@@ -20,14 +20,15 @@ class Actuator {
      */
     constructor () {
         // This is an abstract class, throw an error if it is directly instantiated or if missing virtual functions
-        if (new.target === Abstract) {
+        // if (new.target === Abstract) {
+        if (this.constructor === Actuator) {
             throw new TypeError("Cannot construct Abstract instances directly");
         }
-        if (parseCommand === undefined) {
-            throw new TypeError("Must override parseCommand");
-        }
+        // if (this.parseCommand === undefined) {
+        //     throw new TypeError("Must override parseCommand");
+        // }
 
-        this.logger = this.Log4js.getLogger(actuator);
+        this.logger = null;
         this.ordersCallback = [];
         this.currentOrderId = 0;
         this.actuatorCommands = {};
@@ -41,7 +42,7 @@ class Actuator {
         this.serialPortConnected = false;
         this.serialPort = new SerialPort("/dev/ttyUSB0", {
             baudrate: 57600,
-            parser:sp.parsers.readline("\n")
+            parser:SerialPort.parsers.readline("\n")
         });
         this.serialPort.on("data", function(data){
             if(this.serialPortReady === false){
@@ -104,9 +105,9 @@ class Actuator {
     }
 
     // Pure virtual method to implement in children
-    // parseCommand(receivedCommand) {
-    //
-    // }
+    parseCommand(receivedCommand) {
+        throw new TypeError("Must override parseCommand");
+    }
 }
 
 module.exports = Actuator;
