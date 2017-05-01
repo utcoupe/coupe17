@@ -10,38 +10,49 @@
 #include "color_sensor_tcs3200.h"
 #include <Timer.h>
 
+//todo create a real servo object ??
+
 void servoApplyCommand(uint8_t servo_id, uint8_t value);
 
-//todo init, min & max values for all servo
+//todo min & max values for all servo
 
 Servo pr_module_arm;
 Servo pr_module_drop_r;
 Servo pr_module_drop_l;
 Servo pr_module_rotate;
 
-//todo adjust timer time
-Timer rotateTimer = Timer(200, &servoRotateCallback);
+// parameters are : INIT, OPEN, CLOSE, ACTION_TIME(ms)
+uint8_t servoValues[4][4] = {
+        {90, 10, 170, 100},      //PR_MODULE_ARM
+        {80, 180, 80, 100},      //PR_MODULE_DROP_R
+        {90, 10, 90, 100},       //PR_MODULE_DROP_L
+        {90, 10, 170, 200}       //PR_MODULE_ROTATE
+};
 
-MODULE_COLOR servoRotateColor;
+//todo adjust timer time
+Timer armTimer = Timer(servoValues[PR_MODULE_ARM][TIMER], &servoArmCallback);
+Timer dropRTimer = Timer(servoValues[PR_MODULE_DROP_R][TIMER], &servoDropRCallback);
+Timer dropLTimer = Timer(servoValues[PR_MODULE_DROP_L][TIMER], &servoDropLCallback);
+Timer rotateTimer = Timer(servoValues[PR_MODULE_ROTATE_PIN][TIMER], &servoRotateCallback);
+
+//todo dynamic structure with mapping servo_id - order_id ?
+// 0 is the default value, stands for no order
+uint16_t armLastId = 0;
+uint16_t dropRLastId = 0;
+uint16_t dropLLastId = 0;
+MODULE_COLOR servoRotateColor = WHATEVER;
 
 //todo find a way for the size
-servoInformation servoData[MAX_SERVO]= {
-        {PR_MODULE_ARM, INIT, 90},
-        {PR_MODULE_ARM, OPEN, 0},
-        {PR_MODULE_ARM, CLOSE, 150},
-        {PR_MODULE_DROP_R, OPEN, 90},
-        {PR_MODULE_DROP_R, CLOSE, 90},
-        {PR_MODULE_DROP_L, OPEN, 90},
-        {PR_MODULE_DROP_L, CLOSE, 90},
-        {PR_MODULE_ROTATE, OPEN, 90},
-};
-
-uint8_t servoValues[4][3] = {
-        {90, 10, 170},   //PR_MODULE_ARM - INIT, OPEN, CLOSE
-        {80, 180, 80},   //PR_MODULE_DROP_R - INIT, OPEN, CLOSE
-        {90, 10, 90},   //PR_MODULE_DROP_L - INIT, OPEN, CLOSE
-        {90, 10, 170}    //PR_MODULE_ROTATE - INIT, OPEN, CLOSE
-};
+//servoInformation servoData[MAX_SERVO]= {
+//        {PR_MODULE_ARM, INIT, 90},
+//        {PR_MODULE_ARM, OPEN, 0},
+//        {PR_MODULE_ARM, CLOSE, 150},
+//        {PR_MODULE_DROP_R, OPEN, 90},
+//        {PR_MODULE_DROP_R, CLOSE, 90},
+//        {PR_MODULE_DROP_L, OPEN, 90},
+//        {PR_MODULE_DROP_L, CLOSE, 90},
+//        {PR_MODULE_ROTATE, OPEN, 90},
+//};
 
 void servoAttach() {
     pr_module_arm.attach(PR_MODULE_ARM_PIN);
@@ -49,7 +60,9 @@ void servoAttach() {
     pr_module_drop_l.attach(PR_MODULE_DROP_L_PIN);
     pr_module_rotate.attach(PR_MODULE_ROTATE_PIN);
     // Apply default values
-    //todo
+    pr_module_arm.write(servoValues[PR_MODULE_ARM][INIT]);
+    pr_module_drop_r.write(servoValues[PR_MODULE_DROP_R][INIT]);
+    pr_module_drop_l.write(servoValues[PR_MODULE_DROP_L][INIT]);
     pr_module_rotate.write(servoValues[PR_MODULE_ROTATE][INIT]);
 }
 
@@ -135,7 +148,34 @@ void servoRotateCallback() {
     }
 }
 
+void servoArmCallback() {
+    if (armLastId != 0) {
+        SerialSender::SerialSend(SERIAL_INFO, "%d;", armLastId);
+        armLastId = 0;
+        armTimer.Stop();
+    }
+}
+
+void servoDropRCallback() {
+    if (dropRLastId != 0) {
+        SerialSender::SerialSend(SERIAL_INFO, "%d;", dropRLastId);
+        dropRLastId = 0;
+        dropRTimer.Stop();
+    }
+}
+
+void servoDropLCallback() {
+    if (dropLLastId != 0) {
+        SerialSender::SerialSend(SERIAL_INFO, "%d;", dropLLastId);
+        dropLLastId = 0;
+        dropLTimer.Stop();
+    }
+}
+
 void servoTimerUpdate() {
+    armTimer.Update();
+    dropRTimer.Update();
+    dropLTimer.Update();
     rotateTimer.Update();
 }
 

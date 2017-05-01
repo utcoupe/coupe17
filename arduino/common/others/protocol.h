@@ -32,7 +32,8 @@ enum SERVO_POSITION {
     INIT = 0,
     OPEN = 1,
     CLOSE = 2,
-    NB_POS = 3
+    TIMER = 3,
+    NB_POS = 4
 };
 
 enum MODULE_COLOR {

@@ -26,5 +26,9 @@ void open();
 void servoRotate(MODULE_COLOR color);
 void servoTimerUpdate();
 void servoRotateCallback();
+//todo unique method with mapped structure ?
+void servoArmCallback();
+void servoDropRCallback();
+void servoDropLCallback();
 
 #endif //ARDUINO_SERVO_MOTORS_H
