@@ -27,10 +27,10 @@ class UnitGrabber extends Extension {
         this.logger.info("Order received : " + name);
         switch (name) {
             case "open":
-                this.servos.moduleDrop();
+                this.servos.moduleArmOpen();
                 break;
             case "close":
-                this.servos.moduleEngage();
+                this.servos.moduleArmClose();
                 break;
             default:
                 this.logger.error("Order " + name + " does no exist !");

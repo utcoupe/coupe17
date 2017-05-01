@@ -26,8 +26,13 @@ class BaseConstructor extends Extension {
     takeOrder (from, name, param) {
         this.logger.info("Order received : " + name);
         switch (name) {
-            case "deposit":
-                //
+            case "drop":
+                this.servos.moduleDrop();
+                break;
+            case "engage":
+                this.servos.moduleEngage();
+                break;
+
         }
     }
 }
