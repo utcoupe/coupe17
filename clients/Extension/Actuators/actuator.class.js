@@ -88,7 +88,7 @@ class Actuator {
     sendOrder(orderType, servoId, callback) {
         //todo ";" as protocol separator
         if (this.serialPortConnected) {
-            var order = orderType + ";" + servoId + ";" + args + ";\n";
+            var order = orderType + ";" + servoId + ";\n";
             order = this.addOrderId(order);
             this.ordersCallback.push([this.currentOrderId, callback]);
             this.logger.info(order);
