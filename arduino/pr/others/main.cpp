@@ -18,7 +18,8 @@ void serialRead() {
 //    static char receivedCommand[20];
     String receivedString;
     //readString has a default timeout of 1s
-    receivedString = Serial.readString();
+//    receivedString = Serial.readString();
+    receivedString = Serial.readStringUntil('\n');
     receivedString.replace("\n", "");
     if (receivedString != "") {
         if (receivedString == "S") {
@@ -40,7 +41,7 @@ void setup() {
 
     servoAttach();
 
-    setupColorSensor();
+//    setupColorSensor();
 }
 
 //main loop, first read an order from serial, execute the order and then send all data to send
@@ -61,7 +62,7 @@ void loop() {
             stop = true;
 //            open();
         }
-        delay(1000);
+//        delay(1000);
     }
     SerialSender::SerialSendTask();
 }
