@@ -37,7 +37,7 @@ servoInformation servoData[MAX_SERVO]= {
 };
 
 uint8_t servoValues[4][3] = {
-        {90, 0, 170},   //PR_MODULE_ARM - INIT, OPEN, CLOSE
+        {90, 10, 170},   //PR_MODULE_ARM - INIT, OPEN, CLOSE
         {80, 180, 80},   //PR_MODULE_DROP_R - INIT, OPEN, CLOSE
         {90, 10, 90},   //PR_MODULE_DROP_L - INIT, OPEN, CLOSE
         {90, 10, 170}    //PR_MODULE_ROTATE - INIT, OPEN, CLOSE
