@@ -8,7 +8,6 @@
 "use strict";
 
 const Actuator = require('./actuator.class.js');
-// const Log4js = require('log4js');
 
 /**
  * Classe implémentant l'actuator pour le servo-moteur
@@ -18,8 +17,7 @@ const Actuator = require('./actuator.class.js');
  */
 class Servo extends Actuator {
     constructor () {
-        super();
-        // this.logger = Log4js.getLogger("servo");
+        super("servo");
         this.parseParameterFile(process.env.UTCOUPE_WORKSPACE + "/arduino/common/others/protocol.h");
     }
 

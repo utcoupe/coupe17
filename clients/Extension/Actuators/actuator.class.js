@@ -20,7 +20,7 @@ class Actuator {
     /**
      * Creates an instance of Actuator.
      */
-    constructor () {
+    constructor (actuatorName) {
         // This is an abstract class, throw an error if it is directly instantiated or if missing virtual functions
         // if (new.target === Abstract) {
         if (this.constructor === Actuator) {
@@ -31,7 +31,7 @@ class Actuator {
         // }
 
         // this.logger = null;
-        this.logger = Log4js.getLogger("actuator");
+        this.logger = Log4js.getLogger(actuatorName);
         this.ordersCallback = [];
         this.currentOrderId = 0;
         this.actuatorCommands = {};
