@@ -192,14 +192,18 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 
 	$scope.tibot.openUnitGrabber = function () {
 		Client.send("unit_grabber", "open");
-	}
+	};
 
 	$scope.tibot.closeUnitGrabber = function () {Client.send("unit_grabber", "close");
-	}
+	};
 
-	$scope.tibot.depositModule = function () {
-		Client.send("base_constructor", "deposit");
-	}
+	$scope.tibot.dropModule = function () {
+		Client.send("base_constructor", "drop");
+	};
+
+    $scope.tibot.engageModule = function () {
+        Client.send("base_constructor", "engage");
+    };
 
 	// ******************************** Grobot ********************************
 	$scope.gr_pwm_gauche = 50;
