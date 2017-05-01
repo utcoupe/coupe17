@@ -66,6 +66,7 @@ class Servo extends Actuator {
         this.sendOrder(this.actuatorCommands.SERVO_CLOSE, this.actuatorCommands.PR_MODULE_DROP_L, function(params){
             //todo advertise IA
         });
+        //todo send color id
         // this.sendOrder(this.actuatorCommands.MODULE_ROTATE, this.actuatorCommands.PR_MODULE_ROTATE, function(params){
         //     //todo advertise IA
         // });
