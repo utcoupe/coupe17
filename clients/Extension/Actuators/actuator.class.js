@@ -43,7 +43,7 @@ class Actuator {
         this.serialPortReady = false;
         // Connected means that the node has started the device through serial port
         this.serialPortConnected = false;
-        this.serialPort = new SerialPort("/dev/ttyUSB0", {
+        this.serialPort = new SerialPort("/dev/ttyACM0", {
             baudrate: 57600,
             parser:SerialPort.parsers.readline("\n")
         });
@@ -88,10 +88,10 @@ class Actuator {
     sendOrder(orderType, servoId, callback) {
         //todo ";" as protocol separator
         if (this.serialPortConnected) {
-            var order = orderType + ";" + servoId + ";\n";
+            var order = orderType + ";" + servoId + ";" + args + ";\n";
             order = this.addOrderId(order);
             this.ordersCallback.push([this.currentOrderId, callback]);
-            // this.logger.log(order);
+            this.logger.info(order);
             this.serialPort.write(order);
         } else {
             this.logger.error("SerialPort is not connected...");

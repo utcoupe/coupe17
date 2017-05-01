@@ -25,7 +25,6 @@ class Servo extends Actuator {
 
     // Automatically called by the super class
     parseCommand(receivedCommand) {
-        console.log("in parse command, received : " + receivedCommand.toString());
         if (!this.serialPortConnected) {
             //todo robot+"_others"
             // If not connected, wait the ID of the arduino before doing something else
@@ -40,10 +39,10 @@ class Servo extends Actuator {
                 // It's an order response
                 //todo ";" as protocol separator
                 var splittedCommand = receivedCommand.split(";");
-                this.callOrderCallback(splittedCommand[0], splittedCommand.slice(0, 1));
+                this.callOrderCallback(splittedCommand[0], splittedCommand.slice(0, 2));
             } else {
                 // It's a debug string
-                this.logger.fatal(receivedCommand.toString());
+                this.logger.info(receivedCommand.toString());
             }
         }
     }
