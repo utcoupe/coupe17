@@ -20,7 +20,7 @@ class Servo extends Actuator {
     constructor () {
         super();
         this.logger = Log4js.getLogger("actuator");
-        super.parseParameterFile(process.env.UTCOUPE_WORKSPACE + "arduino/common/others/protocol.h");
+        this.parseParameterFile(process.env.UTCOUPE_WORKSPACE + "/arduino/common/others/protocol.h");
     }
 
     // Automatically called by the super class
@@ -81,10 +81,6 @@ class Servo extends Actuator {
         super.sendOrder(super.actuatorCommands.SERVO_OPEN, super.actuatorCommands.PR_MODULE_DROP_L, function(params){
             //todo advertise IA
         });
-    }
-
-    test() {
-        console.log("i'm alive");
     }
 }
 

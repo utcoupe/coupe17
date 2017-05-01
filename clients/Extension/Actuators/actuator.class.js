@@ -101,7 +101,8 @@ class Actuator {
             } else {
                 this.logger.error("Try to parse parameter file " + filename + ", but an error ocured : " + err.code);
             }
-        })
+        });
+        console.log(this.actuatorCommands);
     }
 
     // Pure virtual method to implement in children
