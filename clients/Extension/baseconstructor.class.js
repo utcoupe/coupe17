@@ -7,7 +7,8 @@
 
 "use strict";
 
-const Extension = require('extension.class.js');
+const Extension = require('./extension.class.js');
+var servos = require('./Actuators/servo.class.js');
 
 /**
  * Extension permettant de construire la base lunaire
@@ -18,7 +19,16 @@ const Extension = require('extension.class.js');
  */
 class BaseConstructor extends Extension {
     constructor(){
-        //
+        super("base_constructor");
+        this.servos = servos;
+    }
+
+    takeOrder (from, name, param) {
+        this.logger.info("Order received : " + name);
+        switch (name) {
+            case "deposit":
+                //
+        }
     }
 }
 

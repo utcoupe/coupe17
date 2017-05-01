@@ -14,6 +14,7 @@
 
 const Robot = require('./robot.class.js');
 const UnitGrabber = require('../Extension/unitgrabber.class.js');
+const BaseConstructor = require('../Extension/baseconstructor.class.js');
 
 /**
  * Petit Robot
@@ -30,6 +31,7 @@ class Tibot extends Robot{
 			super();
 		
 		this.unitGrabber = new UnitGrabber();
+		this.baseConstructor = new BaseConstructor();
 	}
 
 	/**
