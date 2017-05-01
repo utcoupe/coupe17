@@ -8,6 +8,8 @@
 
 const fs = require('fs');
 const SerialPort = require('serialport');
+const defineParser = require("../../Shared/defineParser.js");
+const Log4js = require('log4js');
 
 /**
  * Abstract class Actuator, which goal is to be an interface between the whole Node system and the code controlling the actuators.
@@ -28,7 +30,8 @@ class Actuator {
         //     throw new TypeError("Must override parseCommand");
         // }
 
-        this.logger = null;
+        // this.logger = null;
+        this.logger = Log4js.getLogger("actuator");
         this.ordersCallback = [];
         this.currentOrderId = 0;
         this.actuatorCommands = {};
@@ -50,23 +53,17 @@ class Actuator {
                 //todo
                 // this.sendStatus();
             }
-            parseCommand(data.toString());
+            this.parseCommand(data.toString());
         }.bind(this));
         this.serialPort.on("error", function(data){
             this.logger.debug("Serial port error : " + data.toString());
-        });
+        }.bind(this));
         this.serialPort.on("close", function(){
             this.serialPortReady = false;
             //todo
             // this.sendStatus();
             this.logger.error("Serial port close");
         }.bind(this));
-
-        //add the id at the second position, orderToSend is the string to send to the actuator
-        function addOrderId(orderToSend) {
-            this.currentOrderId++;
-            return (orderToSend.slice(0, 1) + this.currentOrderId + ";" + orderToSend.slice(2))
-        }
     }
 
     //call the callback corresponding to the received order id, stored in ordersCallback
@@ -74,19 +71,27 @@ class Actuator {
     for (var index = 0; index < this.ordersCallback; index++) {
         if (this.ordersCallback[index][0] == orderId) {
             // Call the callback
-            this.ordersCallback[index][1](params);
+            if (this.ordersCallback[index][1] != null) {
+                this.ordersCallback[index][1](params);
+            }
             // Remove the line from the array
             this.ordersCallback.splice(index, 1);
         }
     }
 }
+    //add the id at the second position, orderToSend is the string to send to the actuator
+    addOrderId(orderToSend) {
+        this.currentOrderId++;
+        return (orderToSend.slice(0, 2) + this.currentOrderId + ";" + orderToSend.slice(2))
+    }
 
     sendOrder(orderType, servoId, callback) {
         //todo ";" as protocol separator
         if (this.serialPortConnected) {
             var order = orderType + ";" + servoId + ";\n";
-            order = addOrderId(order);
+            order = this.addOrderId(order);
             this.ordersCallback.push([this.currentOrderId, callback]);
+            // this.logger.log(order);
             this.serialPort.write(order);
         } else {
             this.logger.error("SerialPort is not connected...");
@@ -97,12 +102,11 @@ class Actuator {
     parseParameterFile(filename) {
         fs.stat(filename, function(err) {
             if(err == null) {
-                this.actuatorCommands = require('../../Shared/defineParser.js')(filename);
+                this.actuatorCommands = defineParser(filename.toString());
             } else {
                 this.logger.error("Try to parse parameter file " + filename + ", but an error ocured : " + err.code);
             }
-        });
-        console.log(this.actuatorCommands);
+        }.bind(this));
     }
 
     // Pure virtual method to implement in children

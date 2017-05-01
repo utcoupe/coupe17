@@ -8,7 +8,7 @@
 "use strict";
 
 const Actuator = require('./actuator.class.js');
-const Log4js = require('log4js');
+// const Log4js = require('log4js');
 
 /**
  * Classe implémentant l'actuator pour le servo-moteur
@@ -19,18 +19,19 @@ const Log4js = require('log4js');
 class Servo extends Actuator {
     constructor () {
         super();
-        this.logger = Log4js.getLogger("actuator");
+        // this.logger = Log4js.getLogger("servo");
         this.parseParameterFile(process.env.UTCOUPE_WORKSPACE + "/arduino/common/others/protocol.h");
     }
 
     // Automatically called by the super class
     parseCommand(receivedCommand) {
-        if (!super.serialPortConnected) {
+        console.log("in parse command, received : " + receivedCommand.toString());
+        if (!this.serialPortConnected) {
             //todo robot+"_others"
             // If not connected, wait the ID of the arduino before doing something else
-            if (receivedCommand == "pr_others") {
-                super.sendOrder(super.actuatorCommands.START, 0, undefined);
-                super.serialPortConnected = true;
+            if (receivedCommand.toString() == "pr_others\r") {
+                this.serialPortConnected = true;
+                this.sendOrder(this.actuatorCommands.START, 0, null);
             }
         } else {
             // Check if the received command is a debug string or a response from an order
@@ -39,48 +40,54 @@ class Servo extends Actuator {
                 // It's an order response
                 //todo ";" as protocol separator
                 var splittedCommand = receivedCommand.split(";");
-                super.callOrderCallback(splittedCommand[0], splittedCommand.slice(0, 1));
+                this.callOrderCallback(splittedCommand[0], splittedCommand.slice(0, 1));
             } else {
                 // It's a debug string
-                super.logger("SERVO : " + receivedCommand);
+                this.logger.fatal(receivedCommand.toString());
             }
         }
     }
 
     // Orders used by the extension
     moduleArmClose() {
-        super.sendOrder(super.actuatorCommands.SERVO_CLOSE, super.actuatorCommands.PR_MODULE_ARM, function(params){
+        this.sendOrder(this.actuatorCommands.SERVO_CLOSE, this.actuatorCommands.PR_MODULE_ARM, function(params){
             //todo advertise IA
         });
     }
 
     moduleArmOpen() {
-        super.sendOrder(super.actuatorCommands.SERVO_OPEN, super.actuatorCommands.PR_MODULE_ARM, function(params){
+        this.sendOrder(this.actuatorCommands.SERVO_OPEN, this.actuatorCommands.PR_MODULE_ARM, function(params){
             //todo advertise IA
         });
     }
 
     //implicit rotate the module
     moduleEngage() {
-        super.sendOrder(super.actuatorCommands.SERVO_CLOSE, super.actuatorCommands.PR_MODULE_DROP_R, function(params){
+        this.sendOrder(this.actuatorCommands.SERVO_CLOSE, this.actuatorCommands.PR_MODULE_DROP_R, function(params){
             //todo advertise IA
         });
-        super.sendOrder(super.actuatorCommands.SERVO_CLOSE, super.actuatorCommands.PR_MODULE_DROP_L, function(params){
+        this.sendOrder(this.actuatorCommands.SERVO_CLOSE, this.actuatorCommands.PR_MODULE_DROP_L, function(params){
             //todo advertise IA
         });
-        super.sendOrder(super.actuatorCommands.MODULE_ROTATE, super.actuatorCommands.PR_MODULE_ROTATE, function(params){
+        this.sendOrder(this.actuatorCommands.MODULE_ROTATE, this.actuatorCommands.PR_MODULE_ROTATE, function(params){
             //todo advertise IA
         });
     }
 
     moduleDrop() {
         //todo modules--
-        super.sendOrder(super.actuatorCommands.SERVO_OPEN, super.actuatorCommands.PR_MODULE_DROP_R, function(params){
+        this.sendOrder(this.actuatorCommands.SERVO_OPEN, this.actuatorCommands.PR_MODULE_DROP_R, function(params){
             //todo advertise IA
         });
-        super.sendOrder(super.actuatorCommands.SERVO_OPEN, super.actuatorCommands.PR_MODULE_DROP_L, function(params){
+        this.sendOrder(this.actuatorCommands.SERVO_OPEN, this.actuatorCommands.PR_MODULE_DROP_L, function(params){
             //todo advertise IA
         });
+    }
+
+    test() {
+        setTimeout(function(){
+            console.log(this.actuatorCommands);
+        }.bind(this), 200);
     }
 }
 
