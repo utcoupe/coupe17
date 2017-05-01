@@ -63,7 +63,8 @@ module.exports = (function () {
 			lidar: {},
 			hokuyo: {},
 			pr: {},
-			gr: {}
+			gr: {},
+			unit_grabber: {}
 		};
 		/** @type {Object} */
 		this.utcoupe = {

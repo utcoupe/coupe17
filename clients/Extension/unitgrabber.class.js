@@ -7,7 +7,8 @@
 
 "use strict";
 
-const Extension = require('extension.class.js');
+const Extension = require('./extension.class.js');
+var servos = require('./Actuators/servo.class.js');
 
 /**
  * Extension permettant de ramasser les modules lunaires
@@ -18,7 +19,19 @@ const Extension = require('extension.class.js');
  */
 class UnitGrabber extends Extension {
     constructor(){
-        //
+        super("unit_grabber");
+        this.servos = servos;
+    }
+
+    takeOrder (from, name, param) {
+        this.logger.info("UG: order received : " + name);
+        switch (name) {
+            case "open":
+                this.servos.moduleArmOpen();
+
+            case "close":
+                this.servos.moduleArmClose();
+        }
     }
 }
 

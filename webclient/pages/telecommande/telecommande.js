@@ -67,7 +67,11 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	}
 
 	$scope.tibot.fermerTout = function() {
-		Client.send("pr", "fermer_tout");
+		Client.send("unit_grabber", "close");
+	}
+
+	$scope.tibot.ouvrirTout = function() {
+		Client.send("unit_grabber", "open");
 	}
 
 	$scope.tibot.clean = function() {
