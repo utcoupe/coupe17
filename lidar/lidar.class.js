@@ -43,23 +43,29 @@ module.exports = (function () {
 
 		this.hokuyoPositions = {
 			one: {
-	 			"x": -4, //-6.2
-	 			"y": -4,	//-6.2
+	 			"x": -2, //-6.2
+	 			"y": -2,	//-6.2
 	 			"w": 0 ,	//0
 				"decalage" : [],
-				"init" : 3
+				"init" : 2, //Nb de boucles de recalage
+				"rockets" : ["two"]
 	 		},
 			two: {
 	 			"x": 304, //306.2
 	 			"y": 100,	//100
 	 			"w": 180 ,	//180
 				"decalage" : [],
-				"init" : 0
+				"init" : 2,
+				"rockets" : ["one"]
 	 		}
 		}
 		this.rocketPositions = {
 			one : {
 				"x" : 185,
+				"y" : 4
+			},
+			two : {
+				"x" : 115,
 				"y" : 4
 			}
 		}
@@ -464,11 +470,11 @@ module.exports = (function () {
 		let clusters = this.clusterize(spots);
 		let hokPos = this.hokuyoPositions[hokName];
 		let angle;
-		let detected = false;
+		let finish = false
 		function isNear(lidar, cluster, rocketName, d){
 			let x = lidar.rocketPositions[rocketName].x;
 			let y = lidar.rocketPositions[rocketName].y;
-
+			//logger.warn([cluster.x, x]);
 			//logger.warn([cluster.x, lidar.rocketPositions["one"].x]);
 			if (cluster.x > x - d
 				&& cluster.x < x + d
@@ -483,20 +489,34 @@ module.exports = (function () {
 			var tab1 = lidar.toPolar(cluster, hokName);
 			var tab2 = lidar.toPolar(lidar.rocketPositions[rocketName], hokName);
 			//logger.warn([tab1[0], tab2[0]])
-			return (tab2[0] - tab1 [0])
+			return (tab2[0] - tab1[0])
 		}
 		for (let i = 0; i < clusters.length ; i++){
 			clusters[i].calculCenter();
-			if (isNear(this, clusters[i], "one", 35) == true){
+			finish = false;
+			/*if (isNear(this, clusters[i], "one", 15) == true && finish == false){
 				angle = angleGap(this, clusters[i], "one", hokName)
 				hokPos.decalage.push(angle)
-				detected = true;
+				finish = true;
+			}
+			if (isNear(this, clusters[i], "two", 15) == true && finish == false){
+				angle = angleGap(this, clusters[i], "two", hokName)
+				hokPos.decalage.push(angle)
+				finish = true;
+			}*/
+			for(let j=0; j < hokPos.rockets.length; j++){
+				if (isNear(this, clusters[i], hokPos.rockets[j], 30) == true && finish == false){
+					angle = angleGap(this, clusters[i], hokPos.rockets[j], hokName)
+					hokPos.decalage.push(angle)
+					finish = true;
+					logger.warn("fusee detectee");
+				}
 			}
 		}
 		hokPos.init = hokPos.init - 1 ;
-		if (hokPos.init == 0 && detected == true){
+		let nb = hokPos.decalage.length;
+		if (hokPos.init == 0 && nb > 0){
 			let a = 0;
-			let nb = hokPos.decalage.length
 			for( let i = 0; i < nb; i++){
 				a = a + hokPos.decalage[i];
 			}

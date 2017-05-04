@@ -65,6 +65,8 @@
 						// quitC("stop");
 						spawn('sudo', ['halt']);
 						break;
+					case "calibration":
+						break;
 					case "stop":
 						hokMng.stop();
 						// quitC("stop");
