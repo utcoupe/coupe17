@@ -91,16 +91,22 @@ void servoAction(uint8_t servo_id, SERVO_POSITION position) {
     }
 }
 
+//todo put the timer start in another function to avoid multiple call ba protocol.cpp
 void servoApplyCommand(uint8_t servo_id, uint8_t value) {
     if (value < MAX_UINT8_T_VALUE) {
         switch (servo_id) {
             case PR_MODULE_ARM:
+                armTimer.Start();
+                //todo use real order id...
+                armLastId = 36;
                 pr_module_arm.write(value);
                 break;
             case PR_MODULE_DROP_R:
+                dropRTimer.Start();
                 pr_module_drop_r.write(value);
                 break;
             case PR_MODULE_DROP_L:
+                dropLTimer.Start();
                 pr_module_drop_l.write(value);
                 break;
             case PR_MODULE_ROTATE:
@@ -176,7 +182,7 @@ void servoTimerUpdate() {
     armTimer.Update();
     dropRTimer.Update();
     dropLTimer.Update();
-    rotateTimer.Update();
+//    rotateTimer.Update();
 }
 
 
