@@ -24,7 +24,7 @@ class Extension extends Client {
     }
 
     takeOrder(from, name, param) {
-        this.fifo.newOrder(this.processFifoOrder(name, param).bind(this), name);
+        this.fifo.newOrder(() => {this.processFifoOrder(name, param)}, name);
     }
 
     processFifoOrder (name, param) {

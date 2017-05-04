@@ -23,7 +23,7 @@ class UnitGrabber extends Extension {
         this.servos = servos;
     }
 
-    processFifoOrder (name, param) {
+   processFifoOrder (name, param) {
         this.logger.info("Order received : " + name);
         switch (name) {
             case "open":
@@ -46,8 +46,6 @@ class UnitGrabber extends Extension {
             
             case "take_4":
                 // Order : same thing but 4 times
-                break;
-
                 break;
             
             default:
