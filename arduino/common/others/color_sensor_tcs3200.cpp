@@ -8,22 +8,30 @@
 #include <Arduino.h>
 #include "sender.h"
 
-#define S0 4
-#define S1 5
-#define S2 6
-#define S3 7
-#define LED 12
-#define sensorOut 3
+#define S0          7
+#define S1          8
+#define S2          12
+#define S3          13
+#define LED         2
+#define sensorOut   10
 
-#define COLOR_ACCUMULATE_NB     3
+#define COLOR_ACCUMULATE_NB     1
+#define COLOR_SENSOR_TIMEOUT    100000//in µs
 
 #define WHITE_COLOR_THRESHOLD   600
 #define YELLOW_COLOR_THRESHOLD  270
 
+#define YELLOW_MIN_THRESHOLD    40
+#define YELLOW_MAX_THRESHOLD    70
+#define BLUE_MIN_THRESHOLD    220
+#define BLUE_MAX_THRESHOLD    250
+#define WHITE_MIN_THRESHOLD    180
+#define WHITE_MAX_THRESHOLD    200
+
 //red, green, blue
 uint8_t rgbValues[3];
 //use tlc values instead of rgb, because more easy to get colors
-uint16_t tslValues[3];
+//uint16_t tslValues[3];
 
 //used to map rawFrequency read from sensor to a RGB value on 8 bytes
 //those data have to be calibrated to be optimal
@@ -58,7 +66,11 @@ void colorSensorValuesCapture() {
     for (uint8_t color_id = 0; color_id < 3; color_id++) {
         colorSensorFilterApply((rgbValuesName)color_id);
         rawFrequency = pulseIn(sensorOut, LOW);
-        rgbValues[color_id] = constrain(map(rawFrequency, rgbMinMaxFrequency[color_id][0], rgbMinMaxFrequency[color_id][1], 255, 0), 0, 255);
+        if (rawFrequency == 0) {
+            SerialSender::SerialSend(SERIAL_ERROR, "Color sensor timed out...");
+        } else {
+            rgbValues[color_id] = constrain(map(rawFrequency, rgbMinMaxFrequency[color_id][0], rgbMinMaxFrequency[color_id][1], 255, 0), 0, 255);
+        }
     }
 }
 
@@ -66,6 +78,7 @@ MODULE_COLOR computeColor() {
     MODULE_COLOR returnValue = WHATEVER;
     uint16_t rgbColorAccumulator[3] = {0, 0, 0};
     uint8_t rgbMeanValues[3] = {0, 0, 0};
+    uint16_t tslValues[3] = {0, 0, 0};
     // First accumulate color sensor values to be more accurate
     for (uint8_t accumulator_nb = 0; accumulator_nb < COLOR_ACCUMULATE_NB; accumulator_nb++) {
         colorSensorValuesCapture();
@@ -79,26 +92,39 @@ MODULE_COLOR computeColor() {
     rgbMeanValues[RGB_BLUE] = rgbColorAccumulator[RGB_BLUE] / COLOR_ACCUMULATE_NB;
     SerialSender::SerialSend(SERIAL_DEBUG, "RED : %d, GREEN : %d, BLUE : %d", rgbMeanValues[RGB_RED], rgbMeanValues[RGB_GREEN], rgbMeanValues[RGB_BLUE]);
     // Compute the corresponding tsl colors
-    computeTslColors(rgbMeanValues);
-    SerialSender::SerialSend(SERIAL_DEBUG, "HUE : %d, SATURATION : %d, LIGHTNESS : %d", tslValues[TSL_HUE], tslValues[TSL_SATURATION], tslValues[TSL_SATURATION]);
-    // Compute the non rgb colors
-    uint16_t yellowColor = rgbMeanValues[RGB_RED] + rgbMeanValues[RGB_GREEN];
-    uint16_t colorSum = yellowColor + rgbMeanValues[RGB_BLUE];
+    computeTslColors(rgbMeanValues, tslValues);
+    SerialSender::SerialSend(SERIAL_DEBUG, "HUE : %d, SATURATION : %d, LIGHTNESS : %d", tslValues[TSL_HUE], tslValues[TSL_SATURATION], tslValues[TSL_LIGHTNESS]);
+//    // Compute the non rgb colors
+//    uint16_t yellowColor = rgbMeanValues[RGB_RED] + rgbMeanValues[RGB_GREEN];
+//    uint16_t colorSum = yellowColor + rgbMeanValues[RGB_BLUE];
+//    String color;
+//    //todo return the color corresponding to the protocol
+//    if (colorSum > WHITE_COLOR_THRESHOLD) {
+//        color = String("white");
+//    } else {
+//        //todo find a way to avoid blue -> white turning in yellow...
+//        if (yellowColor > YELLOW_COLOR_THRESHOLD) {
+//            color = String("yellow");
+//            returnValue = YELLOW;
+//        } else if ((yellowColor >> 2) < rgbMeanValues[RGB_BLUE]) {
+//            color = String("blue");
+//            returnValue = BLUE;
+//        } else {
+//            color = String("undefined");
+//        }
+//    }
+    // Compute the color value
     String color;
-    //todo return the color corresponding to the protocol
-    if (colorSum > WHITE_COLOR_THRESHOLD) {
+    if ((tslValues[TSL_HUE] > YELLOW_MIN_THRESHOLD) && (tslValues[TSL_HUE] < YELLOW_MAX_THRESHOLD)) {
+        color = String("yellow");
+        returnValue = YELLOW;
+    } else if ((tslValues[TSL_HUE] > BLUE_MIN_THRESHOLD) && (tslValues[TSL_HUE] < BLUE_MAX_THRESHOLD)) {
+        returnValue = BLUE;
+        color = String("blue");
+    } else if ((tslValues[TSL_HUE] > WHITE_MIN_THRESHOLD) && (tslValues[TSL_HUE] < WHITE_MAX_THRESHOLD)) {
         color = String("white");
     } else {
-        //todo find a way to avoid blue -> white turning in yellow...
-        if (yellowColor > YELLOW_COLOR_THRESHOLD) {
-            color = String("yellow");
-            returnValue = YELLOW;
-        } else if ((yellowColor >> 2) < rgbMeanValues[RGB_BLUE]) {
-            color = String("blue");
-            returnValue = BLUE;
-        } else {
-            color = String("undefined");
-        }
+        color = String("undefined");
     }
     SerialSender::SerialSend(SERIAL_INFO, color);
     return returnValue;
@@ -123,41 +149,69 @@ void colorSensorFilterApply(rgbValuesName color) {
     }
 }
 
-void computeTslColors(uint8_t rgbValues[3]) {
-    uint8_t maxColorValue = rgbValues[RGB_RED];
-    uint8_t minColorValue  = rgbValues[RGB_RED];
+void computeTslColors(uint8_t rgbValues[3], uint16_t tslColors[3]) {
+    uint16_t maxColorValue = (uint16_t)rgbValues[RGB_RED];
+    uint16_t minColorValue  = (uint16_t)rgbValues[RGB_RED];
     uint8_t maxColorValueIndex = 0;
     // Compute min and max color
     for (uint8_t index = 1; index < 3; index++) {
-        if (rgbValues[index] > maxColorValue) {
-            maxColorValue = rgbValues[index];
+        if ((uint16_t)rgbValues[index] > maxColorValue) {
+            maxColorValue = (uint16_t)rgbValues[index];
             maxColorValueIndex = index;
         }
-        if (rgbValues[index] < minColorValue) {
-            minColorValue = rgbValues[index];
+        if ((uint16_t)rgbValues[index] < minColorValue) {
+            minColorValue = (uint16_t)rgbValues[index];
         }
+    }
+    // Use float values, not best idea but standard TSL calculation can't be done in integers...
+    uint16_t delta = maxColorValue - minColorValue;
+    if (delta != 0) {
+        float deltaf = (float)delta;
+        float hue;
+        if ((rgbValuesName)maxColorValueIndex == RGB_RED)
+        {
+            hue = (float)(rgbValues[RGB_GREEN] - rgbValues[RGB_BLUE]) / delta;
+        }
+        else
+        {
+            if ((rgbValuesName)maxColorValueIndex == RGB_GREEN)
+            {
+                hue = 2.0 + (float)(rgbValues[RGB_BLUE] - rgbValues[RGB_RED]) / delta;
+            }
+            else
+            {
+                hue = 4.0 + (float)(rgbValues[RGB_RED] - rgbValues[RGB_GREEN]) / delta;
+            }
+        }
+        hue *= 60.0;
+        if (hue < 0) hue += 360;
+        tslColors[TSL_HUE] = (uint16_t)hue;
+//        switch ((rgbValuesName)maxColorValueIndex) {
+//            case RGB_RED:
+//            {
+//                tslColors[TSL_HUE] = (uint16_t)((uint16_t)60 * (uint16_t)((((uint16_t)rgbValues[RGB_GREEN] - (uint16_t)rgbValues[RGB_BLUE]) / (maxColorValue - minColorValue)) % 6));
+//                break;
+//            }
+//            case RGB_GREEN:
+//            {
+//                tslColors[TSL_HUE] = (uint16_t)((uint16_t)60 * (uint16_t)((((uint16_t)rgbValues[RGB_BLUE] - (uint16_t)rgbValues[RGB_RED]) / (maxColorValue - minColorValue)) + (uint16_t)2));
+//                break;
+//            }
+//            case RGB_BLUE:
+//            {
+//                tslColors[TSL_HUE] = (uint16_t)((uint16_t)60 * ((((uint16_t)rgbValues[RGB_RED] - (uint16_t)rgbValues[RGB_GREEN]) / (maxColorValue - minColorValue)) + (uint16_t)4));
+//                break;
+//            }
+//            default:
+//                SerialSender::SerialSend(SERIAL_ERROR, "ComputeTslColor : Color index %d does not exists...", maxColorValueIndex);
+//                break;
+//        }
     }
     // Compute the tsl values
-    switch ((rgbValuesName)maxColorValueIndex) {
-        case RGB_RED:
-        {
-            tslValues[TSL_HUE] = 60 * (((rgbValues[RGB_GREEN] - rgbValues[RGB_BLUE]) / (maxColorValue - minColorValue)) % 6);
-            break;
-        }
-        case RGB_GREEN:
-        {
-            tslValues[TSL_HUE] = 60 * (((rgbValues[RGB_BLUE] - rgbValues[RGB_RED]) / (maxColorValue - minColorValue)) + 2);
-            break;
-        }
-        case RGB_BLUE:
-        {
-            tslValues[TSL_HUE] = 60 * (((rgbValues[RGB_RED] - rgbValues[RGB_GREEN]) / (maxColorValue - minColorValue)) + 4);
-            break;
-        }
-        default:
-            SerialSender::SerialSend(SERIAL_ERROR, "ComputeTslColor : Color index %d does not exists...", maxColorValueIndex);
-            break;
-    }
-    tslValues[TSL_SATURATION] = 100*((maxColorValue - minColorValue) / maxColorValue);
-    tslValues[TSL_LIGHTNESS] = 100 * maxColorValue / 255;
+    tslColors[TSL_SATURATION] = (uint16_t)((uint16_t)100 * (uint16_t)((maxColorValue - minColorValue)) / (uint16_t)maxColorValue);
+    tslColors[TSL_LIGHTNESS] = (uint16_t)((uint16_t)100 * maxColorValue) / (uint16_t)255;
+//    uint16_t maxin = (uint16_t)(maxColorValue - minColorValue);
+//    uint16_t mult = (uint16_t)100 * maxin;
+//    uint16_t div = mult / maxColorValue;
+//    SerialSender::SerialSend(SERIAL_INFO, "Max = %d, 100Max = %d, light = %d, LIGHT = %d", maxColorValue, maxin, mult, tslColors[TSL_SATURATION]);
 }

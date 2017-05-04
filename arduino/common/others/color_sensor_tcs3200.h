@@ -23,6 +23,6 @@ void setupColorSensor();
 void colorSensorValuesCapture();
 MODULE_COLOR computeColor();
 void colorSensorFilterApply(rgbValuesName color);
-void computeTslColors(uint8_t rgbValues[3]);
+void computeTslColors(uint8_t rgbValues[3], uint16_t tslColors[3]);
 
 #endif //ARDUINO_COLOR_SENSOR_TCS3200_H
