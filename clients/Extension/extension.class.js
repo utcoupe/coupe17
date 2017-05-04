@@ -19,6 +19,16 @@ class Extension extends Client {
     constructor(extensionName){
         super(extensionName);
         this.extensionName = extensionName;
+
+        this.fifo = new (require('../fifo.class.js'))();
+    }
+
+    takeOrder(from, name, param) {
+        this.fifo.newOrder(this.processFifoOrder(name, param).bind(this), name);
+    }
+
+    processFifoOrder (name, param) {
+        throw new TypeError("extension:processFifoOrder is pure virtual !");
     }
 }
 
