@@ -23,7 +23,7 @@ class BaseConstructor extends Extension {
         this.servos = servos;
     }
 
-    takeOrder (from, name, param) {
+    processFifoOrder (name, param) {
         this.logger.info("Order received : " + name);
         switch (name) {
             case "drop":
@@ -32,7 +32,23 @@ class BaseConstructor extends Extension {
             case "engage":
                 this.servos.moduleEngage();
                 break;
-
+            
+            case "drop_border":
+                // open
+                // rotate
+                // close
+                break;
+            
+            case "drop_middle_1":
+                // same thing
+                break;
+            
+            case "drop_middle_2":
+                // same thing
+                break;
+            
+            default:
+                this.logger.error("Order " + name + " does not exist !");
         }
     }
 }

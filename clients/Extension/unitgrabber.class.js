@@ -23,7 +23,7 @@ class UnitGrabber extends Extension {
         this.servos = servos;
     }
 
-    processFifoOrder (name, param) {
+   processFifoOrder (name, param) {
         this.logger.info("Order received : " + name);
         switch (name) {
             case "open":
@@ -37,12 +37,19 @@ class UnitGrabber extends Extension {
                 //processing the next one
                 //-> doing it in callback back and in easy to understand style !
                 //2015 way is to use an other internal fifo, but not really understandable...
+                // Order :
+                // - open grabber
+                // - close arms
+                // - up grabber
+                // - open arms
                 break;
-            case "drop_1":
-
+            
+            case "take_4":
+                // Order : same thing but 4 times
                 break;
+            
             default:
-                this.logger.error("Order " + name + " does no exist !");
+                this.logger.error("Order " + name + " does not exist !");
         }
     }
 }
