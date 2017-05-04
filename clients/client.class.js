@@ -8,6 +8,7 @@
 "use strict";
 
 const Log4js = require('log4js');
+const CONFIG = require('../config.js');
 const SocketClient = require('../server/socket_client.class.js');
 
 /**
@@ -19,13 +20,28 @@ class Client {
 	/**
 	 * Creates an instance of Client.
 	 * @param {any} status
+	 * @param {String} clientName
 	 */
-	constructor(status){
-		this.Log4js = Log4js;
-		this.SocketClient = SocketClient;
+	constructor(clientName, status){
+        this.logger = Log4js.getLogger(clientName);
+		
+		var server = CONFIG.server;
+
+        this.client = new SocketClient({
+            server_ip: server,
+            type: clientName
+        });
+
 		this.parser = null;
 		this.status = status;
+        
+        this.client.order(this.takeOrder.bind(this));
 	}
+
+
+    takeOrder (from, name, param) {
+        throw new TypeError("client:takeOrder is abstract !");
+    }
 
 	send(){
 

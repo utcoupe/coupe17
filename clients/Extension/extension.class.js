@@ -8,8 +8,6 @@
 "use strict";
 
 const Client = require('../client.class.js');
-const SocketClient = require('../../server/socket_client.class.js');
-const CONFIG = require('../../config.js');
 
 /**
  * Classe abstraite représentant les extensions
@@ -19,21 +17,8 @@ const CONFIG = require('../../config.js');
  */
 class Extension extends Client {
     constructor(extensionName){
-        super();
+        super(extensionName);
         this.extensionName = extensionName;
-        this.logger = this.Log4js.getLogger(extensionName);
-
-        var server = CONFIG.server;
-
-        this.client = new SocketClient({
-            server_ip: server,
-            type: extensionName
-        });
-        this.client.order(this.takeOrder.bind(this));
-    }
-
-    takeOrder (from, name, param) {
-        throw new TypeError("extension:takeOrder is abstract !");
     }
 }
 

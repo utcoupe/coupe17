@@ -25,11 +25,11 @@
     switch (name){
       case "collision":
         grobot.queue = [];
-        grobot.acts.clean();
+        //grobot.acts.clean();
         grobot.orderInProgress = false;
       break;
       case "stop":
-        grobot.acts.clean();
+        //grobot.acts.clean();
         grobot.logger.fatal("Stop " + grobot.robotName);
         process.exit();
       break;

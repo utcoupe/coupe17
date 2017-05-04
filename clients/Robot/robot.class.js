@@ -3,9 +3,7 @@
  *
  * @module clients/Robot/robot
  * @requires module:clients/client
- * @requires module:server/socket_client
  * @requires module:clients/fifo
- * @requires module:config
  * @requires module:clients/Asserv/AsservSimu
  * @requires module:clients/Asserv/AsservReal
  */
@@ -13,9 +11,7 @@
 "use strict";
 
 const Client = require('../client.class.js');
-const SocketClient = require('../../server/socket_client.class.js');
 const Fifo = require('../fifo.class.js');
-const CONFIG = require('../../config.js');
 const AsservSimu = require('../Asserv/AsservSimu.class.js');
 const AsservReal = require('../Asserv/AsservReal.class.js');
 
@@ -42,48 +38,36 @@ class Robot extends Client{
 	 */
 	constructor(robotName){
 		// Requires
-		super();
+		super(robotName);
 
-		if (robotName )
-		{
-			this.logger = this.Log4js.getLogger(robotName);
+		this.robotName = robotName;
 
-			this.logger.info("Started NodeJS client with pid " + process.pid);
+		this.logger.info("Started NodeJS client with pid " + process.pid);
 
-			var server = CONFIG.server;
+		this.lastStatus = {
+			"status": "waiting"
+		};
+		this.sendChildren(this.lastStatus);
 
-			this.client = new SocketClient({
-				server_ip: server,
-				type: robotName
-			});
+		var fifo = new Fifo();
 
-			this.robotName = robotName;
+		// ??? classe abstraite !
+		// this.acts = new (require('../Extension/Actuators/actuator.class.js'))(this.client, this.sendChildren);
 
-			this.lastStatus = {
-				"status": "waiting"
-			};
-			this.sendChildren(this.lastStatus);
+		//TODO replace devicedetected
+		//this.detect = null; this.detect = new (require('./detect.class.js'))(devicesDetected);
+					//ADD it tmp, to replace the previos one
+					// var struct = {
+					// 	others: false,
+					// 	asserv: false,
+					// 	ax12: false,
+					// 	servos: false
+					// };
 
-			var fifo = new Fifo();
+					// this.devicesDetected(struct); //TODO Replace it
 
-			// ??? classe abstraite !
-			// this.acts = new (require('../Extension/Actuators/actuator.class.js'))(this.client, this.sendChildren);
-
-			//TODO replace devicedetected
-			//this.detect = null; this.detect = new (require('./detect.class.js'))(devicesDetected);
-						//ADD it tmp, to replace the previos one
-						// var struct = {
-						// 	others: false,
-						// 	asserv: false,
-						// 	ax12: false,
-						// 	servos: false
-						// };
-
-						// this.devicesDetected(struct); //TODO Replace it
-
-			this.queue = [];
-			this.orderInProgress = false;
-		}
+		this.queue = [];
+		this.orderInProgress = false;
 
 	}
 

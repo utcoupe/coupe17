@@ -25,10 +25,7 @@ const BaseConstructor = require('../Extension/baseconstructor.class.js');
 class Tibot extends Robot{
 
 	constructor(Robotname){
-		if (Robotname)
-			super(Robotname);
-		else
-			super();
+		super(Robotname);
 		
 		this.unitGrabber = new UnitGrabber();
 		this.baseConstructor = new BaseConstructor();

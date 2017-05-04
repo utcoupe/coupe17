@@ -19,10 +19,7 @@ const Robot = require('./robot.class.js');
 class Grobot extends Robot{
 
 	constructor(Robotname){
-	    if (Robotname)
-	      super(Robotname);
-	    else
-	      super();
+	    super(Robotname);
   	}
 
 	/**
