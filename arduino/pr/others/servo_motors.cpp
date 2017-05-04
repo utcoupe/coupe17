@@ -33,7 +33,7 @@ uint8_t servoValues[4][4] = {
 Timer armTimer = Timer(servoValues[PR_MODULE_ARM][TIMER], &servoArmCallback);
 Timer dropRTimer = Timer(servoValues[PR_MODULE_DROP_R][TIMER], &servoDropRCallback);
 Timer dropLTimer = Timer(servoValues[PR_MODULE_DROP_L][TIMER], &servoDropLCallback);
-Timer rotateTimer = Timer(servoValues[PR_MODULE_ROTATE_PIN][TIMER], &servoRotateCallback);
+Timer rotateTimer = Timer(servoValues[PR_MODULE_ROTATE][TIMER], &servoRotateCallback);
 
 //todo dynamic structure with mapping servo_id - order_id ?
 // 0 is the default value, stands for no order
@@ -133,6 +133,7 @@ void servoChangeParameter(const uint8_t servo_id, const SERVO_POSITION servo_pos
 
 void servoRotate(MODULE_COLOR color) {
     //if color is whatever, no need to rotate
+    SerialSender::SerialSend(SERIAL_INFO, "servoRotate color : %d", color);
     if (color != WHATEVER) {
         // Activate rotation
         servoAction(PR_MODULE_ROTATE, OPEN);
@@ -182,7 +183,7 @@ void servoTimerUpdate() {
     armTimer.Update();
     dropRTimer.Update();
     dropLTimer.Update();
-//    rotateTimer.Update();
+    rotateTimer.Update();
 }
 
 

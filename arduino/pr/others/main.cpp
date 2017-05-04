@@ -41,7 +41,7 @@ void setup() {
 
     servoAttach();
 
-//    setupColorSensor();
+    setupColorSensor();
 }
 
 //main loop, first read an order from serial, execute the order and then send all data to send
