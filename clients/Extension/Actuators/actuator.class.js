@@ -20,7 +20,7 @@ class Actuator {
     /**
      * Creates an instance of Actuator.
      */
-    constructor () {
+    constructor (actuatorName) {
         // This is an abstract class, throw an error if it is directly instantiated or if missing virtual functions
         // if (new.target === Abstract) {
         if (this.constructor === Actuator) {
@@ -31,7 +31,7 @@ class Actuator {
         // }
 
         // this.logger = null;
-        this.logger = Log4js.getLogger("actuator");
+        this.logger = Log4js.getLogger(actuatorName);
         this.ordersCallback = [];
         this.currentOrderId = 0;
         this.actuatorCommands = {};
@@ -85,10 +85,15 @@ class Actuator {
         return (orderToSend.slice(0, 2) + this.currentOrderId + ";" + orderToSend.slice(2))
     }
 
-    sendOrder(orderType, servoId, callback) {
+    sendOrder(orderType, servoId, callback, args) {
         //todo ";" as protocol separator
         if (this.serialPortConnected) {
-            var order = orderType + ";" + servoId + ";\n";
+            if (args === undefined) {
+                args = ";";
+            } else {
+                args += ";";
+            }
+            var order = orderType + ";" + servoId + ";" + args + "\n";
             order = this.addOrderId(order);
             this.ordersCallback.push([this.currentOrderId, callback]);
             this.logger.info(order);

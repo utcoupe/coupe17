@@ -22,6 +22,8 @@
 
 //red, green, blue
 uint8_t rgbValues[3];
+//use tlc values instead of rgb, because more easy to get colors
+uint16_t tslValues[3];
 
 //used to map rawFrequency read from sensor to a RGB value on 8 bytes
 //those data have to be calibrated to be optimal
@@ -76,6 +78,9 @@ MODULE_COLOR computeColor() {
     rgbMeanValues[RGB_GREEN] = rgbColorAccumulator[RGB_GREEN] / COLOR_ACCUMULATE_NB;
     rgbMeanValues[RGB_BLUE] = rgbColorAccumulator[RGB_BLUE] / COLOR_ACCUMULATE_NB;
     SerialSender::SerialSend(SERIAL_DEBUG, "RED : %d, GREEN : %d, BLUE : %d", rgbMeanValues[RGB_RED], rgbMeanValues[RGB_GREEN], rgbMeanValues[RGB_BLUE]);
+    // Compute the corresponding tsl colors
+    computeTslColors(rgbMeanValues);
+    SerialSender::SerialSend(SERIAL_DEBUG, "HUE : %d, SATURATION : %d, LIGHTNESS : %d", tslValues[TSL_HUE], tslValues[TSL_SATURATION], tslValues[TSL_SATURATION]);
     // Compute the non rgb colors
     uint16_t yellowColor = rgbMeanValues[RGB_RED] + rgbMeanValues[RGB_GREEN];
     uint16_t colorSum = yellowColor + rgbMeanValues[RGB_BLUE];
@@ -116,4 +121,43 @@ void colorSensorFilterApply(rgbValuesName color) {
         default:
             break;
     }
+}
+
+void computeTslColors(uint8_t rgbValues[3]) {
+    uint8_t maxColorValue = rgbValues[RGB_RED];
+    uint8_t minColorValue  = rgbValues[RGB_RED];
+    uint8_t maxColorValueIndex = 0;
+    // Compute min and max color
+    for (uint8_t index = 1; index < 3; index++) {
+        if (rgbValues[index] > maxColorValue) {
+            maxColorValue = rgbValues[index];
+            maxColorValueIndex = index;
+        }
+        if (rgbValues[index] < minColorValue) {
+            minColorValue = rgbValues[index];
+        }
+    }
+    // Compute the tsl values
+    switch ((rgbValuesName)maxColorValueIndex) {
+        case RGB_RED:
+        {
+            tslValues[TSL_HUE] = 60 * (((rgbValues[RGB_GREEN] - rgbValues[RGB_BLUE]) / (maxColorValue - minColorValue)) % 6);
+            break;
+        }
+        case RGB_GREEN:
+        {
+            tslValues[TSL_HUE] = 60 * (((rgbValues[RGB_BLUE] - rgbValues[RGB_RED]) / (maxColorValue - minColorValue)) + 2);
+            break;
+        }
+        case RGB_BLUE:
+        {
+            tslValues[TSL_HUE] = 60 * (((rgbValues[RGB_RED] - rgbValues[RGB_GREEN]) / (maxColorValue - minColorValue)) + 4);
+            break;
+        }
+        default:
+            SerialSender::SerialSend(SERIAL_ERROR, "ComputeTslColor : Color index %d does not exists...", maxColorValueIndex);
+            break;
+    }
+    tslValues[TSL_SATURATION] = 100*((maxColorValue - minColorValue) / maxColorValue);
+    tslValues[TSL_LIGHTNESS] = 100 * maxColorValue / 255;
 }

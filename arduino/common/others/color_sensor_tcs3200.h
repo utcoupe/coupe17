@@ -13,11 +13,16 @@ enum rgbValuesName {
     RGB_BLUE
 };
 
-
+enum tslValuesName {
+    TSL_HUE = 0,
+    TSL_SATURATION,
+    TSL_LIGHTNESS
+};
 
 void setupColorSensor();
 void colorSensorValuesCapture();
 MODULE_COLOR computeColor();
 void colorSensorFilterApply(rgbValuesName color);
+void computeTslColors(uint8_t rgbValues[3]);
 
 #endif //ARDUINO_COLOR_SENSOR_TCS3200_H
