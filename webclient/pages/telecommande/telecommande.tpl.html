@@ -72,67 +72,76 @@
 
 		<div>
 			<h3>Extensions : </h3>
-			<!-- coupe15 
-			<p>
-				Servo (WiP):
-				<select ng-model="tibot.selectedServo">
-					<option value="">--</option>
-					<option value="left_stab">left_stab</option>
-					<option value="right_stab">right_stab</option>
-					<option value="left_arm">left_arm</option>
-					<option value="right_arm">right_arm</option>
-				</select>
-				Position servo :
-				<input type="text"  class="nombreVirgule" ng-model="tibot.posServo"> 
-				<button type="button" class="btn" ng-click="tibot.updateSelectedServo()">Go !</button>
-			</p>
-			<p>
-				Stabilisateurs :
-				<button type="button" class="btn" ng-click="tibot.fermerStabilisateurs">Fermer</button>
-				<button type="button" class="btn" ng-click="tibot.ouvrirUnPeuStabilisateurs">Ouvrir un peu</button>
-				<button type="button" class="btn" ng-click="tibot.ouvrirStabilisateurs">Ouvrir</button>
-			</p>
-			<p>
-				Bras :
-				<button type="button" class="btn" ng-click="tibot.closeArm()">Fermer</button>
-				<button type="button" class="btn" ng-click="tibot.ouvrirUnPeuArm()">Ouvrir un peu</button>
-				<button type="button" class="btn" ng-click="tibot.ouvrirArm()">Ouvrir</button>
-			</p>
-			<p>
-				AX12 :
-				<button type="button" class="btn" ng-click="tibot.closeAx12">Fermer</button>
-				<button type="button" class="btn" ng-click="tibot.ouvrirAx12">Ouvrir</button>
-			</p>
-			-->
 			<p>
 				Unit grabber :
 				<button type="button" class="btn" ng-click="tibot.openUnitGrabber()">Open</button>
 				<button type="button" class="btn" ng-click="tibot.closeUnitGrabber()">Close</button>
+				<button type="button" class="btn" ng-click="tibot.take_1()">Take 1</button>
+				<button type="button" class="btn" ng-click="tibot.take_4()">Take 4</button>
+				
 			</p>
 			<p>
 				Base Constructor :
 				<button type="button" class="btn" ng-click="tibot.dropModule()">Drop module</button>
-                <button type="button" class="btn" ng-click="tibot.engageModule()">Engage module</button>
+                <button type="button" class="btn" ng-click="tibot.drop_border()">Drop border</button>
+                <button type="button" class="btn" ng-click="tibot.drop_middle_1()">Drop middle 1</button>
+                <button type="button" class="btn" ng-click="tibot.drop_middle_2()">Drop middle 2</button>
 			</p>
 		</div>
 	</section>
 
-	<h2>GR</h2>
-	<button type="button" class="btn" ng-click="grAcheter()">Acheter</button> 
-	<button type="button" class="btn" ng-click="grVendre()">Vendre</button> <br><br>
-	G <input type="number" ng-model="gr_pwm_gauche" />
-	D <input type="number" ng-model="gr_pwm_droite" />
-	<input type="number" ng-model="gr_pwm_ms" /> ms
-	<button type="button" class="btn" ng-click="grPWM()">PWM</button><br><br>
-	x : <input type="number" ng-model="gr_x" /> mm ; y : <input type="number" ng-model="gr_y" /> mm
-	<button type="button" class="btn" ng-click="grGoxy()">Go to xy</button><br><br>
-	<input type="number" ng-model="gr_a" /> deg
-	<button type="button" class="btn" ng-click="grGoa()">Go to angle</button><br><br>
-	<button type="button" class="btn" ng-click="grGoxya()">Go to xy angle</button><br><br>
-	<input type="number" ng-model="gr_v" /> mm/s
-	<input type="number" ng-model="gr_r" /> 
-	<button type="button" class="btn" ng-click="grSetVit()">Set vitesse</button><br><br>
-	<!-- <button type="button" class="btn" ng-click="grClean()">Clean</button><br><br> -->
+	<section>
+		<h2>Grobot</h2>
+		<p>
+			<button type="button" class="btn" ng-click="grobot.fermerTout()">Fermer Tout</button>
+			<button type="button" class="btn" ng-click="grobot.ouvrirTout()">Ouvrir Tout</button>
+			<button type="button" class="btn" ng-click="grobot.clean()">Clean FiFo</button>
+			<button type="button" class="btn" ng-click="grobot.stop()">Stop</button>
+		</p>
+		<div>
+			<h3>Asserv</h3>
+			<p>
+				Gauche : <input type="number" ng-model="grobot.pwm_gauche" />
+				Droite : <input type="number" ng-model="grobot.pwm_droite" />
+				<input type="number" ng-model="grobot.pwm_ms" /> ms
+				<button type="button" class="btn" ng-click="grobot.setPWM()">Set PWM</button>
+			</p>
+
+			<p>
+				x : <input type="number" ng-model="grobot.x" /> mm;
+				y : <input type="number" ng-model="grobot.y" /> mm;
+				a : <input type="number" ng-model="grobot.a" /> deg
+				<button type="button" class="btn" ng-click="grobot.goPos()">Go to position</button>
+				<button type="button" class="btn" ng-click="grobot.goAngle()">Go to angle</button>
+				<button type="button" class="btn" ng-click="grobot.goPosAngle()">Go to position and angle</button>
+			</p>
+
+			<p>
+				<input type="number" ng-model="grobot.v" /> mm/s
+				<input type="text" class="nombreVirgule" ng-model="grobot.r" /> <!-- les champs de type number n'acceptent que des nombres entiers -->
+				<button type="button" class="btn" ng-click="grobot.setVit()">Set vitesse</button>
+				Accélération : <input type="number" ng-model="grobot.acc" /> 
+				<button type="button" class="btn" ng-click="grobot.setAcc()">Set accélération</button>
+			</p>
+
+			<p>
+				x : <input type="number" ng-model="grobot.set_x" /> mm;
+				y : <input type="number" ng-model="grobot.set_y" /> mm;
+				a : <input type="number" ng-model="grobot.set_a" /> deg
+				<button type="button" class="btn" ng-click="grobot.setPos()">Set Pos</button>
+			</p>
+			<p>
+				P : <input type="text" class="nombreVirgule" ng-model="grobot.PID_P" />;
+				I : <input type="number" ng-model="grobot.PID_I" />;
+				D : <input type="number" ng-model="grobot.PID_D" />
+				<button type="button" class="btn" ng-click="grobot.setPID()">Set PID</button>
+			</p>
+		</div>
+
+		<div>
+			<h3>Extensions : </h3>
+		</div>
+	</section>
 
 	<section>
 		<h2>Hokuyo</h2>
