@@ -28,9 +28,15 @@ class BaseConstructor extends Extension {
         switch (name) {
             case "drop":
                 this.servos.moduleDrop();
+                this.fifo.orderFinished();
                 break;
             case "engage":
                 this.servos.moduleEngage();
+                this.fifo.orderFinished();
+                break;
+            case "rotate":
+                this.servos.moduleRotate();
+                this.fifo.orderFinished();
                 break;
             
             case "drop_border":

@@ -25,6 +25,10 @@ class TibotDisplay extends RobotDisplay {
         this.client.send("base_constructor", "engage");
     }
 
+    rotateModule () {
+        this.client.send("base_constructor", "rotate");
+    }
+
     take_1 () {
         this.client.send("unit_grabber", "take_1");
     }

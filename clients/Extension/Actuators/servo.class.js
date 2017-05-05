@@ -82,6 +82,12 @@ class Servo extends Actuator {
         });
     }
 
+    moduleRotate() {
+        this.sendOrder(this.actuatorCommands.MODULE_ROTATE, this.actuatorCommands.PR_MODULE_ROTATE, function(params){
+            //todo advertise IA
+        }, 1);
+    }
+
     test() {
         setTimeout(function(){
             console.log(this.actuatorCommands);
