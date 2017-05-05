@@ -103,10 +103,14 @@ void servoApplyCommand(uint8_t servo_id, uint8_t value) {
                 break;
             case PR_MODULE_DROP_R:
                 dropRTimer.Start();
+                //todo use real order id...
+                dropRLastId = 36;
                 pr_module_drop_r.write(value);
                 break;
             case PR_MODULE_DROP_L:
                 dropLTimer.Start();
+                //todo use real order id...
+                dropLLastId = 36;
                 pr_module_drop_l.write(value);
                 break;
             case PR_MODULE_ROTATE:
