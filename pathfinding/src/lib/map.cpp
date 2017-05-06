@@ -47,7 +47,7 @@ void MAP::add_dynamic_circle(unsigned int x, unsigned int y, float f_r) {
             continue;
         }
         //todo test pow integer versus std using double
-        int y_length = (int)ceil(sqrt((float)r2 - std::pow((float)(x - p_x), (float)2)));
+        int y_length = (int)ceil(sqrt((float)r2 - std::pow((float)(x - r + p_x), (float)2)));
         for (unsigned int p_y = y - y_length; p_y <= y + y_length; p_y++) {
             if (p_y < 0 || p_y >= map_h) {
                 continue;
