@@ -12,13 +12,14 @@ module.exports = (function () {
 	var logger = log4js.getLogger('lidar.lidar');
 
 	var DELTA_T = 100; 					// ms between two data shipping
-	var DELTA_T_CHECK = 200; 			// ms between two data shipping
-	var X_MAX_ZONE = 295;
+	var DELTA_T_CHECK = 500; 			// ms between two data shipping
+	var X_MAX_ZONE = 300;
 	var X_MIN_ZONE = 0;
-	var Y_MAX_ZONE = 195;
+	var Y_MAX_ZONE = 200;
 	var Y_MIN_ZONE = 0;
-	var CLUSTER_DISTANCE = 5;
-	var CLUSTER_K = 6;
+	var CLUSTER_DISTANCE = 3;
+	var CLUSTER_K = 10;
+	// var SILENCE_TIMEOUT = 300;
 
 	/**
 	 * Lidar Constructor
@@ -41,36 +42,79 @@ module.exports = (function () {
 		this.lastSignOfLife = {};		// of each hokuyo
 
 		this.hokuyoPositions = {
-			one: {
-	 			"x": -6.2, //-6.2
-	 			"y": -6.2,	//-6.2
-	 			"w": 0 ,	//0
-				"decalage" : [],
-				"init" : 3
-	 		},
-			two: {
-	 			"x": 306.2, //306.2
-	 			"y": 100,	//100
-	 			"w": 180 ,	//180
-				"decalage" : [],
-				"init" : 0
-	 		}
 		}
+
 		this.rocketPositions = {
 			one : {
+				"x" : 2,
+				"y" : 137
+			},
+			two : {
+				"x" : 115,
+				"y" : 2
+			},
+			three : {
 				"x" : 185,
-				"y" : 4
+				"y" : 2
+			},
+			four : {
+				"x" : 298,
+				"y" : 137
 			}
 		}
 
 		// If other color
 		logger.warn("TODO: change Lidar color depending ours");
 
-		this.sendStatus(this.status);
+		this.sendStatus(this.status, 0);
 
 
 		// Status loop
 		this.updateStatus();
+	}
+	Lidar.prototype.setColor = function(){
+		if (this.color == "blue"){
+			this.hokuyoPositions = {
+				one: {
+		 			"x": -2, //-6.2
+		 			"y": -2,	//-6.2
+		 			"w": 0 ,	//0
+					"decalage" : [],
+					"init" : 0, //Nb de boucles de recalage
+					"rockets" : ["one", "two"]
+		 		},
+				two: {
+		 			"x": 306, //306.2
+		 			"y": 100,	//100
+		 			"w": 180 ,	//180
+					"decalage" : [],
+					"init" : 0,
+					"rockets" : ["three", "four"]
+		 		}
+			}
+		}
+		if (this.color == "yellow"){
+			this.hokuyoPositions = {
+				one: {
+		 			"x": -6.2, //-6.2
+		 			"y": -6.2,	//-6.2
+		 			"w": 0 ,	//0
+					"decalage" : [],
+					"init" : 0, //Nb de boucles de recalage
+					"rockets" : ["one", "two"]
+		 		},
+				two: {
+		 			"x": 306.2, //306.2
+		 			"y": 100,	//100
+		 			"w": 180,	//180
+					"decalage" : [],
+					"init" : 0,
+					"rockets" : ["three", "four"]
+		 		}
+			}
+		}
+
+
 	}
 
 	Lidar.prototype.updateStatus = function() {
@@ -111,13 +155,13 @@ module.exports = (function () {
 
 		this.statusTimer = setTimeout( function(){
 			this.updateStatus();
-		}.bind(this), 200);
+		}.bind(this), 2*DELTA_T /*SILENCE_TIMEOUT*/);
 	};
 
 	Lidar.prototype.changeStatus = function(newStatus) {
 		logger.info("New lidar status : " + newStatus);
 		this.status = newStatus;
-		this.sendStatus(this.status);
+		this.sendStatus(this.status, this.hokuyosWorking().length);
 	};
 
 	Lidar.prototype.start = function(color) {
@@ -125,7 +169,15 @@ module.exports = (function () {
 		this.started = true;
 		this.changeStatus("error");		// as far as we do not receive hokuyo data
 		logger.info("Started as " + this.color);
+		this.setColor() //assigne une position à chaque hokuyo en fonction de la couleur du robot
+
 	};
+
+	Lidar.prototype.recalage = function(nb){
+		this.setColor();
+		this.hokuyoPositions["one"].init = nb;
+		this.hokuyoPositions["two"].init = nb;
+	}
 
 	Lidar.prototype.stop = function() {
 		this.color = undefined;
@@ -153,8 +205,11 @@ module.exports = (function () {
 				this.distance * Math.sin(lidar.toRadian(-this.angle))
 			]
 			// Change to table frame
+			//this.x = hokPos.x + cartPt[0] * Math.cos(lidar.toRadian(hokPos.w)) + cartPt[1] * Math.sin(lidar.toRadian(hokPos.w)),
+			//this.y = hokPos.y + cartPt[0] * Math.sin(lidar.toRadian(hokPos.w)) + cartPt[1] * Math.cos(lidar.toRadian(hokPos.w))
+
 			this.x = hokPos.x + cartPt[0] * Math.cos(lidar.toRadian(hokPos.w)) + cartPt[1] * Math.sin(lidar.toRadian(hokPos.w)),
-			this.y = hokPos.y + cartPt[0] * Math.sin(lidar.toRadian(hokPos.w)) + cartPt[1] * Math.cos(lidar.toRadian(hokPos.w))
+			this.y = hokPos.y - cartPt[0] * Math.sin(lidar.toRadian(hokPos.w)) + cartPt[1] * Math.cos(lidar.toRadian(hokPos.w))
 
 	}
 
@@ -173,14 +228,14 @@ module.exports = (function () {
 
 	}
 	Cluster.prototype.diagBox = function() {
-		let Xmax = 0, Ymax = 0, Xmin = 10000, Ymin = 10000, x, y;
+		var Xmax = 0, Ymax = 0, Xmin = 10000, Ymin = 10000, x, y;
 		for(let i = 0 ; i < this.spots.length; i++){
 			x = this.spots[i].x;
 			y = this.spots[i].y;
-			if (Xmax < x ) Xmax = x;
-			if (Xmin > x) Xmin = x;
-			if (Ymax < x ) Ymax = y;
-			if (Ymin > x) Ymin = y;
+			if (Xmax < x ) {Xmax = x;}
+			if (Xmin > x) {Xmin = x;}
+			if (Ymax < y ){ Ymax = y;}
+			if (Ymin > y) {Ymin = y;}
 		}
 		x = Xmax - Xmin;
 		y = Ymax - Ymin;
@@ -195,8 +250,10 @@ module.exports = (function () {
 				this.distance * Math.sin(lidar.toRadian(-this.angle))
 			]
 			// Change to table frame
+			//this.x = hokPos.x + cartPt[0] * Math.cos(lidar.toRadian(hokPos.w)) + cartPt[1] * Math.sin(lidar.toRadian(hokPos.w)),
+			//this.y = hokPos.y + cartPt[0] * Math.sin(lidar.toRadian(hokPos.w)) + cartPt[1] * Math.cos(lidar.toRadian(hokPos.w))
 			this.x = hokPos.x + cartPt[0] * Math.cos(lidar.toRadian(hokPos.w)) + cartPt[1] * Math.sin(lidar.toRadian(hokPos.w)),
-			this.y = hokPos.y + cartPt[0] * Math.sin(lidar.toRadian(hokPos.w)) + cartPt[1] * Math.cos(lidar.toRadian(hokPos.w))
+			this.y = hokPos.y - cartPt[0] * Math.sin(lidar.toRadian(hokPos.w)) + cartPt[1] * Math.cos(lidar.toRadian(hokPos.w))
 
 	}
 	/**
@@ -224,15 +281,17 @@ module.exports = (function () {
 
 			// Merge spots
 			//logger.warn(this.lastCartSpots)
+			// Retourne un tableau de points provenant des deux hokuyos
 			this.mergedSpots = this.mergeSpots(this.lastCartSpots);
-			//logger.warn(this.mergedSpots);
-			/* Merge very close clusters provided by two different hokuyo */
+
 
 			//this.toCartesian(hokuyoName, this.mergedSpots);
 			// Filter (bis)
+			//Ne fait rien
 			this.mergedFilterSpots = this.filterCart(this.mergedSpots);
+
 			// Find enemy robots
-			this.robotsSpots = this.findRobots(this.mergedFilterSpots);
+			this.robotsSpots = this.findRobots(this.mergedSpots);
 			this.displaySpots = this.prepareData(this.mergedSpots); //renvoie un tableau de coordonnées prêt à être affiché
 
 			// Prepare data
@@ -243,8 +302,12 @@ module.exports = (function () {
 			};
 
 			// Send it to AI
-			this.send("lidar.all", toBeSent);
-			this.lastDataSent = Date.now();
+			if(this.status == "error"){
+				logger.warn("Fell in an error while computing !");
+			} else {
+                                this.send("lidar.all", toBeSent);
+                                this.lastDataSent = Date.now();
+                        }
 		}
 
 		this.updateStatus();
@@ -263,6 +326,8 @@ module.exports = (function () {
 					"name": hokName,
 					"position": this.hokuyoPositions[hokName]
 				});
+			} else {
+				logger.warn("Haven't heard from " + hokName + " since " + (Date.now() - lastData[hokName].time));
 			}
 		}
 
@@ -293,7 +358,7 @@ module.exports = (function () {
 
             var jmin, dmin, x, y
 			clusters[0] = new Cluster;
-			clusters[0].spots = new Array;
+			//clusters[0].spots = new Array;
 			/* A modifier !!
 			On met les k premiers points dans un même cluster
 			*/
@@ -301,17 +366,17 @@ module.exports = (function () {
 			let nulSpot = new Spot;
 			nulSpot.angle = 0; nulSpot.distance = 0;nulSpot.x = 0; nulSpot.y = 0;
 
-            for (i = 0; i < k; i++){
+            for (let i = 0; i < k; i++){
 				spotsIn.unshift(nulSpot);
                 G.push(0);
 				clusters[0].spots.push(spotsIn[i]);
             }
-            for (var i = k; i < spotsIn.length; i++){
+            for (let i = k; i < spotsIn.length; i++){
 				G.push(0);
                 if (spotsIn[i].distance > 1){
                      jmin = 1;
                      dmin = 0;
-                    for (var j = 1; j <= k; j++){
+                    for (let j = 1; j <= k; j++){
                         x = spotsIn[i].x - spotsIn[i - j].x;
                         y = spotsIn[i].y - spotsIn[i - j].y ;
                         d[j] =Math.sqrt(x*x + y*y);
@@ -327,7 +392,7 @@ module.exports = (function () {
                             G[i - jmin] = g;
 
 							clusters[g] = new Cluster;
-							clusters[g].spots = new Array;
+							// 	clusters[g].spots = new Array;
                         }
 
                         g = G[i - jmin];
@@ -336,7 +401,7 @@ module.exports = (function () {
                     }
 				}
             }
-			for (i = 0; i < k; i++){
+			for (let i = 0; i < k; i++){
 				spotsIn.shift();
             }
 			clusters.shift();
@@ -414,7 +479,8 @@ module.exports = (function () {
 					x = Math.abs(clusters[i].x - clusters[j].x);
 					y = Math.abs(clusters[i].y - clusters[j].y);
 					d = Math.sqrt(x*x + y*y)
-					if(d < 20){
+
+					if(d < 30){
 						clusters[i].spots = clusters[i].spots.concat(clusters[j].spots);
 						clusters.splice(j, 1);
 						diff ++;
@@ -425,14 +491,17 @@ module.exports = (function () {
 		}
 		for (let i = 0 ; i < clusters.length ; i++){
 			clusters[i].calculCenter();
-			if (clusters[i].spots.length >3){
+			//if (clusters[i].spots.length >3 && clusters[i].spots.length < 120){
 				if(clusters[i].x > X_MIN_ZONE && clusters[i].x < X_MAX_ZONE && clusters[i].y < Y_MAX_ZONE && clusters[i].y > Y_MIN_ZONE){
 					clusters[i].diagBox();
-					if (clusters[i].diag < 30 && clusters[i].diag > 4 )
+
+					if (clusters[i].diag < 16  && clusters[i].diag > 3)
 					ret.push([clusters[i].x, clusters[i].y]);
 				}
-			}
+			//}
 		}
+		//logger.info([clusters.length, ret.length])
+
 		/*ret = [
 			[ 150, 100 ],
 			[ 100, 135 ]
@@ -444,6 +513,7 @@ module.exports = (function () {
 		let ret = [];
 		for(let i = 0; i < spots.length ; i++){
 			if (spots[i].inTheTable == true)
+			//if(spots[i].x > -20 && spots[i].x < 320 && spots[i].y>-20 && spots[i].y<220)
 				ret.push([spots[i].x, spots[i].y])
 		}
 		return ret;
@@ -457,17 +527,16 @@ module.exports = (function () {
 		let clusters = this.clusterize(spots);
 		let hokPos = this.hokuyoPositions[hokName];
 		let angle;
-		let detected = false;
+		let finish = false
 		function isNear(lidar, cluster, rocketName, d){
 			let x = lidar.rocketPositions[rocketName].x;
 			let y = lidar.rocketPositions[rocketName].y;
-
+			//logger.warn([cluster.x, x]);
 			//logger.warn([cluster.x, lidar.rocketPositions["one"].x]);
 			if (cluster.x > x - d
 				&& cluster.x < x + d
 				&& cluster.y > y - d
 				&& cluster.y < y + d){
-					logger.warn("fusee detectee")
 					return true;
 				}
 				else return false;
@@ -476,20 +545,33 @@ module.exports = (function () {
 			var tab1 = lidar.toPolar(cluster, hokName);
 			var tab2 = lidar.toPolar(lidar.rocketPositions[rocketName], hokName);
 			//logger.warn([tab1[0], tab2[0]])
-			return (tab2[0] - tab1 [0])
+			return (tab2[0] - tab1[0])
 		}
 		for (let i = 0; i < clusters.length ; i++){
 			clusters[i].calculCenter();
-			if (isNear(this, clusters[i], "one", 35) == true){
+			finish = false;
+			/*if (isNear(this, clusters[i], "one", 15) == true && finish == false){
 				angle = angleGap(this, clusters[i], "one", hokName)
 				hokPos.decalage.push(angle)
-				detected = true;
+				finish = true;
+			}
+			if (isNear(this, clusters[i], "two", 15) == true && finish == false){
+				angle = angleGap(this, clusters[i], "two", hokName)
+				hokPos.decalage.push(angle)
+				finish = true;
+			}*/
+			for(let j=0; j < hokPos.rockets.length; j++){
+				if (isNear(this, clusters[i], hokPos.rockets[j], 25) == true && finish == false){
+					angle = -angleGap(this, clusters[i], hokPos.rockets[j], hokName)
+					hokPos.decalage.push(angle)
+					finish = true;
+				}
 			}
 		}
 		hokPos.init = hokPos.init - 1 ;
-		if (hokPos.init == 0 && detected == true){
+		let nb = hokPos.decalage.length;
+		if (hokPos.init == 0 && nb > 0){
 			let a = 0;
-			let nb = hokPos.decalage.length
 			for( let i = 0; i < nb; i++){
 				a = a + hokPos.decalage[i];
 			}

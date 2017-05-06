@@ -25,65 +25,14 @@
 
 	var hokMng = new Lidar(function (name, params){
 		client.send("ia", name, params);
-	}, function (newStatus) {
+	}, function (newStatus, nbHok) {
 		sendChildren({
-			"status": newStatus
+			"status": newStatus,
+			"nb": nbHok
 		});
 	});
 
 	client.connect(function(){
-/*
-		setTimeout(function() {
-			client.send("lidar", "start", {
-				color: "yellow"
-			}); // TMP
-		}, 300);
-
-		setTimeout(function() {
-			client.send("lidar", "hokuyo.polar_raw_data", {
-				hokuyo: "one",
-				polarSpots: [
-					[ -40, 200 ],
-					[ -35, 200 ],
-					[ -30, 200 ],
-					[ -25, 230 ],
-					[ -20, 100 ],
-					[ -15, 105 ],
-					[ -5, 120 ],
-					[ 0, 100 ],
-					[ 5, 90 ],
-					[ 10, 95 ],
-					[ 15, 100 ],
-					[ 20, 100 ],
-					[ 25, 130 ],
-					[ 30, 135 ]
-				]
-			}); // TMP
-		}, 1000);
-
-
-		setTimeout(function() {
-			client.send("lidar", "hokuyo.polar_raw_data", {
-				hokuyo: "two",
-				polarSpots: [
-					[ -40, 155 ],
-					[ -30, 155 ],
-					[ -35, 150 ],
-					[ -25, 150 ],
-					[ -20, 100 ],
-					[ -15, 105 ],
-					[ -5, 120 ],
-					[ 0, 100 ],
-					[ 5, 90 ],
-					[ 10, 95 ],
-					[ 15, 100 ],
-					[ 20, 100 ],
-					[ 25, 230 ],
-					[ 30, 235 ]
-				]
-			}); // TMP
-		}, 1100);*/
-
 
 		client.order(function(from, name, params){
 
@@ -115,6 +64,12 @@
 					case "shutdown":
 						// quitC("stop");
 						spawn('sudo', ['halt']);
+						break;
+					case "calibration":
+						hokMng.recalage(10); //Recalage des hokuyos
+						break;
+					case "color":
+						hokMng.changeColor()
 						break;
 					case "stop":
 						hokMng.stop();
@@ -168,6 +123,7 @@
 	// Sends status to server
 	function sendChildren(status){
 		client.send("server", "server.childrenUpdate", status);
+		client.send("ia", "lidar.status", status);
 		// client.send("ia", "hokuyo.nb_hokuyo", { nb: nb_active_hokuyos });
 	}
 

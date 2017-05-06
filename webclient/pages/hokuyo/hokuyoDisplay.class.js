@@ -262,13 +262,15 @@ class HokuyoDisplay {
 
 		this.isBusy = false;
 
-		this.clearMainTimeout = setTimeout(clearMain, 1000);
+		this.clearMainTimeout = setTimeout(function() {
+			this.clearMain();
+		}.bind(this), 1000);
 	}
 
 	clearMain() {
 		// For each object
-		for(let hok of this.hokuyos) {
-			hok.remove();
+		for(let hokName in this.hokuyos) {
+			this.hokuyos[hokName].remove();
 		}
 
 		// For each object
