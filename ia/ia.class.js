@@ -95,38 +95,50 @@ module.exports = (function () {
 		this.client.send("server", "server.iaColor", {color: this.color});
 
 		this.client.order(function(from, name, params) {
-			var classe = name.split('.')[0];
-				// logger.debug(this[classe]);
-			if(classe == 'ia') {
-				switch(name) {
-					case 'ia.jack':
-						this.jack();
-					break;
-					case 'ia.stop':
-						this.stop();
-					break;
-					case 'ia.hok':
-						if ((log_counter++ % 15) == 0) {
-							logger.debug(params);
-						}
-						this.pr.updatePos(params);
-					break;
-					case 'ia.hokfailed':
-						 logger.fatal("HOKUYO NOT WORKING, UNPLUG AND REPLUG USB");
-						this.pr.updatePos(params);
-					break;
-					default:
-						logger.warn("Ordre pour l'ia inconnu : "+name);
-				}
-			} else if(!!this[classe]) {
-				// logger.debug("Order to class: "+classe);
-				if(!this[classe].parseOrder) {
-					logger.warn("Attention, pas de fonction parseOrder dans ia."+classe);
+			if (name.indexOf('.') != -1)
+			{
+				var classe = name.split('.')[0];
+					// logger.debug(this[classe]);
+				if(classe == 'ia') {
+					switch(name) {
+						case 'ia.jack':
+							this.jack();
+						break;
+						case 'ia.stop':
+							this.stop();
+						break;
+						case 'ia.hok':
+							if ((log_counter++ % 15) == 0) {
+								logger.debug(params);
+							}
+							this.pr.updatePos(params);
+						break;
+						case 'ia.hokfailed':
+							logger.fatal("HOKUYO NOT WORKING, UNPLUG AND REPLUG USB");
+							this.pr.updatePos(params);
+						break;
+						default:
+							logger.warn("Ordre pour l'ia inconnu : "+name);
+					}
+				} else if(!!this[classe]) {
+					// logger.debug("Order to class: "+classe);
+					if(!this[classe].parseOrder) {
+						logger.warn("Attention, pas de fonction parseOrder dans ia."+classe);
+					} else {
+						this[classe].parseOrder(from, name, params);
+					}
 				} else {
-					this[classe].parseOrder(from, name, params);
+					logger.warn("Sous client inconnu: "+classe);
 				}
-			} else {
-				logger.warn("Sous client inconnu: "+classe);
+			}
+			else {
+				switch (name) {
+					case "kill":
+						this.stop();
+						break;
+					default:
+						logger.warn("Undefined order : " + name);
+				}
 			}
 		}.bind(this));
 
