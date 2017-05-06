@@ -116,7 +116,7 @@
 						// quitC("stop");
 						spawn('sudo', ['halt']);
 						break;
-					case "stop":
+					case "kill":
 						hokMng.stop();
 						// quitC("stop");
 						break;

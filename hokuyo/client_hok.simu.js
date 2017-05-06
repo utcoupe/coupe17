@@ -59,7 +59,7 @@
 					quitC("stop");
 					spawn('sudo', ['halt']);
 					break;
-				case "stop":
+				case "kill":
 					quitC("stop");
 					break;
 				case "sync_git":
