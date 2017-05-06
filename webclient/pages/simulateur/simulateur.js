@@ -76,9 +76,13 @@ function updatePr(data_robot, Simulateur, type) {
 		});
 		if(data_robot.path)
 			updatePath(data_robot.path, Simulateur, type + "_jaune");
+		else
+			clearPath(data_robot.path, Simulateur, type + "_jaune");
+
 		Simulateur.updateInterface();
 	}
 }
+
 /**
  * Met à jour le chemin du robot
  * 
@@ -99,10 +103,27 @@ function updatePath(path, Simulateur, robot)
 	);
 }
 
+/**
+ * Supprime le chemin du robot
+ * 
+ * @param {Array<Number>} path 
+ * @param {Object} Simulateur 
+ * @param {String} robot 
+ */
+function clearPath(path, Simulateur, robot)
+{
+	if(path.length <= 1) // Impossible de tracer une ligne si on n'a pas au moins 2 points
+		return;
+	var PATH_HIGHT = 0.1;
+	Simulateur.controllerSimu.objects3d.get(robot).clearPath();
+}
+
 angular.module('app').service('Simulateur', ['$rootScope', 'Client', function ($rootScope, Client) {
 	this.init = function () {
 		Client.order(function (from, name, data) {
 			if (name == 'simulateur' && $rootScope.act_page == 'simulateur') {
+				clearPath();
+
 				// Met à jour le pr (s'il existe)
 				updatePr(data.robots.pr, this, "pr");
 				// Met à jour le gr (s'il existe)

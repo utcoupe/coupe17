@@ -96,6 +96,16 @@ class Robot extends Object3d
     }
 
     /**
+     * Supprime le chemin de ce robot
+     */
+    clearPath()
+    {
+        this.pathLine.geometry.vertices(0, this.pathLine.geometry.vertices.length);
+        
+        this.pathLine.geometry.verticesNeedUpdate = true;
+    }
+
+    /**
      * Met à jour la position et la rotation de l'objet 3D.
      * Si certains paramètres ne sont pas définis, ils ne seront pas modifiés.
      * Supprime automatiquement les objets proches.
