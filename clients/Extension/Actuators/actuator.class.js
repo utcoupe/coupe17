@@ -32,6 +32,7 @@ class Actuator {
 
         // this.logger = null;
         this.logger = Log4js.getLogger(actuatorName);
+        this.actuatorName = actuatorName;
         this.ordersCallback = [];
         this.currentOrderId = 0;
         this.actuatorCommands = {};
@@ -48,7 +49,7 @@ class Actuator {
             parser:SerialPort.parsers.readline("\n")
         });
         this.serialPort.on("data", function(data){
-            if(this.serialPortReady === false){
+            if(this.serialPortReady == false){
                 this.serialPortReady = true;
                 //todo
                 // this.sendStatus();
@@ -60,6 +61,7 @@ class Actuator {
         }.bind(this));
         this.serialPort.on("close", function(){
             this.serialPortReady = false;
+            this.serialPortConnected = false;
             //todo
             // this.sendStatus();
             this.logger.error("Serial port close");
@@ -68,17 +70,19 @@ class Actuator {
 
     //call the callback corresponding to the received order id, stored in ordersCallback
     callOrderCallback(orderId, params) {
-    for (var index = 0; index < this.ordersCallback; index++) {
-        if (this.ordersCallback[index][0] == orderId) {
-            // Call the callback
-            if (this.ordersCallback[index][1] != null) {
-                this.ordersCallback[index][1](params);
+        for (var index = 0; index < this.ordersCallback.length; index++) {
+            if (this.ordersCallback[index][0] == orderId) {
+                // Call the callback
+                if (this.ordersCallback[index][1] != null) {
+                    this.ordersCallback[index][1](params);
+                } else {
+                    this.logger.info("Callback for order " + orderId + " is null...");
+                }
+                // Remove the line from the array
+                this.ordersCallback.splice(index, 1);
             }
-            // Remove the line from the array
-            this.ordersCallback.splice(index, 1);
         }
     }
-}
     //add the id at the second position, orderToSend is the string to send to the actuator
     addOrderId(orderToSend) {
         this.currentOrderId++;
@@ -117,6 +121,13 @@ class Actuator {
     // Pure virtual method to implement in children
     parseCommand(receivedCommand) {
         throw new TypeError("Must override parseCommand");
+    }
+
+    stop() {
+        if (this.serialPortReady) {
+            this.serialPort.close();
+        }
+        this.logger.info(this.actuatorName + " has stopped.");
     }
 }
 
