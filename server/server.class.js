@@ -194,6 +194,7 @@ module.exports = (function () {
 				break;
 				case 'pr':
 					//this.progs[prog] = spawn('ssh', ['igep', '/root/main.sh']);
+                    //todo launch remote client
 					this.progs[prog] = spawn('node', ['./clients/Robot/main_tibot.js']);
 				break;
 				case 'gr':
@@ -278,13 +279,21 @@ module.exports = (function () {
 	 */
 	Server.prototype.stop = function(prog) {
 		if (prog == "pr") {
-			this.progs[prog] = spawn('ssh', ['igep', 'pkill', 'node']);
+            //todo kill real client on remote raspi ?
+			// this.progs[prog] = spawn('ssh', ['igep', 'pkill', 'node']);
+            logger.info("Stopping pr client properly");
+            this.server.to('pr').emit('order', {
+                to: 'pr',
+                name: 'stop',
+                params: "",
+                from: 'server'
+            });
 		} else if (prog == "hokuyo") {
 			this.progs[prog] = spawn('ssh', ['raspi', 'pkill', 'node']);
 		}
 		if(this.utcoupe[prog]) {
-			this.progs[prog].kill();
-			logger.info("stopped "+prog);
+			// this.progs[prog].kill();
+			// logger.info("stopped "+prog);
 			this.utcoupe[prog] = false;
 		}
 		this.sendUTCoupe();
