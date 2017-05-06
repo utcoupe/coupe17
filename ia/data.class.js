@@ -21,7 +21,9 @@ module.exports = (function () {
 	 * @param EGR_d
 	 * @param EPR_d 
 	 */
-	function Data(ia/*, nb_erobots, EGR_d, EPR_d*/) {
+	function Data(ia) { /*, nb_erobots, EGR_d, EPR_d*/
+		this.ia = ia;
+
 		/** balls */
 		this.balls = [];
 		/** rocket */
@@ -84,7 +86,7 @@ module.exports = (function () {
 		this.erobot = [{ // big robot on position 0
 				name: "gr",
 				pos:{
-					x:3100,
+					x:2800,
 					y:200
 				},
 				speed:{ // in mm/sec
@@ -97,7 +99,7 @@ module.exports = (function () {
 			},{ // small robot on position 1
 				name: "pr",
 				pos:{
-					x:3500,
+					x:2100,
 					y:200
 				},
 				speed:{
@@ -108,6 +110,11 @@ module.exports = (function () {
 				d: 200,
 				status: "lost"
 			}];
+
+		if (this.ia.color == "yellow") {
+			this.erobot[0].pos.x = 3000 - this.erobot[0].pos.x;
+			this.erobot[1].pos.x = 3000 - this.erobot[1].pos.x;
+		}
 	}
 
 	/**
@@ -223,8 +230,6 @@ module.exports = (function () {
 			default: logger.error("Unknown order name:"+name+" from:"+from);
 		}
 	};
-
-	var data = new Data();
 	
 	return Data;
 })();

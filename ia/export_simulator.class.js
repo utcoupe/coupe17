@@ -122,14 +122,14 @@ module.exports = (function () {
 				color: this.ia.color
 			},
 			egr: {
-				x: this.ia.data.erobot[0].pos.x, // convertX(this.ia.data.erobot[0].pos.x),
-				y: this.ia.data.erobot[0].pos.y, // convertY(this.ia.data.erobot[0].pos.y),
-				color: this.ia.color == "yellow" ? this.ia.color : "blue"
+				x: convertX(this.ia.data.erobot[0].pos.x),
+				y: convertY(this.ia.data.erobot[0].pos.y),
+				color: (this.ia.color == "yellow") ? "blue" : "yellow"
 			},
 			epr: {
-				x: this.ia.data.erobot[1].pos.x, // convertX(this.ia.data.erobot[1].pos.x),
-				y: this.ia.data.erobot[1].pos.y, // convertY(this.ia.data.erobot[1].pos.y)
-				color: this.ia.color == "yellow" ? this.ia.color : "blue"
+				x: convertX(this.ia.data.erobot[1].pos.x),
+				y: convertY(this.ia.data.erobot[1].pos.y),
+				color: (this.ia.color == "yellow") ? "blue" : "yellow"
 			}
 		};
 		// data.dynamic = this.ia.data.dynamic.map(function(o){

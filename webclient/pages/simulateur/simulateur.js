@@ -75,8 +75,6 @@ function updateRobot(data_robot, simulateur, type) {
 			rotation: rotation
 		});
 
-
-		console.log(data_robot.path);
 		if(!!data_robot.path && data_robot.path.length > 1){
 			updatePath(data_robot.path, simulateur, type + "_" + data_robot.color);
 		} else {
@@ -129,8 +127,8 @@ angular.module('app').service('Simulateur', ['$rootScope', 'Client', function ($
 				// Met à jour le gr (s'il existe)
 				updateRobot(data.robots.gr, this, "gr");
 
-				// updateRobot(data.robots.epr, this, "pr");
-				// updateRobot(data.robots.egr, this, "gr");
+				updateRobot(data.robots.epr, this, "pr");
+				updateRobot(data.robots.egr, this, "gr");
 				$rootScope.$apply();
 			}
 		}.bind(this));
