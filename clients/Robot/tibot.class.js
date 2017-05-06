@@ -131,7 +131,7 @@ class Tibot extends Robot{
 	// 	}
 	// }
 
-	quit () {
+	kill () {
 		this.logger.info("Please wait while exiting...");
 		// to be replaced
         this.unitGrabber.stop();

@@ -48,7 +48,7 @@ class Grobot extends Robot{
 	 *
 	 * @todo do something when app is closing
 	 */
-	quit () {
+	kill () {
 		this.logger.info("Please wait while exiting...");
 		// acts.quit();
 		process.exit(0);

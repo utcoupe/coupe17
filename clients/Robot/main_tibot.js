@@ -36,7 +36,7 @@
 			break;
 
 			case "kill":
-				process.exit();
+				tibot.kill();
 				break;
 
 			

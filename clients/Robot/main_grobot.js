@@ -31,12 +31,16 @@
       case "stop":
         //grobot.acts.clean();
         grobot.logger.fatal("Stop " + grobot.robotName);
-        process.exit();
+        grobot.stop();
       break;
+
+      case "kill":
+        grobot.kill();
+        break;
 
       // useless //
       case "start":
-        grobot.queue = [];
+        //grobot.queue = [];
         grobot.start();
       break;
       default:
