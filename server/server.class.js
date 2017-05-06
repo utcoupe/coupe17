@@ -65,7 +65,9 @@ module.exports = (function () {
 			pr: {},
 			gr: {},
 			unit_grabber: {},
-			base_constructor: {}
+			base_constructor: {},
+			canon: {},
+			sweeper: {}
 		};
 		/** @type {Object} */
 		this.utcoupe = {
