@@ -51,7 +51,7 @@ class RobotDisplay {
 	}
 
 	goAngle () {
-		this.client.send("gr", "asserv.goa", {
+		this.client.send(this.name, "asserv.goa", {
 			a: parseFloat(this.a)*Math.PI/180
 		});
 	}
