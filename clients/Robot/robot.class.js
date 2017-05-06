@@ -66,10 +66,52 @@ class Robot extends Client{
 
 					// this.devicesDetected(struct); //TODO Replace it
 
+
 		this.queue = [];
 		this.orderInProgress = false;
 
+		this.client.order( function (from, name, params){
+			this.logger.info("Received an order "+name);
+			var OrderName = name.split('.');
+			var classe = OrderName.shift();
+			var OrderSubname = OrderName.join('.');
+
+			if(classe == "asserv"){
+				this.logger.info("order send to asserv : "+OrderSubname);
+				this.asserv.addOrder2Queue(from,OrderSubname,params);
+			}
+
+			else if(classe == robotName){
+				switch (name){
+					case "collision":
+						tibot.queue = [];
+						//TODO DO it with new actuators
+						//tibot.acts.clean();
+						tibot.orderInProgress = false;
+					break;
+					case "stop":
+						//TODO DO it with new actuators
+						//tibot.acts.clean();
+						tibot.logger.fatal("Stop " + tibot.robotName);
+						process.exit();
+					break;
+
+					// useless //
+					// case "start":
+					// 	tibot.queue = [];
+					// 	tibot.start();
+					// break;
+					default:
+						tibot.addOrder2Queue(from, name, params);
+				}
+			}
+
+			else {
+				this.logger.fatal("this order can't be assigned : "+name)
+			}
+		}.bind(this));
 	}
+
 
 	/**
 	 * Start the Robot
@@ -216,30 +258,6 @@ class Robot extends Client{
 			// Asserv HACK
 			//var callback = this.actionFinished
 				switch (order.name){
-					case "pwm":
-						this.asserv.pwm(order.params.left, order.params.right, order.params.ms, this.actionFinished());
-					break;
-					case "setvit":
-						this.asserv.setVitesse(order.params.v, order.params.r, this.actionFinished());
-					break;
-					case "clean":
-						this.asserv.clean(this.actionFinished());
-					break;
-					case "goa":
-						this.asserv.goa(order.params.a, this.actionFinished(), true);
-					break;
-					case "goxy":
-						this.asserv.goxy(order.params.x, order.params.y, order.params.sens, this.actionFinished(), true);
-					break;
-					case "setpos":
-						this.asserv.setPos(order.params, this.actionFinished());
-					break;
-					case "setacc":
-						this.asserv.setAcc(order.params.acc, this.actionFinished());
-					break;
-					case "setpid":
-						this.asserv.setPid(order.params.p, order.params.i, order.params.d, this.actionFinished());
-					break;
 					case "sync_git":
 						spawn('/root/sync_git.sh', [], {
 							detached: true
