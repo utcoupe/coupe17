@@ -27,8 +27,16 @@ class Canon extends Extension {
     processFifoOrder (name, param) {
         this.logger.info ("Order received: " + name);
         switch (name) {
+            case "turn_on":
+                this.fifo.orderFinished();
+                break;
+            case "turn_off":
+                this.fifo.orderFinished();
+                break;
+
             default:
-                logger.error ("Order " + name + " does not exist!");
+                this.logger.error ("Order " + name + " does not exist!");
+                this.fifo.orderFinished();
         }
     }
 

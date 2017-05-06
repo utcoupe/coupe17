@@ -64,6 +64,12 @@ class Grobot extends Robot{
 		super.stop();
 	}
 
+	start () {
+		super.start();
+		this.sweeper.start();
+		this.canon.start();
+	}
+
 	// Exiting :
 	//do something when app is closing
 	//process.on('exit', quit);

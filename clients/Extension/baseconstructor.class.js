@@ -43,18 +43,22 @@ class BaseConstructor extends Extension {
                 // open
                 // rotate
                 // close
+                this.fifo.orderFinished();
                 break;
             
             case "drop_middle_1":
                 // same thing
+                this.fifo.orderFinished();
                 break;
             
             case "drop_middle_2":
                 // same thing
+                this.fifo.orderFinished();
                 break;
             
             default:
                 this.logger.error("Order " + name + " does not exist !");
+                this.fifo.orderFinished();
         }
     }
 

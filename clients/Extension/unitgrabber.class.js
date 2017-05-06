@@ -28,9 +28,11 @@ class UnitGrabber extends Extension {
         switch (name) {
             case "open":
                 this.servos.moduleArmOpen();
+                this.fifo.orderFinished();
                 break;
             case "close":
                 this.servos.moduleArmClose();
+                this.fifo.orderFinished();
                 break;
             case "take_1":
                 //add a mechanism to process some functions in sequential order, waiting the first has finished before
@@ -42,14 +44,17 @@ class UnitGrabber extends Extension {
                 // - close arms
                 // - up grabber
                 // - open arms
+                this.fifo.orderFinished();
                 break;
             
             case "take_4":
                 // Order : same thing but 4 times
+                this.fifo.orderFinished();
                 break;
             
             default:
                 this.logger.error("Order " + name + " does not exist !");
+                this.fifo.orderFinished();
         }
     }
 
