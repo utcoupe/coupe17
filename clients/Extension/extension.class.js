@@ -30,6 +30,12 @@ class Extension extends Client {
     processFifoOrder (name, param) {
         throw new TypeError("extension:processFifoOrder is pure virtual !");
     }
+
+    // Inherited from client
+    stop() {
+        this.fifo.clean();
+        super.stop();
+    }
 }
 
 module.exports = Extension;

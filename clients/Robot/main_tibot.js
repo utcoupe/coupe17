@@ -30,8 +30,9 @@
 			case "stop":
 				//TODO DO it with new actuators
 				//tibot.acts.clean();
+                tibot.stop();
 				tibot.logger.fatal("Stop " + tibot.robotName);
-				process.exit();
+				// process.exit();
 			break;
 
 			// useless //

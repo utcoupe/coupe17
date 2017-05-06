@@ -24,6 +24,7 @@ class Client {
 	 */
 	constructor(clientName, status){
         this.logger = Log4js.getLogger(clientName);
+        this.clientName = clientName;
 		
 		var server = CONFIG.server;
 
@@ -38,7 +39,6 @@ class Client {
         this.client.order(this.takeOrder.bind(this));
 	}
 
-
     takeOrder (from, name, param) {
         throw new TypeError("client:takeOrder is abstract !");
     }
@@ -52,7 +52,8 @@ class Client {
 	}
 
 	stop(){
-		
+		//todo stop the socket client
+        this.logger.info(this.clientName + " has stopped.");
 	}
 
 	status(){

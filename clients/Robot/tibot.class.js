@@ -137,6 +137,12 @@ class Tibot extends Robot{
 		process.exit();
 	}
 
+	stop() {
+        this.unitGrabber.stop();
+        this.baseConstructor.stop();
+        super.stop();
+    }
+
 	// Exiting :
 	//do something when app is closing
 	// process.on('exit', quit);

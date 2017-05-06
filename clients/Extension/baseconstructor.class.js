@@ -57,6 +57,12 @@ class BaseConstructor extends Extension {
                 this.logger.error("Order " + name + " does not exist !");
         }
     }
+
+    // Inherited from client
+    stop() {
+        this.servos.stop();
+        super.stop();
+    }
 }
 
 module.exports = BaseConstructor;

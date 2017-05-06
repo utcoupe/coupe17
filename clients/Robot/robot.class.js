@@ -98,13 +98,15 @@ class Robot extends Client{
 	 * Stops the robot
 	 */
 	stop(){
-		this.acts.quit();
+		// this.acts.quit();
 
 		// Send struct to server
 		this.sendChildren({
 			status: "waiting",
 			children:[]
 		});
+
+        super.stop();
 	}
 
 	/**

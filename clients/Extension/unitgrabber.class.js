@@ -52,6 +52,12 @@ class UnitGrabber extends Extension {
                 this.logger.error("Order " + name + " does not exist !");
         }
     }
+
+    // Inherited from client
+    stop() {
+        this.servos.stop();
+        super.stop();
+    }
 }
 
 /* new way to work :
