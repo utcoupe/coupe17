@@ -92,28 +92,36 @@ class Actions{
 			actions[i].object = data.getObjectRef(actions[i].objectname);
 			actions[i].name = i;
 
-			// Automatically create startpoints for objects that need it
-			// if ((actions[i].object !== null) && (actions[i].type == "plot") && (actions[i].startpoints.length === 0)) {
-			// 	actions[i].startpoints.push({
-			// 		x: actions[i].object.pos.x,
-			// 		y: actions[i].object.pos.y
-			// 	});
-			// 	// var temp;
-			// 	// for(var j = 0; j < __nb_startpoints_plot; j++) {
-			// 	// 	temp = j*2*Math.PI/__nb_startpoints_plot;
-			// 	// 	actions[i].startpoints.push({
-			// 	// 		x: actions[i].object.pos.x + __dist_startpoints_plot * Math.cos(temp),
-			// 	// 		y: actions[i].object.pos.y + __dist_startpoints_plot * Math.sin(temp),
-			// 	// 		a: convertA(temp+Math.PI)
-			// 	// 	});
-			// 	// }
-			// }
-			// else if((actions[i].object !== null) && (actions[i].type == "clap")) {
-			// 	if(this.ia.color != "blue") {
-			// 		var a = actions[i].startpoints[0].a;
-			// 		actions[i].startpoints[0].a = (a < 0) ? -Math.PI - a : Math.PI - a;
-			// 	}
-			// }
+			// Delete action if it's not for us
+			if (actions[i].object.color != this.ia.color
+				&& actions[i].object.color != "both") {
+				delete actions[i];
+			} else {
+
+				// Automatically create startpoints for objects that need it
+				// if ((actions[i].object !== null) && (actions[i].type == "plot") && (actions[i].startpoints.length === 0)) {
+				// 	actions[i].startpoints.push({
+				// 		x: actions[i].object.pos.x,
+				// 		y: actions[i].object.pos.y
+				// 	});
+				// 	// var temp;
+				// 	// for(var j = 0; j < __nb_startpoints_plot; j++) {
+				// 	// 	temp = j*2*Math.PI/__nb_startpoints_plot;
+				// 	// 	actions[i].startpoints.push({
+				// 	// 		x: actions[i].object.pos.x + __dist_startpoints_plot * Math.cos(temp),
+				// 	// 		y: actions[i].object.pos.y + __dist_startpoints_plot * Math.sin(temp),
+				// 	// 		a: convertA(temp+Math.PI)
+				// 	// 	});
+				// 	// }
+				// }
+				// else if((actions[i].object !== null) && (actions[i].type == "clap")) {
+				// 	if(this.ia.color != "blue") {
+				// 		var a = actions[i].startpoints[0].a;
+				// 		actions[i].startpoints[0].a = (a < 0) ? -Math.PI - a : Math.PI - a;
+				// 	}
+				// }
+
+			}
 		}.bind(this));
 
 		return actions;
@@ -127,18 +135,18 @@ class Actions{
 	 * @param {Object} params Parameters of the action
 	 */
 	parseOrder (from, name, params) {
-		logger.debug("parseOrder: verify this function");
+		this.logger.debug("parseOrder: verify this function");
 		switch(name) {
 			case 'action_finished':
-			// logger.debug('received action_finished');
+			// this.logger.debug('received action_finished');
 				this.actionFinished();
 			break;
 			case 'path_finished':
-				this.logger.debug('received path_finished');
-				this.robot.path = [];
+				// this.logger.debug('received path_finished');
+				this.pathFinished();
 			break;
 			default:
-				this.logger.warn('Ordre inconnu dans ia.' + this.robot.name + ': '+name);
+				this.logger.warn('Ordre inconnu dans ia.' + this.robot.name + '.actions: '+name);
 		}
 	};
 
@@ -149,7 +157,7 @@ class Actions{
 	 * @param {string} action_name
 	 */
 	kill (action_name){
-		logger.debug("kill: verify this function");
+		this.logger.debug("kill: verify this function");
 		// If action doesn't exist
 		if (!!action_name && this.exists(action_name)){
 			this.killed[action_name] = this.todo[action_name];
@@ -386,16 +394,17 @@ class Actions{
 			});
 		}
 
+		if (!!action.preparation_orders) {
+
+			action.preparation_orders.forEach(function (order, index, array){
+				let dest = !!order.dest ? order.dest : this.robot.name;
+				this.ia.client.send(dest, order.name, order.params);
+			}.bind(this));
+		}
+
+
 		this.ia.client.send(this.robot.name, "send_message", {
-			name: "actions.path_finished"
-		});
-		// 1 order for 1 action
-		// action.orders.forEach(function (order, index, array){
-		this.ia.client.send(this.robot.name, action.orders[0].name, action.orders[0].params);
-		// }.bind(this));
-		this.ia.client.send(this.robot.name, "send_message", {
-			name: "actions.action_finished",
-			action_name: action.name
+			name: this.robot.name + ".actions.path_finished"
 		});
 
 		// // Change action and its "to be killed" actions to state done
@@ -417,6 +426,27 @@ class Actions{
 			this.callback = function() {this.logger.warn('callback vide'); };
 			temp();
 		}
+	}
+
+
+	/**
+	 * Do action once arrived
+	 */
+	pathFinished () {
+		this.robot.path = [];
+
+		// 1 order for 1 action -> not any more
+		let dest = null;
+		this.inprogress.orders.forEach(function (order, index, array){
+			// this.ia.client.send(this.robot.name, action.orders[0].name, action.orders[0].params);
+			dest = !!order.dest ? order.dest : this.robot.name;
+			this.ia.client.send(dest, order.name, order.params);
+		}.bind(this));
+
+		this.ia.client.send(dest, "send_message", {
+			name: this.robot.name + ".actions.action_finished",
+			action_name: this.inprogress.name
+		});
 	}
 
 	/**

@@ -120,17 +120,28 @@
 			"objectname": "mountedModules__left",
 			"startpoints": [{
 				"x": 150,
-                "y": 925,
+                "y": 1100,
                 "a": 3.1415
 			}],
 			"direction": "osef",
 			"priority": 93,
 			"dependency": "",
 			"duration": 1,
+			"preparation_orders":[{
+				"dest": "baseconstructor",
+				"name": "prepare_module",
+				"params": {
+					"color": "TO_BE_FILLED_BY_IA",
+					"push_toward": "right"
+				}
+			}],
 			"orders":[{
-				"name": "drop_border",
-				"params": {}
-				}],
+				"dest": "baseconstructor",
+				"drop_module": "drop",
+				"params": {
+					"nb_modules_to_drop": 3
+				}
+			}],
 			"kill": null
 		},
 		"drop_module_middle_left_1":{
@@ -146,8 +157,17 @@
 			"priority": 92,
 			"dependency": "",
 			"duration": 1,
+			"preparation_orders":[{
+				"dest": "baseconstructor",
+				"name": "prepare_module",
+				"params": {
+					"color": "TO_BE_FILLED_BY_IA",
+					"push_toward": "right"
+				}
+				}],
 			"orders":[{
-				"name": "drop_middle_1",
+				"dest": "baseconstructor",
+				"drop_module": "drop",
 				"params": {}
 				}],
 			"kill": null
@@ -165,8 +185,17 @@
 			"priority": 92,
 			"dependency": "",
 			"duration": 1,
+			"preparation_orders":[{
+				"dest": "baseconstructor",
+				"name": "prepare_module",
+				"params": {
+					"color": "TO_BE_FILLED_BY_IA",
+					"push_toward": "left"
+				}
+				}],
 			"orders":[{
-				"name": "drop_middle_2",
+				"dest": "baseconstructor",
+				"drop_module": "drop",
 				"params": {}
 				}],
 			"kill": null
@@ -184,8 +213,17 @@
 			"priority": 91,
 			"dependency": "",
 			"duration": 1,
+			"preparation_orders":[{
+				"dest": "baseconstructor",
+				"name": "prepare_module",
+				"params": {
+					"color": "TO_BE_FILLED_BY_IA",
+					"push_toward": "right"
+				}
+				}],
 			"orders":[{
-				"name": "drop_middle_1",
+				"dest": "baseconstructor",
+				"drop_module": "drop",
 				"params": {}
 				}],
 			"kill": null
@@ -203,8 +241,17 @@
 			"priority": 90,
 			"dependency": "",
 			"duration": 1,
+			"preparation_orders":[{
+				"dest": "baseconstructor",
+				"name": "prepare_module",
+				"params": {
+					"color": "TO_BE_FILLED_BY_IA",
+					"push_toward": "left"
+				}
+				}],
 			"orders":[{
-				"name": "drop_middle_2",
+				"dest": "baseconstructor",
+				"drop_module": "drop",
 				"params": {}
 				}],
 			"kill": null
@@ -222,8 +269,17 @@
 			"priority": 89,
 			"dependency": "",
 			"duration": 1,
+			"preparation_orders":[{
+				"dest": "baseconstructor",
+				"name": "prepare_module",
+				"params": {
+					"color": "TO_BE_FILLED_BY_IA",
+					"push_toward": "right"
+				}
+				}],
 			"orders":[{
-				"name": "drop_middle_1",
+				"dest": "baseconstructor",
+				"drop_module": "drop",
 				"params": {}
 				}],
 			"kill": null
@@ -241,8 +297,17 @@
 			"priority": 88,
 			"dependency": "",
 			"duration": 1,
+			"preparation_orders":[{
+				"dest": "baseconstructor",
+				"name": "prepare_module",
+				"params": {
+					"color": "TO_BE_FILLED_BY_IA",
+					"push_toward": "left"
+				}
+				}],
 			"orders":[{
-				"name": "drop_middle_2",
+				"dest": "baseconstructor",
+				"drop_module": "drop",
 				"params": {}
 				}],
 			"kill": null

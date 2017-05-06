@@ -29,8 +29,9 @@ IA des robots
 	- différence entre fusée et module seul ?
 - `prepare_module` : engage un module dans les servos de drop
 	- `color` (`yellow`, `blue`, `null`) : tourner le module avant de le poser (`null` : on ne le tourne pas)
-- `drop_module` : laisse tomber un module une fois préparé
-	- `pushTowards` (`left`, `right`, `don't`) : pousser le module une fois posé
+	- `push_towards` (`left`, `right`, `don't`) : pousser le module une fois posé
+- `drop_module` : laisse tomber un module une fois préparé (en tenant compte des paramètres de `prepare_module`)
+	- `nb_modules_to_drop` (int) : nombre de dépôts à faire
 
 ### vers GR
 - `funny_action` : lancer la fusée

@@ -6,7 +6,7 @@
                 "x": 350,
                 "y": 1650
             },
-            "color": "none",
+            "color": "both",
             "status": "initial"
         },
         "small_left": {
@@ -15,7 +15,7 @@
                 "x": 650,
                 "y": 540
             },
-            "color": "none",
+            "color": "both",
             "status": "initial"
         },
         "small_right": {
@@ -24,7 +24,7 @@
                 "x": 2350,
                 "y": 540
             },
-            "color": "none",
+            "color": "both",
             "status": "initial"
         },
         "front_right": {
@@ -33,7 +33,7 @@
                 "x": 2650,
                 "y": 1650
             },
-            "color": "none",
+            "color": "both",
             "status": "initial"
         }
     },
@@ -80,7 +80,7 @@
                 "x": 500,
                 "y": 1100
             },
-            "color": "none",
+            "color": "both",
             "status": "initial"
         },
         "mod_lun07": {
@@ -89,7 +89,7 @@
                 "x": 900,
                 "y": 1400
             },
-            "color": "none",
+            "color": "both",
             "status": "initial"
         },
         "mod_lun08": {
@@ -98,7 +98,7 @@
                 "x": 1000,
                 "y": 600
             },
-            "color": "none",
+            "color": "both",
             "status": "initial"
         },
         "mod_lun09": {
@@ -107,7 +107,7 @@
                 "x": 2500,
                 "y": 1100
             },
-            "color": "none",
+            "color": "both",
             "status": "initial"
         },
         "mod_lun10": {
@@ -116,7 +116,7 @@
                 "x": 2100,
                 "y": 1400
             },
-            "color": "none",
+            "color": "both",
             "status": "initial"
         },
         "mod_lun11": {
@@ -125,7 +125,7 @@
                 "x": 2000,
                 "y": 600
             },
-            "color": "none",
+            "color": "both",
             "status": "initial"
         }
     },
@@ -136,7 +136,7 @@
                 "x": 102,
                 "y": 925
             },
-            "color": "none",
+            "color": "both",
             "status": "initial"
         },
         "middle_left": {
@@ -145,7 +145,7 @@
                 "x": 1070,
                 "y": 1400
             },
-            "color": "none",
+            "color": "both",
             "status": "initial"
         },
         "middle_center": {
@@ -154,7 +154,7 @@
                 "x": 1500,
                 "y": 1300
             },
-            "color": "none",
+            "color": "both",
             "status": "initial"
         },
         "middle_right": {
@@ -163,7 +163,7 @@
                 "x": 1930,
                 "y": 1400
             },
-            "color": "none",
+            "color": "both",
             "status": "initial"
         },
         "right": {
@@ -172,7 +172,7 @@
                 "x": 2898,
                 "y": 925
             },
-            "color": "none",
+            "color": "both",
             "status": "initial"
         }
     },
@@ -183,7 +183,7 @@
                 "x": 38,
                 "y": 1350
             },
-            "color": "none",
+            "color": "both",
             "status": "initial"
         },
         "front_right_24>27": {
@@ -192,7 +192,7 @@
                 "x": 2962,
                 "y": 1350
             },
-            "color": "none",
+            "color": "both",
             "status": "initial"
         },
         "rear_left_12>15": {

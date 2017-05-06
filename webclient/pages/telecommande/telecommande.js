@@ -15,6 +15,10 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 		Client.send("server", "server.sync_all_git");
 	}
 
+	$scope.sendFinished = function(){
+		Client.send("ia", $("#robot_finished").val() + $("#what_finished").val());
+	}
+
 	// Arduinos
 	$scope.serverFlashArduinos = function() {
 		Client.send("server", "server.flash_arduinos");
