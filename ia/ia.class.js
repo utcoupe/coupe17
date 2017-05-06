@@ -88,7 +88,7 @@ module.exports = (function () {
 		/** Pathfinding */
 		this.pathfinding = new (require('./pathfinding.class.js'))(this);
 		/** Data */
-		this.data = new (require('./data.class.js'))(this/*, this.nb_erobots, EGR_d, EPR_d*/);
+		this.data = new (require('./data.class.js'))(this); /*, this.nb_erobots, EGR_d, EPR_d*/
 		// /** Actions */ // now instantiated in robot IA components
 		// this.actions = new (require('./actions.class.js'))(this);
 		/** Grand robot */
@@ -176,14 +176,19 @@ module.exports = (function () {
 	 * Stop the robots and stop the programm
 	 */
 	Ia.prototype.stop = function() {
-		logger.fatal('Stop IA');
-		this.gr.funnyAction();
-		this.pr.stop();
-		this.lidar.stop();
-		setTimeout(function(){
-			this.gr.stop();
-		}.bind(this), 1000);
-		setTimeout(process.exit, 4000);
+		logger.debug("TODO: stop but don't kill AI !");
+		if (this.timer.match_started) {
+			logger.fatal('Stop IA');
+			this.gr.funnyAction();
+			this.pr.stop();
+			this.lidar.stop();
+			setTimeout(function(){
+				this.gr.stop();
+			}.bind(this), 1000);
+			setTimeout(process.exit, 4000);
+		} else {
+			process.exit();
+		}
 	};
 
 	return Ia;

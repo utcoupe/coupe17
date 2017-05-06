@@ -15,7 +15,7 @@ IA des robots
 	- ...`goxy` : aller à ce point, en ligne droite, tourner si nécessaire au avant de commencer
 		- `x`
 		- `y`
-		- `direction` (`avant`, `arrière`, `osef`) : si le sens de déplacement importe
+		- `direction` (`avant`, `arrière`, `whatever`) : si le sens de déplacement importe
 	- ...`goa` : tourner le robot pour prendre cet angle
 - `do_start_sequence` : demande de se placer, fermer et ouvrir tous les actionneurs avant le départ
 - `collision` : stopper le robot, vider les files

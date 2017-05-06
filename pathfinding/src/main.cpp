@@ -179,9 +179,9 @@ string commandCalcPath(string &command, MAP &map) {
         elapsedSeconds = endChrono - startChrono;
         cout << "Path contains " << path.size() << " points, total distance = " << distance << endl;
         cout << "Computing time : " << elapsedSeconds.count() << endl;
-        if (bmpRenderingFlag) {
-            map.generate_bmp("tmp.bmp");
-        }
+    }
+    if (bmpRenderingFlag) {
+        map.generate_bmp("tmp.bmp");
     }
     return answer.str();
 }
