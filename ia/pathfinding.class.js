@@ -153,11 +153,11 @@ module.exports = (function () {
 	 * @param end
 	 * @param callback
 	 */
-	Pathfinding.prototype.getPath = function (start, end, otherRobotPos, callback) {
+	Pathfinding.prototype.getPath = function (start, end, robot, callback) {
 		var queryParams = {
 			start: start,
 			end: end,
-			otherRobotPos: otherRobotPos,
+			robot: robot,
 			callback: callback
 		};
 
@@ -184,7 +184,7 @@ module.exports = (function () {
 	Pathfinding.prototype.prepareAndDoQuery = function(params) {
 		this.busy = true;
 
-		this.ia.pathfinding.updateMap(params.otherRobotPos);
+		this.ia.pathfinding.updateMap(params.robot);
 
 		// Leave 1000 ms to the C program to answer, then abort
 		this.timeout_getpath = setTimeout(function() {
@@ -234,22 +234,27 @@ module.exports = (function () {
 	/**
 	 * Update Map
 	 */
-	Pathfinding.prototype.updateMap = function (otherRobotPos) {
+	Pathfinding.prototype.updateMap = function (robot) {
 		//[ [x, y, r], ... ]
 
 		// var objects = [];
 		// objects.push();
+		let otherRobot = robot.name == this.ia.pr.name ? this.ia.gr : this.ia.pr;
 		var objects = [{
-			pos: this.ia.gr.pos,
-			d: this.ia.gr.size.d
-		}].concat(this.ia.data.dots)/*.concat(this.ia.data.dynamic)*/;
+			pos: otherRobot.pos,
+			d: otherRobot.size.d
+		}].concat(this.ia.data.dots)
+
+		if (robot.name == this.ia.pr.name) {
+			objects.concat(this.ia.data.craters);
+		}
 
 
 		// logger.debug(objects);
 
 		this.sendDynamic( objects.map(function(val){
 			// logger.debug(val);
-			return [borne(val.pos.x, 0, 2980), borne(val.pos.y, 0, 1980), 1*((val.d/2)+(this.ia.pr.size.d/2))];
+			return [borne(val.pos.x, 0, 2980), borne(val.pos.y, 0, 1980), 1*((val.d/2)+(robot.size.d/2))];
 		}.bind(this)) );
 	};
 
