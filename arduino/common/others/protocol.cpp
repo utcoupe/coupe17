@@ -27,13 +27,17 @@ void parseAndExecuteOrder(const String& order) {
     switch (orderChar) {
         case START:
         {
-            SerialSender::SerialSend(SERIAL_INFO, "Arduino %s has started (%d)", ARDUINO_ID, order_id);
+            // Ack that arduino has started
+            SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
+            SerialSender::SerialSend(SERIAL_DEBUG, "Arduino %s has started (%d)", ARDUINO_ID, order_id);
             flagArduinoConnected = 1;
             break;
         }
         case HALT:
         {
-            SerialSender::SerialSend(SERIAL_INFO, "Arduino %s has stopped (%d)", ARDUINO_ID, order_id);
+            // Ack that arduino has stopped
+            SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
+            SerialSender::SerialSend(SERIAL_DEBUG, "Arduino %s has stopped (%d)", ARDUINO_ID, order_id);
             flagArduinoConnected = 0;
             break;
         }
