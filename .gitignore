@@ -27,6 +27,7 @@ npm-debug.log
 *.sublime*
 .idea
 .vscode/
+cmake-build-debug/
 
 # UTCoupe folders
 bin/
