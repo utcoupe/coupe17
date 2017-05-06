@@ -47,5 +47,6 @@
         grobot.addOrder2Queue(from, name, params);
     }
   });
+
   grobot.logger.info('Ending of init grobot');
 })();

@@ -32,7 +32,16 @@ class Asserv{
 		this.pos = {};
 
 		/** @type {clients/fifo.Fifo} */
-		this.fifo = fifo;
+		if(fifo === undefined || fifo === null){
+			var Fifo = require('../fifo.class.js');
+			this.fifo = new Fifo();
+		}
+		else 
+			this.fifo = fifo;
+
+		/** @type {Array}*/
+		this.queue = []
+		this.orderInProgress = false;
 	}
 
 	/**

@@ -310,6 +310,74 @@ class AsservSimu extends Asserv{
 	setPid(p, i, d, callback){
 		this.newOrder(callback);
 	}
+
+	addOrder2Queue(from, name, params){
+		this.logger.info("addOrder2Queue from : " + from + " name : " + name + " params: " + params);
+		if(this.queue.length < 100){
+			this.queue.push({
+				"from" : from,
+				"name" : name,
+				"params" : params
+			});
+			this.logger.info("Order added to queue ! : ");
+			this.logger.info(this.queue);
+
+			this.executeNextOrder();
+		}
+	}
+
+	executeNextOrder(){
+	 	if((this.queue.length > 0) && (!this.orderInProgress)) {
+	 		var order = this.queue.shift();
+
+	 		this.orderInProgress = order.name;
+
+	 		this.logger.info(this.orderInProgress+" Begin , executeNextOrder ");
+	 		this.logger.debug(order.params);
+
+ 			switch (order.name){
+				case "pwm":
+					this.pwm(order.params.left, order.params.right, order.params.ms, this.actionFinished());
+				break;
+				case "setvit":
+					this.setVitesse(order.params.v, order.params.r, this.actionFinished());
+				break;
+				case "clean":
+					this.clean(this.actionFinished());
+				break;
+				case "goa":
+					this.goa(order.params.a, this.actionFinished(), true);
+				break;
+				case "goxy":
+					this.goxy(order.params.x, order.params.y, order.params.sens, this.actionFinished(), true);
+				break;
+				case "setpos":
+					this.setPos(order.params, this.actionFinished());
+				break;
+				case "setpid":
+					this.setPid(order.params.p, order.params.i, order.params.d, this.actionFinished());
+				break;
+				default:
+					this.logger.fatal("This order is unknown for the AsservSimu : " + order.name);
+					this.actionFinished();
+					this.executeNextOrder();
+			}
+	 	}
+	}
+
+	/**
+	 * Launch the next order
+	 */
+	actionFinished(){
+		this.logger.info("actionFinished : " + this.orderInProgress);
+		if(this.orderInProgress !== false) {
+			this.logger.info(this.orderInProgress + " : End");
+
+			this.orderInProgress = false;
+			this.executeNextOrder();
+		}
+	}
+	
 }
 
 module.exports = AsservSimu;

@@ -356,14 +356,14 @@ module.exports = (function () {
 
 		logger.debug('Action en cours %s (%d;%d;%d)', action.name, startpoint.x, startpoint.y, startpoint.a);
 		this.ia.pr.path.map(function(checkpoint) {
-			this.ia.client.send('pr', "goxy", {
+			this.ia.client.send('pr', "asserv.goxy", {
 				x: checkpoint.x,
 				y: checkpoint.y,
 				sens: action.sens
 			});
 		}, this);
 		if(!!startpoint.a) {
-			this.ia.client.send('pr', "goa", {
+			this.ia.client.send('pr', "asserv.goa", {
 				a: startpoint.a
 			});
 		}

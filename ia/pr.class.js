@@ -102,7 +102,7 @@ module.exports = (function () {
 	 * Send initial position
 	 */
 	Pr.prototype.sendInitialPos = function () {
-		this.ia.client.send("pr", "setpos", {
+		this.ia.client.send("pr", "asserv.setpos", {
 			x: 142,
 			y: 1000,
 			a: 0,

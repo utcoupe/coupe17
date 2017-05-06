@@ -6,14 +6,14 @@
 	},
 	"script": [
 		{
-			"name": "setpid",
+			"name": "asserv.setpid",
 			"data": {
 				"p": 1.2,
 				"i": 20,
 				"d": 5
 			}
 		},{
-			"name": "setpos",
+			"name": "asserv.setpos",
 			"data": {
 				"x": 130,
 				"y": 1000,
@@ -24,30 +24,30 @@
 			"name": "acheter",
 			"data": {}
 		},{
-			"name": "setvit",
+			"name": "asserv.setvit",
 			"data": {
 				"v": 500,
 				"r": 0.3
 			}
 		},{
-			"name": "goxy",
+			"name": "asserv.goxy",
 			"data": {
 				"x": 1245,
 				"y": 1000
 			}
 		},{
-			"name": "goa",
+			"name": "asserv.goa",
 			"data": {
 				"a": -1.5708
 			}
 		},{
-			"name": "setvit",
+			"name": "asserv.setvit",
 			"data": {
 				"v": 150,
 				"r": 0.3
 			}
 		},{
-			"name": "goxy",
+			"name": "asserv.goxy",
 			"data": {
 				"x": 1245,
 				"y": 490 
@@ -56,7 +56,7 @@
 			"name": "vendre",
 			"data": {}
 		},{
-			"name": "goxy",
+			"name": "asserv.goxy",
 			"data": {
 				"x": 1245,
 				"y": 200 
