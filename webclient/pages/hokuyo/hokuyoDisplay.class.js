@@ -244,6 +244,11 @@ class HokuyoDisplay {
 					fill: this.dotColor,
 					transform:  "t," + this.center.str + "s" + this.viewportScale + "," + this.viewportScale + ",0,0",
 					"fill-opacity": .4}) );
+			this.objects.push( this.r.text(robot[0], robot[1], "["+ robot[0] + "; " + robot[1] +"]").attr({
+					fill: this.dotColor,
+					"font-size": "6px",
+					transform:  "t,50,25" + "t," + this.center.str + "s" + this.viewportScale + "," + this.viewportScale + ",0,0"}) );
+
 		}
 
 		// console.log(cartesianSpots);
