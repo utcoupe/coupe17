@@ -7,7 +7,7 @@
 
 "use strict";
 
-const Actuator = require('actuator.class.js');
+const Actuator = require('./actuator.class.js');
 
 /**
  * Classe implémentant l'actuator pour le capteur pas-à-pas

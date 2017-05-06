@@ -7,7 +7,7 @@
 
 "use strict";
 
-const Actuator = require('actuator.class.js');
+const Actuator = require('./actuator.class.js');
 
 /**
  * Classe implémentant un actuator pour l'AX12

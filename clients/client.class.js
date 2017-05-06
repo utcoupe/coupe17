@@ -3,6 +3,8 @@
  * 
  * @module clients/client
  * @requires module:server/socket_client
+ * @requires module:config
+ * @requires module:log4js
  */
 
 "use strict";
