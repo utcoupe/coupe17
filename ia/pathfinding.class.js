@@ -51,7 +51,7 @@ module.exports = (function () {
 
 
 		var instance = Child_process.spawn(program, [ image ]);*/
-		var instance = Child_process.spawn("bash", ["-c", "pkill pathfinding;"+program+" -m "+image]);
+		var instance = Child_process.spawn("bash", ["-c", "pkill pathfinding;"+program+" -m "+image]); // +" -r 1" for bmp export
 
 		instance.on('error', function(err) {
 			if(err.code === 'ENOENT'){
@@ -244,7 +244,7 @@ module.exports = (function () {
 
 		// var objects = [];
 		// objects.push();
-		let otherRobot = robot.name == this.ia.pr.name ? this.ia.gr : this.ia.pr;
+		let otherRobot = (robot.name == this.ia.pr.name) ? this.ia.gr : this.ia.pr;
 		var objects = [{
 			pos: otherRobot.pos,
 			d: otherRobot.size.d
