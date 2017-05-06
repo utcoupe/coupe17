@@ -41,14 +41,13 @@ MAP::~MAP() {
 
 void MAP::add_dynamic_circle(unsigned int x, unsigned int y, float f_r) {
     unsigned int r = (unsigned int)ceil(f_r);
-    //todo test pow integer versus std using double
-    int r2 = pow(r, 2);
+    int r2 = r*r;
     for (unsigned int p_x = x - r; p_x <= x + r; p_x++) {
         if (p_x < 0 || p_x >= map_w) {
             continue;
         }
         //todo test pow integer versus std using double
-        int y_length = ceil(sqrt(r2 - pow(x - p_x, 2)));
+        int y_length = (int)ceil(sqrt((float)r2 - std::pow((float)(x - p_x), (float)2)));
         for (unsigned int p_y = y - y_length; p_y <= y + y_length; p_y++) {
             if (p_y < 0 || p_y >= map_h) {
                 continue;
