@@ -22,13 +22,34 @@ class Servo extends Actuator {
     }
 
     // Automatically called by the super class
+    //todo find a way to reboot arduino if it doesn't send its ID (previously started)
     parseCommand(receivedCommand) {
         if (!this.serialPortConnected) {
             //todo robot+"_others"
             // If not connected, wait the ID of the arduino before doing something else
             if (receivedCommand.toString() == "pr_others\r") {
-                this.serialPortConnected = true;
-                this.sendOrder(this.actuatorCommands.START, 0, null);
+                //todo find a way to make it proper
+                // this.serialPortConnected = true;
+                // this.sendOrder(this.actuatorCommands.START, 0, null);
+                // Reimplement what this.sendOrder does, because the flag used to send data is set by this function...
+                var order = this.actuatorCommands.START + ";\n";
+                order = this.addOrderId(order);
+                this.ordersCallback.push([this.currentOrderId, function(params) {
+                    this.logger.info("Get arduino ack, serial port is now connected");
+                    this.serialPortConnected = true;
+                }.bind(this)]);
+                this.logger.info(order);
+                this.serialPort.write(order);
+            } else {
+                //todo find a way to not duplicate
+                this.logger.info(receivedCommand.toString());
+                //todo ";" as protocol separator
+                if (receivedCommand.indexOf(";") == 1) {
+                    // It's an order response
+                    //todo ";" as protocol separator
+                    var splittedCommand = receivedCommand.split(";");
+                    this.callOrderCallback(parseInt(splittedCommand[0]), splittedCommand.slice(0, 2));
+                }
             }
         } else {
             // Check if the received command is a debug string or a response from an order
@@ -37,7 +58,7 @@ class Servo extends Actuator {
                 // It's an order response
                 //todo ";" as protocol separator
                 var splittedCommand = receivedCommand.split(";");
-                this.callOrderCallback(splittedCommand[0], splittedCommand.slice(0, 2));
+                this.callOrderCallback(parseInt(splittedCommand[0]), splittedCommand.slice(0, 2));
             } else {
                 // It's a debug string
                 this.logger.info(receivedCommand.toString());
@@ -86,6 +107,19 @@ class Servo extends Actuator {
         this.sendOrder(this.actuatorCommands.MODULE_ROTATE, this.actuatorCommands.PR_MODULE_ROTATE, function(params){
             //todo advertise IA
         }, 1);
+    }
+
+    // Inherited from actuator
+    stop() {
+        this.sendOrder(this.actuatorCommands.HALT, 255, function (params) {
+            this.superStop();
+        }.bind(this));
+        //todo call super stop in callback (not possible because callback can't handle super keyword
+
+    }
+
+    superStop() {
+        super.stop();
     }
 
     test() {
