@@ -36,7 +36,7 @@ class RobotDisplay {
 
     // Asserv
     PWM () {
-		this.client.send(this.name, "pwm", {
+		this.client.send(this.name, "asserv.pwm", {
 			left: this.pwm_droite,
 			right: this.pwm_gauche,
 			ms: this.pwm_ms
@@ -44,14 +44,14 @@ class RobotDisplay {
 	}
 
 	goPos () {
-		this.client.send(this.name, "goxy", {
+		this.client.send(this.name, "asserv.goxy", {
 			x: parseInt(this.x),
 			y: parseInt(this.y)
 		});
 	}
 
 	goAngle () {
-		this.client.send("gr", "goa", {
+		this.client.send("gr", "asserv.goa", {
 			a: parseFloat(this.a)*Math.PI/180
 		});
 	}
@@ -62,20 +62,20 @@ class RobotDisplay {
 	}
 
 	setVit () {
-		this.client.send(this.name, "setvit",{
+		this.client.send(this.name, "asserv.setvit",{
 				v: parseInt(this.v),
 				r: parseFloat(this.r)
 		});
 	}
 
 	setAcc () {
-		this.client.send(this.name, "setacc", {
+		this.client.send(this.name, "asserv.setacc", {
 			acc: parseInt(this.acc)
 		});
 	}
 
 	setPos () {
-		this.client.send(this.name, "setpos", {
+		this.client.send(this.name, "asserv.setpos", {
 			x: parseInt(this.set_x),
 			y: parseInt(this.set_y), 
 			a: parseFloat(this.set_a)*Math.PI/180
@@ -83,7 +83,7 @@ class RobotDisplay {
 	}
 
 	setPID () {
-		this.client.send(this.name, "setpid", {
+		this.client.send(this.name, "asserv.setpid", {
 			p: parseFloat(this.PID_P),
 			i: parseFloat(this.PID_I), 
 			d: parseFloat(this.PID_D)
