@@ -76,7 +76,7 @@ module.exports = (function () {
 		this.client.on('order', function(data){
 			// logger.info('[Order to '+data.to+'] '+data.text);
 			// On n'autorise pas la réception de message si on est muet, sauf si c'est un start
-			if (this.muted && data.name != "start")
+			if (this.muted && data.name != "start" && data.name != "kill")
 				console.log("A client tried to receive an order, but he is muted!");
 			else
 				if(!!this.callbacks.order)
