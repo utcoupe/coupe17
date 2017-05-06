@@ -3,6 +3,8 @@
  *
  * @module ia/gr
  * @requires module:ia/robot
+ * @requires log4js
+ * @see {@link ia/gr.Gr}
  */
 
 "use strict";

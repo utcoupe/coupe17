@@ -6,6 +6,7 @@ var log4js = require('log4js');
  * Actions Module
  * 
  * @module ia/actions
+ * @requires log4js
  * @see {@link ia/actions.Actions}
  */
 

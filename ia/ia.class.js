@@ -12,6 +12,7 @@
  * @requires module:ia/pr
  * @requires module:ia/export_simulator
  * @requires module:ia/lidar
+ * @requires log4js
  * @see {@link ia/ia.Ia}
  */
 

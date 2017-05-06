@@ -3,6 +3,7 @@
  * 
  * @module utcoupe/utcoupe
  * @requires module:server/server
+ * @requires log4js
  */
 (function () {
 	/**

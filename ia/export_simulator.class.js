@@ -2,6 +2,7 @@
  * Export simulator Module
  * 
  * @module ia/export_simulator
+ * @requires log4js
  * @see {@link ia/export_simulator.ExportSimulator}
  */
 

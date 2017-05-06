@@ -3,6 +3,8 @@
  *
  * @module ia/pr
  * @requires module:ia/robot
+ * @requires log4js
+ * @see {@Link ia/pr.Pr}
  */
 
 "use strict";

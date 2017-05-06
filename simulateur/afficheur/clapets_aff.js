@@ -1,5 +1,18 @@
+/*
+ * @namespace Simu
+ */
 var Simu = Simu || {};
 
+/**
+ * Affiche les clapets
+ * 
+ * @memberof Simu
+ * @param {Number} x
+ * @param {Number} y
+ * @param {Number} z
+ * @param {Number} zrot
+ * @param {String} coul
+ */
 Simu.afficherClapet = function afficherClapet(x,y,z,zrot,coul)
 {
     /*  Entrees :

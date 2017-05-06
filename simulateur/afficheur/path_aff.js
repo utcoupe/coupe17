@@ -1,9 +1,22 @@
+/**
+ * @file Gère l'affichage du chemin
+ */
+
+/*
+ * @namespace Simu
+ */
 var Simu = Simu || {};
 
-
-
+/**
+ * Nombre de points maximum du chemin
+ */
 var PATH_MAX_POINTS = 20;
 
+/*
+ * Initialise le chemin
+ * 
+ * @memberof Simu
+ */
 Simu.initPath = function(){
 
 	var mat = new THREE.LineBasicMaterial( {color: 0x000000, linewidth: 3} );
@@ -22,7 +35,12 @@ Simu.initPath = function(){
 	console.log("initPath()");
 };
 
-
+/**
+ * Met à jour le chemin
+ * 
+ * @memberof Simu
+ * @param {Array} vecArray
+ */
 Simu.updatePath = function (vecArray){
 
 	//Simu.pathPR.geometry.dynamic = true;

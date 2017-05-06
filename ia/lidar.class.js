@@ -2,6 +2,7 @@
  * Module de component lidar de l'IA
  *
  * @module ia/lidar
+ * @requires log4js
  */
 
 "use strict";

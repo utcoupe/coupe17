@@ -45,11 +45,11 @@ module.exports = (function () {
 					// logger.debug(ports[i].comName);
 					this.devicesFound.ax12 = ports[i].comName;
 				}
-				if(sp[i].readable){
+				/*if(sp[i].readable){ Désactivé car mode simu forcé
 					logger.info("Closing  "+ports[i].comName);
 					// this.devicesFound.ax12 = ports[i].comName;
 					sp[i].close();
-				}
+				}*/
 			}
 
 			// Sent to acts
