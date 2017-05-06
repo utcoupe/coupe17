@@ -30,10 +30,10 @@ angular.module('app').controller('SimulateurCtrl', ['$rootScope', '$scope', 'Cli
 		$scope.iaStop = function () { Client.send("ia", "ia.stop"); }
 
 		Simulateur.updateInterface = function () {
-			$scope.pos_pr = Simulateur.controllerSimu.objects3d.get("pr_jaune").position;
-			$scope.rot_pr = Simulateur.controllerSimu.objects3d.get("pr_jaune").rotation;
-			$scope.pos_gr = Simulateur.controllerSimu.objects3d.get("gr_jaune").position;
-			$scope.rot_gr = Simulateur.controllerSimu.objects3d.get("gr_jaune").rotation;
+			$scope.pos_pr = Simulateur.controllerSimu.objects3d.get("pr_blue").position;
+			$scope.rot_pr = Simulateur.controllerSimu.objects3d.get("pr_blue").rotation;
+			$scope.pos_gr = Simulateur.controllerSimu.objects3d.get("gr_blue").position;
+			$scope.rot_gr = Simulateur.controllerSimu.objects3d.get("gr_blue").rotation;
 		}
 	}]);
 
@@ -63,19 +63,19 @@ function convertPosNew(pos) {
  * @param {Object} Simulateur
  * @param {String} type Type de Robot
  */
-function updatePr(data_robot, Simulateur, type) {
-	if (data_robot.x && Simulateur.controllerSimu.objects3d.has(type + "_jaune")) {
+function updateRobot(data_robot, Simulateur, type) {
+	if (data_robot.x && Simulateur.controllerSimu.objects3d.has(type + "_" + data_robot.color)) {
 		act_pos = convertPosNew(data_robot);
 		position = new Position(act_pos.x, 0, act_pos.z);
 		position.roundAll(-3);
 		rotation = new Position(0, data_robot.a, 0);
 		rotation.roundAll(-2);
-		Simulateur.controllerSimu.objects3d.get(type + "_jaune").updateParams({
+		Simulateur.controllerSimu.objects3d.get(type + "_" + data_robot.color).updateParams({
 			pos: position,
 			rotation: rotation
 		});
 		if(data_robot.path)
-			updatePath(data_robot.path, Simulateur, type + "_jaune");
+			updatePath(data_robot.path, Simulateur, type + "_" + data_robot.color);
 		Simulateur.updateInterface();
 	}
 }
@@ -104,9 +104,9 @@ angular.module('app').service('Simulateur', ['$rootScope', 'Client', function ($
 		Client.order(function (from, name, data) {
 			if (name == 'simulateur' && $rootScope.act_page == 'simulateur') {
 				// Met à jour le pr (s'il existe)
-				updatePr(data.robots.pr, this, "pr");
+				updateRobot(data.robots.pr, this, "pr");
 				// Met à jour le gr (s'il existe)
-				updatePr(data.robots.gr, this, "gr");
+				updateRobot(data.robots.gr, this, "gr");
 				$rootScope.$apply();
 			}
 		}.bind(this));

@@ -42,6 +42,16 @@ module.exports = (function () {
 	// 		return (1500-x)/1000;
 	// 	}
 	// }
+
+	/**
+	 * Convert x, depends on the team color
+	 * 
+	 * @param {int} x
+	 */
+	function convertX(x) {
+		return (x-1500)/1000;
+	}
+
 	// /**
 	//  * Convert y
 	//  * 
@@ -50,6 +60,15 @@ module.exports = (function () {
 	// function convertY(y) {
 	// 	return (1000-y)/1000;
 	// }
+	/**
+	 * Convert y
+	 * 
+	 * @param {int} y
+	 */
+	function convertY(y) {
+		// return (1000-y)/1000;
+		return (y-1000)/1000;
+	}
 
 	// /**
 	//  * Convert Angle, depends on the team color
@@ -85,36 +104,39 @@ module.exports = (function () {
 		
 		data.robots = {
 			gr: {
-				x: this.ia.gr.pos.x, // convertX(this.ia.gr.pos.x),
-				y: this.ia.gr.pos.y, // convertY(this.ia.gr.pos.y),
+				x: convertX(this.ia.gr.pos.x),
+				y: convertY(this.ia.gr.pos.y),
 				a: this.ia.gr.pos.a, // convertA(this.ia.gr.pos.a)
 				path: [this.ia.gr.pos].concat(this.ia.gr.path).map(function(pos){
-					// return [convertX(pos.x), convertY(pos.y)];
-					return [pos.x, pos.y];
-				})
+					return [convertX(pos.x), convertY(pos.y)];
+				}),
+				color: this.ia.color
 			},
 			pr: {
-				x: this.ia.pr.pos.x, // convertX(this.ia.pr.pos.x),
-				y: this.ia.pr.pos.y, // convertY(this.ia.pr.pos.y),
+				x: convertX(this.ia.pr.pos.x),
+				y: convertY(this.ia.pr.pos.y),
 				a: this.ia.pr.pos.a, // convertA(this.ia.pr.pos.a),
 				path: [this.ia.pr.pos].concat(this.ia.pr.path).map(function(pos){
-					// return [convertX(pos.x), convertY(pos.y)];
-					return [pos.x, pos.y];
-				})
+					return [convertX(pos.x), convertY(pos.y)];
+				}),
+				color: this.ia.color
 			},
 			egr: {
 				x: this.ia.data.erobot[0].pos.x, // convertX(this.ia.data.erobot[0].pos.x),
-				y: this.ia.data.erobot[0].pos.y // convertY(this.ia.data.erobot[0].pos.y),
+				y: this.ia.data.erobot[0].pos.y, // convertY(this.ia.data.erobot[0].pos.y),
+				color: this.ia.color == "yellow" ? this.ia.color : "blue"
 			},
 			epr: {
 				x: this.ia.data.erobot[1].pos.x, // convertX(this.ia.data.erobot[1].pos.x),
-				y: this.ia.data.erobot[1].pos.y // convertY(this.ia.data.erobot[1].pos.y)
+				y: this.ia.data.erobot[1].pos.y, // convertY(this.ia.data.erobot[1].pos.y)
+				color: this.ia.color == "yellow" ? this.ia.color : "blue"
 			}
 		};
 		// data.dynamic = this.ia.data.dynamic.map(function(o){
 		// 	return [convertX(o.pos.x), convertY(o.pos.y)];
 		// });
 		// logger.debug(data.robots.egr);
+
 		this.ia.client.send("webclient", "simulateur", data);
 
 		__timeout = setTimeout(function(){this.orderToSimu()}.bind(this), 1000/FPS);
