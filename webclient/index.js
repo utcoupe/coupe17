@@ -9,8 +9,8 @@ angular.module('app').controller('IndexCtrl', ['$rootScope', '$scope', 'UTCoupe'
 	$scope.EGR_d = 300;
 	$scope.EPR_d = 150;
 
-	$scope.launch = function(u) {
-		Client.send('server', 'server.launch', {
+	$scope.spawn = function(u) {
+		Client.send('server', 'server.spawn', {
 			prog: u,
 			color: $scope.our_color,
 			nb_erobots: $scope.nb_erobots,
@@ -18,9 +18,15 @@ angular.module('app').controller('IndexCtrl', ['$rootScope', '$scope', 'UTCoupe'
 			EPR_d: $scope.EPR_d
 		});
 	}
+	$scope.kill = function (u) {
+		Client.send('server', 'server.kill', u);
+	};
+	$scope.start = function(u) {
+		Client.send(u, 'start');
+	};
 	$scope.stop = function(u) {
-		Client.send('server', 'server.stop', u);
-	}
+		Client.send(u, 'stop');
+	};
 }]);
 
 angular.module('app').service('UTCoupe', ['$rootScope', 'Client', function($rootScope, Client) {

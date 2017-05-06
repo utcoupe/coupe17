@@ -35,11 +35,16 @@
 				// process.exit();
 			break;
 
-			// useless //
-			// case "start":
-			// 	tibot.queue = [];
-			// 	tibot.start();
-			// break;
+			case "kill":
+				process.exit();
+				break;
+
+			
+			case "start":
+			 	//tibot.queue = [];
+				tibot.start();
+				break;
+
 			default:
 				tibot.addOrder2Queue(from, name, params);
 		}

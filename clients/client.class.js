@@ -48,11 +48,12 @@ class Client {
 	}
 
 	start(){
-
+		this.client.unMute();
 	}
 
 	stop(){
 		//todo stop the socket client
+		this.client.mute();
         this.logger.info(this.clientName + " has stopped.");
 	}
 

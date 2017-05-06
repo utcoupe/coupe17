@@ -75,23 +75,9 @@ class Robot extends Client{
 	 * Start the Robot
 	 */
 	start(){
+		super.start();
 		this.logger.info("Starting  :)");
-		this.sendChildren({
-			status: "starting",
-			children:[]
-		});
-			//Hack, NOT LIKE THIS normally
-			var struct = {
-				others: false,
-				asserv: false,
-				ax12: false,
-				servos: false
-			};
-
-			//MUST ADD IT
-			this.devicesDetected(struct); //TODO Replace it by the following
-			//this.detect = new (require('./detect.class.js'))(this.devicesDetected);
-
+		// add all starts
 	}
 
 	/**

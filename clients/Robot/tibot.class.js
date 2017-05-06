@@ -133,7 +133,10 @@ class Tibot extends Robot{
 
 	quit () {
 		this.logger.info("Please wait while exiting...");
-		this.acts.quit();
+		// to be replaced
+        this.unitGrabber.stop();
+        this.baseConstructor.stop();
+		// ****
 		process.exit();
 	}
 
@@ -141,6 +144,12 @@ class Tibot extends Robot{
         this.unitGrabber.stop();
         this.baseConstructor.stop();
         super.stop();
+    }
+
+	start() {
+        super.start();
+        this.unitGrabber.start();
+        this.baseConstructor.start();
     }
 
 	// Exiting :

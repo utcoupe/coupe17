@@ -29,12 +29,18 @@ module.exports = (function () {
 		this.server_ip = params.server_ip || '127.0.0.1:3128';
 		/**
 		 * Socket du client
+		 * @type {socket.io-client}
 		 */
 		this.client = require('socket.io-client')('http://'+this.server_ip);
 		/**
 		 * callbacks
+		 * @type {Array<Function>}
 		 */
 		this.callbacks = {};
+		/**
+		 * Variable permettant au client d'ignorer les échanges réseaux
+		 */
+		this.muted = false;
 
 		if(!!params.type)
 			/** Type of client */
@@ -69,11 +75,15 @@ module.exports = (function () {
 		// When the client receive order from the server
 		this.client.on('order', function(data){
 			// logger.info('[Order to '+data.to+'] '+data.text);
-			if(!!this.callbacks.order)
-				if (!!data.name)
-					this.callbacks.order(data.from, data.name, data.params || {});
-				else
-					logger.error("Order has no name ! : " + data);
+			// On n'autorise pas la réception de message si on est muet, sauf si c'est un start
+			if (this.muted && data.name != "start")
+				console.log("A client tried to receive an order, but he is muted!");
+			else
+				if(!!this.callbacks.order)
+					if (!!data.name)
+						this.callbacks.order(data.from, data.name, data.params || {});
+					else
+						logger.error("Order has no name ! : " + data);
 		}.bind(this));
 
 		// If after 500ms the client isn't connected, throw "server not found" error
@@ -109,12 +119,15 @@ module.exports = (function () {
 	 */
 	SocketClient.prototype.send = function (to, name, params) {
 		// logger.debug('send %s to %s', name, to);
-		this.client.emit('order', {
-			to: to,
-			name: name,
-			params: params,
-			from: this.type
-		});
+		if (this.muted)
+			console.log('A client tried to send an order, but he is muted!');
+		else
+			this.client.emit('order', {
+				to: to,
+				name: name,
+				params: params,
+				from: this.type
+			});
 	};
 
 	// Error functions
@@ -138,6 +151,20 @@ module.exports = (function () {
 	SocketClient.prototype.errorServerTimeout = function () {
 		this.throwError('Server timed out, please make sure the server is still running.');
 	};
+
+	/**
+	 * Désactive temporairement le client
+	 */
+	SocketClient.prototype.mute = function () {
+		this.muted = true;
+	};
+
+	/**
+	 * Réactive le client
+	 */
+	SocketClient.prototype.unMute = function () {
+		this.muted = false;
+	}
 
 	return SocketClient;
 })();

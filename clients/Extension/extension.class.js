@@ -8,6 +8,7 @@
 "use strict";
 
 const Client = require('../client.class.js');
+const Fifo = require('../fifo.class.js');
 
 /**
  * Classe abstraite représentant les extensions
@@ -20,7 +21,7 @@ class Extension extends Client {
         super(extensionName);
         this.extensionName = extensionName;
 
-        this.fifo = new (require('../fifo.class.js'))();
+        this.fifo = new Fifo();
     }
 
     takeOrder(from, name, param) {
@@ -35,6 +36,10 @@ class Extension extends Client {
     stop() {
         this.fifo.clean();
         super.stop();
+    }
+
+    start() {
+        super.start();
     }
 }
 

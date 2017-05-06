@@ -131,10 +131,10 @@ module.exports = (function () {
 				// if(!(data.to in client.adapter.rooms)) {
 				// 	logger.warn("The order recipient `"+data.to+"` doesn't exist.");
 				// }
-				if(data.name == 'server.launch') {
-					this.launch(data.params);
-				} else if(data.name == 'server.stop') {
-					this.stop(data.params);
+				if(data.name == 'server.spawn') {
+					this.spawn(data.params);
+				} else if(data.name == 'server.kill') {
+					this.kill(data.params);
 				} else if(data.name == 'server.childrenUpdate') {
 					// console.log(this.network);
 					this.network[client.type][client.id].status = data.params.status || "";
@@ -185,7 +185,7 @@ module.exports = (function () {
 	/**
 	 * Launch the robot
 	 */
-	Server.prototype.launch = function(params) {
+	Server.prototype.spawn = function(params) {
 		var prog = params.prog;
 		if(!this.utcoupe[prog]) {
 			switch(prog) {
@@ -234,7 +234,7 @@ module.exports = (function () {
 					},
 					from: 'server'
 				});
-				this.stop(prog);
+				this.kill(prog);
 			}.bind(this, prog));
 
 			this.progs[prog].stdout.on('data', function (prog, data) {
@@ -277,13 +277,12 @@ module.exports = (function () {
 	 *
 	 * @param {string} prog
 	 */
+	/* replaced by kill
 	Server.prototype.stop = function(prog) {
-		if (prog == "pr") {
-            //todo kill real client on remote raspi ?
-			// this.progs[prog] = spawn('ssh', ['igep', 'pkill', 'node']);
+		if (prog == "pr" || prog == "gr") {
             logger.info("Stopping pr client properly");
-            this.server.to('pr').emit('order', {
-                to: 'pr',
+            this.server.to(prog).emit('order', {
+                to: prog,
                 name: 'stop',
                 params: "",
                 from: 'server'
@@ -297,7 +296,28 @@ module.exports = (function () {
 			this.utcoupe[prog] = false;
 		}
 		this.sendUTCoupe();
-	}
+	}*/
+
+	/**
+	 * Kill the programm
+	 * 
+	 * @param {String} prog programm to kill
+	 */
+	 Server.prototype.kill = function (prog) {
+		console.warn("server:kill not coded!");
+		if(this.utcoupe[prog]) {
+			// this.progs[prog].kill();
+			// logger.info("stopped "+prog);
+			this.server.to(prog).emit('order', {
+                to: prog,
+                name: 'kill',
+                params: "",
+                from: 'server'
+            });
+			this.utcoupe[prog] = false;
+		}
+		this.sendUTCoupe();
+	 }
 
 	/**
 	 * sendUTCoupe
