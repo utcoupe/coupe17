@@ -8,6 +8,8 @@
 "use strict";
 
 const Robot = require('./robot.class.js');
+const Canon = require('../Extension/canon.class.js');
+const Sweeper = require('../Extension/sweeper.class.js');
 
 /**
  * Grand Robot
@@ -20,6 +22,8 @@ class Grobot extends Robot{
 
 	constructor(Robotname){
 	    super(Robotname);
+		this.canon = new Canon();
+		this.sweeper = new Sweeper();
   	}
 
 	/**
@@ -52,6 +56,12 @@ class Grobot extends Robot{
 		this.logger.info("Please wait while exiting...");
 		// acts.quit();
 		process.exit(0);
+	}
+
+	stop () {
+		this.sweeper.stop();
+		this.canon.stop();
+		super.stop();
 	}
 
 	// Exiting :
