@@ -48,6 +48,9 @@ angular.module('app').controller('IndexCtrl', ['$rootScope', '$scope', 'UTCoupe'
 	$scope.pauseLidar = function() {
 		Client.send("lidar", "stop", {});
 	}
+	$scope.calibLidar = function() {
+		Client.send("lidar", "calibration", {});
+	}
 }]);
 
 angular.module('app').service('UTCoupe', ['$rootScope', 'Client', function($rootScope, Client) {

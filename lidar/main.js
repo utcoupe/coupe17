@@ -66,6 +66,10 @@
 						spawn('sudo', ['halt']);
 						break;
 					case "calibration":
+						hokMng.recalage(10); //Recalage des hokuyos
+						break;
+					case "color":
+						hokMng.changeColor()
 						break;
 					case "stop":
 						hokMng.stop();
