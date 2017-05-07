@@ -252,12 +252,14 @@ class HokuyoDisplay {
 		}
 
 		// console.log(cartesianSpots);
-		for(let spot of cartesianSpots) {
-			this.objects.push( this.r.circle(spot[0], spot[1], this.dotRadius).attr({
-					stroke: this.dotColor,
-					fill: this.dotColor,
-					transform:  "t," + this.center.str + "s" + this.viewportScale + "," + this.viewportScale + ",0,0",
-					"fill-opacity": .4}) );
+		if (!!cartesianSpots) {
+			for(let spot of cartesianSpots) {
+				this.objects.push( this.r.circle(spot[0], spot[1], this.dotRadius).attr({
+						stroke: this.dotColor,
+						fill: this.dotColor,
+						transform:  "t," + this.center.str + "s" + this.viewportScale + "," + this.viewportScale + ",0,0",
+						"fill-opacity": .4}) );
+			}
 		}
 
 		this.isBusy = false;

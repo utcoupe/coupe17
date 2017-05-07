@@ -146,6 +146,19 @@ angular.module('app').service('Hokuyo', ['$rootScope', '$sce', 'Client',
 					if (!this.displays.main.isBusy) {
 						this.displays.main.updateAll(data.hokuyos, data.robotsSpots, data.cartesianSpots);
 					}
+				} else if (name == 'lidar.light'
+					&& !!this.displays.main) {
+					// Save for later
+					this.lastData.main = {};
+					this.lastData.main.hokuyos = data.hokuyos;
+					this.lastData.main.robotsSpots = data.robotsSpots;
+
+					// console.log("Received all");
+
+					// Show
+					if (!this.displays.main.isBusy) {
+						this.displays.main.updateAll(data.hokuyos, data.robotsSpots, null);
+					}
 				} else if (name == 'lidar.robots'
 					&& !!this.displays.main) {
 					// this.displays.main.updateRobots(data.robots);

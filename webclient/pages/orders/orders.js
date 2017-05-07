@@ -10,16 +10,18 @@ angular.module('app').service('Orders', ['$rootScope', 'Client', function($rootS
 		Client.order(function (from, name, data, to) {
 			// Be careful, some orders are filtered by the server, set verbose mode to see them or go to server.server.class.js:175
 
-			this.orders.unshift({
-				from: from,
-				name: name,
-				data: JSON.stringify(data),
-				to: to,
-			});
-			if(this.orders.length > 500)
-				this.orders.pop();
-			if($rootScope.act_page == 'orders') {
-				$rootScope.$apply();
+			if (name != "logger") {
+				this.orders.unshift({
+					from: from,
+					name: name,
+					data: JSON.stringify(data),
+					to: to,
+				});
+				if(this.orders.length > 500)
+					this.orders.pop();
+				if($rootScope.act_page == 'orders') {
+					$rootScope.$apply();
+				}
 			}
 		}.bind(this));
 	};
