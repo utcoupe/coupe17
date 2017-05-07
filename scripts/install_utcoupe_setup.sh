@@ -33,7 +33,7 @@ function install_apt() {
 		sudo apt-get install raspberrypi-kernel-headers
 		sudo apt-get remove npm nodejs nodejs-legacy
 		wget https://nodejs.org/dist/v4.8.1/node-v4.8.1-linux-armv6l.tar.gz
-		tar -xvf node-v4.8.1-linux-armv6l.tar.gz 
+		tar -xvf node-v4.8.1-linux-armv6l.tar.gz
 		cd node-v4.8.1-linux-armv6l
 		sudo cp -R * /usr/local/
 		cd ..
@@ -46,14 +46,14 @@ function install_apt() {
 
 ### Setup the variable environment to taget the UTCoupe main folder
 function env_setup() {
-	# Add the UTCOUPE_WORKSPACE env variable
+	# Add the UTCOUPE_WORKSPACE env variable, default consider as bash shell
 	if [ -z "$UTCOUPE_WORKSPACE" ]; then
 		green_echo "Env variable is not set."
 		if [ "$SHELL" = "/bin/zsh" ]; then
 			echo "export UTCOUPE_WORKSPACE=$PWD" >> $HOME/.zshrc
 			printf "Warning :\n"
 			printf "Please \"source ~/.zshrc\" and run again this script if necessary\n"
-			exit
+			exit 1
 		else
 			echo "export UTCOUPE_WORKSPACE=$PWD" >> $HOME/.bashrc
             source $HOME/.bashrc
@@ -111,6 +111,7 @@ function compile_hokuyo() {
 }
 
 function launch_script() {
+
 	env_setup
 	
 	printf "Install apt missing packets ? [Y/n]?"
@@ -151,3 +152,4 @@ read answer
 if [ "$answer" = "" ] || [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
 	launch_script
 fi
+

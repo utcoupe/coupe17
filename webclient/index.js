@@ -18,8 +18,38 @@ angular.module('app').controller('IndexCtrl', ['$rootScope', '$scope', 'UTCoupe'
 			EPR_d: $scope.EPR_d
 		});
 	}
+
 	$scope.stop = function(u) {
 		Client.send('server', 'server.stop', u);
+	}
+
+	$scope.toogleVerbose = function() {
+		Client.send('server', 'server.verbose', {});
+	}
+
+	$scope.startC = function() {
+		Client.send("hokuyo", "start", {});
+	}
+
+	$scope.stopC = function() {
+		Client.send("hokuyo", "stop", {});
+	}
+
+	$scope.calibration = function() {
+		Client.send("hokuyo", "calibration", {});
+	}
+
+	$scope.resumeLidar = function() {
+		Client.send("lidar", "start", {
+			"color": $scope.our_color
+		});
+	}
+
+	$scope.pauseLidar = function() {
+		Client.send("lidar", "stop", {});
+	}
+	$scope.calibLidar = function() {
+		Client.send("lidar", "calibration", {});
 	}
 }]);
 
@@ -29,7 +59,8 @@ angular.module('app').service('UTCoupe', ['$rootScope', 'Client', function($root
 		'pr': false,
 		'gr': false,
 		'lidar': false,
-		'hokuyo': false
+		'hokuyo': false,
+		'isServerVerbose': false
 	};
 	this.init = function () {
 		Client.order(function (from, name, data) {
@@ -40,6 +71,11 @@ angular.module('app').service('UTCoupe', ['$rootScope', 'Client', function($root
 				this.utcoupe.pr = data.pr;
 				this.utcoupe.lidar = data.lidar;
 				this.utcoupe.hokuyo = data.hokuyo;
+				if($rootScope.act_page == 'index') {
+					$rootScope.$apply();
+				}
+			} else if(name == 'serverVerbosity') {
+				this.utcoupe.isServerVerbose = data.isServerVerbose;
 				if($rootScope.act_page == 'index') {
 					$rootScope.$apply();
 				}

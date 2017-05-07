@@ -461,63 +461,6 @@ module.exports = (function () {
 		}
 	};
 
-	// Hokuyo.prototype.detectCollision = function() {
-	// 	var collision = false;
-	// 	var pf = this.ia.pr.path;
-	// 	var ebots = [{ // estimated positions
-	// 			x:this.ia.data.erobot[0].pos.x +  this.ia.data.erobot[0].speed.x*DELTA_T,
-	// 			y:this.ia.data.erobot[0].pos.y +  this.ia.data.erobot[0].speed.y*DELTA_T,
-	// 			d:this.ia.data.erobot[0].d
-	// 		}];
-
-	// 	if (this.ia.data.nb_erobots == 2) {
-	// 		ebots.push = {
-	// 			x:this.ia.data.erobot[1].pos.x +  this.ia.data.erobot[1].speed.x*DELTA_T,
-	// 			y:this.ia.data.erobot[1].pos.y +  this.ia.data.erobot[1].speed.y*DELTA_T,
-	// 			d:this.ia.data.erobot[1].d
-	// 		};
-	// 	}
-
-	// 	// for each path segment
-	// 	var complete_path = [this.ia.pr.pos].concat(this.ia.pr.path);
-	// 	for (var i = 0; i < complete_path.length-1 && !collision; (i++) ) {
-	// 		var segment = [complete_path[i], complete_path[i+1]]; // so segment[0][0] is the x value of the beginning of the segment
-	// 		var segLength = this.getDistance({x:segment[0].x , y:segment[0].y }, {x:segment[1].x , y:segment[1].y });
-	// 		var nthX = (segment[1].x-segment[0].x)*SEGMENT_DELTA_D/segLength; // segment X axis length nth 
-	// 		var nthY = (segment[1].y-segment[0].y)*SEGMENT_DELTA_D/segLength;
-
-	// 		// for each X cm of the segment
-	// 		for (var j = 0; (j*SEGMENT_DELTA_D) < segLength && !collision; (j++)) {
-
-	// 			var segPoint = {
-	// 				x: segment[0].x + nthX*j,
-	// 				y: segment[0].y + nthY*j
-	// 			};
-
-	// 			// distance to each estimated position of the ennemi robots
-	// 			var minDist = this.getDistance(ebots[0], segPoint);
-
-	// 			/*
-	// 			if (ebots.length == 2) {
-	// 				var tmp = this.getDistance(ebots[1], segPoint);
-	// 				if (tmp < minDist) {
-	// 					minDist = tmp;
-	// 				}
-	// 			}*/
-
-	// 			// if one of the dist < security diameter, there will be a collision
-	// 			if (minDist < SECURITY_COEF*ebots[0].d/2.0) {
-	// 				collision = true;
-	// 			}
-				
-	// 		}
-	// 	}
-
-	// 	if (collision) {
-	// 		this.ia.pr.collision();
-	// 	}
-	// };
-
 	/**
 	 * Updates number of robots
 	 * 

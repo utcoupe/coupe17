@@ -20,16 +20,22 @@
 	var config = require('../config.js');
 	var lastT = Date.now();
 	var startingT = lastT;
+	var bufferData;
+	var count = 0;
 
 	var FREQ_ENVOI_INFO = 50; // tous les 10 infos (genre 1 seconde)
 	var nth = 0;
 
 	var server = process.argv[2] || config.server;
-	var command = process.argv[3] || config.hokuyo_command;
+
+	if (!process.env.UTCOUPE_WORKSPACE) {
+		logger.warn("Missing UTCOUPE_WORKSPACE environment variable... Please make sur you have launched the install script");
+		process.exit(1);
+	}
 
 	var client = new SocketClient({
 		server_ip: server,
-		type: "hokuyo",
+		type: "hokuyo"
 	});
 
 	var started = false;
@@ -37,9 +43,18 @@
 	var lastStatus = {
 		"status": "waiting"
 	};
-	sendChildren(lastStatus);
+	changeStatus("waiting");
 
 	logger.info("Starting with pid " + process.pid);
+
+	// Exit handlers
+	//do something when app is closing
+	// process.on('exit', exit); // doesn't seem to work, don't know why... https://nodejs.org/api/process.html#process_event_exit
+	// catches ctrl+c event
+	process.on('SIGINT', exit);
+	// process.on('SIGTERM', quitC); // SIGTERM impossible to catch
+	//catches uncaught exceptions
+	//process.on('uncaughtException', uException);
 
 	client.order(function(from, name, params){
 		var now = Date.now();
@@ -51,18 +66,18 @@
 			lastT = now;
 			switch (name){
 				case "start":
-					if(!!params.color && !started) {
+					if(!started) {
 						started = true;
-						start(params.color);
+						logger.info("Receive order to start");
+						start();
 					} else
-						logger.error("ALready started or Missing parameters !");
+						logger.error("Already started !");
 					break;
 				case "shutdown":
 					quitC("stop");
 					spawn('sudo', ['halt']);
 					break;
 				case "stop":
-					started = false;
 					quitC("stop");
 					break;
 				case "sync_git":
@@ -79,10 +94,18 @@
 	});
 
 	function matchLogger(name, line){
+		spawn("mkdir", ["-p", "/var/log/utcoupe"]);
 		fs.appendFile('/var/log/utcoupe/'+name+'.log', line+'\n', function (err) {
 			if (err) logger.error('Ecriture dans le fichier de log de match "/var/log/utcoupe/'+name+'.log" impossible');
 			// logger.debug('The "data to append" was appended to file!');
 		});
+	}
+
+	function exit(code) {
+		logger.info("Closing Hokuyo C client");
+		quitC(code);
+		logger.info("Exiting");
+		process.exit();
 	}
 
 	function quitC(code){
@@ -95,61 +118,56 @@
 			logger.info("Father's pid : " + process.pid);
 			// process.kill(process.pid, 'SIGINT');
 		}
+		started = false;
 	}
 
 	function uException(code){
 		logger.error("uException sent with code "+code);
 	}
 
-	function start(color){
+	function start(){
 		// We just an order to start, with the flavour :P (color, number of robots)
 
-		sendChildren({"status": "starting"});
+		changeStatus("starting");
 
 		// Generates the match name (for the log file)
 		var tmp = new Date();
 		match_name = tmp.toJSON().replace(/T/, ' ').replace(/\..+/, '');
 		var now = Date.now() - lastT;
-		matchLogger(match_name, now+"; color:"+color);
+		matchLogger(match_name, now);
 		now = lastT;
+		var logcount = 101;
 
 		// If there's a child, kill it
 		quitC("start");
 
-		// Exit handlers
-		//do something when app is closing
-		process.on('exit', quitC);
-		// catches ctrl+c event
-		// process.on('SIGINT', quitC);
-		//catches uncaught exceptions
-		//process.on('uncaughtException', uException);
-
 		// Functions
-		function parseRobots(string) {
-			var dots = [];
-			now = Date.now() - lastT;
-
-			if(!!string){
-				var temp = string.split("#");
-				for (var i = 0; i <= temp.length - 1; i++) {
-					temp[i] = temp[i].split(",");
-					dots.push({x: 0, y: 0});
-					dots[i].x = parseInt(temp[i][0]);
-					dots[i].y = parseInt(temp[i][1]);
-
-					// Log them :
-					matchLogger(match_name, now+"; dotx:"+dots[i].x+"; doty:"+dots[i].y);
-				}
-				logger.info('[J-HOK] Robots');
-				logger.info(dots);
-			} else {
-				logger.info('[J-HOK] No robot detected !');
+		function parseData(string) {
+			//logger.warn(string.length);
+			var temp = string.split("#")
+			if(temp[1] == "0" && count == 0){
+				bufferData = temp[2];
+				count = count + 1;
 			}
+			else {
+				if(temp[1] == "1" && count == 1){
+					bufferData = bufferData + temp[2];
+					count = count + 1;
+				}
+				else {
+					if(temp[1] == "2" && count == 2){
+						bufferData = bufferData + temp[2];
+						client.send("lidar", "hokuyo.polar_raw_data", { "hokuyo": temp[0], "polarSpots" : JSON.parse(bufferData) });
+						count = 0;
 
-			now = lastT;
-
-			// Send all robots
-			client.send("ia", "hokuyo.position_tous_robots", {dots: dots});
+						// logger.warn(JSON.parse(bufferData));
+						if (logcount++ > 100) {
+							logger.info("Hokuyo " + temp[0] + " correctly running");
+							logcount = 0;
+						}
+					}
+				}
+			}
 		}
 
 		function parseInfo(string) {
@@ -203,19 +221,20 @@
 						case "HI:)":
 							// send "C started" to server
 							logger.info('C Hokuyo software says "Hi !" :)');
-							sendChildren({"status": "starting"});
+							changeStatus("starting");
 							break;
 						case "DATA":
-							logger.info('C Hokuyo software sends datas');
-							parseRobots(inputAr[i].substring(6));
+							//logger.info('C Hokuyo software sends datas');
+							parseData(inputAr[i].substring(6));
+							changeStatus("everythingIsAwesome");
 							break;
 						case "INFO":
 							logger.info('C Hokuyo software sends information :'+inputAr[i].substring(6));
-							parseInfo(inputAr[i].substring(6));
+							//parseInfo(inputAr[i].substring(6));
 							break;
 						case "WARN":
 							logger.warn('C Hokuyo software sends a warning :'+inputAr[i].substring(6));
-							parseInfo(inputAr[i].substring(6));
+							//parseInfo(inputAr[i].substring(6));
 							break;
 						default:
 							logger.info("Data "+ inputAr[i].substring(1,5) + " not understood at line " + i + " : " + inputAr[i]);
@@ -224,17 +243,17 @@
 			}
 		}
 
-
 		// Execute C program
-		// var command = "/home/pi/coupe15/hokuyo/bin/hokuyo";
-		var args = [color];
+		var command = process.env.UTCOUPE_WORKSPACE + "/bin/hokuyo";
+		var args = []; // [color];
 		// var options = // default : { cwd: undefined, env: process.env};
 		logger.info('Launching : ' + command + ' ' + args);
 		child = child_process.spawn(command, args);
+		logger.info("process C lance");
 
 		// Events
 		child.stdout.on('data', function(data) {
-			logger.debug(data.toString());
+			//logger.debug(data.toString());
 			dataFromCHandler(data);
 		});
 
@@ -256,8 +275,11 @@
 
 		child.stderr.on('data', function(data) {
 			logger.error(data.toString());
+			sendChildren({"status": "error"});
+			setTimeout(function(){
+				sendChildren({"status": "waiting", "children":[]});
+			}, 5000);
 		});
-
 
 		child.on('close', function(code) {
 			started = false;
@@ -295,13 +317,19 @@
 		return data;
 	}
 
+	function changeStatus(newStatus) {
+		if (newStatus != lastStatus.status) {
+			logger.info("New status : " + newStatus);
+			lastStatus.status = newStatus;
+			sendChildren(lastStatus);
+		}
+	}
 
 	// Sends status to server
 	function sendChildren(status){
 		lastStatus = status;
 
 		client.send("server", "server.childrenUpdate", lastStatus);
-		client.send("ia", "hokuyo.nb_hokuyo", { nb: nb_active_hokuyos });
 	}
 
 	function isOk(){
@@ -310,6 +338,5 @@
 
 		client.send("ia", "isOkAnswer", lastStatus);
 		client.send("server", "server.childrenUpdate", lastStatus);
-		client.send("ia", "hokuyo.nb_hokuyo", { nb: nb_active_hokuyos });
 	}
 })();
