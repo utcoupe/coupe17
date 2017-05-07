@@ -30,6 +30,10 @@ angular.module('app').controller('IndexCtrl', ['$rootScope', '$scope', 'UTCoupe'
 		});
 	}
 
+	$scope.jack = function() {
+		Client.send('ia', 'ia.jack', {});
+	}
+
 	$scope.stop = function(u) {
 		Client.send('server', 'server.stop', u);
 	}

@@ -30,7 +30,7 @@
 				"a": -3.1415
 			}],
 			"direction": "whatever",
-			"priority": 99,
+			"priority": 101,
 			"dependency": "",
 			"duration": 1,
 			"orders":[{
@@ -348,6 +348,22 @@
 				"name": "catch_balls_small",
 				"params": {}
 				}],
+			"kill": null
+		},
+		"seesaw_blue":{
+			"type": "seesaw",
+			"owner": "gr",
+			"objectname": "seesaw__left",
+			"startpoints": [{
+				"x": 500,
+                "y": 200,
+                "a": 0
+			}],
+			"direction": "whatever",
+			"priority": 89,
+			"dependency": "",
+			"duration": 1,
+			"orders":[],
 			"kill": null
 		}
 	}

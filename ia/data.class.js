@@ -27,7 +27,19 @@ module.exports = (function () {
 		/** balls */
 		this.balls = [];
 		/** rocket */
-		this.rocket = [];
+		this.rockets = [{
+			x:40,
+			y:1350
+		},{
+			x:1150,
+			y:40
+		},{
+			x:1850,
+			y:40
+		},{
+			x:2960,
+			y:1350
+		}];
 		/** module */
 		this.module = [];
 		/** erobot */
@@ -136,6 +148,7 @@ module.exports = (function () {
 		this.mountedModules = ret.mountedModules;
 		this.rocket = ret.rocket;
 		this.throwBalls = ret.throwBalls;
+		this.seesaw = ret.seesaw;
 
 		return ret;
 	};
@@ -157,7 +170,8 @@ module.exports = (function () {
 		}
 
 		if (!this[actName[0]] || !this[actName[0]][actName[1]]){
-			logger.warn("L'objet "+actName[0]+" de type "+actName[1]+" est inconnu.");
+			logger.warn("L'objet "+actName[1]+" de type "+actName[0]+" est inconnu.");
+			logger.warn(this[actName[0]]);
 			return null;
 		}
 

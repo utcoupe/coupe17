@@ -51,7 +51,7 @@ module.exports = (function () {
 
 
 		var instance = Child_process.spawn(program, [ image ]);*/
-		var instance = Child_process.spawn("bash", ["-c", "pkill pathfinding;"+program+" -m "+image]); // +" -r 1" for bmp export
+		var instance = Child_process.spawn("bash", ["-c", "pkill pathfinding;"+program+" -m "+image + " -r 1"]); // +" -r" for bmp export
 
 		instance.on('error', function(err) {
 			if(err.code === 'ENOENT'){
@@ -109,7 +109,7 @@ module.exports = (function () {
 
 			var str = ["C"].concat( vecMultiply(start, 1/RATIO) ).concat( vecMultiply(end, 1/RATIO) ).join(SEPARATOR) + "\n";
 			instance.stdin.write( str );
-			logger.info("Query to pathfinding from [" + start[0] + ", " + start[1] + "] to [" + end[0] + ", " + end[1] + "]: " + str);
+			logger.debug("Query to pathfinding from [" + start[0] + ", " + start[1] + "] to [" + end[0] + ", " + end[1] + "]: " + str);
 		};
 
 		/**

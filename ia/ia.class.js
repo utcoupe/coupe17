@@ -166,7 +166,7 @@ module.exports = (function () {
 			this.timer.start();
 			this.pr.start();
 			this.gr.start();
-			// this.lidar.start();
+			this.lidar.start();
 		} else {
 			logger.warn("Match déjà lancé");
 		}

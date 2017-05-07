@@ -19,6 +19,8 @@ angular.module('app').controller('SimulateurCtrl', ['$rootScope', '$scope', 'Cli
 		$scope.rot_pr = new Position();
 		$scope.pos_gr = new Position();
 		$scope.rot_gr = new Position();
+		$scope.pos_epr = new Position();
+		$scope.pos_egr = new Position();
 		$scope.vueDeFace = function () { Simulateur.controllerSimu.selectView("front"); }
 		$scope.vueDeDessus = function () { Simulateur.controllerSimu.selectView("top"); }
 		$scope.vueDeDerriere = function () { Simulateur.controllerSimu.selectView("behind"); }
@@ -30,10 +32,12 @@ angular.module('app').controller('SimulateurCtrl', ['$rootScope', '$scope', 'Cli
 		$scope.iaStop = function () { Client.send("ia", "ia.stop"); }
 
 		Simulateur.updateInterface = function () {
-			$scope.pos_pr = Simulateur.controllerSimu.objects3d.get("pr_blue").position;
-			$scope.rot_pr = Simulateur.controllerSimu.objects3d.get("pr_blue").rotation;
-			$scope.pos_gr = Simulateur.controllerSimu.objects3d.get("gr_blue").position;
-			$scope.rot_gr = Simulateur.controllerSimu.objects3d.get("gr_blue").rotation;
+			$scope.pos_pr = Simulateur.controllerSimu.objects3d.get("pr_" + this.robots.pr.color).position;
+			$scope.rot_pr = Simulateur.controllerSimu.objects3d.get("pr_" + this.robots.pr.color).rotation;
+			$scope.pos_gr = Simulateur.controllerSimu.objects3d.get("gr_" + this.robots.gr.color).position;
+			$scope.rot_gr = Simulateur.controllerSimu.objects3d.get("gr_" + this.robots.gr.color).rotation;
+			$scope.pos_epr = Simulateur.controllerSimu.objects3d.get("pr_" + this.robots.epr.color).position;
+			$scope.pos_egr = Simulateur.controllerSimu.objects3d.get("gr_" + this.robots.egr.color).position;
 		}
 	}]);
 
@@ -81,7 +85,6 @@ function updateRobot(data_robot, simulateur, type) {
 			clearPath(simulateur, type + "_" + data_robot.color);
 		}
 
-		simulateur.updateInterface();
 	} else {
 		console.warn("Given robot not found or properly formed");
 	}
@@ -121,6 +124,7 @@ angular.module('app').service('Simulateur', ['$rootScope', 'Client', function ($
 	this.init = function () {
 		Client.order(function (from, name, data) {
 			if (name == 'simulateur' && $rootScope.act_page == 'simulateur') {
+				this.robots = data.robots;
 
 				// Met à jour le pr (s'il existe)
 				updateRobot(data.robots.pr, this, "pr");
@@ -130,6 +134,8 @@ angular.module('app').service('Simulateur', ['$rootScope', 'Client', function ($
 				updateRobot(data.robots.epr, this, "pr");
 				updateRobot(data.robots.egr, this, "gr");
 				$rootScope.$apply();
+
+				this.updateInterface();
 			}
 		}.bind(this));
 	};

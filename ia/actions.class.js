@@ -381,7 +381,7 @@ class Actions{
 		this.inprogress = action;
 		delete this.todo[action.name];
 
-		this.logger.debug('Current action : %s (%d;%d;%d)', action.name, startpoint.x, startpoint.y, startpoint.a);
+		this.logger.info('Current action : %s (%d;%d;%d)', action.name, startpoint.x, startpoint.y, startpoint.a);
 		this.robot.path.map(function(checkpoint) {
 			this.ia.client.send(this.robot.name, "asserv.goxy", {
 				x: checkpoint.x,

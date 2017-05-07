@@ -18,7 +18,8 @@
 	<li>
 		<span class="utcoupe" ng-class="{launched: utcoupe.ia}" >IA</span>
 		<button type="button" class="btn" ng-hide="utcoupe.ia" ng-click="launch('ia')">Lancer</button>
-		<button type="button" class="btn" ng-show="utcoupe.ia" ng-click="stop('ia')">Arrêter</button> <br/>
+		<button type="button" class="btn" ng-show="utcoupe.ia" ng-click="stop('ia')">Arrêter</button>
+		<button type="button" class="btn" ng-show="utcoupe.ia" ng-click="jack()">Jack</button> <br/>
 		<span class="legend">Color:</span>
 		<span style="color:{{ our_color }};" class="config" >{{ our_color }}</span>
 		<button class="btn" ng-show="our_color=='yellow'" ng-disabled="utcoupe.ia" ng-click="our_color='blue'">Blue</button>

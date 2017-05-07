@@ -12,6 +12,7 @@ const logger = log4js.getLogger('ia.lidar');
 const EventEmitter = require('events');
 
 const SILENCE_TIMEOUT = 500;					// ms
+const ROCKET_SECURITY_DIAM = 80;				// mm
 
 /**
  * Lidar mng de l'IA
@@ -45,8 +46,6 @@ class Lidar {
 
 		/** nb d'itération depuis laquelle on a perdu un robot */
 		this.nb_lost = 0;
-
-		logger.debug("TODO: hokuyo, adapt to LiDAR data");
 	}
 
 	updateStatus() {
@@ -75,10 +74,10 @@ class Lidar {
 	 * Starts the hokuyo
 	 */
 	start() {
-		logger.info("Lidar AI component started, waiting for LiDAR node data...");
+		// logger.info("Lidar AI component started, waiting for LiDAR node data...");
 		// this.ia.client.send("hokuyo", "start", {color:this.params.color}); // must have been already done
 
-		logger.debug("TODO: hokuyo, keep track of living hokuyos according to data coming from LiDAR");
+		// logger.debug("TODO: hokuyo, keep track of living hokuyos according to data coming from LiDAR");
 		// timeout = setTimeout(function() {this.timedOut(); }.bind(this) , LOST_TIMEOUT*1000);
 
 		// Status loop
@@ -95,30 +94,46 @@ class Lidar {
 
 	mayday(reason){
 		this.emergencyStopped_status = true;
-		logger.error("Mayday called, the given reason is :");
-		logger.error(reason);
+		logger.debug("Mayday called, the given reason is " + reason);
 		this.events.emit("emergencyStop", reason);
 	}
 
 
 	resume(reason){
-		logger.warn("Reusme called, the given reason is :");
-		logger.warn(reason);
+		logger.debug("Resume called, the given reason is :" + reason);
 		this.events.emit("endOfEmergencyStop", reason);
 	}
 
 	getDistance (spot1, spot2) {
 		return Math.sqrt(Math.pow(spot1.x - spot2.x, 2) + Math.pow(spot1.y - spot2.y, 2));
-	};
+	}
 
 	deleteOurRobots(spots){
-		for(var i in spots) {
+		for(let i = spots.length - 1; i>= 0; i--) { // TODO: test this loop works worrectly
 			if(this.getDistance( { x: spots[i][0], y:spots[i][1] }, this.ia.pr.pos) < this.ia.pr.size.d/2 ||
 				this.getDistance( { x: spots[i][0], y:spots[i][1] }, this.ia.gr.pos) < this.ia.gr.size.d/2) {
 				// logger.debug("Found one of our robots at [" + spots[i][0] + ", " + spots[i][1] + "]");
 				spots.splice(i, 1);
 			}
 		}
+		return spots;
+	}
+
+	deleteRockets(spots){
+		let c = spots.length;
+
+		for(let s = spots.length - 1; s>= 0; s--) {
+			for(var r in this.ia.data.rockets) {
+				let dist = this.getDistance( spots[s].pos, this.ia.data.rockets[r]);
+
+				if(dist < ROCKET_SECURITY_DIAM) {
+					// logger.debug("Found one of our robots at [" + spots[i][0] + ", " + spots[i][1] + "]");
+					spots.splice(s, 1);
+					break;
+				}
+			}
+		}
+		// logger.debug("Found " + (c-spots.length) + " rockets");
 		return spots;
 	}
 
@@ -130,6 +145,19 @@ class Lidar {
 			// logger.warn("We are receiving data but match hasn't started yet");
 			return;
 		}
+
+		// Convert cm to mm
+		robots = robots.map((val) => {
+			return {
+				pos: {
+					x: val[0]*10,
+					y: val[1]*10,
+				},
+				d: 320
+			}
+		});
+
+		robots = this.deleteRockets(robots);
 
 		if (this.we_have_hats) {
 			robots = this.deleteOurRobots(robots);
@@ -147,22 +175,23 @@ class Lidar {
 		this.ia.data.dots = robots.map(function(val) {
 			return {
 				pos: {
-					x: val[0],
-					y: val[1],
+					x: val.pos.x,
+					y: val.pos.y,
 				},
 				d: 320
 			}
 		});
+
 		if (robots.length > 0) {
 			this.ia.data.erobot[0].pos= {
-				x: robots[0][0],
-				y: robots[0][1]
+				x: robots[0].pos.x,
+				y: robots[0].pos.y
 			};
 
 			if (robots.length > 1) {
 				this.ia.data.erobot[1].pos= {
-					x: robots[1][0],
-					y: robots[1][1]
+					x: robots[1].pos.x,
+					y: robots[1].pos.y
 				};
 			};
 		};
@@ -211,10 +240,15 @@ class Lidar {
 	 * @param {Object} params
 	 */
 	parseOrder(from, name, params) {
+		// logger.warn(name);
 		switch (name){
 			case "all":
-				this.onAllSpot(params.robotsSpots);
+				// We already treat data in light
+				// this.onAllSpot(params.robotsSpots);
 				// this.updatePos(params.dots);
+				break;
+			case "light":
+				this.onAllSpot(params.robotsSpots);
 				break;
 			case "status":
 				this.onLidarStatus(params);

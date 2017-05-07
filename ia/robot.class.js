@@ -81,7 +81,7 @@ class Robot{
 		var minDist, dotIdx;
 
 		var SEGMENT_DELTA_D = 30; // (mm) between 2 iterations on a segment to detect colision
-
+		
 		// For each path segment
 		var complete_path = [this.pos].concat(this.path);
 		for (let i = 0; i < complete_path.length-1; (i++) ) {
@@ -127,12 +127,17 @@ class Robot{
 			}
 		}
 
+		if (currentSegmentIdx < 0) {
+			return;
+		}
+
 		let collision = false;
 
 		// For each path segment THAT IS AHEAD !
-		for (let i = currentSegmentIdx; i < complete_path.length-1 && !collision; (i++) ) {
+		for (let i = currentSegmentIdx; i < complete_path.length-1; (i++) ) {
 			if (segmentsCollision[i]) {
 				collision = true;
+				break;
 			}
 		}
 

@@ -233,5 +233,25 @@
             "color": "yellow",
             "status": "initial"
         }
+    },
+    "seesaw": {
+        "left": {
+            "pos":
+            {
+                "x": 650,
+                "y": 200
+            },
+            "color": "blue",
+            "status": "initial"
+        },
+        "right": {
+            "pos":
+            {
+                "x": 2350,
+                "y": 400
+            },
+            "color": "yellow",
+            "status": "initial"
+        }
     }
 }
