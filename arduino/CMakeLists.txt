@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
+#todo include it in utcoupe workspace !
 set(CMAKE_TOOLCHAIN_FILE /home/tfuhrman/dev/tools/arduino-cmake/cmake/ArduinoToolchain.cmake) # Arduino Toolchain
 
 set(ARDUINO_CXX_FLAGS    "${ARDUINO_C_FLAGS} -std=c++11")
@@ -24,7 +25,7 @@ SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../bin)
 #set(TARGET_ROBOT gr)
 #set(TARGET_PROGRAM asserv)
 
-file(GLOB_RECURSE SRC_FILES	${TARGET_ROBOT}/${TARGET_PROGRAM}/*.cpp)
+file(GLOB_RECURSE SRC_FILES	${TARGET_ROBOT}/${TARGET_PROGRAM}/*.cpp ${TARGET_ROBOT}/${TARGET_PROGRAM}/*.c)
 include_directories(${TARGET_ROBOT}/${TARGET_PROGRAM} common/${TARGET_PROGRAM})
 
 #asserv or others extra common stuff
