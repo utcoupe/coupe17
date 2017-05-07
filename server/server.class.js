@@ -88,7 +88,8 @@ module.exports = (function () {
 			'hokuyo': false
 		}
 
-		this.spamList = ["hokuyo.polar_raw_data"];
+		this.spamList = ["hokuyo.polar_raw_data", "lidar.all", 'logger', 'utcoupe', 'simulateur', 'gr.pos', 'pr.pos'];
+
 
 		// When the client is connected
 		this.server.on('connection', function (client) {

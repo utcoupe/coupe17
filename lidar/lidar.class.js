@@ -305,9 +305,9 @@ module.exports = (function () {
 			if(this.status == "error"){
 				logger.warn("Fell in an error while computing !");
 			} else {
-                                this.send("lidar.all", toBeSent);
-                                this.lastDataSent = Date.now();
-                        }
+                this.send("lidar.all", toBeSent);
+                this.lastDataSent = Date.now();
+            }
 		}
 
 		this.updateStatus();
