@@ -251,7 +251,7 @@ module.exports = (function () {
 		}].concat(this.ia.data.dots)
 
 		if (robot.name == this.ia.pr.name) {
-			objects.concat(this.ia.data.craters);
+			objects = objects.concat(this.ia.data.craters);
 		}
 
 
