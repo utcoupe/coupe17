@@ -46,19 +46,19 @@ module.exports = (function () {
 
 		this.rocketPositions = {
 			one : {
-				"x" : 2,
+				"x" : 4,
 				"y" : 137
 			},
 			two : {
 				"x" : 115,
-				"y" : 2
+				"y" : 4
 			},
 			three : {
 				"x" : 185,
-				"y" : 2
+				"y" : 4
 			},
 			four : {
-				"x" : 298,
+				"x" : 296,
 				"y" : 137
 			}
 		}
@@ -72,46 +72,37 @@ module.exports = (function () {
 		// Status loop
 		this.updateStatus();
 	}
+
+	Lidar.prototype.convertXA = function(obj) {
+		obj.x = 300 - obj.x;
+		obj.a = 180 - obj.a;
+
+		return obj;
+	};
+
 	Lidar.prototype.setColor = function(){
-		if (this.color == "blue"){
-			this.hokuyoPositions = {
-				one: {
-		 			"x": -2, //-6.2
-		 			"y": -2,	//-6.2
-		 			"w": 0 ,	//0
-					"decalage" : [],
-					"init" : 0, //Nb de boucles de recalage
-					"rockets" : ["one", "two"]
-		 		},
-				two: {
-		 			"x": 306, //306.2
-		 			"y": 100,	//100
-		 			"w": 180 ,	//180
-					"decalage" : [],
-					"init" : 0,
-					"rockets" : ["three", "four"]
-		 		}
-			}
+		this.hokuyoPositions = {
+			one: {
+	 			"x": -6.2, //-6.2
+	 			"y": 2062,	//-6.2
+	 			"w": 0 ,	//0
+				"decalage" : [],
+				"init" : 0, //Nb de boucles de recalage
+				"rockets" : ["one", "two"]
+	 		},
+			two: {
+	 			"x": 306.2, //306.2
+	 			"y": 100,	//100
+	 			"w": 180 ,	//180
+				"decalage" : [],
+				"init" : 0,
+				"rockets" : ["three", "four"]
+	 		}
 		}
+
 		if (this.color == "yellow"){
-			this.hokuyoPositions = {
-				one: {
-		 			"x": -6.2, //-6.2
-		 			"y": -6.2,	//-6.2
-		 			"w": 0 ,	//0
-					"decalage" : [],
-					"init" : 0, //Nb de boucles de recalage
-					"rockets" : ["one", "two"]
-		 		},
-				two: {
-		 			"x": 306.2, //306.2
-		 			"y": 100,	//100
-		 			"w": 180,	//180
-					"decalage" : [],
-					"init" : 0,
-					"rockets" : ["three", "four"]
-		 		}
-			}
+			this.hokuyoPositions.one = this.convertXA(this.hokuyoPositions.one);
+			this.hokuyoPositions.two = this.convertXA(this.hokuyoPositions.two);
 		}
 
 
@@ -167,9 +158,10 @@ module.exports = (function () {
 	Lidar.prototype.start = function(color) {
 		this.color = color;
 		this.started = true;
+		this.lastCartSpots = {};
 		this.changeStatus("error");		// as far as we do not receive hokuyo data
 		logger.info("Started as " + this.color);
-		this.setColor() //assigne une position à chaque hokuyo en fonction de la couleur du robot
+		this.setColor(); //assigne une position à chaque hokuyo en fonction de la couleur du robot
 
 	};
 
@@ -267,8 +259,13 @@ module.exports = (function () {
 		if (this.hokuyoPositions[hokuyoName].init != 0){
 			this.calibration(spots, hokuyoName)
 		}
-		// Save
 
+		if (!!this.lastCartSpots[hokuyoName]
+			&& !this.lastCartSpots[hokuyoName].isWorking()) {
+			logger.warn("Hearing from " + hokuyoName + " for the first time since " + (Date.now() - this.lastCartSpots[hokuyoName].time) + " ms");
+		}
+
+		// Save
 		this.lastCartSpots[hokuyoName] = {};
 		this.lastCartSpots[hokuyoName].isWorking = function() { return Date.now() - this.time <  2 * DELTA_T; }; // we had some data no long ago
 		this.lastCartSpots[hokuyoName].time = Date.now();
@@ -294,10 +291,18 @@ module.exports = (function () {
 			this.robotsSpots = this.findRobots(this.mergedSpots);
 			this.displaySpots = this.prepareData(this.mergedSpots); //renvoie un tableau de coordonnées prêt à être affiché
 
+			let hokuyos = this.hokuyosWorking();
+
 			// Prepare data
 			let toBeSent = {
-				hokuyos: this.hokuyosWorking(),
+				hokuyos: hokuyos,
 				cartesianSpots: this.displaySpots,
+				robotsSpots: this.robotsSpots
+			};
+
+			// Prepare data
+			let toBeSentLight = {
+				hokuyos: hokuyos,
 				robotsSpots: this.robotsSpots
 			};
 
@@ -306,6 +311,7 @@ module.exports = (function () {
 				logger.warn("Fell in an error while computing !");
 			} else {
                 this.send("lidar.all", toBeSent);
+                this.send("lidar.light", toBeSentLight);
                 this.lastDataSent = Date.now();
             }
 		}
@@ -327,7 +333,7 @@ module.exports = (function () {
 					"position": this.hokuyoPositions[hokName]
 				});
 			} else {
-				logger.warn("Haven't heard from " + hokName + " since " + (Date.now() - lastData[hokName].time));
+				logger.warn(hokName + " not working since " + (Date.now() - lastData[hokName].time));
 			}
 		}
 

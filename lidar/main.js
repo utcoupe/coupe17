@@ -58,7 +58,7 @@
 						if (hokMng.started) {
 							hokMng.onHokuyoPolar(params.hokuyo, params.polarSpots);
 						} else {
-							logger.warn("Start the Lidar before sending data !");
+							// logger.warn("Start the Lidar before sending data !");
 						}
 						break;
 					case "shutdown":
