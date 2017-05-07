@@ -2,6 +2,8 @@
  * Socket Client
  * 
  * @module server/socket_client
+ * @requires log4js
+ * @requires socket.io-client
  * @see {@link server/socket_client.SocketClient}
  */
 
@@ -26,7 +28,7 @@ module.exports = (function () {
 		 */
 		this.server_ip = params.server_ip || '127.0.0.1:3128';
 		/**
-		 * client
+		 * Socket du client
 		 */
 		this.client = require('socket.io-client')('http://'+this.server_ip);
 		/**

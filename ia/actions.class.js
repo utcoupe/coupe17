@@ -2,6 +2,7 @@
  * Actions Module
  * 
  * @module ia/actions
+ * @requires log4js
  * @see {@link ia/actions.Actions}
  */
 

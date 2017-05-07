@@ -1,6 +1,16 @@
+/*
+ * @namespace Simu
+ */
 var Simu = Simu || {};
 
-
+/**
+ * Crée des popcorns
+ * 
+ * @memberof Simu
+ * @param {Number} x
+ * @param {Number} y
+ * @param {Number} z
+ */
 Simu.creerPopcorn = function creerPopcorn(x,y,z){
     var geo = new THREE.SphereGeometry(0.02,60,60);
     var mat = new THREE.MeshLambertMaterial({color:'white',side:THREE.DoubleSide});

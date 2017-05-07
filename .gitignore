@@ -1,4 +1,4 @@
-### Main git ignore files
++++++++++### Main git ignore files
 ### Beware, there are som gitignore files in subdirectories, for local and specific files
 
 # Generated executables
@@ -42,4 +42,4 @@ doc/
 *sync_time_stamp
 *liburg_c.a
 *.swp
-
+tmp.bmp

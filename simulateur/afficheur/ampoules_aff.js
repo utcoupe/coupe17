@@ -1,6 +1,13 @@
+/*
+ * @namespace Simu
+ */
 var Simu = Simu || {};
 
-
+/**
+ * Affiche les ampoules
+ * 
+ * @memberof Simu
+ */
 Simu.afficherAmpoule = function afficherAmpoule(x,y,z,coul)
 {
     /*  Entrees
