@@ -84,7 +84,7 @@ module.exports = (function () {
 		this.hokuyoPositions = {
 			one: {
 	 			"x": -6.2, //-6.2
-	 			"y": 2062,	//-6.2
+	 			"y": 206.2,	//-6.2
 	 			"w": 0 ,	//0
 				"decalage" : [],
 				"init" : 0, //Nb de boucles de recalage
