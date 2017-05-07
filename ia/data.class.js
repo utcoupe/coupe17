@@ -187,43 +187,7 @@ module.exports = (function () {
 	Data.prototype.isCloser = function (dist1, dist2){
 		return (dist1 < dist2);
 	};
-
-	/**
-	 * Return the distance between two positions
-	 * 
-	 * @param {Object} pos1
-	 * @param {int} pos1.x
-	 * @param {int} pos1.y
-	 * @param {Object} pos2
-	 * @param {int} pos2.x
-	 * @param {int} pos2.y
-	 */
-	Data.prototype.getDistance = function (pos1, pos2){
-		return Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
-	};
-
-	/**
-	 * Takes a position and the ennemy robot # to put everything in its surroundings (~ 1.1 * radius) as "lost"
-	 * 
-	 * @param {Object} pos
-	 * @param {int} e_robot_id
-	 */
-	Data.prototype.theEnnemyWentThere = function (pos, e_robot_id){
-		Object.keys(this.plot).forEach(function(c) {
-			if ((this.getDistance(pos, this.plot[c].pos) < 0.55*this.erobot[e_robot_id].d) && (this.plot[c].status != "lost")) {
-				logger.info("Le plot " + c + " est marqué lost");
-				this.plot[c].status = "lost";
-			}
-		}.bind(this));
-		var min_dist = Infinity;
-		Object.keys(this.gobelet).forEach(function(g) {
-			if ((this.getDistance(pos, this.gobelet[g].pos) < 0.55*this.erobot[e_robot_id].d) && (this.gobelet[g].status != "lost")) {
-				logger.info("Le gobelet" + g + " est marqué lost");
-				this.gobelet[g].status = "lost";
-			}
-		}.bind(this));
-	};
-
+	
 	/**
 	 * Parse Order
 	 * 

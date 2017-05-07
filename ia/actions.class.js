@@ -259,9 +259,9 @@ class Actions{
 		 
 		}
 
-		// if (action.object.status == "lost"){
-		// 	return false;
-		// }
+		if (action.object.status == "lost"){
+			return false;
+		}
 
 		return true;
 	};
@@ -451,10 +451,37 @@ class Actions{
 	}
 
 	/**
-	* the enemy went there, don't do that !
-	*/
+	 * Return the distance between two positions
+	 * 
+	 * @param {Object} pos1
+	 * @param {int} pos1.x
+	 * @param {int} pos1.y
+	 * @param {Object} pos2
+	 * @param {int} pos2.x
+	 * @param {int} pos2.y
+	 */
+	getDistance (pos1, pos2){
+		return Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
+	};
+
+	/**
+	 * Takes a position and the ennemy robot # to put everything in its surroundings (~ 1.1 * radius) as "lost"
+	 * the enemy went there, don't do that !
+	 * 
+	 * @param {Object} pos
+	 * @param {int} e_robot_id
+	 */
 	killObjects (dots) {
 		// this.logger.debug("TODO: kill objects/actions by which the enemy went");
+		Object.keys(this.todo).forEach(function(a) {
+			if ((this.todo[a].object.color == "both")
+				&& ((this.getDistance(this.ia.data.erobot[0].pos, this.todo[a].object.pos) < 0.55*this.ia.data.erobot[0].d)
+					|| (this.getDistance(this.ia.data.erobot[1].pos, this.todo[a].object.pos) < 0.55*this.ia.data.erobot[1].d))
+				&& (this.todo[a].object.status != "lost")) {
+				this.logger.info("The object " + this.todo[a].objectname + " linked to the action " + a + " of type  " + this.todo[a].type + " is recorded as lost");
+				this.todo[a].object.status = "lost";
+			}
+		}.bind(this));
 	}
 	
 }

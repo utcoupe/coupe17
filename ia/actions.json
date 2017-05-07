@@ -57,7 +57,7 @@
 		"take_module_02":{
 			"type": "module",
 			"owner": "pr",
-			"objectname": "module__mod_lun01",
+			"objectname": "module__mod_lun02",
 			"startpoints": [],
 			"direction": "whatever",
 			"priority": 97,
