@@ -29,8 +29,38 @@ angular.module('app').controller('IndexCtrl', ['$rootScope', '$scope', 'UTCoupe'
 			we_have_hats: $scope.we_have_hats
 		});
 	}
+
 	$scope.stop = function(u) {
 		Client.send('server', 'server.stop', u);
+	}
+
+	$scope.toogleVerbose = function() {
+		Client.send('server', 'server.verbose', {});
+	}
+
+	$scope.startC = function() {
+		Client.send("hokuyo", "start", {});
+	}
+
+	$scope.stopC = function() {
+		Client.send("hokuyo", "stop", {});
+	}
+
+	$scope.calibration = function() {
+		Client.send("hokuyo", "calibration", {});
+	}
+
+	$scope.resumeLidar = function() {
+		Client.send("lidar", "start", {
+			"color": $scope.our_color
+		});
+	}
+
+	$scope.pauseLidar = function() {
+		Client.send("lidar", "stop", {});
+	}
+	$scope.calibLidar = function() {
+		Client.send("lidar", "calibration", {});
 	}
 }]);
 
@@ -40,7 +70,8 @@ angular.module('app').service('UTCoupe', ['$rootScope', 'Client', function($root
 		'pr': false,
 		'gr': false,
 		'lidar': false,
-		'hokuyo': false
+		'hokuyo': false,
+		'isServerVerbose': false
 	};
 	this.network = {};
 	this.init = function () {
@@ -59,6 +90,12 @@ angular.module('app').service('UTCoupe', ['$rootScope', 'Client', function($root
 					break;
 				case 'reseau':
 					this.network = data.network;
+					break;
+				case 'serverVerbosity':
+					this.utcoupe.isServerVerbose = data.isServerVerbose;
+					if($rootScope.act_page == 'index') {
+						$rootScope.$apply();
+					}
 					break;
 			}
 		}.bind(this));

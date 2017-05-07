@@ -46,7 +46,7 @@ function install_apt() {
 
 ### Setup the variable environment to taget the UTCoupe main folder
 function env_setup() {
-	# Add the UTCOUPE_WORKSPACE env variable
+	# Add the UTCOUPE_WORKSPACE env variable, default consider as bash shell
 	if [ -z "$UTCOUPE_WORKSPACE" ]; then
 		green_echo "Env variable is not set."
 		if [ "$SHELL" = "/bin/zsh" ]; then
@@ -54,7 +54,7 @@ function env_setup() {
 
 			printf "Warning :\n"
 			printf "Please \"source ~/.zshrc\" and run again this script if necessary\n"
-			exit
+			exit 1
 		else
 			echo "export UTCOUPE_WORKSPACE=$PWD" >> $HOME/.bashrc
             source $HOME/.bashrc
@@ -153,3 +153,4 @@ read answer
 if [ "$answer" = "" ] || [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
 	launch_script
 fi
+

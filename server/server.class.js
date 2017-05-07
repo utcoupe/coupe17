@@ -19,7 +19,7 @@ module.exports = (function () {
 
 	/**
 	 * Starts a server on the port specified. Default port: 3128
-	 * 
+	 *
 	 * @exports server/server.Server
 	 * @constructor
 	 * @param {int} [server_port=3128] Server port
@@ -29,15 +29,26 @@ module.exports = (function () {
 		 * @type {int}
 		 */
 		this.server_port = server_port || 3128;
-		
+
+		this.verbose = false;
+
 		// Get server IP address
 		var os = require('os');
 		var networkInterfaces = os.networkInterfaces();
 		try {
 			/** @type {string} */
-			this.ip = networkInterfaces["eth0"][0].address || networkInterfaces["Wi-Fi"][0].address || "127.0.0.1";
+			if (!!networkInterfaces["ra0"]){
+				this.ip = networkInterfaces["ra0"][0].address;
+			} else if (!!networkInterfaces["wlan0"]){
+				this.ip = networkInterfaces["wlan0"][0].address;
+			} else if (!!networkInterfaces["Wi-Fi"]){
+				this.ip = networkInterfaces["Wi-Fi"][0].address;
+			} else {
+				this.ip = "127.0.0.1";
+			}
 		}
 		catch(e) {
+			logger.warn("Error looking for ip address, fallback to loopback address.");
 			this.ip = "127.0.0.1";
 		}
 		/** @type {string} */
@@ -49,7 +60,7 @@ module.exports = (function () {
 		 */
 		this.server = require('socket.io')();
 
-		/** 
+		/**
 		 * Create the network default object
 		 * @type {Object}
 		 * */
@@ -80,6 +91,10 @@ module.exports = (function () {
 			'lidar': null,
 			'hokuyo': false
 		}
+
+		this.spamListLevel1 = ["lidar.all", 'utcoupe', 'simulateur', 'gr.pos', 'pr.pos'];
+		this.spamListLevel2 = ["hokuyo.polar_raw_data"];
+
 
 		// When the client is connected
 		this.server.on('connection', function (client) {
@@ -113,6 +128,7 @@ module.exports = (function () {
 				client.emit('log', "Connected to the server successfully at " + client.handshake.headers.host);
 				this.sendNetwork();
 				this.sendUTCoupe();
+				this.sendVerbosity();
 			}.bind(this));
 
 			// When the client send an order
@@ -153,10 +169,25 @@ module.exports = (function () {
 					spawn('/root/flash_all_arduinos.sh', [], {
 						detached: true
 					});
+				} else if (data.name == 'server.verbose') {
+					// Toogle verbose mode
+					this.verbose = !this.verbose;
+					logger.info("Have been asked to " + (this.verbose?"talk a lot :)":"shut up :/"));
+					this.sendVerbosity();
 				} else {
 					// The order is valid
 					// logger.info("Data " +data.name+ " from " +data.from+ " to " +data.to);
-					this.server.to('webclient').to(data.to).emit('order', data);
+					if (!this.verbose &&
+						this.spamListLevel1.concat(this.spamListLevel2).indexOf(data.name) != -1) {
+						// Verbose mode level 1 : send most of spam messages
+						this.server.to(data.to).emit('order', data);
+					} else if (this.spamListLevel2.indexOf(data.name) != -1) {
+						// Not verbose, don't copy level 2 spam message to webclients
+						this.server.to(data.to).emit('order', data);
+					} else {
+						// Not verbose, copy to all regular messages
+						this.server.to('webclient').to(data.to).emit('order', data);
+					}
 				}
 			}.bind(this));
 		}.bind(this));
@@ -199,7 +230,8 @@ module.exports = (function () {
 					this.progs[prog] = spawn('node', ['./clients/gr/main.js']);
 				break;
 				case 'hokuyo':
-					this.progs[prog] = spawn('node', ['./hokuyo/client_hok.js']);
+					// this.progs[prog] = spawn('ssh', ['raspi', './hokuyo/main.js']);
+					this.progs[prog] = spawn('node', ['./hokuyo/main.js']);
 				break;
 				case 'lidar':
 					this.progs[prog] = spawn('node', ['./lidar/main.js'/*, params.color, params.nb_erobots, params.EGR_d, params.EPR_d*/]);
@@ -215,7 +247,7 @@ module.exports = (function () {
 					name: 'logger',
 					params: {
 						head: '[ERROR]['+prog+'](code:'+err.code+')',
-						text: convert.toHtml(JSON.stringify(err))						
+						text: convert.toHtml(JSON.stringify(err))
 					},
 					from: 'server'
 				});
@@ -228,7 +260,7 @@ module.exports = (function () {
 					// params: '[CLOSE]['+prog+'] '+data.toString(),
 					params: {
 						head: '[CLOSE]['+prog+'](code:'+code+')',
-						text: " "						
+						text: " "
 					},
 					from: 'server'
 				});
@@ -246,7 +278,7 @@ module.exports = (function () {
 					name: 'logger',
 					params: {
 						head: '['+prog+'][stdout]',
-						text: convert.toHtml(data.toString())						
+						text: convert.toHtml(data.toString())
 					},
 					from: 'server'
 				});
@@ -257,12 +289,12 @@ module.exports = (function () {
 					name: 'logger',
 					params: {
 						source: '['+prog+'][stderr]',
-						text: convert.toHtml(data.toString())						
+						text: convert.toHtml(data.toString())
 					},
 					from: 'server'
 				});
 			}.bind(this, prog));
-			 
+
 				// logger.debug(prog);
 				// logger.fatal(prog, '|stdout|', data.toString());
 			this.utcoupe[prog] = true;
@@ -272,18 +304,19 @@ module.exports = (function () {
 
 	/**
 	 * Stops all
-	 * 
+	 *
 	 * @param {string} prog
 	 */
 	Server.prototype.stop = function(prog) {
 		if (prog == "pr") {
 			this.progs[prog] = spawn('ssh', ['igep', 'pkill', 'node']);
-		} else if (prog == "hokuyo") {
-			this.progs[prog] = spawn('ssh', ['raspi', 'pkill', 'node']);
 		}
-		if(this.utcoupe[prog]) {
-			this.progs[prog].kill();
-			logger.info("stopped "+prog);
+		// else if (prog == "hokuyo") {
+		// 	this.progs[prog] = spawn('ssh', ['raspi', 'pkill', 'node']);
+		// }
+		if(!!this.utcoupe[prog]) {
+			logger.info("Killing "+prog);
+			this.progs[prog].kill("SIGINT");
 			this.utcoupe[prog] = false;
 		}
 		this.sendUTCoupe();
@@ -291,7 +324,7 @@ module.exports = (function () {
 
 	/**
 	 * sendUTCoupe
-	 * 
+	 *
 	 * @param {string} prog
 	 */
 	Server.prototype.sendUTCoupe = function(prog) {
@@ -299,6 +332,22 @@ module.exports = (function () {
 			to: 'webclient',
 			name: 'utcoupe',
 			params: this.utcoupe,
+			from: 'server'
+		});
+	}
+
+	/**
+	 * sendUTCoupe
+	 *
+	 * @param {string} prog
+	 */
+	Server.prototype.sendVerbosity = function() {
+		this.server.to('webclient').emit('order', {
+			to: 'webclient',
+			name: 'serverVerbosity',
+			params: {
+				"isServerVerbose": this.verbose
+			},
 			from: 'server'
 		});
 	}

@@ -17,8 +17,8 @@
 extern FILE* logfile;
 
 char expected_serial[2][20] = {
-	HOK1_SERIAL,
-	HOK2_SERIAL,
+	HOK1_SERIAL, //one - enemy
+	HOK2_SERIAL, //two - corner
 };
 
 #define NR_ACM_TRY 4
@@ -26,15 +26,11 @@ char expected_serial[2][20] = {
 
 int detectHokuyos1(Hok_t *hok1, Hok_t *hok2) {
 	char base_path[] = "/dev/ttyACMx";
-	int i;
+	int i = 42;
 	int j;
 	int found = 0;
 	//hok1->path = "/dev/ttyACMx";
-	if (hok1->c == 'c')
-		i = 0;
-	else
-		i = 1;
-	fprintf(stderr, "Searching hokuyo %d\n", i);
+	fprintf(stderr, "Searching hokuyo \n");
 	for (j=0; j<NR_ACM_TRY; j++) {
 		char *answer, *serial_nr;
 		char *try_path = base_path;
@@ -84,8 +80,6 @@ int detectHokuyos1(Hok_t *hok1, Hok_t *hok2) {
 #if DEBUG
 
 			fprintf(stderr, "Answer is: %s\n", answer);
-			fprintf(stderr, "ok3\n");
-
 
 #endif
 			if (strstr(answer, "SERI:") == NULL)
@@ -98,21 +92,28 @@ int detectHokuyos1(Hok_t *hok1, Hok_t *hok2) {
 			else{
 				fprintf(stderr, "strstr: %s\n", strstr(answer, "SERI:"));
 				serial_nr = strstr(answer, "SERI:") + sizeof("SERI:");
-				fprintf(stderr, "ok1\n" );
 				k = 0;
 				while (serial_nr[++k] != ';');
 				serial_nr[k] = '\0';
 			}
 
 #if DEBUG
-			fprintf(stderr, "ok2\n" );
-			fprintf(stderr, "Found serial %s on port %s\n i = %d\n c = %c", serial_nr, try_path, i, hok1->c);
+			fprintf(stderr, "Found serial %s on port %s\n i = %d\n", serial_nr, try_path, i);
 			//fprintf(stderr, "i = %d\n", i);
 #endif
 
 			// check if it is the right hokuyo
-			if (strcmp(serial_nr, expected_serial[i]) == 0) {
+			if (strcmp(serial_nr, expected_serial[0]) == 0) {
 				strcpy(hok1->path, try_path);
+				hok1->c = 'e';
+
+				i = 0;
+				found = 1;
+			}
+			else if (strcmp(serial_nr, expected_serial[1]) == 0) {
+				strcpy(hok1->path, try_path);
+				hok1->c = 'c';
+				i = 1;
 				found = 1;
 			}
 
@@ -120,7 +121,7 @@ int detectHokuyos1(Hok_t *hok1, Hok_t *hok2) {
 		}
  		if (found) {
 #if DEBUG
-			fprintf(stderr, "Found hokuyo %d (%s) on port %s\n", i, expected_serial[i], try_path);
+			fprintf(stderr, "Found hokuyo (%s) on port %s, c = %c\n",  expected_serial[i], try_path, hok1->c);
 #endif
 			break;
 		}

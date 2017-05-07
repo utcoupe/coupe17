@@ -8,11 +8,9 @@ angular.module('app').service('Orders', ['$rootScope', 'Client', function($rootS
 	this.orders = [];
 	this.init = function () {
 		Client.order(function (from, name, data, to) {
-			// TODO: put this into the server spam list to be able to see them on verbose mode
-			if(	   name != 'logger'
-				&& name != 'utcoupe'
-				&& name != 'gr.pos'
-				&& name != 'pr.pos') {
+			// Be careful, some orders are filtered by the server, set verbose mode to see them or go to server.server.class.js:175
+
+			if (name != "logger") {
 				this.orders.unshift({
 					from: from,
 					name: name,
