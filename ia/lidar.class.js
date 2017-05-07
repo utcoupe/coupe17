@@ -12,7 +12,7 @@ const logger = log4js.getLogger('ia.lidar');
 const EventEmitter = require('events');
 
 const SILENCE_TIMEOUT = 500;					// ms
-const ROCKET_SECURITY_DIAM = 80;				// mm
+const ROCKET_SECURITY_DIAM = 150;				// mm
 
 /**
  * Lidar mng de l'IA

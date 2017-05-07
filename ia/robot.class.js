@@ -77,8 +77,7 @@ class Robot{
 		let shortestDistToRobot = Infinity; // distance to the susmentionned segment
 		
 		// logger.debug("TODO: detect collision");
-		var pf = this.path;
-		var minDist, dotIdx;
+		var minDist/*, dotIdx*/;
 
 		var SEGMENT_DELTA_D = 30; // (mm) between 2 iterations on a segment to detect colision
 		
@@ -104,10 +103,10 @@ class Robot{
 				minDist = Infinity;//this.getDistance(dots[0], segPoint);
 				
 				for(var k = 0; k < dots.length; k++) {
-					distSegmentPtToHokEcho = this.getDistance(dots[k], segPoint);
+					distSegmentPtToHokEcho = this.getDistance(dots[k].pos, segPoint);
 					if (distSegmentPtToHokEcho < minDist) {
 						minDist = distSegmentPtToHokEcho;
-						dotIdx = k;
+						//dotIdx = k; // be carefull, we might not see a robot that is ahead on the path but less closer than the other opponent behind us
 					}
 
 					distSegmentPtToRobot = this.getDistance(this.pos, segPoint);
@@ -131,26 +130,22 @@ class Robot{
 			return;
 		}
 
-		let collision = false;
+		//logger.debug("Robot is at idx " + currentSegmentIdx + "/" + segmentsCollision.length + ". 1st collision at " + segmentsCollision.indexOf(true));
 
 		// For each path segment THAT IS AHEAD !
-		for (let i = currentSegmentIdx; i < complete_path.length-1; (i++) ) {
+		for (let i = currentSegmentIdx; i < segmentsCollision.length; (i++) ) {
 			if (segmentsCollision[i]) {
-				collision = true;
+				this.onCollision(/*dots[dotIdx]*/);
 				break;
 			}
-		}
-
-		if (collision) {
-			this.onCollision(dots[dotIdx]);
 		}
 	}
 
 	/**
 	 * What to do if a collision happens
 	 */
-	onCollision(pos) {
-		logger.warn('Collision detected between an enemy and ' + this.name + ' at [' + pos[0] + ", " + pos[1] + ']');
+	onCollision() {
+		logger.warn('Collision detected between an enemy and ' + this.name /* + ' at [' + pos[0] + ", " + pos[1] + ']'*/ );
 		this.path = [];
 		this.ia.client.send(this.name, "collision");
 
