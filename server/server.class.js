@@ -88,7 +88,8 @@ module.exports = (function () {
 			'hokuyo': false
 		}
 
-		this.spamList = ["hokuyo.polar_raw_data", "lidar.all", 'logger', 'utcoupe', 'simulateur', 'gr.pos', 'pr.pos'];
+		this.spamListLevel1 = ["lidar.all", 'utcoupe', 'simulateur', 'gr.pos', 'pr.pos'];
+		this.spamListLevel2 = ["hokuyo.polar_raw_data"];
 
 
 		// When the client is connected
@@ -172,9 +173,14 @@ module.exports = (function () {
 					// The order is valid
 					// logger.info("Data " +data.name+ " from " +data.from+ " to " +data.to);
 					if (!this.verbose &&
-						this.spamList.indexOf(data.name) != -1) {
+						this.spamListLevel1.concat(this.spamListLevel2).indexOf(data.name) != -1) {
+						// Verbose mode level 1 : send most of spam messages
+						this.server.to(data.to).emit('order', data);
+					} else if (this.spamListLevel2.indexOf(data.name) != -1) {
+						// Not verbose, don't copy level 2 spam message to webclients
 						this.server.to(data.to).emit('order', data);
 					} else {
+						// Not verbose, copy to all regular messages
 						this.server.to('webclient').to(data.to).emit('order', data);
 					}
 				}
