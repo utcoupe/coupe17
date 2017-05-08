@@ -62,7 +62,7 @@ class Robot extends Object3d
             linewidth: 3
         });
 
-        for(var idVertice = 0; idVertice < PATH_MAX_POINTS; idVertice++)
+        for(var idVertice = 0; idVertice < this.PATH_MAX_POINTS; idVertice++)
             pathGeometry.vertices.push(new THREE.Vector3( 0, 0, 0 ));
 
         /** @type {external:THREE.Line} */
