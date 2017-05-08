@@ -31,7 +31,7 @@ class Robot extends Object3d
          * @type {Number}
          * @const
          */
-        this.PATH_MAX_POINTS = 3;
+        this.PATH_MAX_POINTS = 10;
 
         /**
          * Rayons représentant le robot sur le plan (xOz)
@@ -62,7 +62,7 @@ class Robot extends Object3d
             linewidth: 3
         });
 
-        for(var idVertice = 0; idVertice < PATH_MAX_POINTS; idVertice++)
+        for(var idVertice = 0; idVertice < this.PATH_MAX_POINTS; idVertice++)
             pathGeometry.vertices.push(new THREE.Vector3( 0, 0, 0 ));
 
         /** @type {external:THREE.Line} */
@@ -79,7 +79,7 @@ class Robot extends Object3d
     {
         //console.log(newPath);
         var idVertice = 0;
-        while(idVertice < newPath.length && idVertice < PATH_MAX_POINTS)
+        while(idVertice < newPath.length && idVertice < this.PATH_MAX_POINTS)
         {
             var pos = newPath[idVertice];
             var v = new THREE.Vector3(pos.x, pos.y, pos.z);
@@ -87,7 +87,7 @@ class Robot extends Object3d
             idVertice++;
         }
         var lastVertice = newPath[newPath.length-1];
-        while(idVertice < PATH_MAX_POINTS)
+        while(idVertice < this.PATH_MAX_POINTS)
         {
             this.pathLine.geometry.vertices[idVertice] = lastVertice;
             idVertice++;
