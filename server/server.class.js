@@ -9,22 +9,27 @@
  * @requires socket.io
  * @see {@link server/server.Server}
  */
-module.exports = (function () {
-	"use strict";
-	var log4js = require('log4js');
-	var logger = log4js.getLogger('Server');
-	var spawn = require('child_process').spawn;
-	var Convert = require('ansi-to-html');
-	var convert = new Convert({newLine: true});
 
+"use strict";
+
+const Log4js = require('log4js');
+var Convert = require('ansi-to-html');
+
+var logger = Log4js.getLogger('Server');
+var spawn = require('child_process').spawn;
+var convert = new Convert({newLine: true});
+
+/**
+ * Serveur pour toutes les communications
+ * 
+ */
+class Server {
 	/**
 	 * Starts a server on the port specified. Default port: 3128
 	 *
-	 * @exports server/server.Server
-	 * @constructor
 	 * @param {int} [server_port=3128] Server port
 	 */
-	function Server(server_port) {
+	constructor (server_port) {
 		/**
 		 * @type {int}
 		 */
@@ -101,19 +106,19 @@ module.exports = (function () {
 
 
 		// When the client is connected
-		this.server.on('connection', function (client) {
+		this.server.on('connection', (client) => {
 			// When the client is disconnected
-			client.on('disconnect', function() {
+			client.on('disconnect', () => {
 				logger.info(client.type+" is disconnected!");
 				try {
 					delete this.network[client.type][client.id];
 				}
 				catch(e) { }
 				this.sendNetwork();
-			}.bind(this));
+			});
 
 			// When the client send his type
-			client.on('type', function(data) {
+			client.on('type', (data) => {
 				if(typeof data.type !== 'string') {
 					logger.error("The client type sent isn't a string");
 					return;
@@ -133,10 +138,10 @@ module.exports = (function () {
 				this.sendNetwork();
 				this.sendUTCoupe();
 				this.sendVerbosity();
-			}.bind(this));
+			});
 
 			// When the client send an order
-			client.on('order', function(data) {
+			client.on('order', (data) => {
 				// console.log(data);
 				if(typeof data !== 'object') {
 					logger.error("The client order sent isn't a object");
@@ -193,8 +198,8 @@ module.exports = (function () {
 						this.server.to('webclient').to(data.to).emit('order', data);
 					}
 				}
-			}.bind(this));
-		}.bind(this));
+			});
+		});
 
 		this.server.listen(this.server_port);
 		logger.info("Server started at "+this.ip_port);
@@ -203,7 +208,7 @@ module.exports = (function () {
 	/**
 	 * Send Network
 	 */
-	Server.prototype.sendNetwork = function(){
+	sendNetwork (){
 		// logger.info("Message sent to webclient !");
 		// logger.info(this.network);
 		this.server.to('webclient').emit('order', {
@@ -219,7 +224,7 @@ module.exports = (function () {
 	/**
 	 * Launch the robot
 	 */
-	Server.prototype.spawn = function(params) {
+	spawn (params) {
 		var prog = params.prog;
 		if(!this.utcoupe[prog]) {
 			switch(prog) {
@@ -246,7 +251,7 @@ module.exports = (function () {
 			logger.info("[Launch]"+prog);
 
 
-			this.progs[prog].on('error', function (prog, err) {
+			this.progs[prog].on('error', (err) => {
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
 					name: 'logger',
@@ -256,8 +261,8 @@ module.exports = (function () {
 					},
 					from: 'server'
 				});
-			}.bind(this, prog));
-			this.progs[prog].on('close', function (prog, code) {
+			});
+			this.progs[prog].on('close', (code) => {
 				logger.error("[CLOSE]"+prog);
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
@@ -270,14 +275,9 @@ module.exports = (function () {
 					from: 'server'
 				});
 				this.kill(prog);
-			}.bind(this, prog));
+			});
 
-			this.progs[prog].stdout.on('data', function (prog, data) {
-				// logger.debug(data);
-				// for(var i in data) {
-				// 	if(data[i] == 5)
-				// 		logger.debug('LOL');
-				// }
+			this.progs[prog].stdout.on('data', (data) => {
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
 					name: 'logger',
@@ -287,8 +287,8 @@ module.exports = (function () {
 					},
 					from: 'server'
 				});
-			}.bind(this, prog));
-			this.progs[prog].stderr.on('data', function (prog, data) {
+			});
+			this.progs[prog].stderr.on('data', (data) => {
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
 					name: 'logger',
@@ -298,7 +298,7 @@ module.exports = (function () {
 					},
 					from: 'server'
 				});
-			}.bind(this, prog));
+			});
 
 				// logger.debug(prog);
 				// logger.fatal(prog, '|stdout|', data.toString());
@@ -312,7 +312,7 @@ module.exports = (function () {
 	 * 
 	 * @param {String} prog programm to kill
 	 */
-	 Server.prototype.kill = function (prog) {
+	kill (prog) {
 		console.warn("server:kill not coded!");
 		if(this.utcoupe[prog]) {
 			// this.progs[prog].kill();
@@ -333,7 +333,7 @@ module.exports = (function () {
 	 *
 	 * @param {string} prog
 	 */
-	Server.prototype.sendUTCoupe = function(prog) {
+	sendUTCoupe (prog) {
 		this.server.to('webclient').emit('order', {
 			to: 'webclient',
 			name: 'utcoupe',
@@ -347,7 +347,7 @@ module.exports = (function () {
 	 *
 	 * @param {string} prog
 	 */
-	Server.prototype.sendVerbosity = function() {
+	sendVerbosity () {
 		this.server.to('webclient').emit('order', {
 			to: 'webclient',
 			name: 'serverVerbosity',
@@ -357,6 +357,6 @@ module.exports = (function () {
 			from: 'server'
 		});
 	}
+}
 
-	return Server;
-})();
+module.exports = Server;
