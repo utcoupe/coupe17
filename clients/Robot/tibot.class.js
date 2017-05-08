@@ -24,40 +24,13 @@ const BaseConstructor = require('../Extension/baseconstructor.class.js');
  */
 class Tibot extends Robot{
 
-	constructor(Robotname){
-		super(Robotname);
-		
+	constructor(robotName){
+		super(robotName);
+
 		this.unitGrabber = new UnitGrabber();
 		this.baseConstructor = new BaseConstructor();
 	}
-
-	/**
-	 * Push the order (enfiler)
-	 *
-	 * @param {string} f from
-	 * @param {string} n name
-	 * @param {Object} p parameters
-	 */
-	addOrder2Queue(f, n, p){
-		// if(n == 'clean') {
-		// 	logger.info(n+" : Begin");
-		// 	acts.orderHandler(f, n, p, actionFinished);
-		// } else
-		this.logger.info("addOrder2Queue f : " + f + " n : " + n + " p : " + p);
-		if(this.queue.length < 100){
-			// Adds the order to the queue
-			this.queue.push({
-				from: f,
-				name: n,
-				params: p
-			});
-			this.logger.info("Order added to queue ! : ");
-			this.logger.info(this.queue);
-
-			this.executeNextOrder();
-		}
-	}
-
+	
 	kill () {
 		this.logger.info("Please wait while exiting...");
 		// to be replaced

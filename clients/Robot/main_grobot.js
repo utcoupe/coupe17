@@ -17,7 +17,7 @@
   //grobot.sendChildren(tibot.grobot);
 
 	grobot.start();
-  grobot.logger.info('Started grobot');
+  // grobot.logger.info('Started grobot');
 
   // On message
   grobot.client.order(function (from, name, params){

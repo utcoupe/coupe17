@@ -338,6 +338,14 @@ class Actions{
 			var actionName = actions.shift();
 			var action = this.todo[actionName];
 			var startpoint = this.getNearestStartpoint(this.robot.pos, action.startpoints);
+			if (!startpoint) {
+				this.logger.warn("TMP startpoint");
+				startpoint = {
+					x: 1500,
+					y: 1000,
+					a: 0
+				}
+			}
 			this.logger.debug("Asking path to " + actionName + ' at [' + startpoint.x + ", " + startpoint.y + ']');
 			this.ia.pathfinding.getPath(this.robot.pos, startpoint, this.robot, function(path) {
 				if (this.robot.paused) {

@@ -15,7 +15,7 @@
 	var tibot = new Tibot('pr');
 	//tibot.sendChildren(tibot.lastStatus);
 	tibot.start();
-	tibot.logger.info('Started tibot');
+	// tibot.logger.info('Started tibot');
 
 	// On message
 	tibot.client.order(function (from, name, params){

@@ -16,15 +16,14 @@ const Asserv = require('./Asserv.class.js');
  * @extends {clients/Asserv/Asserv.Asserv}
  */
 class AsservSimu extends Asserv{
-	constructor(client, who, fifo){
+	constructor(client, who, fifo, sendStatus = null, sp = null){
 		super(client, who, fifo);
 		this.SIMU_FACTOR_VIT = 1;
 		this.SIMU_FACTOR_A = 0.3;
-		this.FPS = 30
+		this.FPS = 30;
 		this.timeouts = [];
 		this.pos = {x:0,y:0,a:0};
 		this.vitesse = 800;
-		this.getInitPos();
 	}
 
 	SIMU_DIST(dt, vitesse) { return (vitesse*this.SIMU_FACTOR_VIT)*dt; }

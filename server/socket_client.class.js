@@ -77,7 +77,7 @@ module.exports = (function () {
 			// logger.info('[Order to '+data.to+'] '+data.text);
 			// On n'autorise pas la réception de message si on est muet, sauf si c'est un start
 			if (this.muted && data.name != "start" && data.name != "kill")
-				console.log("A client tried to receive an order, but he is muted!");
+				logger.info("A client tried to receive an order, but he is muted!");
 			else
 				if(!!this.callbacks.order)
 					if (!!data.name)
@@ -120,7 +120,7 @@ module.exports = (function () {
 	SocketClient.prototype.send = function (to, name, params) {
 		// logger.debug('send %s to %s', name, to);
 		if (this.muted)
-			console.log('A client tried to send an order, but he is muted!');
+			logger.info('A client tried to send an order, but he is muted!');
 		else
 			this.client.emit('order', {
 				to: to,

@@ -16,14 +16,14 @@ const Asserv = require('./Asserv.class.js');
  * @extends {clients/Asserv/Asserv.Asserv}
  */
 class AsservReal extends Asserv{
-	constructor(sp, client, who, sendStatus, fifo){
+	constructor(client, who, fifo, sendStatus = null, sp = null){
 		super(client, who, fifo);
 		//this.COMMANDS = require('./defineParser.js')('./arduino/asserv/protocol.h');
 		this.DETECT_SERIAL_TIMEOUT = 100; //ms, -1 to disable
 		this.ready = true;
 		this.sendStatus = sendStatus;
 		this.currentId = 0;
-		this.color = "yellow";
+		// this.color = "blue"; // useless, to be deleted if robot works properly this way
 
 		this.sp.on("data", function(data){
 			if(this.ready === false){
@@ -42,10 +42,6 @@ class AsservReal extends Asserv{
 			this.sendStatus();
 			logger.error("Serial port close");
 		}.bind(this));
-
-		setTimeout(function() {
-			this.getInitPos();
-		}.bind(this), 2000);
 	}
 
 
@@ -55,11 +51,14 @@ class AsservReal extends Asserv{
 	 * @param {int} x
 	 */
 	convertColorX(x) {
-		if(this.color == "yellow") {
-			return x;
-		} else {
-			return 3000-x;
-		}
+		return x;
+
+		// TODO : delete that, we don't need it this year
+		// if(this.color == "blue") {
+		// 	return x;
+		// } else {
+		// 	return 3000-x;
+		// }
 	}
 
 	/**
@@ -68,11 +67,14 @@ class AsservReal extends Asserv{
 	 * @param {int} y
 	 */
 	convertColorY(y) {
-		if(this.color == "yellow") {
-			return y;
-		} else {
-			return y;
-		}
+		return y;
+
+		// TODO : delete that, we don't need it this year
+		// if(this.color == "blue") {
+		// 	return y;
+		// } else {
+		// 	return y;
+		// }
 	}
 
 	/**
@@ -81,11 +83,14 @@ class AsservReal extends Asserv{
 	 * @param {int} a
 	 */
 	convertColorA(a) {
-		if(this.color == "yellow") {
-			return convertA(a);
-		} else {
-			return convertA(Math.PI - a);
-		}
+		return convertA(a);
+
+		// TODO : delete that, we don't need it this year
+		// if(this.color == "blue") {
+		// 	return convertA(a);
+		// } else {
+		// 	return convertA(Math.PI - a);
+		// }
 	}
 
 	/**
@@ -96,8 +101,8 @@ class AsservReal extends Asserv{
 	 */
 	setPos(pos, callback) {
 		logger.debug(pos);
-		if(pos.color !== undefined)
-			this.color = pos.color;
+		// if(pos.color !== undefined)
+		// 	this.color = pos.color;
 		this.sendCommand(COMMANDS.SET_POS, [
 			parseInt(this.convertColorX(pos.x)),
 			parseInt(this.convertColorY(pos.y)),

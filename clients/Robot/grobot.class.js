@@ -20,32 +20,12 @@ const Sweeper = require('../Extension/sweeper.class.js');
  */
 class Grobot extends Robot{
 
-	constructor(Robotname){
-	    super(Robotname);
+	constructor(robotName){
+	    super(robotName);
+
 		this.canon = new Canon();
 		this.sweeper = new Sweeper();
   	}
-
-	/**
-	* Push the order (enfiler)
-	*
-	* @param {string} f from
-	* @param {string} n name
-	* @param {Object} p parameters
-	*/
-	addOrder2Queue(f, n, p){
-		if(this.queue.length < 50) {
-			// Adds the order to the queue
-			this.queue.push({
-				from: f,
-				name: n,
-				params: p
-			});
-			this.logger.info("Order added to queue ! : ");
-			this.logger.info(this.queue);
-			this.executeNextOrder();
-		}
-	}
 
 	/**
 	 * Tries to exit
