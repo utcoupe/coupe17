@@ -47,6 +47,10 @@ div.yellow{
 	border: gold solid 1px;
 }
 
+div.blue{
+	border: dodgerblue solid 1px;
+}
+
 div.error{
 	border: firebrick solid 1px;
 }

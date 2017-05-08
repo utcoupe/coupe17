@@ -30,38 +30,59 @@ module.exports = (function () {
 		color = this.ia.color;
 	}
 
+	// /**
+	//  * Convert x, depends on the team color
+	//  * 
+	//  * @param {int} x
+	//  */
+	// function convertX(x) {
+	// 	if(color == "yellow") {
+	// 		return (x-1500)/1000;
+	// 	} else {
+	// 		return (1500-x)/1000;
+	// 	}
+	// }
+
 	/**
 	 * Convert x, depends on the team color
 	 * 
 	 * @param {int} x
 	 */
 	function convertX(x) {
-		if(color == "yellow") {
-			return (x-1500)/1000;
-		} else {
-			return (1500-x)/1000;
-		}
+		return (x-1500)/1000;
 	}
+
+	// /**
+	//  * Convert y
+	//  * 
+	//  * @param {int} y
+	//  */
+	// function convertY(y) {
+	// 	return (1000-y)/1000;
+	// }
 	/**
 	 * Convert y
 	 * 
 	 * @param {int} y
 	 */
 	function convertY(y) {
-		return (1000-y)/1000;
+		// return (1000-y)/1000;
+		return (y-1000)/1000;
 	}
-	/**
-	 * Convert Angle, depends on the team color
-	 * 
-	 * @param {int} a Angle
-	 */
-	function convertA(a) {
-		if(color == "yellow") {
-			return a;
-		} else {
-			return (a < 0) ? -Math.PI - a : Math.PI - a;
-		}
-	}
+
+	// /**
+	//  * Convert Angle, depends on the team color
+	//  * 
+	//  * @param {int} a Angle
+	//  */
+	// function convertA(a) {
+	// 	if(color == "yellow") {
+	// 		return a;
+	// 	} else {
+	// 		return (a < 0) ? -Math.PI - a : Math.PI - a;
+	// 	}
+	// }
+
 	/**
 	 * Start
 	 */
@@ -85,29 +106,37 @@ module.exports = (function () {
 			gr: {
 				x: convertX(this.ia.gr.pos.x),
 				y: convertY(this.ia.gr.pos.y),
-				a: convertA(this.ia.gr.pos.a)
+				a: this.ia.gr.pos.a, // convertA(this.ia.gr.pos.a)
+				path: [this.ia.gr.pos].concat(this.ia.gr.path).map(function(pos){
+					return [convertX(pos.x), convertY(pos.y)];
+				}),
+				color: this.ia.color
 			},
 			pr: {
 				x: convertX(this.ia.pr.pos.x),
 				y: convertY(this.ia.pr.pos.y),
-				a: convertA(this.ia.pr.pos.a),
+				a: this.ia.pr.pos.a, // convertA(this.ia.pr.pos.a),
 				path: [this.ia.pr.pos].concat(this.ia.pr.path).map(function(pos){
 					return [convertX(pos.x), convertY(pos.y)];
-				})
+				}),
+				color: this.ia.color
 			},
 			egr: {
 				x: convertX(this.ia.data.erobot[0].pos.x),
 				y: convertY(this.ia.data.erobot[0].pos.y),
+				color: (this.ia.color == "yellow") ? "blue" : "yellow"
 			},
 			epr: {
 				x: convertX(this.ia.data.erobot[1].pos.x),
-				y: convertY(this.ia.data.erobot[1].pos.y)
+				y: convertY(this.ia.data.erobot[1].pos.y),
+				color: (this.ia.color == "yellow") ? "blue" : "yellow"
 			}
 		};
-		data.dynamic = this.ia.data.dynamic.map(function(o){
-			return [convertX(o.pos.x), convertY(o.pos.y)];
-		});
+		// data.dynamic = this.ia.data.dynamic.map(function(o){
+		// 	return [convertX(o.pos.x), convertY(o.pos.y)];
+		// });
 		// logger.debug(data.robots.egr);
+
 		this.ia.client.send("webclient", "simulateur", data);
 
 		__timeout = setTimeout(function(){this.orderToSimu()}.bind(this), 1000/FPS);

@@ -168,6 +168,14 @@ class Controller {
     }
 
     /**
+     * Met à jour le rendu lorsque la page est rechargée par angular
+     */
+    updateRenderer() {
+        this.container = document.getElementById("simulateur_container");
+        this.container.appendChild(this.renderer.domElement);
+    }
+
+    /**
      * Crée et insert des lumières directionnelles dans la scène
      */
     createLights() {

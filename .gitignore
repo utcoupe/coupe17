@@ -33,6 +33,10 @@ cmake-build-debug/
 bin/
 doc/
 
+# UTCoupe files
+tmp.bmp
+config.js
+
 # Some other files
 *get_distance
 *get_distance_intensity

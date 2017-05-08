@@ -19,6 +19,19 @@
 	</section>
 
 	<section>
+		<h2>... finished</h2>
+		<select id="robot_finished">
+			<option value="gr">gr</option>
+			<option value="pr">pr</option>
+		</select>
+		<select id="what_finished">
+			<option value=".actions.action_finished">.actions.action_finished</option>
+			<option value=".actions.path_finished">.actions.path_finished</option>
+		</select>
+		<button type="button" class="btn" ng-click="sendFinished()">Send</button>
+	</section>
+
+	<section>
 		<h2>Tibot</h2>
 		<p>
 			<button type="button" class="btn" ng-click="tibot.prendreModule()">Prendre Module</button>
@@ -38,6 +51,7 @@
 				<input type="number" ng-model="tibot.pwm_ms" /> ms
 				<button type="button" class="btn" ng-click="tibot.setPWM()">Set PWM</button>
 			</p>
+
 
 			<p>
 				x : <input type="number" ng-model="tibot.x" /> mm;
@@ -153,23 +167,5 @@
 				<button type="button" class="btn" ng-click="grobot.turnOffSweeper()">Turn off</button>
 			</p>
 		</div>
-	</section>
-
-	<section>
-		<h2>Hokuyo</h2>
-		Nb robots :
-		<select ng-model="hokuyo.nbRobots">
-			<option value="4">4</option>
-			<option value="3">3</option>
-			<option value="2">2</option>
-			<option value="1">1 (test)</option>
-		</select>
-		Couleur :
-		<select id="hokuyo.couleur">
-			<option value="green">vert</option>
-			<option value="yellow">jaune</option>
-		</select>
-		<button type="button" class="btn" ng-click="hokuyo.start()">Start</button>
-		<button type="button" class="btn" ng-click="hokuyo.stop()">Stop</button>
 	</section>
 </div>

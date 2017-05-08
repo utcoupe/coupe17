@@ -21,27 +21,74 @@ module.exports = (function () {
 	 * @param EGR_d
 	 * @param EPR_d 
 	 */
-	function Data(ia, nb_erobots, EGR_d, EPR_d) {
-		/** balle */
-		this.balle = [];
-		/** chargeur */
-		this.chargeur = [];
-		/** clap */
-		this.clap = [];
-		/** plot */
-		this.plot = [];
+	function Data(ia) { /*, nb_erobots, EGR_d, EPR_d*/
+		this.ia = ia;
+
+		/** balls */
+		this.balls = [];
+		/** rocket */
+		this.rockets = [{
+			x:40,
+			y:1350
+		},{
+			x:1150,
+			y:40
+		},{
+			x:1850,
+			y:40
+		},{
+			x:2960,
+			y:1350
+		}];
+		/** module */
+		this.module = [];
 		/** erobot */
 		this.erobot = [];
-		/** gobelet */
-		this.gobelet = [];
-		/** pile */
-		this.pile = {};
-		/** dynamic */
-		this.dynamic = []; //used for laid stacks
-		/** depot */
-		this.depot = [];
-		/** nb_erobot */
-		this.nb_erobots = nb_erobots;
+		/** mountedModules */
+		this.mountedModules = [];
+		/** throwBalls */
+		this.throwBalls = [];
+		// /** nb_erobot */
+		// this.nb_erobots = nb_erobots;
+
+		/** craters */
+		this.craters = [{
+			pos:{
+				x:650,
+				y:540
+			},
+			d: 240
+		},{
+			pos:{
+				x:2350,
+				y:540
+			},
+			d: 240
+		},{
+			pos:{
+				x:0,
+				y:2000
+			},
+			d: 510
+		},{
+			pos:{
+				x:3000,
+				y:2000
+			},
+			d: 510
+		},{
+			pos:{
+				x:1070,
+				y:1870
+			},
+			d: 240
+		},{
+			pos:{
+				x:1930,
+				y:1870
+			},
+			d: 240
+		}];
 
 		/** dots */
 		this.dots = [];
@@ -51,30 +98,35 @@ module.exports = (function () {
 		this.erobot = [{ // big robot on position 0
 				name: "gr",
 				pos:{
-					x:3200,
-					y:1000
+					x:2800,
+					y:200
 				},
 				speed:{ // in mm/sec
 					x:0,
 					y:0,
 				},
 				lastUpdate: 0, // time in ms from the beining of the match
-				d: EGR_d || 320,
+				d: 320,
 				status: "lost"
 			},{ // small robot on position 1
 				name: "pr",
 				pos:{
-					x:3500,
-					y:1000
+					x:2100,
+					y:200
 				},
 				speed:{
 					x:0,
 					y:0
 				},
 				lastUpdate: 0,
-				d: EPR_d || 200,
+				d: 200,
 				status: "lost"
 			}];
+
+		if (this.ia.color == "yellow") {
+			this.erobot[0].pos.x = 3000 - this.erobot[0].pos.x;
+			this.erobot[1].pos.x = 3000 - this.erobot[1].pos.x;
+		}
 	}
 
 	/**
@@ -83,13 +135,21 @@ module.exports = (function () {
 	Data.prototype.importObjects = function () {
 		var ret = require('./objects.json');
 
-		this.balle = ret.balle;
-		this.chargeur = ret.chargeur;
-		this.clap = ret.clap;
-		this.plot = ret.plot;
-		this.gobelet = ret.gobelet;
-		this.pile = ret.pile;
-		this.depot = ret.depot;
+		// this.balle = ret.balle;
+		// this.chargeur = ret.chargeur;
+		// this.clap = ret.clap;
+		// this.plot = ret.plot;
+		// this.gobelet = ret.gobelet;
+		// this.pile = ret.pile;
+		// this.depot = ret.depot;
+
+		this.balls = ret.balls;
+		this.module = ret.module;
+		this.mountedModules = ret.mountedModules;
+		this.rocket = ret.rocket;
+		this.throwBalls = ret.throwBalls;
+		this.seesaw = ret.seesaw;
+
 		return ret;
 	};
 
@@ -109,8 +169,9 @@ module.exports = (function () {
 			return null;
 		}
 
-		if (!this[actName[0]][actName[1]]){
-			logger.warn("L'objet "+actName[0]+" de type "+actName[1]+" est inconnu.");
+		if (!this[actName[0]] || !this[actName[0]][actName[1]]){
+			logger.warn("L'objet "+actName[1]+" de type "+actName[0]+" est inconnu.");
+			logger.warn(this[actName[0]]);
 			return null;
 		}
 
@@ -126,43 +187,7 @@ module.exports = (function () {
 	Data.prototype.isCloser = function (dist1, dist2){
 		return (dist1 < dist2);
 	};
-
-	/**
-	 * Return the distance between two positions
-	 * 
-	 * @param {Object} pos1
-	 * @param {int} pos1.x
-	 * @param {int} pos1.y
-	 * @param {Object} pos2
-	 * @param {int} pos2.x
-	 * @param {int} pos2.y
-	 */
-	Data.prototype.getDistance = function (pos1, pos2){
-		return Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
-	};
-
-	/**
-	 * Takes a position and the ennemy robot # to put everything in its surroundings (~ 1.1 * radius) as "lost"
-	 * 
-	 * @param {Object} pos
-	 * @param {int} e_robot_id
-	 */
-	Data.prototype.theEnnemyWentThere = function (pos, e_robot_id){
-		Object.keys(this.plot).forEach(function(c) {
-			if ((this.getDistance(pos, this.plot[c].pos) < 0.55*this.erobot[e_robot_id].d) && (this.plot[c].status != "lost")) {
-				logger.info("Le plot " + c + " est marqué lost");
-				this.plot[c].status = "lost";
-			}
-		}.bind(this));
-		var min_dist = Infinity;
-		Object.keys(this.gobelet).forEach(function(g) {
-			if ((this.getDistance(pos, this.gobelet[g].pos) < 0.55*this.erobot[e_robot_id].d) && (this.gobelet[g].status != "lost")) {
-				logger.info("Le gobelet" + g + " est marqué lost");
-				this.gobelet[g].status = "lost";
-			}
-		}.bind(this));
-	};
-
+	
 	/**
 	 * Parse Order
 	 * 
@@ -172,7 +197,7 @@ module.exports = (function () {
 	 */
 	Data.prototype.parseOrder = function(from, name, param){
 		switch(name){
-			case "data.add_dynamic" :
+			case "add_dynamic" :
 				if(!!param.pos && !!param.pos.x && !!param.pos.y && !!param.d){
 					this.dynamic.push(param);
 					logger.info("added dynamic from :"+from+" params:"+JSON.stringify(param));
@@ -183,8 +208,6 @@ module.exports = (function () {
 			default: logger.error("Unknown order name:"+name+" from:"+from);
 		}
 	};
-
-	var data = new Data();
 	
 	return Data;
 })();

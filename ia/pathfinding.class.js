@@ -14,8 +14,10 @@ module.exports = (function () {
 
 	var Path = require('path');
 
-	var programm = Path.normalize("./bin/pathfinding");
-	var image = Path.normalize("./pathfinding/img/map-20mm-yellow.bmp");
+	// var program = Path.normalize("./bin/pathfinding");
+	var program = Path.normalize("./bin/pathfinding");
+	// var image = Path.normalize("./pathfinding/img/map-20mm-yellow.bmp");
+	var image = Path.normalize("./pathfinding/img/map.bmp");
 	var RATIO = 20;
 	var SEPARATOR = ";";
 
@@ -33,7 +35,11 @@ module.exports = (function () {
 	function Pathfinding(ia) {
 		/** Ia */
 		this.ia = ia;
-		var fifo = [];
+		var callbacksFifo = [];
+
+		this.busy = false;			// true if a request to the C program has already been made and hasn't returned yet
+		this.pendingQueries = [];	// fifo queue of queries to the pathfinding
+
 
 		/*var instance_pkill = Child_process.spawn("pkill", ["pathfinding"]);
 		instance_pkill.on('error', function(err){
@@ -44,12 +50,12 @@ module.exports = (function () {
 		});
 
 
-		var instance = Child_process.spawn(programm, [ image ]);*/
-		var instance = Child_process.spawn("bash", ["-c", "pkill pathfinding;"+programm+" -m "+image]);
+		var instance = Child_process.spawn(program, [ image ]);*/
+		var instance = Child_process.spawn("bash", ["-c", "pkill pathfinding;"+program+" -m "+image + " -r 1"]); // +" -r" for bmp export
 
 		instance.on('error', function(err) {
 			if(err.code === 'ENOENT'){
-				logger.fatal("pathfinding programm executable not found! Is it compiled ? :) Was looking in \""+Path.resolve(programm)+"\"");
+				logger.fatal("pathfinding program executable not found! Is it compiled ? :) Was looking in \""+Path.resolve(program)+"\"");
 				process.exit();
 			}
 			logger.error("c++ subprocess terminated with error:", err);
@@ -70,7 +76,7 @@ module.exports = (function () {
 		var stdout = Byline.createStream(instance.stdout);
 		stdout.setEncoding('utf8')
 		stdout.on('data', function(data) {
-			logger.debug("Received: "+data);
+			logger.debug("Pathfinding just gave : "+data);
 			parse(data);
 		});
 
@@ -98,12 +104,12 @@ module.exports = (function () {
 		 * @param cb
 		 */
 		this.sendQuery = function(start, end, cb){
-			fifo.push(cb || true);
+			callbacksFifo.push(cb || true);
 
 
 			var str = ["C"].concat( vecMultiply(start, 1/RATIO) ).concat( vecMultiply(end, 1/RATIO) ).join(SEPARATOR) + "\n";
 			instance.stdin.write( str );
-			logger.info("Sending:"+str);
+			logger.debug("Query to pathfinding from [" + start[0] + ", " + start[1] + "] to [" + end[0] + ", " + end[1] + "]: " + str);
 		};
 
 		/**
@@ -139,7 +145,7 @@ module.exports = (function () {
 				if(path.length > 0) ret = path;
 			}
 
-			var callback = fifo.shift();
+			var callback = callbacksFifo.shift();
 			callback(ret); // if(typeof callback === "function") 
 		}
 
@@ -152,14 +158,55 @@ module.exports = (function () {
 	 * @param end
 	 * @param callback
 	 */
-	Pathfinding.prototype.getPath = function (start, end, callback) {
-		this.ia.pathfinding.updateMap();
+	Pathfinding.prototype.getPath = function (start, end, robot, callback) {
+		var queryParams = {
+			start: start,
+			end: end,
+			robot: robot,
+			callback: callback
+		};
+
+		if (this.busy) {
+			if (this.pendingQueries.length > 2) {
+				logger.warn("Pathfinding queue is getting long (more than 2 requests waiting)");
+			}
+			// logger.debug("Queued !");
+			this.pendingQueries.push(queryParams);
+			// logger.debug(this.pendingQueries);
+		} else {
+			this.prepareAndDoQuery(queryParams);
+		}
+	};
+
+	/**
+	 * prepareAndDoQuery
+	 * DO NOT call this from outside, call getPath instead
+	 * 
+	 * @param start
+	 * @param end
+	 * @param callback
+	 */
+	Pathfinding.prototype.prepareAndDoQuery = function(params) {
+		this.busy = true;
+
+		this.ia.pathfinding.updateMap(params.robot);
+
+		// Leave 1000 ms to the C program to answer, then abort
 		this.timeout_getpath = setTimeout(function() {
-			callback(null);
+			logger.warn("Pathfinding failed to answer in 1s !");
+			this.busy = false;
+			params.callback(null);
 			callback = function() {};
-		}, 1000);
-		this.sendQuery([start.x, start.y], [end.x, end.y], function(path){
+
+			let nextQuery = this.pendingQueries.shift();
+			if (!!nextQuery) {
+				this.prepareAndDoQuery(nextQuery);
+			}
+		}.bind(this), 1000);
+		this.sendQuery([params.start.x, params.start.y], [params.end.x, params.end.y], function(path){
 			clearTimeout(this.timeout_getpath);
+			this.busy = false;
+
 			if(path !== null) {
 				path.shift();
 				path = path.map(function(val) {
@@ -169,7 +216,12 @@ module.exports = (function () {
 					};
 				});
 			}
-			callback(path);
+			params.callback(path);
+
+			let nextQuery = this.pendingQueries.shift();
+			if (!!nextQuery) {
+				this.prepareAndDoQuery(nextQuery);
+			}
 		}.bind(this));
 	};
 
@@ -187,22 +239,27 @@ module.exports = (function () {
 	/**
 	 * Update Map
 	 */
-	Pathfinding.prototype.updateMap = function () {
+	Pathfinding.prototype.updateMap = function (robot) {
 		//[ [x, y, r], ... ]
 
 		// var objects = [];
 		// objects.push();
+		let otherRobot = (robot.name == this.ia.pr.name) ? this.ia.gr : this.ia.pr;
 		var objects = [{
-			pos: this.ia.gr.pos,
-			d: this.ia.gr.size.d
-		}].concat(this.ia.data.dots).concat(this.ia.data.dynamic);
+			pos: otherRobot.pos,
+			d: otherRobot.size.d
+		}].concat(this.ia.data.dots)
+
+		if (robot.name == this.ia.pr.name) {
+			objects = objects.concat(this.ia.data.craters);
+		}
 
 
 		// logger.debug(objects);
 
 		this.sendDynamic( objects.map(function(val){
 			// logger.debug(val);
-			return [borne(val.pos.x, 0, 2980), borne(val.pos.y, 0, 1980), 1*((val.d/2)+(this.ia.pr.size.d/2))];
+			return [borne(val.pos.x, 0, 2980), borne(val.pos.y, 0, 1980), 1*((val.d/2)+(robot.size.d/2))];
 		}.bind(this)) );
 	};
 

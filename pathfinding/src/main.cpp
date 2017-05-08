@@ -179,9 +179,9 @@ string commandCalcPath(string &command, MAP &map) {
         elapsedSeconds = endChrono - startChrono;
         cout << "Path contains " << path.size() << " points, total distance = " << distance << endl;
         cout << "Computing time : " << elapsedSeconds.count() << endl;
-        if (bmpRenderingFlag) {
-            map.generate_bmp("tmp.bmp");
-        }
+    }
+    if (bmpRenderingFlag) {
+        map.generate_bmp("tmp.bmp");
     }
     return answer.str();
 }
@@ -239,11 +239,9 @@ void parseOptions(int argc, char **argv) {
                                        1, "uint8_t");
         cmd.add(heuristicArg);
 
-        ValueArg<bool> debugArg("d", "debug", "Set the debug flag.", false, false, "bool");
-        cmd.add(debugArg);
+        SwitchArg debugArg("d", "debug", "Set the debug flag.", cmd, false);
 
-        ValueArg<bool> renderingArg("r", "rendering", "Set the rendering flag.", false, false, "bool");
-        cmd.add(renderingArg);
+        SwitchArg renderingArg("r", "rendering", "Set the rendering flag.", cmd, false);
 
         cmd.parse(argc, argv);
 
