@@ -23,7 +23,7 @@ Timer asservLoopTimer = Timer(100, &asservLoop);
 //TODO make it proper with others
 // Flag to know if a computer is connected to the arduino
 static unsigned char flagConnected = 0;
-static unsigned char flagArduinoConnected = 0;
+//static unsigned char flagArduinoConnected = 0;
 
 //todo debug level as a parameter
 
@@ -35,13 +35,11 @@ void serialRead() {
     receivedString = Serial.readStringUntil('\n');
     receivedString.replace("\n", "");
     if (receivedString != "") {
-        if (receivedString == "S") {
-            flagConnected = true;
-        } else {
-            static char receivedStringArray[15];
-            receivedString.toCharArray(receivedStringArray, receivedString.length());
-            ProtocolExecuteCmd(receivedStringArray, receivedString.length());
-        }
+//        if (receivedString == "S") {
+//            flagConnected = true;
+//        } else {
+        parseAndExecuteOrder(receivedString);
+//        }
 //            SerialSender::SerialSend(SERIAL_INFO, receivedString);
 //            Serial.println(receivedString);
 //            Serial.flush();

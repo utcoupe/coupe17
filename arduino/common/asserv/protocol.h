@@ -1,7 +1,15 @@
-#ifndef PROTOCOL_H
-#define PROTOCOL_H
+//
+// Created by tfuhrman on 09/05/17.
+//
+
+#ifndef ASSERV_PROTOCOL_H
+#define ASSERV_PROTOCOL_H
 
 #include "parameters.h"
+#include <stdint.h>
+
+
+class String;
 
 // 	COMMANDS :
 // 'ordre;id;arg1;arg2;argn'
@@ -20,13 +28,15 @@
 //  multiplied by FLOAT_PRECISION
 
 // BEGIN_ORDERS - Do not remove this comment
+#define START               'S'     //no args, start the program
+#define HALT                'h'     //no args, halt the program
 #define	GOTOA 		'c' 	// x(int);y(int);a(decimal);direction(int) - (mm and radian), direction is optionnal : 1 is forward, -1 is backward, 0 is any
 #define	GOTO 		'd' 	// x(int);y(int);direction(int) - (mm), direction is optionnal : 1 is forward, -1 is backward, 0 is any
 #define	ROT 		'e' 	// a(decimal) - (radian), can't turn more than 1 turn
 #define ROTNOMODULO	'a' 	// a(decimal) - radian, can turn more than 1 turn
 #define	KILLG 		'f' 	// no args, go to next order
 #define	CLEANG 		'g' 	// no args, cancel all orders
-#define	PIDLEFT		'h' 	// p(decimal);i(decimal);d(decimal) - set left PID
+#define	PIDLEFT		'p' 	// p(decimal);i(decimal);d(decimal) - set left PID
 #define	PIDRIGHT	'i' 	// p(decimal);i(decimal);d(decimal) - set right PID
 #define PIDALL 		'u' 	// p(decimal);i(decimal);d(decimal) - set both PID
 #define	GET_CODER 	'j' 	// no args, response : l(long);r(long)
@@ -62,18 +72,26 @@
 
 #define MAX_BYTES_PER_IT (0.9*BAUDRATE/(HZ*10))
 
+#define ORDER_INDEX (uint8_t)0
+#define ID_INDEX    (uint8_t)2
+
 #ifdef DEBUG_TARGET_SPEED
 #define MAX_AUTOSEND_SIZE (48)
 #else
 #define MAX_AUTOSEND_SIZE (24)
 #endif
 
-#ifdef __cplusplus
-extern "C" int ProtocolExecuteCmd(char* order, int size);
-extern "C" void ProtocolAutoSendStatus();
-#else
-int ProtocolExecuteCmd(char* order, int size);
-void ProtocolAutoSendStatus();
-#endif
+//#ifdef __cplusplus
+//extern "C" int ProtocolExecuteCmd(char* order, int size);
+//extern "C" void ProtocolAutoSendStatus();
+//#else
+//int ProtocolExecuteCmd(char* order, int size);
+//void ProtocolAutoSendStatus();
+//#endif
 
-#endif
+extern unsigned char flagArduinoConnected;
+void parseAndExecuteOrder(const String& order);
+uint8_t getLog10(const uint16_t number);
+void ProtocolAutoSendStatus();
+
+#endif //ASSERV_PROTOCOL_H

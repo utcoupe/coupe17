@@ -39,7 +39,7 @@
 
 #define HZ 100
 #define DT (1.0/HZ)
-#define AUTO_STATUS_HZ 100 // must be a divider a HZ or 0 to disable
+#define AUTO_STATUS_HZ 0 // must be a divider a HZ or 0 to disable
 
 #define SPD_MAX 1000 //mm/s
 #define ACC_MAX 1500  //mm/s2
