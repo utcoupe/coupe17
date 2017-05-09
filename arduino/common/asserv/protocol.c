@@ -4,6 +4,9 @@
 #include "serial_switch.h"
 #include "robotstate.h"
 #include "control.h"
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
 int sendResponse(char order, char *buf, int size, int ID){
 	char message[MAX_COMMAND_LEN];
@@ -45,62 +48,90 @@ void autoSendStatus(void) {
 	serial_print(message);
 }
 
-void ProtocolAutoSendStatus(int bytes_left) {
+//void ProtocolAutoSendStatus(int bytes_left) {
+void ProtocolAutoSendStatus() {
 #if AUTO_STATUS_HZ
 	static int i=0;
 	if (++i % (HZ / AUTO_STATUS_HZ) == 0) {
-		if (bytes_left >= MAX_AUTOSEND_SIZE) {
+//		if (bytes_left >= MAX_AUTOSEND_SIZE) {
 			autoSendStatus();
-			i = 0;
-		} else {
-			i--;
-		}
+//			i = 0;
+//		} else {
+//			i--;
+//		}
 	}
 #endif
 }
 
-int ProtocolExecuteCmd(char data) {
-	static char current_command[MAX_COMMAND_LEN];
-	static int index = 0;
-	if (data == '\r') data = '\n';
-	current_command[index++] = data;
-	if (index >= MAX_COMMAND_LEN) {
-		// epic fail, this MUST NEVER happen
-		// if ever this happens, the order will be corrupted
-		// decrease index so the arduino keep going on
-		// that means we overwrite the last received char
-		index = MAX_COMMAND_LEN-1;
-	}
-	if (data == '\n') {
-		// end of current command
-		char order = current_command[0];
-		char response[MAX_RESPONSE_LEN];
-		int id, end_of_id, response_size, sent_size;
-		current_command[index] = '\0';
-		end_of_id = ID_START_INDEX; // start after first ';'
-		while (current_command[end_of_id] != ';') {
-			end_of_id++;
-			if (end_of_id >= MAX_ID_LEN+ID_START_INDEX) {
-				char message[MAX_COMMAND_LEN];
-				int msg_index = 0;
-				clean_current_command(current_command, &index);
-				if (order != '\n') {
-					message[0] = order;
-					message[1] = ';';
-					msg_index = 2;
-				}
-				sent_size = sprintf(message+msg_index, "%s\n", FAILED_MSG);
-				serial_print(message);
-				return sent_size;
-			}
-		}
-		current_command[end_of_id] = '\0';
-		sscanf(&current_command[ID_START_INDEX], "%i", &id);
+//int ProtocolExecuteCmd(char data) {
+//	static char current_command[MAX_COMMAND_LEN];
+//	static int index = 0;
+//	if (data == '\r') data = '\n';
+//	current_command[index++] = data;
+//	if (index >= MAX_COMMAND_LEN) {
+//		// epic fail, this MUST NEVER happen
+//		// if ever this happens, the order will be corrupted
+//		// decrease index so the arduino keep going on
+//		// that means we overwrite the last received char
+//		index = MAX_COMMAND_LEN-1;
+//	}
+//	if (data == '\n') {
+//		// end of current command
+//		char order = current_command[0];
+//		char response[MAX_RESPONSE_LEN];
+//		int id, end_of_id, response_size, sent_size;
+//		current_command[index] = '\0';
+//		end_of_id = ID_START_INDEX; // start after first ';'
+//		while (current_command[end_of_id] != ';') {
+//			end_of_id++;
+//			if (end_of_id >= MAX_ID_LEN+ID_START_INDEX) {
+//				char message[MAX_COMMAND_LEN];
+//				int msg_index = 0;
+//				clean_current_command(current_command, &index);
+//				if (order != '\n') {
+//					message[0] = order;
+//					message[1] = ';';
+//					msg_index = 2;
+//				}
+//				sent_size = sprintf(message+msg_index, "%s\n", FAILED_MSG);
+//				serial_print(message);
+//				return sent_size;
+//			}
+//		}
+//		current_command[end_of_id] = '\0';
+//		sscanf(&current_command[ID_START_INDEX], "%i", &id);
+//
+//		switchOrdre(order, id, &current_command[end_of_id+1], response, &response_size);
+//		sent_size = sendResponse(order, response, response_size, id);
+//		clean_current_command(current_command, &index);
+//		return sent_size;
+//	}
+//	return 0;
+//}
 
-		switchOrdre(order, id, &current_command[end_of_id+1], response, &response_size);
-		sent_size = sendResponse(order, response, response_size, id);
-		clean_current_command(current_command, &index);
-		return sent_size;
-	}
-	return 0;
+uint8_t getLog10(const uint16_t number);
+
+int ProtocolExecuteCmd(char* order, int size) {
+    char response[MAX_RESPONSE_LEN];
+    int response_size;
+    static char receivedOrder[15];
+    memcpy(receivedOrder, order, size*sizeof(char));
+    char* receivedOrderPtr = receivedOrder;
+//    order.toCharArray(receivedOrder, order.length());
+    char orderChar = receivedOrder[0];
+    uint16_t order_id = (uint16_t) atoi(&receivedOrder[2]);
+    uint8_t numberDigits = getLog10(order_id);
+//    SerialSender::SerialSend(SERIAL_INFO, "order : %c, id : %d (digits : %d)", orderChar, order_id, numberDigits);
+    // Move to the first parameter of the order
+    receivedOrderPtr +=  2 + numberDigits + (uint8_t)1;
+    switchOrdre(orderChar, order_id, receivedOrderPtr, response, &response_size);
+    return 1;
+}
+
+uint8_t getLog10(const uint16_t number) {
+    if(number>=10000) return 5;
+    if(number>=1000) return 4;
+    if(number>=100) return 3;
+    if(number>=10) return 2;
+    return 1;
 }

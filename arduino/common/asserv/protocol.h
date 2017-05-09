@@ -69,11 +69,11 @@
 #endif
 
 #ifdef __cplusplus
-extern "C" int ProtocolExecuteCmd(char data);
-extern "C" void ProtocolAutoSendStatus(int bytes_left);
+extern "C" int ProtocolExecuteCmd(char* order, int size);
+extern "C" void ProtocolAutoSendStatus();
 #else
-int ProtocolExecuteCmd(char data);
-void ProtocolAutoSendStatus(int bytes_left);
+int ProtocolExecuteCmd(char* order, int size);
+void ProtocolAutoSendStatus();
 #endif
 
 #endif
