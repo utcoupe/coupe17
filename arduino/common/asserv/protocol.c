@@ -40,8 +40,8 @@ void autoSendStatus(void) {
 			(int)(control.speeds.linear_speed - control.speeds.angular_speed),
 			(int)(control.speeds.linear_speed + control.speeds.angular_speed));
 #endif
-	message[index] = '\n';
-	message[index+1] = '\0';
+//	message[index] = '\n';
+//	message[index+1] = '\0';
 	serial_print(message);
 }
 

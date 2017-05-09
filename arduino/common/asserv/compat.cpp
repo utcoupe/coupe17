@@ -10,7 +10,7 @@ extern "C" void serial_print_float(float f) {
 }
 
 extern "C" void serial_print(const char *str) {
-	SERIAL_MAIN.print(str);
+	SERIAL_MAIN.println(str);
 }
 
 extern "C" void serial_send(char data) { //Envoi d'un octet en serial, dépend de la plateforme
