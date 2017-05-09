@@ -81,14 +81,6 @@ class String;
 #define MAX_AUTOSEND_SIZE (24)
 #endif
 
-//#ifdef __cplusplus
-//extern "C" int ProtocolExecuteCmd(char* order, int size);
-//extern "C" void ProtocolAutoSendStatus();
-//#else
-//int ProtocolExecuteCmd(char* order, int size);
-//void ProtocolAutoSendStatus();
-//#endif
-
 extern unsigned char flagArduinoConnected;
 void parseAndExecuteOrder(const String& order);
 uint8_t getLog10(const uint16_t number);

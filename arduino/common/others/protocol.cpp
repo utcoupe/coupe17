@@ -90,13 +90,3 @@ uint8_t getLog10(const uint16_t number) {
     if(number>=10) return 2;
     return 1;
 }
-
-/*
-receive orders as String, so keep this format
-store the received strings in a QueueList (test that it's working and not using too much space)
-when processing, copy the String buffer in an internal buffer to avoid any conflict
-best is to use a generic parser, but the parser execute orders too, how to split them ??
-
-goal is to integrate OS48 and to compile a chuck of code with a main (not generic at first) and
-generic functions to read and to write through the serial port + trigger on S order with response
- */

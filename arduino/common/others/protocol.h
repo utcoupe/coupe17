@@ -44,25 +44,12 @@ enum MODULE_COLOR {
 
 #define MAX_UINT8_T_VALUE   (uint8_t)255
 
-//
-//enum servoOrder {
-//    O_PR_MODULE_ARM_INIT = 0,
-//    O_PR_MODULE_ARM_OPEN,
-//    O_PR_MODULE_ARM_CLOSE
-//};
-
 #define ORDER_INDEX (uint8_t)0
 #define ID_INDEX    (uint8_t)2
 
 #define MAX_SERVO   (uint8_t)8
 
 extern unsigned char flagArduinoConnected;
-
-//todo move to cpp file ? useless ?
-//static const unsigned int servoMapping[4][2] = {{PR_MODULE_ARM, PR_MODULE_ARM_PIN},
-//                                                {PR_MODULE_DROP_R, PR_MODULE_DROP_R_PIN},
-//                                                {PR_MODULE_DROP_L, PR_MODULE_DROP_L_PIN},
-//                                                {PR_MODULE_ROTATE, PR_MODULE_ROTATE_PIN},};
 
 void parseAndExecuteOrder(const String& order);
 

@@ -23,29 +23,16 @@ Timer asservLoopTimer = Timer(100, &asservLoop);
 //TODO make it proper with others
 // Flag to know if a computer is connected to the arduino
 static unsigned char flagConnected = 0;
-//static unsigned char flagArduinoConnected = 0;
 
 //todo debug level as a parameter
 
 void serialRead() {
-//    static char receivedCommand[20];
     String receivedString;
-    //readString has a default timeout of 1s
-//    receivedString = Serial.readString();
     receivedString = Serial.readStringUntil('\n');
     receivedString.replace("\n", "");
     if (receivedString != "") {
-//        if (receivedString == "S") {
-//            flagConnected = true;
-//        } else {
         parseAndExecuteOrder(receivedString);
-//        }
-//            SerialSender::SerialSend(SERIAL_INFO, receivedString);
-//            Serial.println(receivedString);
-//            Serial.flush();
-//            delay(1000);
     }
-//        delay(50);
 }
 
 unsigned long nextTime = 0;
@@ -80,7 +67,6 @@ void setup() {
 #endif
 #endif
 	initPins();
-//	SERIAL_MAIN.write(ARDUINO_ID);
 	nextTime = micros();
 	ControlInit();
 }
@@ -116,16 +102,6 @@ void asservLoop(){
 	ComputeIsBlocked();
 	ControlCompute();
 
-//	// Flush serial every time to stay in time
-//	Serial.flush();
-//	// zone programmation libre
-//	available = SERIAL_MAIN.available();
-//	for(int i = 0; i < available; i++) {
-//		// recuperer l'octet courant
-//		sent_bytes += ProtocolExecuteCmd(generic_serial_read());
-//	}
-	// Auto send status if necessary
-//	ProtocolAutoSendStatus(MAX_BYTES_PER_IT - sent_bytes);
     ProtocolAutoSendStatus();
 
 	digitalWrite(LED_MAINLOOP, LOW);
@@ -140,5 +116,4 @@ void asservLoop(){
 		digitalWrite(LED_DEBUG, HIGH);
 	}
 #endif
-//	while (micros() < nextTime);
 }
