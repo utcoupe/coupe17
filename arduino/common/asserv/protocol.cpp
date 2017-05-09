@@ -12,12 +12,13 @@
 #include <stdlib.h>
 
 //get from old protocol file
-#include "compat.h"
-#include "robotstate.h"
-#include "control.h"
-#include "goals.h"
-#include "emergency.h"
-
+extern "C" {
+    #include "compat.h"
+    #include "robotstate.h"
+    #include "control.h"
+    #include "goals.h"
+    #include "emergency.h"
+}
 
 
 void autoSendStatus() {
@@ -175,7 +176,9 @@ void parseAndExecuteOrder(const String& order) {
             int x, y, direction;
             direction = 0;
             sscanf(receivedOrderPtr, "%i;%i;%i", &x, &y, &direction);
-            FifoPushGoal(order_id, TYPE_POS, POS_DATA(x, y, direction));
+            goal_data_t goal;
+            goal.pos_data = {x, y, direction};
+            FifoPushGoal(order_id, TYPE_POS, goal);
             break;
         }
         case GOTOA:
@@ -185,8 +188,11 @@ void parseAndExecuteOrder(const String& order) {
             direction = 0;
             sscanf(receivedOrderPtr, "%i;%i;%i;%i", &x, &y, &a_int, &direction);
             a = a_int / (float)FLOAT_PRECISION;
-            FifoPushGoal(order_id, TYPE_POS, POS_DATA(x,y,direction));
-            FifoPushGoal(order_id, TYPE_ANG, ANG_DATA(a,1));
+            goal_data_t goal;
+            goal.pos_data = {x, y, direction};
+            FifoPushGoal(order_id, TYPE_POS, goal);
+            goal.ang_data = {a, 1};
+            FifoPushGoal(order_id, TYPE_ANG, goal);
             break;
         }
         case ROT:
@@ -195,7 +201,9 @@ void parseAndExecuteOrder(const String& order) {
             float a;
             sscanf(receivedOrderPtr, "%i", &a_int);
             a = a_int / (float)FLOAT_PRECISION;
-            FifoPushGoal(order_id, TYPE_ANG, ANG_DATA(a,1));
+            goal_data_t goal;
+            goal.ang_data = {a, 1};
+            FifoPushGoal(order_id, TYPE_ANG, goal);
             break;
         }
         case ROTNOMODULO:
@@ -204,21 +212,27 @@ void parseAndExecuteOrder(const String& order) {
             float a;
             sscanf(receivedOrderPtr, "%li", &a_int);
             a = a_int / (float)FLOAT_PRECISION;
-            FifoPushGoal(order_id, TYPE_ANG, ANG_DATA(a,0));
+            goal_data_t goal;
+            goal.ang_data = {a, 0};
+            FifoPushGoal(order_id, TYPE_ANG, goal);
             break;
         }
         case PWM:
         {
             int l, r, t;
             sscanf(receivedOrderPtr, "%i;%i;%i", &l, &r, &t);
-            FifoPushGoal(order_id, TYPE_PWM, PWM_DATA(l, r, t));
+            goal_data_t goal;
+            goal.pwm_data = {(float)t, l, r};
+            FifoPushGoal(order_id, TYPE_PWM, goal);
             break;
         }
         case SPD:
         {
             int l, a, t;
             sscanf(receivedOrderPtr, "%i;%i;%i", &l, &a, &t);
-            FifoPushGoal(order_id, TYPE_SPD, SPD_DATA(l, a, t));
+            goal_data_t goal;
+            goal.spd_data = {(float)t, l, a};
+            FifoPushGoal(order_id, TYPE_SPD, goal);
             break;
         }
         case PIDALL:
@@ -231,9 +245,9 @@ void parseAndExecuteOrder(const String& order) {
             p = p_int / (float)FLOAT_PRECISION;
             i = i_int / (float)FLOAT_PRECISION;
             d = d_int / (float)FLOAT_PRECISION;
-            if (ordre == PIDLEFT)
+            if (orderChar == PIDLEFT)
                 PIDSet(&PID_left, p, i, d, LEFT_BIAS);
-            else if (ordre == PIDRIGHT)
+            else if (orderChar == PIDRIGHT)
                 PIDSet(&PID_right, p, i, d, RIGHT_BIAS);
             else {
                 PIDSet(&PID_left, p, i, d, LEFT_BIAS);
