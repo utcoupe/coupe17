@@ -40,18 +40,20 @@ void pushData(Hok_t hok, long* data) {
     }
     char type[10];
     char message[MAX_DATA*50];
-    if (hok.c == 'c')
+    if (hok.c == 'e')
         strcpy(type, "one");
     else
         strcpy(type, "two");
     int i = hok.imin;
-    int fin;
     int mid = floor((float)(hok.imax-hok.imin)/3);
+    int fin;
     //while(i<= hok.imax){
     for (j=1 ; j<4 ; j++){
         strcpy(message, "[DATA]");
         fin = hok.imin + j * mid;
-        sprintf(message, "%s%s#[", message, type);
+        sprintf(message, "%s%s#%d#", message, type, j-1);
+        if(j == 1)
+            sprintf(message, "%s[", message);
 
         while(i<= fin){
 
@@ -59,9 +61,22 @@ void pushData(Hok_t hok, long* data) {
             sprintf(message, "%s,", message);
             i = i +1;
         }
-        printf( "%s[0,0]]\n", message);
+        if(j == 3)
+            sprintf(message, "%s[0,0]]", message);
+        printf( "%s\n", message);
         fflush(stdin);
     }
+
+    /*strcpy(message, "[DATA]");
+    sprintf(message, "%s%s#[", message, type);
+    while(i < hok.imax){
+        sprintf(message, "%s[%lf,%ld]", message, hok.angles[i], data[i]);
+        sprintf(message, "%s,", message);
+        i = i +1;
+    }
+    printf( "%s[0,0]]\n", message);
+    //printf("ok");
+    fflush(stdin);*/
 }
 
 void pushInfo(char info){

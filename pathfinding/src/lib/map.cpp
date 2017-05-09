@@ -39,18 +39,21 @@ MAP::~MAP() {
     delete map_barrier;
 }
 
-void MAP::add_dynamic_circle(unsigned int x, unsigned int y, float f_r) {
-    unsigned int r = (unsigned int)ceil(f_r);
-    //todo test pow integer versus std using double
-    int r2 = pow(r, 2);
-    for (unsigned int p_x = x - r; p_x <= x + r; p_x++) {
-        if (p_x < 0 || p_x >= map_w) {
+void MAP::add_dynamic_circle(unsigned int x, unsigned int y, unsigned int f_r) {
+//    unsigned int r = (unsigned int)ceil(f_r);
+    int r = (int)f_r;
+    int r2 = r*r;
+    for (int p_x = (int)x - r; p_x <= (int)x + r; p_x++) {
+        if (p_x < 0 || p_x >= (int)map_w) {
             continue;
         }
-        //todo test pow integer versus std using double
-        int y_length = ceil(sqrt(r2 - pow(x - p_x, 2)));
-        for (unsigned int p_y = y - y_length; p_y <= y + y_length; p_y++) {
-            if (p_y < 0 || p_y >= map_h) {
+
+        // Caution with std pow ! 2 standard function exist but be careful of particularities around float zeros !!
+        // We chose to use standard int multiplication instead
+        int y_length = (int)ceil(sqrt((float)r2 - (float)(((int)x - p_x)*((int)x - p_x))));
+        for (int p_y = (int)y - y_length; p_y <= (int)y + y_length; p_y++) {
+            if (p_y < 0 || p_y >= (int)map_h) {
+                // cout<<"Escape p_y = "<<p_y<<endl;
                 continue;
             }
             vertex_descriptor u = get_vertex(p_x, p_y);

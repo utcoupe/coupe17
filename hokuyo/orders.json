@@ -4,7 +4,7 @@ Please make sure take a look at the "plan.svg" file (part Communication),
 it's a summary of this part of the structure :
 	- the Raspberry Pi is linked to the server/AI wirelessly
 	- it hosts 2 programs :
-		¤ client_hok.js : always running nodeJS script, which starts the
+		¤ main.js : always running nodeJS script, which starts the
 			other when it is needed.
 		¤ hokuyo : (compilation of the src files), connects to the Hokuyos,
 			recieves the spots and sends the computed robots to the nodeJS.

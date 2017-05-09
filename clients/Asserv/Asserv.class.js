@@ -18,7 +18,7 @@ class Asserv{
 	 * @param {any} who
 	 * @param {any} fifo
 	 */
-	constructor(client, who, fifo){
+	constructor(client, who, fifo, sendStatus = null, sp = null){
 		/** @type {Log4js} */
 		this.logger = require('log4js').getLogger('asserv');
 
@@ -42,6 +42,8 @@ class Asserv{
 		/** @type {Array}*/
 		this.queue = []
 		this.orderInProgress = false;
+
+		this.getInitPos();
 	}
 
 	/**
@@ -113,7 +115,7 @@ class Asserv{
 	 * @param {int} a Angle
 	 * @param {Object} callback
 	 */
-	calageX(y, a, callback){}
+	calageY(y, a, callback){}
 
 	/**
 	 * Set Vitesse

@@ -6,13 +6,15 @@ class HokuyoDisplay {
 		this.ONE = "one";
 		this.TWO = "two";
 
-		this.dotRadius = 1; 	// cm
+		this.dotRadius = 1; 			// cm
 
 		this.parentId = parentId;
 		this.mode = mode;
 		this.div = $('#' + this.parentId);
 
-		this.isBusy = false; 	// lock
+		this.isBusy = false; 			// lock
+
+		this.clearMainTimeout = null; 	// timeout in case we don't receive data for a while
 
 		if (reinitColor) {
 			Raphael.getColor.reset();
@@ -33,15 +35,15 @@ class HokuyoDisplay {
 		this.realH = 0;
 		this.W = 0;
 		this.H = 0;
-		this.center = {}; 
-		this.center.x = 0; 
+		this.center = {};
+		this.center.x = 0;
 		this.center.y = 0;
 		this.center.str = this.center.x + "," + this.center.y; // in the viewport frame
 		this.viewportScale = 1;
 
 		if (this.mode == this.MAIN) {
 			var maxWidth = 1000; // px
-			
+
 			this.realW = 300;
 			this.realH = 200;
 
@@ -183,8 +185,8 @@ class HokuyoDisplay {
 				var dot = this.r.circle(0, newSpot[1] * this.viewportScale, this.dotRadius).attr({
 					stroke: this.dotColor,
 					fill: this.dotColor,
-					transform:  "t," + this.center.str + "r180,0,0" + "r" + newSpot[0] + ",0,0"});
-				//  + " 0 0" +   + 
+					transform:  "t," + this.center.str + "r180,0,0" + "r" + -newSpot[0] + ",0,0"});
+				//  + " 0 0" +   +
 				this.dots.set(newSpot[0], dot);
 			}
 		}.bind(this));
@@ -203,6 +205,12 @@ class HokuyoDisplay {
 		if (this.mode != this.MAIN) {
 			console.error("Single LiDAR displays can't handle global robot spot");
 			return;
+		}
+
+		this.isBusy = true;
+
+		if (!!this.clearMainTimeout) {
+			clearTimeout(this.clearMainTimeout);
 		}
 
 		// console.log(hokuyos);
@@ -236,16 +244,40 @@ class HokuyoDisplay {
 					fill: this.dotColor,
 					transform:  "t," + this.center.str + "s" + this.viewportScale + "," + this.viewportScale + ",0,0",
 					"fill-opacity": .4}) );
+			this.objects.push( this.r.text(robot[0], robot[1], "["+ parseInt(robot[0]) + "; " + parseInt(robot[1]) +"]").attr({
+					fill: this.dotColor,
+					"font-size": "6px",
+					transform:  "t,50,25" + "t," + this.center.str + "s" + this.viewportScale + "," + this.viewportScale + ",0,0"}) );
+
 		}
 
 		// console.log(cartesianSpots);
-		for(let spot of cartesianSpots) {
-			this.objects.push( this.r.circle(spot[0], spot[1], this.dotRadius).attr({
-					stroke: this.dotColor,
-					fill: this.dotColor,
-					transform:  "t," + this.center.str + "s" + this.viewportScale + "," + this.viewportScale + ",0,0",
-					"fill-opacity": .4}) );
+		if (!!cartesianSpots) {
+			for(let spot of cartesianSpots) {
+				this.objects.push( this.r.circle(spot[0], spot[1], this.dotRadius).attr({
+						stroke: this.dotColor,
+						fill: this.dotColor,
+						transform:  "t," + this.center.str + "s" + this.viewportScale + "," + this.viewportScale + ",0,0",
+						"fill-opacity": .4}) );
+			}
 		}
 
+		this.isBusy = false;
+
+		this.clearMainTimeout = setTimeout(function() {
+			this.clearMain();
+		}.bind(this), 1000);
+	}
+
+	clearMain() {
+		// For each object
+		for(let hokName in this.hokuyos) {
+			this.hokuyos[hokName].remove();
+		}
+
+		// For each object
+		for(let obj of this.objects) {
+			obj.remove();
+		}
 	}
 }

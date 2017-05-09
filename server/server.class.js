@@ -9,35 +9,51 @@
  * @requires socket.io
  * @see {@link server/server.Server}
  */
-module.exports = (function () {
-	"use strict";
-	var log4js = require('log4js');
-	var logger = log4js.getLogger('Server');
-	var spawn = require('child_process').spawn;
-	var Convert = require('ansi-to-html');
-	var convert = new Convert({newLine: true});
 
+"use strict";
+
+const Log4js = require('log4js');
+var Convert = require('ansi-to-html');
+
+var logger = Log4js.getLogger('Server');
+var spawn = require('child_process').spawn;
+var convert = new Convert({newLine: true});
+
+/**
+ * Serveur pour toutes les communications
+ * 
+ */
+class Server {
 	/**
 	 * Starts a server on the port specified. Default port: 3128
 	 *
-	 * @exports server/server.Server
-	 * @constructor
 	 * @param {int} [server_port=3128] Server port
 	 */
-	function Server(server_port) {
+	constructor (server_port) {
 		/**
 		 * @type {int}
 		 */
 		this.server_port = server_port || 3128;
+
+		this.verbose = false;
 
 		// Get server IP address
 		var os = require('os');
 		var networkInterfaces = os.networkInterfaces();
 		try {
 			/** @type {string} */
-			this.ip = networkInterfaces["eth0"][0].address || networkInterfaces["Wi-Fi"][0].address || "127.0.0.1";
+			if (!!networkInterfaces["ra0"]){
+				this.ip = networkInterfaces["ra0"][0].address;
+			} else if (!!networkInterfaces["wlan0"]){
+				this.ip = networkInterfaces["wlan0"][0].address;
+			} else if (!!networkInterfaces["Wi-Fi"]){
+				this.ip = networkInterfaces["Wi-Fi"][0].address;
+			} else {
+				this.ip = "127.0.0.1";
+			}
 		}
 		catch(e) {
+			logger.warn("Error looking for ip address, fallback to loopback address.");
 			this.ip = "127.0.0.1";
 		}
 		/** @type {string} */
@@ -85,20 +101,24 @@ module.exports = (function () {
 			'hokuyo': false
 		}
 
+		this.spamListLevel1 = ["lidar.all", 'utcoupe', 'simulateur', 'gr.pos', 'pr.pos'];
+		this.spamListLevel2 = ["hokuyo.polar_raw_data"];
+
+
 		// When the client is connected
-		this.server.on('connection', function (client) {
+		this.server.on('connection', (client) => {
 			// When the client is disconnected
-			client.on('disconnect', function() {
+			client.on('disconnect', () => {
 				logger.info(client.type+" is disconnected!");
 				try {
 					delete this.network[client.type][client.id];
 				}
 				catch(e) { }
 				this.sendNetwork();
-			}.bind(this));
+			});
 
 			// When the client send his type
-			client.on('type', function(data) {
+			client.on('type', (data) => {
 				if(typeof data.type !== 'string') {
 					logger.error("The client type sent isn't a string");
 					return;
@@ -117,10 +137,11 @@ module.exports = (function () {
 				client.emit('log', "Connected to the server successfully at " + client.handshake.headers.host);
 				this.sendNetwork();
 				this.sendUTCoupe();
-			}.bind(this));
+				this.sendVerbosity();
+			});
 
 			// When the client send an order
-			client.on('order', function(data) {
+			client.on('order', (data) => {
 				// console.log(data);
 				if(typeof data !== 'object') {
 					logger.error("The client order sent isn't a object");
@@ -143,8 +164,9 @@ module.exports = (function () {
 					this.network[client.type][client.id].children = data.params.children || "";
 					// console.log(this.network);
 					this.sendNetwork();
-				} else if (data.name == 'server.iaColor') {
+				} else if (data.name == 'server.iaParams') {
 					this.network[client.type][client.id].color = data.params.color || "";
+					this.network[client.type][client.id].we_have_hats = data.params.we_have_hats;
 					this.sendNetwork();
 				} else if (data.name == 'server.sync_all_git') {
 					logger.info("Starting to sync all git repositories");
@@ -156,13 +178,28 @@ module.exports = (function () {
 					spawn('/root/flash_all_arduinos.sh', [], {
 						detached: true
 					});
+				} else if (data.name == 'server.verbose') {
+					// Toogle verbose mode
+					this.verbose = !this.verbose;
+					logger.info("Have been asked to " + (this.verbose?"talk a lot :)":"shut up :/"));
+					this.sendVerbosity();
 				} else {
 					// The order is valid
 					// logger.info("Data " +data.name+ " from " +data.from+ " to " +data.to);
-					this.server.to('webclient').to(data.to).emit('order', data);
+					if (!this.verbose &&
+						this.spamListLevel1.concat(this.spamListLevel2).indexOf(data.name) != -1) {
+						// Verbose mode level 1 : send most of spam messages
+						this.server.to(data.to).emit('order', data);
+					} else if (this.spamListLevel2.indexOf(data.name) != -1) {
+						// Not verbose, don't copy level 2 spam message to webclients
+						this.server.to(data.to).emit('order', data);
+					} else {
+						// Not verbose, copy to all regular messages
+						this.server.to('webclient').to(data.to).emit('order', data);
+					}
 				}
-			}.bind(this));
-		}.bind(this));
+			});
+		});
 
 		this.server.listen(this.server_port);
 		logger.info("Server started at "+this.ip_port);
@@ -171,7 +208,7 @@ module.exports = (function () {
 	/**
 	 * Send Network
 	 */
-	Server.prototype.sendNetwork = function(){
+	sendNetwork (){
 		// logger.info("Message sent to webclient !");
 		// logger.info(this.network);
 		this.server.to('webclient').emit('order', {
@@ -187,12 +224,12 @@ module.exports = (function () {
 	/**
 	 * Launch the robot
 	 */
-	Server.prototype.spawn = function(params) {
+	spawn (params) {
 		var prog = params.prog;
 		if(!this.utcoupe[prog]) {
 			switch(prog) {
 				case 'ia':
-					this.progs[prog] = spawn('node', ['./ia/main.js', params.color, params.nb_erobots, params.EGR_d, params.EPR_d]);
+					this.progs[prog] = spawn('node', ['./ia/main.js', params.color, params.we_have_hats/*, params.nb_erobots, params.EGR_d, params.EPR_d*/]);
 				break;
 				case 'pr':
 					//this.progs[prog] = spawn('ssh', ['igep', '/root/main.sh']);
@@ -203,7 +240,8 @@ module.exports = (function () {
 					this.progs[prog] = spawn('node', ['./clients/Robot/main_grobot.js']);
 				break;
 				case 'hokuyo':
-					this.progs[prog] = spawn('node', ['./hokuyo/client_hok.js']);
+					// this.progs[prog] = spawn('ssh', ['raspi', './hokuyo/main.js']);
+					this.progs[prog] = spawn('node', ['./hokuyo/main.js']);
 				break;
 				case 'lidar':
 					this.progs[prog] = spawn('node', ['./lidar/main.js'/*, params.color, params.nb_erobots, params.EGR_d, params.EPR_d*/]);
@@ -213,7 +251,7 @@ module.exports = (function () {
 			logger.info("[Launch]"+prog);
 
 
-			this.progs[prog].on('error', function (prog, err) {
+			this.progs[prog].on('error', (err) => {
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
 					name: 'logger',
@@ -223,8 +261,8 @@ module.exports = (function () {
 					},
 					from: 'server'
 				});
-			}.bind(this, prog));
-			this.progs[prog].on('close', function (prog, code) {
+			});
+			this.progs[prog].on('close', (code) => {
 				logger.error("[CLOSE]"+prog);
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
@@ -237,14 +275,9 @@ module.exports = (function () {
 					from: 'server'
 				});
 				this.kill(prog);
-			}.bind(this, prog));
+			});
 
-			this.progs[prog].stdout.on('data', function (prog, data) {
-				// logger.debug(data);
-				// for(var i in data) {
-				// 	if(data[i] == 5)
-				// 		logger.debug('LOL');
-				// }
+			this.progs[prog].stdout.on('data', (data) => {
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
 					name: 'logger',
@@ -254,8 +287,8 @@ module.exports = (function () {
 					},
 					from: 'server'
 				});
-			}.bind(this, prog));
-			this.progs[prog].stderr.on('data', function (prog, data) {
+			});
+			this.progs[prog].stderr.on('data', (data) => {
 				this.server.to('webclient').emit('order', {
 					to: 'webclient',
 					name: 'logger',
@@ -265,7 +298,7 @@ module.exports = (function () {
 					},
 					from: 'server'
 				});
-			}.bind(this, prog));
+			});
 
 				// logger.debug(prog);
 				// logger.fatal(prog, '|stdout|', data.toString());
@@ -275,37 +308,11 @@ module.exports = (function () {
 	}
 
 	/**
-	 * Stops all
-	 *
-	 * @param {string} prog
-	 */
-	/* replaced by kill
-	Server.prototype.stop = function(prog) {
-		if (prog == "pr" || prog == "gr") {
-            logger.info("Stopping pr client properly");
-            this.server.to(prog).emit('order', {
-                to: prog,
-                name: 'stop',
-                params: "",
-                from: 'server'
-            });
-		} else if (prog == "hokuyo") {
-			this.progs[prog] = spawn('ssh', ['raspi', 'pkill', 'node']);
-		}
-		if(this.utcoupe[prog]) {
-			// this.progs[prog].kill();
-			// logger.info("stopped "+prog);
-			this.utcoupe[prog] = false;
-		}
-		this.sendUTCoupe();
-	}*/
-
-	/**
 	 * Kill the programm
 	 * 
 	 * @param {String} prog programm to kill
 	 */
-	 Server.prototype.kill = function (prog) {
+	kill (prog) {
 		console.warn("server:kill not coded!");
 		if(this.utcoupe[prog]) {
 			// this.progs[prog].kill();
@@ -326,7 +333,7 @@ module.exports = (function () {
 	 *
 	 * @param {string} prog
 	 */
-	Server.prototype.sendUTCoupe = function(prog) {
+	sendUTCoupe (prog) {
 		this.server.to('webclient').emit('order', {
 			to: 'webclient',
 			name: 'utcoupe',
@@ -335,5 +342,21 @@ module.exports = (function () {
 		});
 	}
 
-	return Server;
-})();
+	/**
+	 * sendUTCoupe
+	 *
+	 * @param {string} prog
+	 */
+	sendVerbosity () {
+		this.server.to('webclient').emit('order', {
+			to: 'webclient',
+			name: 'serverVerbosity',
+			params: {
+				"isServerVerbose": this.verbose
+			},
+			from: 'server'
+		});
+	}
+}
+
+module.exports = Server;

@@ -1,5 +1,6 @@
 li {
 	font-size: 18px;
+	list-style-type: none;
 }
 
 .utcoupe {
@@ -7,6 +8,10 @@ li {
 }
 .utcoupe.launched {
 	color: green;
+}
+
+.activeButton {
+	background-color: #81E939;
 }
 
 .config {

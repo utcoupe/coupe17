@@ -8,11 +8,10 @@ angular.module('app').service('Orders', ['$rootScope', 'Client', function($rootS
 	this.orders = [];
 	this.init = function () {
 		Client.order(function (from, name, data, to) {
-			if(	   name != 'logger'
-				&& name != 'utcoupe'
-				&& name != 'simulateur'
-				&& name != 'gr.pos'
-				&& name != 'pr.pos') {
+			// Be careful, some orders are filtered by the server, set verbose mode to see them or go to server.server.class.js:175
+
+			if (name != "logger"
+				&& name != "simulateur") {
 				this.orders.unshift({
 					from: from,
 					name: name,

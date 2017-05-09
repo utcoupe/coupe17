@@ -20,13 +20,13 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 
 	$(document).on("click", ".hokuyo", function(e) {
 		switch(e.target.innerHTML){
-			case "Start":
-				Client.send("hokuyo", "start", {
-					"color": $("#rc_hok_color").val()});
-				break;
-			case "Stop":
-				Client.send("hokuyo", "stop", {});
-				break;
+			// case "Start":
+			// 	Client.send("hokuyo", "start", {
+			// 		"color": $("#rc_hok_color").val()});
+			// 	break;
+			// case "Stop":
+			// 	Client.send("hokuyo", "stop", {});
+			// 	break;
 			case "Shutdown":
 			Client.send("hokuyo", "shutdown", {});
 				break;
@@ -51,19 +51,19 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		}
 	});
 
-	$(document).on("click", ".lidar", function(e) {
-		if(e.target.innerHTML == "yellow"){
-			Client.send("lidar", "start", {
-					"color": "yellow"
-				});
-		} else if(e.target.innerHTML == "blue"){
-			Client.send("lidar", "start", {
-					"color": "blue"
-				});
-		} else {
-			Client.send("lidar", "stop", {});
-		}
-	});
+	// $(document).on("click", ".lidar", function(e) {
+	// 	if(e.target.innerHTML == "yellow"){
+	// 		Client.send("lidar", "start", {
+	// 				"color": "yellow"
+	// 			});
+	// 	} else if(e.target.innerHTML == "blue"){
+	// 		Client.send("lidar", "start", {
+	// 				"color": "blue"
+	// 			});
+	// 	} else {
+	// 		Client.send("lidar", "stop", {});
+	// 	}
+	// });
 
 
 	/* --------- Prints ------------- */
@@ -109,23 +109,25 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 		    if(parentId == "clients" || parentId == "children"){
 		    	devClass = name.toLowerCase();
 		    	
-		    	if(color == "waiting"){
-		    		// Hok params
-		    		if(devClass == "lidar"){
-		    			// newDiv.innerHTML += "<select id='rc_hok_color'> <option value='green' selected>vert</option> <option value='yellow'>jaune</option> </select>";
-			        	newDiv.innerHTML += "Start : <button type='button' class='btn "+devClass+" yellow'>yellow</button>";
-			        	newDiv.innerHTML += "<button type='button' class='btn "+devClass+" blue'>blue</button>";
-		    		} else {
-			        	newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Start</button>";
-		    		}
+		    	// if(color == "waiting"){
+		    	// 	// Hok params
+		    	// 	if(devClass == "lidar"){
+		    	// 		// newDiv.innerHTML += "<select id='rc_hok_color'> <option value='green' selected>vert</option> <option value='yellow'>jaune</option> </select>";
+			    //     	newDiv.innerHTML += "Start : <button type='button' class='btn "+devClass+" yellow'>yellow</button>";
+			    //     	newDiv.innerHTML += "<button type='button' class='btn "+devClass+" blue'>blue</button>";
+		    	// 	} else {
+			    //     	newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Start</button>";
+		    	// 	}
 
 
-		    		if(devClass == "hokuyo")
-		    			newDiv.innerHTML += "<button type='button' class='btn hokuyo'>Shutdown</button><br>";
-		    		else 
-		    			newDiv.innerHTML += "<br>";
-			    } else{
-			        newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Stop</button><br>";
+		    	// 	
+		    	// 	else 
+		    	// 		newDiv.innerHTML += "<br>";
+			    // } else{
+			    //     newDiv.innerHTML += "<button type='button' class='btn "+devClass+"'>Stop</button><br>";
+		    	// }
+		    	if(devClass == "hokuyo"){
+    				newDiv.innerHTML += "<button type='button' class='btn hokuyo'>Shutdown</button><br>";
 		    	}
 		    }
 		    
@@ -199,10 +201,12 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 					    // addDiv("clients", i, "hok", client.status, "Hokuyo", client.ip);
 					    addDiv("children", i, "hok", client.status, "Hokuyo", client.ip);
 
-			            links.push({
-			            	start: lidarKeys[0],
-			            	end: i
-			            });
+					    if (!!lidarKeys[0]) {
+				            links.push({
+				            	start: lidarKeys[0],
+				            	end: i
+				            });
+					    }
 
 					    // if(!!client.children)
 					    //     for(var j=0; j<client.children.length; j++) {

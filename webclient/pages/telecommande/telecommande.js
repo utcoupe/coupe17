@@ -15,6 +15,10 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 		Client.send("server", "server.sync_all_git");
 	}
 
+	$scope.sendFinished = function(){
+		Client.send("ia", $("#robot_finished").val() + $("#what_finished").val());
+	}
+
 	$scope.serverFlashArduinos = function() {
 		Client.send("server", "server.flash_arduinos");
 	}
@@ -35,23 +39,4 @@ angular.module('app').controller('TelecommandeCtrl', ['$rootScope', '$scope', 'C
 	// ******************************** Grobot ********************************
 	if (!$scope.grobot)
 		$scope.grobot = new GrobotDisplay("gr", Client);
-
-	// ******************************** Hokuyo ********************************
-	$scope.hokuyo = {};
-
-	$scope.hokuyo.nbRobots = 4;
-	$scope.hokuyo.couleur = "green";
-	
-	$scope.hokuyo.start = function() {
-		Client.send("hokuyo", "start", {
-			"color": $scope.hokuyo.couleur,
-			"nbrobots": $scope.hokuyo.nbRobots
-		});
-		console.log("Message `start` sent");
-	};
-
-	$scope.hokuyo.stop =  function() {
-		Client.send("hokuyo", "stop", {});
-		console.log("Message `stop` sent");
-	}
 }]);
