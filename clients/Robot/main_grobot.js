@@ -17,36 +17,4 @@
   //grobot.sendChildren(tibot.grobot);
 
 	grobot.start();
-  // grobot.logger.info('Started grobot');
-
-  // On message
-  grobot.client.order(function (from, name, params){
-    grobot.logger.info("Recieved an order "+name);
-    switch (name){
-      case "collision":
-        grobot.queue = [];
-        //grobot.acts.clean();
-        grobot.orderInProgress = false;
-      break;
-      case "stop":
-        //grobot.acts.clean();
-        grobot.logger.fatal("Stop " + grobot.robotName);
-        grobot.stop();
-      break;
-
-      case "kill":
-        grobot.kill();
-        break;
-
-      // useless //
-      case "start":
-        //grobot.queue = [];
-        grobot.start();
-      break;
-      default:
-        grobot.addOrder2Queue(from, name, params);
-    }
-  });
-
-  grobot.logger.info('Ending of init grobot');
 })();

@@ -53,7 +53,7 @@ class SocketClient {
 
 		// When the client is connected to the server
 		this.client.on('connect', () => {
-			logger.info('Client connected to server');
+			// logger.info('Client connected to server');
 			this.client.emit('type', {
 				type: this.type,
 				options: {

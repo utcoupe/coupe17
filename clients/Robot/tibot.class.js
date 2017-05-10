@@ -30,27 +30,19 @@ class Tibot extends Robot{
 		this.unitGrabber = new UnitGrabber();
 		this.baseConstructor = new BaseConstructor();
 	}
+
 	
-	kill () {
-		this.logger.info("Please wait while exiting...");
-		// to be replaced
-        this.unitGrabber.stop();
-        this.baseConstructor.stop();
-		// ****
-		process.exit();
-	}
-
-	stop() {
-        this.unitGrabber.stop();
-        this.baseConstructor.stop();
-        super.stop();
-    }
-
-	start() {
-        super.start();
+	// called by start
+	openExtensions () {
         this.unitGrabber.start();
         this.baseConstructor.start();
-    }
+	}
+	
+	// called by stop and exit
+	closeExtensions () {
+        this.unitGrabber.stop();
+        this.baseConstructor.stop();
+	}
 
 	// Exiting :
 	//do something when app is closing

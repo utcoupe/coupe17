@@ -15,10 +15,10 @@ class Asserv{
 	/**
 	 * Creates an instance of Asserv.
 	 * @param {any} client
-	 * @param {any} who
+	 * @param {any} robotName
 	 * @param {any} fifo
 	 */
-	constructor(client, who, fifo, sendStatus = null, sp = null){
+	constructor(client, robotName, fifo, sendStatus = null, sp = null){
 		/** @type {Log4js} */
 		this.logger = require('log4js').getLogger('asserv');
 
@@ -26,7 +26,7 @@ class Asserv{
 		this.client = client;
 
 		/** @type {Object} */
-		this.who = who;
+		this.robotName = robotName;
 
 		/** @type {Object} */
 		this.pos = {};
@@ -88,7 +88,7 @@ class Asserv{
 	 * @param {Object} pos
 	 */
 	getInitPos(pos) {
-		this.client.send('ia', this.who+'.getpos');
+		this.client.send('ia', this.robotName+'.getinitpos');
 	}
 
 
@@ -96,7 +96,7 @@ class Asserv{
 	 * Sends Position
 	 */
 	sendPos() {
-		this.client.send('ia', this.who+'.pos', this.pos);
+		this.client.send('ia', this.robotName+'.pos', this.pos);
 	}
 
 	/**
@@ -175,6 +175,45 @@ class Asserv{
 	 * @param {Object} callback
 	 */
 	setPid(p, i, d, callback){}
+
+	executeNextOrder(){
+	 	if((this.queue.length > 0) && (!this.orderInProgress)) {
+	 		var order = this.queue.shift();
+
+	 		this.orderInProgress = order.name;
+
+			this.logger.info("Executing " + this.orderInProgress);
+	 		// this.logger.debug(order.params);
+
+ 			switch (order.name){
+				case "pwm":
+					this.pwm(order.params.left, order.params.right, order.params.ms, this.actionFinished());
+				break;
+				case "setvit":
+					this.setVitesse(order.params.v, order.params.r, this.actionFinished());
+				break;
+				case "clean":
+					this.clean(this.actionFinished());
+				break;
+				case "goa":
+					this.goa(order.params.a, this.actionFinished(), true);
+				break;
+				case "goxy":
+					this.goxy(order.params.x, order.params.y, order.params.sens, this.actionFinished(), true);
+				break;
+				case "setpos":
+					this.setPos(order.params, this.actionFinished());
+				break;
+				case "setpid":
+					this.setPid(order.params.p, order.params.i, order.params.d, this.actionFinished());
+				break;
+				default:
+					this.logger.fatal("This order is unknown for the " + this.robotName + " AsservSimu : " + order.name);
+					this.actionFinished();
+					this.executeNextOrder();
+			}
+	 	}
+	}
 }
 
 module.exports = Asserv;

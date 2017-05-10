@@ -16,8 +16,8 @@ const Asserv = require('./Asserv.class.js');
  * @extends {clients/Asserv/Asserv.Asserv}
  */
 class AsservReal extends Asserv{
-	constructor(client, who, fifo, sendStatus = null, sp = null){
-		super(client, who, fifo);
+	constructor(client, robotName, fifo, sendStatus = null, sp = null){
+		super(client, robotName, fifo);
 		//this.COMMANDS = require('./defineParser.js')('./arduino/asserv/protocol.h');
 		this.DETECT_SERIAL_TIMEOUT = 100; //ms, -1 to disable
 		this.ready = true;

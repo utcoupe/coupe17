@@ -43,7 +43,7 @@ class Robot extends Client{
 
 		this.robotName = robotName;
 
-		this.logger.info("Started NodeJS client with pid " + process.pid);
+		this.logger.info("Launched robot client with pid " + process.pid);
 
 		this.lastStatus = {
 			"status": "starting"
@@ -69,21 +69,26 @@ class Robot extends Client{
 
 
 		this.queue = [];
+		this.started = false;
 		this.orderInProgress = false;
 
+
 		this.client.order( function (from, name, params){
-			this.logger.info("Received an order "+name);
+			// this.logger.info("Received an order "+name);
 			var OrderName = name.split('.');
 			var classe = OrderName.shift();
 			var OrderSubname = OrderName.join('.');
 
 			if(classe == "asserv"){
-				this.logger.info("order send to asserv : "+OrderSubname);
+				// this.logger.debug("order send to asserv : "+OrderSubname);
 				this.asserv.addOrder2Queue(from,OrderSubname,params);
-			}
-
-			else if(classe == this.robotName){
+			} else if (classe == this.robotName){
+				this.addOrder2Queue(from, name, params);
+			} else {
 				switch (name){
+					case "start":
+						this.start();
+					break;
 					case "collision":
 						this.queue = [];
 						//TODO DO it with new actuators
@@ -94,19 +99,14 @@ class Robot extends Client{
 						//TODO DO it with new actuators
 						//this.acts.clean();
 						this.logger.fatal("Stop " + this.robotName);
-						process.exit();
+						this.stop();
 					break;
-					case "start":
-						this.queue = [];
-						this.start();
-					break;
+					case "kill":
+						this.kill();
+						break;
 					default:
-						this.addOrder2Queue(from, name, params);
+					this.logger.fatal("this order can't be assigned : "+name);
 				}
-			}
-
-			else {
-				this.logger.fatal("this order can't be assigned : "+name)
 			}
 		}.bind(this));
 	}
@@ -116,11 +116,27 @@ class Robot extends Client{
 	 * Start the Robot
 	 */
 	start(){
+		if (this.started) {
+			this.logger.warn(this.robotName + " already started !");
+			return;
+		}
+		
 		super.start();
 		this.logger.info("Starting  :)");
 		// add all starts
+		
+		this.queue = [];
 
 		// Tests devices and connect
+		this.openExtensions();
+
+		// Send struct to server
+		this.sendChildren({
+			status: "starting",
+			children:[]
+		});
+
+
 		let testAsserv = new SerialPort("/dev/ttyACM0", {
 			baudrate: 57600,
 			parser:SerialPort.parsers.readline('\n')
@@ -131,7 +147,7 @@ class Robot extends Client{
 
 		if (asservReal) {
 			// There's a match with the asserv Arduino ! Let's open a connection ;)
-			this.asserv = new AsservReal( this.client, 'pr', this.fifo, this.sendStatus, 
+			this.asserv = new AsservReal( this.client, this.robotName, this.fifo, this.sendStatus, 
 				new SerialPort("/dev/ttyACM0", {
 					baudrate: 57600,
 					parser:SerialPort.parsers.readline('\n')
@@ -139,8 +155,25 @@ class Robot extends Client{
 			);
 		} else {
 			this.logger.fatal("Lancement de l'asserv pr en mode simu !");
-			this.asserv = new AsservSimu(this.client, 'pr', this.fifo);
+			this.asserv = new AsservSimu(this.client, this.robotName, this.fifo);
 		}
+
+		// Send struct to server
+		this.sendChildren({
+			status: "ok", // TODO : make it everything is awesome
+			children:[]
+		});
+
+		this.started = true;
+	}
+
+	
+	openExtensions () {
+        this.logger.fatal("This function openExtensions must be overriden");
+	}
+
+	closeExtensions () {
+        this.logger.fatal("This function openExtensions must be overriden");
 	}
 
 	/**
@@ -155,7 +188,23 @@ class Robot extends Client{
 			children:[]
 		});
 
+        this.closeExtensions();
+
         super.stop();
+
+		this.started = false;
+	}
+	
+
+	/**
+	 * Tries to exit
+	 *
+	 * @todo do something when app is closing
+	 */
+	kill () {
+		this.logger.info("Please wait while exiting...");
+		this.closeExtensions();
+		process.exit();
 	}
 
 	/**
@@ -195,8 +244,6 @@ class Robot extends Client{
 				name: n,
 				params: p
 			});
-			this.logger.info("Order added to queue ! : ");
-			this.logger.info(this.queue);
 
 			this.executeNextOrder();
 		}
@@ -278,7 +325,7 @@ class Robot extends Client{
 			} else {
 				this.orderInProgress = order.name;
 
-				this.logger.info(this.orderInProgress+" : Begin , 	executeNextOrder");
+				this.logger.info("Executing " + this.orderInProgress);
 				this.logger.debug(order.params);
 
 				//TODO DECOMMENT IT AFTER acts done
@@ -294,6 +341,7 @@ class Robot extends Client{
 						});
 					break;
 					default:
+						this.logger.warn("Unknown order for "+ this.robotName +" : " + order.name);
 						this.actionFinished();
 						this.executeNextOrder();
 				}
@@ -305,9 +353,8 @@ class Robot extends Client{
 	 * Launch the next order
 	 */
 	actionFinished(){
-		this.logger.info("actionFinished : " + this.orderInProgress);
 		if(this.orderInProgress !== false) {
-			this.logger.info(this.orderInProgress + " : End");
+			this.logger.info("Finished " + this.orderInProgress);
 
 			this.orderInProgress = false;
 			this.executeNextOrder();

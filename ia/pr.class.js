@@ -64,19 +64,6 @@ class Pr extends Robot{
 		this.actions = new (this.Actions)(this.ia, this);
 	}
 
-	/**
-	 * Send initial position
-	 */
-	sendInitialPos () {
-		logger.debug("TODO TEST: check this function");
-		this.ia.client.send("pr", "asserv.setpos", {
-			x: 142,
-			y: 1000,
-			a: 0,
-			color: this.color
-		});
-	};
-
 	// /**
 	//  * Place
 	//  */

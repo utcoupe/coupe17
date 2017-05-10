@@ -84,7 +84,7 @@ class Gr extends Robot{
 			// 	this.content.nb_modules -= 1;
 			// break;
 			default:
-				logger.warn('Unknown order in ia.pr: '+name);
+				logger.warn('Unknown order in ' + this.name + ': '+name);
 			break;
 		}
 	};
