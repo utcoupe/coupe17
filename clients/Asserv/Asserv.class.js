@@ -18,7 +18,7 @@ class Asserv{
 	 * @param {any} robotName
 	 * @param {any} fifo
 	 */
-	constructor(client, robotName, fifo, sendStatus = null, sp = null){
+	constructor(client, robotName, fifo, sendStatus, sp){
 		/** @type {Log4js} */
 		this.logger = require('log4js').getLogger('asserv');
 

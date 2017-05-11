@@ -16,7 +16,7 @@ const Asserv = require('./Asserv.class.js');
  * @extends {clients/Asserv/Asserv.Asserv}
  */
 class AsservSimu extends Asserv{
-	constructor(client, robotName, fifo, sendStatus = null, sp = null){
+	constructor(client, robotName, fifo, sendStatus, sp){
 		super(client, robotName, fifo);
 		this.SIMU_FACTOR_VIT = 1;
 		this.SIMU_FACTOR_A = 0.3;
