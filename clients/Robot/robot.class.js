@@ -82,8 +82,7 @@ class Robot extends Client{
 			if(classe == "asserv"){
 				// this.logger.debug("order send to asserv : "+OrderSubname);
 				this.asserv.addOrder2Queue(from,OrderSubname,params);
-			} else if (classe == this.robotName){
-				this.addOrder2Queue(from, name, params);
+			// } else if (classe == this.robotName){
 			} else {
 				switch (name){
 					case "start":
@@ -105,7 +104,8 @@ class Robot extends Client{
 						this.kill();
 						break;
 					default:
-					this.logger.fatal("this order can't be assigned : "+name);
+						this.addOrder2Queue(from, name, params);
+						// this.logger.fatal("this order can't be assigned : "+name);
 				}
 			}
 		}.bind(this));
@@ -120,7 +120,7 @@ class Robot extends Client{
 			this.logger.warn(this.robotName + " already started !");
 			return;
 		}
-		
+
 		super.start();
 		this.logger.info("Starting  :)");
 		// add all starts

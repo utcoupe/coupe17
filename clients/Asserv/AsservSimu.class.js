@@ -23,7 +23,7 @@ class AsservSimu extends Asserv{
 		this.FPS = 30;
 		this.timeouts = [];
 		this.pos = {x:0,y:0,a:0};
-		this.vitesse = 800;
+		this.vitesse = 300; // 800;
 	}
 
 	SIMU_DIST(dt, vitesse) { return (vitesse*this.SIMU_FACTOR_VIT)*dt; }
@@ -58,7 +58,8 @@ class AsservSimu extends Asserv{
 			this.fifo.newOrder(nextOrder.bind(this));
 		} else {
 			// logger.debug('no_fifo');
-			this.timeouts.push(setTimeout(callback, ms));//.call(this));
+			// this.timeouts.push(setTimeout(callback, ms));//.call(this));
+			this.timeouts.push(setTimeout(() => { callback(); }, ms));
 		}
 	}
 
@@ -163,7 +164,8 @@ class AsservSimu extends Asserv{
 				this.timeouts.push(setTimeout(this.simu_speed(l, this.pos.x, this.pos.y, this.pos.a, t), t));
 			}
 			this.timeouts.push(setTimeout(this.simu_speed(l, this.pos.x, this.pos.y, this.pos.a, ms), ms));
-			this.timeouts.push(setTimeout(callback, ms));
+			// this.timeouts.push(setTimeout(callback, ms));
+			this.timeouts.push(setTimeout(() => { callback(); }, ms));
 		}.bind(this), 0, false, ms);
 	};
 
@@ -201,7 +203,8 @@ class AsservSimu extends Asserv{
 				this.timeouts.push(setTimeout(this.simu_pwm(pwm, this.pos.x, this.pos.y, this.pos.a, t), t));
 			}
 			this.timeouts.push(setTimeout(this.simu_pwm(pwm, this.pos.x, this.pos.y, this.pos.a, ms), ms));
-			this.timeouts.push(setTimeout(callback, ms));
+			// this.timeouts.push(setTimeout(callback, ms));
+			this.timeouts.push(setTimeout(() => { callback(); }, ms));
 		}.bind(this), 0, false, ms);
 	}
 
@@ -256,7 +259,8 @@ class AsservSimu extends Asserv{
 						this.timeouts.push(setTimeout(this.simu_goxy(this.pos.x+dx*t/tf, this.pos.y+dy*t/tf), t));
 					}
 					this.timeouts.push(setTimeout(this.simu_goxy(x, y), tf));
-					this.timeouts.push(setTimeout(callback, tf));
+					this.timeouts.push(setTimeout(() => { callback(); }, tf));
+					// this.timeouts.push(setTimeout(callback, tf));
 				}.bind(this), 0, no_fifo, tf);
 			}.bind(this), no_fifo);
 	}
@@ -294,7 +298,8 @@ class AsservSimu extends Asserv{
 				this.timeouts.push(setTimeout(this.simu_goa(this.pos.a+da*t/tf), t));
 			}
 			this.timeouts.push(setTimeout(this.simu_goa(a), tf));
-			this.timeouts.push(setTimeout(callback, tf));
+			this.logger.debug("Callback goa " + callback);
+			this.timeouts.push(setTimeout(() => { callback(); }, tf)); // arrow function to simply bind this
 		}.bind(this), 0, no_fifo, tf);
 	}
 
@@ -319,18 +324,6 @@ class AsservSimu extends Asserv{
 				"params" : params
 			});
 
-			this.executeNextOrder();
-		}
-	}
-
-	/**
-	 * Launch the next order
-	 */
-	actionFinished(){
-		if(this.orderInProgress !== false) {
-			this.logger.info("Asserv simu actionFinished : " + this.orderInProgress);
-
-			this.orderInProgress = false;
 			this.executeNextOrder();
 		}
 	}

@@ -176,6 +176,18 @@ class Asserv{
 	 */
 	setPid(p, i, d, callback){}
 
+	/**
+	 * Launch the next order TODO : put in fifo class
+	 */
+	actionFinished(){
+		if(this.orderInProgress !== false) {
+			this.logger.info("Asserv simu actionFinished : " + this.orderInProgress);
+
+			this.orderInProgress = false;
+			this.executeNextOrder();
+		}
+	}
+
 	executeNextOrder(){
 	 	if((this.queue.length > 0) && (!this.orderInProgress)) {
 	 		var order = this.queue.shift();
@@ -186,6 +198,11 @@ class Asserv{
 	 		// this.logger.debug(order.params);
 
  			switch (order.name){
+				case "send_message":
+					// logger.debug("Send message %s", order.params.name);
+					this.client.send('ia', order.params.name, order.params || {});
+					this.executeNextOrder();
+				break;
 				case "pwm":
 					this.pwm(order.params.left, order.params.right, order.params.ms, this.actionFinished());
 				break;
@@ -196,10 +213,12 @@ class Asserv{
 					this.clean(this.actionFinished());
 				break;
 				case "goa":
-					this.goa(order.params.a, this.actionFinished(), true);
+					this.logger.debug("Callback " + this.actionFinished); // TODO : undefined...
+					this.goa(order.params.a, this.actionFinished, true);
 				break;
 				case "goxy":
-					this.goxy(order.params.x, order.params.y, order.params.sens, this.actionFinished(), true);
+					this.logger.debug("Callback goxy " + this.actionFinished); // TODO : undefined...
+					this.goxy(order.params.x, order.params.y, order.params.sens, this.actionFinished, true);
 				break;
 				case "setpos":
 					this.setPos(order.params, this.actionFinished());

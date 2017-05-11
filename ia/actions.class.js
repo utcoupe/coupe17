@@ -412,7 +412,7 @@ class Actions{
 		}
 
 
-		this.ia.client.send(this.robot.name, "send_message", {
+		this.ia.client.send(this.robot.name + ".asserv", "send_message", {
 			name: this.robot.name + ".actions.path_finished"
 		});
 
