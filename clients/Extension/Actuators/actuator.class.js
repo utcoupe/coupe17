@@ -83,6 +83,7 @@ class Actuator {
             }
         }
     }
+
     //add the id at the second position, orderToSend is the string to send to the actuator
     addOrderId(orderToSend) {
         this.currentOrderId++;
