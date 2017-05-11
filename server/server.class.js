@@ -17,7 +17,8 @@ var Convert = require('ansi-to-html');
 
 var logger = Log4js.getLogger('Server');
 var spawn = require('child_process').spawn;
-var convert = new Convert({newLine: true});
+var convert = new Convert({newLine: true})
+var os = require('os');;
 
 /**
  * Serveur pour toutes les communications
@@ -37,19 +38,24 @@ class Server {
 
 		this.verbose = false;
 
+		/** @type {String} */
+		this.ip = "127.0.0.1";
+
 		// Get server IP address
-		var os = require('os');
 		var networkInterfaces = os.networkInterfaces();
 		try {
-			/** @type {string} */
-			if (!!networkInterfaces["ra0"]){
-				this.ip = networkInterfaces["ra0"][0].address;
-			} else if (!!networkInterfaces["wlan0"]){
-				this.ip = networkInterfaces["wlan0"][0].address;
-			} else if (!!networkInterfaces["Wi-Fi"]){
-				this.ip = networkInterfaces["Wi-Fi"][0].address;
-			} else {
-				this.ip = "127.0.0.1";
+			var whiteList = [
+				"ra0",
+				"wlan0",
+				"Wi-Fi",
+				"wlp3s0",
+				"enp4s0"
+			];
+			for (var net in whiteList) {
+				if (!!networkInterfaces[net]){
+					this.ip = networkInterfaces[net][0].address;
+					break;
+				}
 			}
 		}
 		catch(e) {
@@ -154,49 +160,57 @@ class Server {
 				// if(!(data.to in client.adapter.rooms)) {
 				// 	logger.warn("The order recipient `"+data.to+"` doesn't exist.");
 				// }
-				if(data.name == 'server.spawn') {
-					this.spawn(data.params);
-				} else if(data.name == 'server.kill') {
-					this.kill(data.params);
-				} else if(data.name == 'server.childrenUpdate') {
-					// console.log(this.network);
-					this.network[client.type][client.id].status = data.params.status || "";
-					this.network[client.type][client.id].children = data.params.children || "";
-					// console.log(this.network);
-					this.sendNetwork();
-				} else if (data.name == 'server.iaParams') {
-					this.network[client.type][client.id].color = data.params.color || "";
-					this.network[client.type][client.id].we_have_hats = data.params.we_have_hats;
-					this.sendNetwork();
-				} else if (data.name == 'server.sync_all_git') {
-					logger.info("Starting to sync all git repositories");
-					spawn('/root/sync_all_git.sh', [], {
-						detached: true
-					});
-				} else if (data.name == 'server.flash_arduinos') {
-					logger.info("Starting to flash all arduinos");
-					spawn('/root/flash_all_arduinos.sh', [], {
-						detached: true
-					});
-				} else if (data.name == 'server.verbose') {
-					// Toogle verbose mode
-					this.verbose = !this.verbose;
-					logger.info("Have been asked to " + (this.verbose?"talk a lot :)":"shut up :/"));
-					this.sendVerbosity();
-				} else {
-					// The order is valid
-					// logger.info("Data " +data.name+ " from " +data.from+ " to " +data.to);
-					if (!this.verbose &&
-						this.spamListLevel1.concat(this.spamListLevel2).indexOf(data.name) != -1) {
-						// Verbose mode level 1 : send most of spam messages
-						this.server.to(data.to).emit('order', data);
-					} else if (this.spamListLevel2.indexOf(data.name) != -1) {
-						// Not verbose, don't copy level 2 spam message to webclients
-						this.server.to(data.to).emit('order', data);
-					} else {
-						// Not verbose, copy to all regular messages
-						this.server.to('webclient').to(data.to).emit('order', data);
-					}
+				switch (data.name) {
+					case 'server.spawn':
+						this.spawn(data.params);
+						break;
+					case data.name == 'server.kill':
+						this.kill(data.params);
+						break;
+					case data.name == 'server.childrenUpdate':
+						// console.log(this.network);
+						this.network[client.type][client.id].status = data.params.status || "";
+						this.network[client.type][client.id].children = data.params.children || "";
+						// console.log(this.network);
+						this.sendNetwork();
+						break;
+					case data.name == 'server.iaParams':
+						this.network[client.type][client.id].color = data.params.color || "";
+						this.network[client.type][client.id].we_have_hats = data.params.we_have_hats;
+						this.sendNetwork();
+						break;
+					case 'server.sync_all_git' :
+						logger.info("Starting to sync all git repositories");
+						spawn('/root/sync_all_git.sh', [], {
+							detached: true
+						});
+						break;
+					case 'server.flash_arduinos' :
+						logger.info("Starting to flash all arduinos");
+						spawn('/root/flash_all_arduinos.sh', [], {
+							detached: true
+						});
+						break;
+					case 'server.verbose':
+						// Toogle verbose mode
+						this.verbose = !this.verbose;
+						logger.info("Have been asked to " + (this.verbose?"talk a lot :)":"shut up :/"));
+						this.sendVerbosity();
+						break;
+					default:
+						// The order is valid
+						// logger.info("Data " +data.name+ " from " +data.from+ " to " +data.to);
+						if (!this.verbose &&
+							this.spamListLevel1.concat(this.spamListLevel2).indexOf(data.name) != -1) {
+							// Verbose mode level 1 : send most of spam messages
+							this.server.to(data.to).emit('order', data);
+						} else if (this.spamListLevel2.indexOf(data.name) != -1) {
+							// Not verbose, don't copy level 2 spam message to webclients
+							this.server.to(data.to).emit('order', data);
+						} else {
+							// Not verbose, copy to all regular messages
+							this.server.to('webclient').to(data.to).emit('order', data);
+						}
 				}
 			});
 		});
