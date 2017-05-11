@@ -69,6 +69,8 @@ void setup() {
 	initPins();
 	nextTime = micros();
 	ControlInit();
+
+    asservLoopTimer.Start();
 }
 
 void loop() {
