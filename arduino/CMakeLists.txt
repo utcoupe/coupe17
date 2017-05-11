@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 #todo include it in utcoupe workspace !
-set(CMAKE_TOOLCHAIN_FILE /home/tfuhrman/dev/tools/arduino-cmake/cmake/ArduinoToolchain.cmake) # Arduino Toolchain
+set(CMAKE_TOOLCHAIN_FILE $ENV{UTCOUPE_WORKSPACE}/libs/arduino-cmake/cmake/ArduinoToolchain.cmake) # Arduino Toolchain
 
 set(ARDUINO_CXX_FLAGS    "${ARDUINO_C_FLAGS} -std=c++11")
 
