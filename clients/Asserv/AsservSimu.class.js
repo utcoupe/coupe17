@@ -73,7 +73,7 @@ class AsservSimu extends Asserv{
 		this.Pos(pos);
 		this.sendPos();
 		if(callback !== undefined)
-			callback();
+			callback.call(this);
 	}
 
 	/**
@@ -259,7 +259,7 @@ class AsservSimu extends Asserv{
 						this.timeouts.push(setTimeout(this.simu_goxy(this.pos.x+dx*t/tf, this.pos.y+dy*t/tf), t));
 					}
 					this.timeouts.push(setTimeout(this.simu_goxy(x, y), tf));
-					this.timeouts.push(setTimeout(() => { callback(); }, tf));
+					this.timeouts.push(setTimeout(() => { callback.call(this); }, tf));
 					// this.timeouts.push(setTimeout(callback, tf));
 				}.bind(this), 0, no_fifo, tf);
 			}.bind(this), no_fifo);
@@ -298,8 +298,8 @@ class AsservSimu extends Asserv{
 				this.timeouts.push(setTimeout(this.simu_goa(this.pos.a+da*t/tf), t));
 			}
 			this.timeouts.push(setTimeout(this.simu_goa(a), tf));
-			this.logger.debug("Callback goa " + callback);
-			this.timeouts.push(setTimeout(() => { callback(); }, tf)); // arrow function to simply bind this
+			// this.logger.debug("Callback goa " + callback);
+			this.timeouts.push(setTimeout(() => { callback.call(this); }, tf)); // arrow function to simply bind this
 		}.bind(this), 0, no_fifo, tf);
 	}
 

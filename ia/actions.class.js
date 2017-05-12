@@ -136,7 +136,6 @@ class Actions{
 	 * @param {Object} params Parameters of the action
 	 */
 	parseOrder (from, name, params) {
-		this.logger.debug("parseOrder: verify this function");
 		switch(name) {
 			case 'action_finished':
 			// this.logger.debug('received action_finished');
@@ -173,7 +172,7 @@ class Actions{
 	 */
 	exists (action_name){
 		if (!this.todo[action_name]){
-			if (!this.killed[action_name] && !this.inprogress[action_name] && !this.done[action_name])
+			if (!this.killed[action_name] && (this.inprogress.name != action_name) && /*!this.inprogress[action_name] &&*/ !this.done[action_name])
 				this.logger.warn("Action named '"+ action_name +"' doesn't exist");
 			else
 				this.logger.warn("Action named '"+ action_name +"' already killed in progress or done !");
@@ -363,7 +362,7 @@ class Actions{
 				}
 			}.bind(this));
 		} else {
-			this.logger.debug("all paths not found");
+			this.logger.debug("No valid path were found, trying again in 0.5s");
 			setTimeout(function() {
 				this.doNextAction(callback, otherRobotPos);
 			}.bind(this), 500);
@@ -412,7 +411,7 @@ class Actions{
 		}
 
 
-		this.ia.client.send(this.robot.name + ".asserv", "send_message", {
+		this.ia.client.send(this.robot.name, "asserv.send_message", {
 			name: this.robot.name + ".actions.path_finished"
 		});
 
@@ -445,7 +444,7 @@ class Actions{
 		this.robot.path = [];
 
 		// 1 order for 1 action -> not any more
-		let dest = null;
+		let dest = this.robot.name;
 		this.inprogress.orders.forEach(function (order, index, array){
 			// this.ia.client.send(this.robot.name, action.orders[0].name, action.orders[0].params);
 			dest = !!order.dest ? order.dest : this.robot.name;

@@ -20,7 +20,7 @@ class Asserv{
 	 */
 	constructor(client, robotName, fifo, sendStatus, sp){
 		/** @type {Log4js} */
-		this.logger = require('log4js').getLogger('asserv');
+		this.logger = require('log4js').getLogger(robotName + '.asserv');
 
 		/** @type {Object} */
 		this.client = client;
@@ -201,30 +201,29 @@ class Asserv{
 				case "send_message":
 					// logger.debug("Send message %s", order.params.name);
 					this.client.send('ia', order.params.name, order.params || {});
+					this.actionFinished();
 					this.executeNextOrder();
 				break;
 				case "pwm":
-					this.pwm(order.params.left, order.params.right, order.params.ms, this.actionFinished());
+					this.pwm(order.params.left, order.params.right, order.params.ms, this.actionFinished);
 				break;
 				case "setvit":
-					this.setVitesse(order.params.v, order.params.r, this.actionFinished());
+					this.setVitesse(order.params.v, order.params.r, this.actionFinished);
 				break;
 				case "clean":
-					this.clean(this.actionFinished());
+					this.clean(this.actionFinished);
 				break;
 				case "goa":
-					this.logger.debug("Callback " + this.actionFinished); // TODO : undefined...
 					this.goa(order.params.a, this.actionFinished, true);
 				break;
 				case "goxy":
-					this.logger.debug("Callback goxy " + this.actionFinished); // TODO : undefined...
 					this.goxy(order.params.x, order.params.y, order.params.sens, this.actionFinished, true);
 				break;
 				case "setpos":
-					this.setPos(order.params, this.actionFinished());
+					this.setPos(order.params, this.actionFinished);
 				break;
 				case "setpid":
-					this.setPid(order.params.p, order.params.i, order.params.d, this.actionFinished());
+					this.setPid(order.params.p, order.params.i, order.params.d, this.actionFinished);
 				break;
 				default:
 					this.logger.fatal("This order is unknown for the " + this.robotName + " AsservSimu : " + order.name);
