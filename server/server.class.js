@@ -164,17 +164,17 @@ class Server {
 					case 'server.spawn':
 						this.spawn(data.params);
 						break;
-					case data.name == 'server.kill':
+					case 'server.kill':
 						this.kill(data.params);
 						break;
-					case data.name == 'server.childrenUpdate':
+					case 'server.childrenUpdate':
 						// console.log(this.network);
 						this.network[client.type][client.id].status = data.params.status || "";
 						this.network[client.type][client.id].children = data.params.children || "";
 						// console.log(this.network);
 						this.sendNetwork();
 						break;
-					case data.name == 'server.iaParams':
+					case 'server.iaParams':
 						this.network[client.type][client.id].color = data.params.color || "";
 						this.network[client.type][client.id].we_have_hats = data.params.we_have_hats;
 						this.sendNetwork();
@@ -331,7 +331,7 @@ class Server {
 		if(this.utcoupe[prog]) {
 			// this.progs[prog].kill();
 			// logger.info("stopped "+prog);
-			this.server.to(prog).emit('order', {
+			this.server.to(prog).to("webclient").emit('order', {
                 to: prog,
                 name: 'kill',
                 params: "",
