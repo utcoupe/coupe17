@@ -23,32 +23,67 @@ class UnitGrabber extends Extension {
         this.servos = servos;
     }
 
-   processFifoOrder (name, param) {
-        this.logger.info("Order received : " + name);
+    takeOrder (from, name, param) {
+        this.logger.info("Order received " + name);
         switch (name) {
-            case "open":
-                this.servos.moduleArmOpen();
-                this.fifo.orderFinished();
-                break;
-            case "close":
-                this.servos.moduleArmClose();
-                this.fifo.orderFinished();
-                break;
-            case "take_1":
-                //add a mechanism to process some functions in sequential order, waiting the first has finished before
-                //processing the next one
-                //-> doing it in callback back and in easy to understand style !
-                //2015 way is to use an other internal fifo, but not really understandable...
-                // Order :
-                // - open grabber
-                // - close arms
-                // - up grabber
-                // - open arms
-                this.fifo.orderFinished();
+            case "take_module":
+                this.takeModule();
                 break;
             
-            case "take_4":
-                // Order : same thing but 4 times
+            // **************** tests only ************
+            case "openArm":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder("openArm");
+                }, "openArm");
+                break;
+            case "closeArm":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder("closeArm");
+                }, "closeArm");
+                break;
+            case "upGrabber":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder("upGrabber");
+                }, "upGrabber");
+                break;
+            case "downGrabber":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder("downGrabber");
+                }, "downGrabber");
+                break;
+            
+            case "stop":
+                this.stot();
+                break;
+            case "clean":
+                this.logger.debug("Cleaning Fifo...");
+                this.fifo.clean();
+                break;
+            
+            default:
+                this.logger.error("Order " + name + " does not exist !");
+        }
+    }
+
+   processFifoOrder (name, param) {
+        this.logger.info("Executing order : " + name);
+        switch (name) {
+            case "openArm":
+                this.servos.moduleArmOpen(() => {
+                    this.fifo.orderFinished();
+                });
+                break;
+            case "closeArm":
+                this.servos.moduleArmClose(() => {
+                    this.fifo.orderFinished();
+                });
+                break;
+            case "upGrabber":
+                // TODO AX12 up
+                this.fifo.orderFinished();
+                break;
+            case "downGrabber":
+                // TODO AX12 down
                 this.fifo.orderFinished();
                 break;
             
@@ -62,6 +97,27 @@ class UnitGrabber extends Extension {
     stop() {
         this.servos.stop();
         super.stop();
+    }
+
+    takeModule () {
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("openArms");
+        }, "openArms");
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("openGrabber");
+        }, "openGrabber");
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("closeArms");
+        }, "closeArms");
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("openArms");
+        }, "openArms");
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("closeGrabber");
+        }, "closeGrabber");
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("closeArms");
+        }, "closeArms");
     }
 }
 
