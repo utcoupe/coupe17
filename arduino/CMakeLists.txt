@@ -14,6 +14,7 @@ SET(TARGET_ARDUINO "mega2560" CACHE STRING "User defined arduino target")
 SET(TARGET_ROBOT "gr" CACHE STRING "User defined robot")
 SET(TARGET_PROGRAM "asserv" CACHE STRING "User defined program")
 
+#todo use the script to determine which port to use
 if (TARGET_ARDUINO STREQUAL "nano328")
 	set(ARDUINO_DEFAULT_PORT /dev/ttyUSB0)
 else()
