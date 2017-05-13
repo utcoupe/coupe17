@@ -24,8 +24,29 @@ class Sweeper extends Extension {
         this.servos = servos;
     }
 
+    takeOrder (from, name, param) {
+        this.logger.info ("Order received: " + name);
+        switch (name) {
+            case "smallow_ball":
+                this.fifo.newOrder (() => {
+                    this.processFifoOrder("smallow_ball", param);
+                });
+                break;
+                
+            case "turn_on":
+            case "turn_off":
+                this.fifo.newOrder (() => {
+                    this.processFifoOrder(name, param);
+                });
+                break;
+            
+            default:
+                this.logger.error("Order " + name + " does not exist!");
+        }
+    }
+
     processFifoOrder (name, param) {
-        this.logger.info("Order received: " + name);
+        this.logger.info("Executing order " + name);
         switch (name) {
             case "turn_on":
                 this.fifo.orderFinished();
