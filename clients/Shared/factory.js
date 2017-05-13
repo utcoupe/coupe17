@@ -20,6 +20,7 @@ class Factory {
 
         // Last step, detects devices
         this.detectArduino();
+        //todo do not launch both at the same time to avoid /dev/ttyX conflicts
         this.detectAx12();
 
         setTimeout(this.closeAllPorts.bind(this), 3000);
@@ -42,10 +43,12 @@ class Factory {
                 {
                     if (this.devicesPortMap[this.robotName + "_" + type] !== undefined) {
                         this.logger.info("Asserv is real, arduino detected");
-                        returnedObject = require('../Asserv/Asserv.class.js');
+                        //todo parameters
+                        returnedObject = require('../Asserv/Asserv.class.js')();
                     } else {
                         this.logger.fatal("Servo is simu");
-                        returnedObject = require('../Asserv/AsservSimu.class.js');
+                        //todo parameters
+                        returnedObject = require('../Asserv/AsservSimu.class.js')();
                     }
                     break;
                 }
@@ -53,7 +56,7 @@ class Factory {
                 {
                     if (this.devicesPortMap[this.robotName + "_others"] !== undefined) {
                         this.logger.info("Servo is real, arduino detected");
-                        returnedObject = require('../Extension/Actuators/servo.class.js');
+                        returnedObject = require('../Extension/Actuators/servoreal.js')(this.devicesPortMap[this.robotName + "_others"]);
                     } else {
                         this.logger.fatal("Servo is simu");
                         //todo
