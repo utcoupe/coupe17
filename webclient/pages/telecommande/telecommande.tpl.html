@@ -96,12 +96,23 @@
 			</p>
 			<p>
 				Base Constructor :
-				<button type="button" class="btn" ng-click="tibot.dropModule()">Drop module</button>
+				<button type="button" class="btn" ng-click="tibot.drop()">Drop</button>
                 <button type="button" class="btn" ng-click="tibot.engageModule()">Engage module</button>
-                <button type="button" class="btn" ng-click="tibot.rotateModule()">Rotate module</button>
-                <button type="button" class="btn" ng-click="tibot.drop_border()">Drop border</button>
-                <button type="button" class="btn" ng-click="tibot.drop_middle_1()">Drop middle 1</button>
-                <button type="button" class="btn" ng-click="tibot.drop_middle_2()">Drop middle 2</button>
+                <select ng-model="tibot.moduleColor">
+					<option value="null">No rotation </option>
+					<option value="yellow">Yellow</option>
+					<option value="blue">Blue</option>
+				</select>
+				<button type="button" class="btn" ng-click="tibot.rotateModule()">Rotate module</button>
+                <select ng-model="tibot.pushTowards">
+					<option value="dont">Don't push</option>
+					<option value="left">Left</option>
+					<option value="right">Right</option>
+				</select>
+				<button type="button" class="btn" ng-click="tibot.push()">Push module</button>
+				<button type="button" class="btn" ng-click="tibot.prepareModule()">Prepare module</button>
+				<input type="number" ng-model="tibot.nbModules" />
+				<button type="button" class="btn" ng-click="tibot.dropModule()">Drop module</button>
 			</p>
 		</div>
 	</section>
