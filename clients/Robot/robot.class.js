@@ -122,7 +122,7 @@ class Robot extends Client{
 		}
 
 		super.start();
-		this.logger.info("Starting  :)");
+		this.logger.info("Starting "+ this.robotName +"  :)");
 		// add all starts
 		
 		this.queue = [];

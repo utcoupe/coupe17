@@ -337,7 +337,7 @@ class Actions{
 			var actionName = actions.shift();
 			var action = this.todo[actionName];
 			var startpoint = this.getNearestStartpoint(this.robot.pos, action.startpoints);
-			if (!startpoint) {
+			if (startpoint === null) {
 				this.logger.warn("TMP startpoint");
 				startpoint = {
 					x: 1500,
