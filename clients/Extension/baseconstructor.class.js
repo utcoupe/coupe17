@@ -21,38 +21,84 @@ class BaseConstructor extends Extension {
     constructor(){
         super("base_constructor");
         this.servos = servos;
+        this.hasAPreparedModule = false;
+        this.pushTowards = "dont";
+        this.color = "null";
+        this.nbModulesToDrop = 0;
+    }
+
+    takeOrder (from, name, param) {
+        this.logger.info("Order received : " + name);
+        switch (name) {
+            
+            case "prepare_module":
+                this.prepareModule(param);
+                break;
+            
+            case "drop_module":
+                this.dropModule(param);
+                break;
+            
+            case "clean":
+                this.logger.debug("Cleaning FiFo");
+                this.fifo.clean();
+                break;
+            
+            case "stop":
+                this.stop();
+                break;
+            
+            // ************ tests only ! ************
+            case "drop":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder("drop");
+                }, "drop");
+                break;
+            case "engage":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder("engage");
+                }, "engage");
+                break;
+            case "push":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder("push", {towards: param.push_towards});
+                }, "push");
+                break;
+            case "rotate":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder("rotate", {color: param.color});
+                }, "rotate");
+                break;
+            
+            default :
+                this.logger.error("Order " + name + " does not exist !");
+        }
     }
 
     processFifoOrder (name, param) {
-        this.logger.info("Order received : " + name);
+        this.logger.info("Order executing : " + name);
         switch (name) {
             case "drop":
-                this.servos.moduleDrop();
-                this.fifo.orderFinished();
+                this.servos.moduleDrop( () => {
+                    this.fifo.orderFinished();
+                });
+                if (this.nbModulesToDrop > 0)
+                    this.nbModulesToDrop--;
+                else
+                    this.logger.error("Aucun module à déposer !");
                 break;
             case "engage":
-                this.servos.moduleEngage();
-                this.fifo.orderFinished();
+                this.servos.moduleEngage( () => {
+                    this.fifo.orderFinished();
+                });
                 break;
             case "rotate":
-                this.servos.moduleRotate();
-                this.fifo.orderFinished();
+                this.servos.moduleRotate( () => {
+                    this.fifo.orderFinished();
+                });
                 break;
-            
-            case "drop_border":
-                // open
-                // rotate
-                // close
-                this.fifo.orderFinished();
-                break;
-            
-            case "drop_middle_1":
-                // same thing
-                this.fifo.orderFinished();
-                break;
-            
-            case "drop_middle_2":
-                // same thing
+            case "push":
+                /// TODO AX12 action with param.towards
                 this.fifo.orderFinished();
                 break;
             
@@ -66,6 +112,62 @@ class BaseConstructor extends Extension {
     stop() {
         this.servos.stop();
         super.stop();
+    }
+
+    /**
+     * Engage a module in drop servos and rotate it
+     * 
+     * @param {Object} [params]
+     * @param {String} params.color
+     * @param {String} params.push_towards
+     */
+    prepareModule (params) {
+        if (params && params.push_towards)
+            this.pushTowards = params.push_towards;
+        // push_towards -> oposite direction
+        var opositPush = "dont";
+        if (this.push_towards == "left")
+            opositPush = "right";
+        else if (this.push_towards == "right")
+            opositPush = "left";
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("push", {towards: opositPush});
+        }, "push");
+        // open
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("engage");
+        }, "engage");
+        // rotate
+        if (params && params.color)
+            this.color = params.color;
+        if (this.color != "null")
+            this.fifo.newOrder(() => {
+                this.processFifoOrder("rotate", {color: this.color})
+            });
+        this.hasAPreparedModule = true;
+    }
+
+    /**
+     * Drop a module after preparing it (according to prepare_module)
+     * 
+     * @param {Object} params 
+     * @param {Number} params.nb_modules_to_drop number of iterations
+     */
+    dropModule (params) {
+        for (var idModule = 0; idModule < params.nb_modules_to_drop; idModule++) {
+            this.nbModulesToDrop++;
+            // Preparation
+            if (!this.hasAPreparedModule)
+                this.prepareModule();
+            // close
+            this.fifo.newOrder(() => {
+                this.processFifoOrder("drop");
+            }, "drop");
+            this.fifo.newOrder(() => {
+                this.processFifoOrder("push", {towards: this.push_towards});
+            }, "push");
+            this.hasAPreparedModule = false;
+        }
     }
 }
 

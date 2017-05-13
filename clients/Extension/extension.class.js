@@ -25,7 +25,7 @@ class Extension extends Client {
     }
 
     takeOrder(from, name, param) {
-        this.fifo.newOrder(() => {this.processFifoOrder(name, param)}, name);
+        throw new TypeError("extension:takeOrder is pure virtual !");
     }
 
     processFifoOrder (name, param) {

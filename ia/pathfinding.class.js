@@ -189,14 +189,14 @@ module.exports = (function () {
 	Pathfinding.prototype.prepareAndDoQuery = function(params) {
 		this.busy = true;
 
-		this.ia.pathfinding.updateMap(params.robot);
+		this.ia.pathfinding.updateMap(params.robot, params.end);
 
 		// Leave 1000 ms to the C program to answer, then abort
 		this.timeout_getpath = setTimeout(function() {
 			logger.warn("Pathfinding failed to answer in 1s !");
 			this.busy = false;
 			params.callback(null);
-			callback = function() {};
+			params.callback = function() {}; // utile ?
 
 			let nextQuery = this.pendingQueries.shift();
 			if (!!nextQuery) {
@@ -239,7 +239,7 @@ module.exports = (function () {
 	/**
 	 * Update Map
 	 */
-	Pathfinding.prototype.updateMap = function (robot) {
+	Pathfinding.prototype.updateMap = function (robot, except) {
 		//[ [x, y, r], ... ]
 
 		// var objects = [];
@@ -250,10 +250,21 @@ module.exports = (function () {
 			d: otherRobot.size.d
 		}].concat(this.ia.data.dots)
 
+		// Add craters
 		if (robot.name == this.ia.pr.name) {
-			objects = objects.concat(this.ia.data.craters);
+			let ballsArray = [];
+			for (let name in this.ia.data.balls) {
+				ballsArray.push(this.ia.data.balls[name]);
+			}
+			objects = objects.concat(ballsArray);
 		}
 
+		// Add modules still on the table
+		let modulesArray = [];
+		for (let name in this.ia.data.module) {
+			modulesArray.push(this.ia.data.module[name]);
+		}
+		objects = objects.concat(modulesArray.filter( (m) => { return (m.status ==  "initial" && (m.pos.x != except.x) && (m.pos.y != except.y)); } ));
 
 		// logger.debug(objects);
 
