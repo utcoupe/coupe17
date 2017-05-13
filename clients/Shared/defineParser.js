@@ -30,7 +30,7 @@ module.exports = (function(){
 		fs.readFile(file, 'utf8', function (err,data) {
 			if(err) {
 				logger.fatal("cant read file:\""+file+"\"");
-				return ;
+				return {};
 			}
 			var nb = 0;
 			while( findings = reg.exec(data) ) {
