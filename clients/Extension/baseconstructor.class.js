@@ -22,7 +22,7 @@ class BaseConstructor extends Extension {
         super("base_constructor");
         this.servos = servos;
         this.hasAPreparedModule = false;
-        this.pushTowards = "don't";
+        this.pushTowards = "dont";
         this.color = "null";
         this.nbModulesToDrop = 0;
     }
@@ -36,7 +36,7 @@ class BaseConstructor extends Extension {
                 break;
             
             case "drop_module":
-                this.drop_module(param);
+                this.dropModule(param);
                 break;
             
             case "clean":
@@ -86,8 +86,6 @@ class BaseConstructor extends Extension {
                     this.nbModulesToDrop--;
                 else
                     this.logger.error("Aucun module à déposer !");
-                if (this.nbModulesToDrop = 0)
-                    ;// TODO wait push & send message to IA
                 break;
             case "engage":
                 this.servos.moduleEngage( () => {
@@ -119,18 +117,18 @@ class BaseConstructor extends Extension {
     /**
      * Engage a module in drop servos and rotate it
      * 
-     * @param {Object} [param]
-     * @param {String} param.color
-     * @param {String} param.push_towards
+     * @param {Object} [params]
+     * @param {String} params.color
+     * @param {String} params.push_towards
      */
-    prepareModule (param) {
-        if (params.push_towards)
+    prepareModule (params) {
+        if (params && params.push_towards)
             this.pushTowards = params.push_towards;
         // push_towards -> oposite direction
-        var opositPush = "don't";
-        if (push_towards == "left")
+        var opositPush = "dont";
+        if (this.push_towards == "left")
             opositPush = "right";
-        else if (push_towards == "right")
+        else if (this.push_towards == "right")
             opositPush = "left";
         this.fifo.newOrder(() => {
             this.processFifoOrder("push", {towards: opositPush});
@@ -140,11 +138,11 @@ class BaseConstructor extends Extension {
             this.processFifoOrder("engage");
         }, "engage");
         // rotate
-        if (params.color)
-            this.color = "null";
-        if (color != "null")
+        if (params && params.color)
+            this.color = params.color;
+        if (this.color != "null")
             this.fifo.newOrder(() => {
-                this.processFifoOrder("rotate", {color: params.color})
+                this.processFifoOrder("rotate", {color: this.color})
             });
         this.hasAPreparedModule = true;
     }
@@ -160,7 +158,7 @@ class BaseConstructor extends Extension {
             this.nbModulesToDrop++;
             // Preparation
             if (!this.hasAPreparedModule)
-                this.prepare_module();
+                this.prepareModule();
             // close
             this.fifo.newOrder(() => {
                 this.processFifoOrder("drop");
