@@ -154,7 +154,7 @@ class Robot extends Client{
 				})
 			);
 		} else {
-			this.logger.fatal("Lancement de l'asserv pr en mode simu !");
+			this.logger.fatal("Lancement de l'asserv "+ this.robotName +" en mode simu !");
 			this.asserv = new AsservSimu(this.client, this.robotName, this.fifo);
 		}
 

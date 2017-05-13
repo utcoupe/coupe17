@@ -405,6 +405,10 @@ class Actions{
 		if (!!action.preparation_orders) {
 
 			action.preparation_orders.forEach(function (order, index, array){
+				if (order.params.color == "TO_BE_FILLED_BY_IA") {
+					logger.warn("TODO: drop color depending on robot content");
+					order.params.color = this.ia.color;
+				}
 				let dest = !!order.dest ? order.dest : this.robot.name;
 				this.ia.client.send(dest, order.name, order.params);
 			}.bind(this));
