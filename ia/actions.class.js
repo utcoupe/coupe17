@@ -221,7 +221,7 @@ class Actions{
 	 * @param {string} an Action name
 	 */
 	getPriorityAction(an) {
-		return this.todo[an].object.status == "lost" ? -1000 : this.todo[an].priority;
+		return this.todo[an].object.status == "lost" ? (this.todo[an].priority - 100) : this.todo[an].priority;
 	};
 	
 	/**
@@ -240,27 +240,32 @@ class Actions{
 		if (action.dependencyRobotContent !== undefined){
 			// Depends on the robot content
 
-			if ((action.dependencyRobotContent.gobelet !== undefined) &&
-				(this.robot.content.gobelet !== action.dependencyRobotContent.gobelet)){
-				// The cup holder position isn't consistent with needed state
-				return false;
-			}
+			// if ((action.dependencyRobotContent.gobelet !== undefined) &&
+			// 	(this.robot.content.gobelet !== action.dependencyRobotContent.gobelet)){
+			// 	// The cup holder position isn't consistent with needed state
+			// 	return false;
+			// }
 
-			// If there's a constraint about the current number of cylinders
-			if ((action.dependencyRobotContent.invPlot !== undefined)  &&
-				(this.robot.content.nb_plots < action.dependencyRobotContent.invPlot)){
+			// If there's a constraint about the current number of modules
+			if ((action.dependencyRobotContent.supModule  !== undefined)
+				&& (this.robot.content.nb_modules  !== undefined)
+				&& (this.robot.content.nb_modules > action.dependencyRobotContent.supModule)){
+				// More than the supremum
 				return false;
 			}
-			if ((action.dependencyRobotContent.subPlot !== undefined)  &&
-				(this.robot.content.nb_plots > action.dependencyRobotContent.subPlot)){
+			if ((action.dependencyRobotContent.infModule  !== undefined)
+				&& (this.robot.content.nb_modules  !== undefined)
+				&& (this.robot.content.nb_modules < action.dependencyRobotContent.infModule)){
+				// Less than the infimum
 				return false;
 			}
 		 
 		}
 
-		if (action.object.status == "lost"){
-			return false;
-		}
+		// Lost objects are actually done in priority
+		// if (action.object.status == "lost"){
+		// 	return false;
+		// }
 
 		return true;
 	};
@@ -337,11 +342,12 @@ class Actions{
 			var actionName = actions.shift();
 			var action = this.todo[actionName];
 			var startpoint = this.getNearestStartpoint(this.robot.pos, action.startpoints);
-			if (startpoint === null) {
-				this.logger.warn("TMP startpoint");
+			if (startpoint === null
+				&& action.type == "module") {
+				this.logger.warn("TMP startpoint for module");
 				startpoint = {
-					x: 1500,
-					y: 1000,
+					x: action.object.pos.x,
+					y: action.object.pos.y,
 					a: 0
 				}
 			}
@@ -405,9 +411,16 @@ class Actions{
 		if (!!action.preparation_orders) {
 
 			action.preparation_orders.forEach(function (order, index, array){
-				if (order.params.color == "TO_BE_FILLED_BY_IA") {
+				if (!!this.robot.modules_color
+					&& order.params.color == "TO_BE_FILLED_BY_IA") {
 					logger.warn("TODO: drop color depending on robot content");
-					order.params.color = this.ia.color;
+					if (this.robot.modules_color == this.ia.color) {
+						// If all the modules are of our color, it doesn't matter how we drop them
+						order.params.color = "null";
+					} else {
+						// Some modules are multicolor, we must rotate the modules
+						order.params.color = this.ia.color;
+					}
 				}
 				let dest = !!order.dest ? order.dest : this.robot.name;
 				this.ia.client.send(dest, order.name, order.params);
