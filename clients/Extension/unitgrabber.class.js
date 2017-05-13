@@ -101,23 +101,23 @@ class UnitGrabber extends Extension {
 
     takeModule () {
         this.fifo.newOrder(() => {
-            this.processFifoOrder("openArms");
-        }, "openArms");
+            this.processFifoOrder("openArm");
+        }, "openArm");
         this.fifo.newOrder(() => {
-            this.processFifoOrder("openGrabber");
+            this.processFifoOrder("downGrabber");
         }, "openGrabber");
         this.fifo.newOrder(() => {
-            this.processFifoOrder("closeArms");
-        }, "closeArms");
+            this.processFifoOrder("closeArm");
+        }, "closeArm");
         this.fifo.newOrder(() => {
-            this.processFifoOrder("openArms");
-        }, "openArms");
+            this.processFifoOrder("openArm");
+        }, "openArm");
         this.fifo.newOrder(() => {
-            this.processFifoOrder("closeGrabber");
+            this.processFifoOrder("upGrabber");
         }, "closeGrabber");
         this.fifo.newOrder(() => {
-            this.processFifoOrder("closeArms");
-        }, "closeArms");
+            this.processFifoOrder("closeArm");
+        }, "closeArm");
     }
 }
 
