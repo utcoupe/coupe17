@@ -15,9 +15,12 @@ class Factory {
         this.devicesPortMap = [];
         //list of opened serial port, waiting data to be received to determine if device detected
         this.openedSerialPort = [];
+        //flag to know if the factory is ready, if not, can't build any object
+        this.factoryReady = false;
 
         // Last step, detects devices
         this.detectArduino();
+        this.detectAx12();
 
         setTimeout(this.closeAllPorts.bind(this), 3000);
     }
@@ -26,40 +29,57 @@ class Factory {
     //type is the same as createObject
     //todo
     forceSimulation(type) {
-        // this.logger.info("Force simulation of " + type + " (not active yet)");
+        this.logger.info("Force simulation of " + type + " (not active yet)");
         // console.log(this.openedSerialPort);
     }
 
     //type can be asserv, servo, ax12 or hokuyo
     createObject(type) {
         var returnedObject;
-        switch (type) {
-            case "asserv" : {
-                break;
+        if (this.factoryReady) {
+            switch (type) {
+                case "asserv" :
+                {
+                    if (this.devicesPortMap[this.robotName + "_" + type] !== undefined) {
+                        this.logger.info("Asserv is real, arduino detected");
+                        returnedObject = require('../Asserv/Asserv.class.js');
+                    } else {
+                        this.logger.fatal("Servo is simu");
+                        returnedObject = require('../Asserv/AsservSimu.class.js');
+                    }
+                    break;
+                }
+                case "servo" :
+                {
+                    if (this.devicesPortMap[this.robotName + "_others"] !== undefined) {
+                        this.logger.info("Servo is real, arduino detected");
+                        returnedObject = require('../Extension/Actuators/servo.class.js');
+                    } else {
+                        this.logger.fatal("Servo is simu");
+                        //todo
+                    }
+                    break;
+                }
+                case "ax12" :
+                {
+                    this.logger.info("Ax12 not implemented yet");
+                    break;
+                }
+                default:
+                    this.logger.error("Type " + type + " can not be build by the factory, it does not exists");
             }
-            case "servo" : {
-                break;
-            }
-            case "ax12" : {
-                break;
-            }
-            case "hokuyo" : {
-                break;
-            }
-            default:
-                this.logger.error("Type " + type + " can not be build by the factory, it does not exists");
+        } else {
+            this.logger.error("Factory is not ready to build " + type);
         }
+        return returnedObject;
     }
 
     //open all serial devices and set a callback, waiting to receive data in order to set the devicePortMap
     detectArduino() {
         SerialPort.list(function (err, ports) {
+            // Open each listed serial port and add a callback to detect if it is an arduino
             for(var currentPort in ports) {
                 this.openedSerialPort[currentPort] = new SerialPort(ports[currentPort].comName, { baudrate: 57600, parser: SerialPort.parsers.readline('\n') });
-
-                // this.openedSerialPort[currentPort].on('open', function (currentPort) {
-                // }.bind(this, currentPort));
-
                 this.openedSerialPort[currentPort].on("data", function (currentPort, data) {
                     if (data.toString().indexOf(this.robotName + "_asserv") != -1) {
                         this.logger.info("Real asserv detected");
@@ -76,11 +96,17 @@ class Factory {
         }.bind(this));
     }
 
+    //todo
+    detectAx12() {
+        this.logger.info("Detect ax12 is not implemented yet");
+    }
+
     closeAllPorts() {
         for (var port in this.openedSerialPort) {
             this.openedSerialPort[port].close();
         }
         if (this.factoryReadyCallback !== undefined) {
+            this.factoryReady = true;
             this.factoryReadyCallback();
         }
     }
