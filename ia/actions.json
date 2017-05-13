@@ -10,10 +10,13 @@
 				"y": 100,
 				"a": -1.5707
 			}],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 100,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"supModule": 5,
+				"infModule": 0
+			},
 			"orders":[{
 				"dest": "unitgrabber",
 				"name": "take_module",
@@ -33,10 +36,13 @@
 				"y": 1350,
 				"a": -3.1415
 			}],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 101,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"supModule": 5,
+				"infModule": 0
+			},
 			"orders":[{
 				"dest": "unitgrabber",
 				"name": "take_module",
@@ -56,10 +62,13 @@
 				"y": 38,
 				"a": -1.5707
 			}],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 100,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"supModule": 5,
+				"infModule": 0
+			},
 			"orders":[{
 				"dest": "unitgrabber",
 				"name": "take_module",
@@ -79,10 +88,13 @@
 				"y": 1350,
 				"a": 0
 			}],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 101,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"supModule": 5,
+				"infModule": 0
+			},
 			"orders":[{
 				"dest": "unitgrabber",
 				"name": "take_module",
@@ -98,10 +110,13 @@
 			"owner": "pr",
 			"objectname": "module__mod_lun01",
 			"startpoints": [],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 98,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"supModule": 8,
+				"infModule": 0
+			},
 			"orders":[{
 				"dest": "unitgrabber",
 				"name": "take_module",
@@ -117,10 +132,13 @@
 			"owner": "pr",
 			"objectname": "module__mod_lun02",
 			"startpoints": [],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 97,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"supModule": 8,
+				"infModule": 0
+			},
 			"orders":[{
 				"dest": "unitgrabber",
 				"name": "take_module",
@@ -136,10 +154,13 @@
 			"owner": "pr",
 			"objectname": "module__mod_lun04",
 			"startpoints": [],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 98,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"supModule": 8,
+				"infModule": 0
+			},
 			"orders":[{
 				"dest": "unitgrabber",
 				"name": "take_module",
@@ -155,10 +176,13 @@
 			"owner": "pr",
 			"objectname": "module__mod_lun05",
 			"startpoints": [],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 97,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"supModule": 8,
+				"infModule": 0
+			},
 			"orders":[{
 				"dest": "unitgrabber",
 				"name": "take_module",
@@ -174,10 +198,13 @@
 			"owner": "pr",
 			"objectname": "module__mod_lun06",
 			"startpoints": [],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 96,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"supModule": 8,
+				"infModule": 0
+			},
 			"orders":[{
 				"dest": "unitgrabber",
 				"name": "take_module",
@@ -193,10 +220,13 @@
 			"owner": "pr",
 			"objectname": "module__mod_lun07",
 			"startpoints": [],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 95,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"supModule": 8,
+				"infModule": 0
+			},
 			"orders":[{
 				"dest": "unitgrabber",
 				"name": "take_module",
@@ -212,10 +242,13 @@
 			"owner": "pr",
 			"objectname": "module__mod_lun08",
 			"startpoints": [],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 94,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"supModule": 8,
+				"infModule": 0
+			},
 			"orders":[{
 				"dest": "unitgrabber",
 				"name": "take_module",
@@ -231,10 +264,13 @@
 			"owner": "pr",
 			"objectname": "module__mod_lun09",
 			"startpoints": [],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 96,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"supModule": 8,
+				"infModule": 0
+			},
 			"orders":[{
 				"dest": "unitgrabber",
 				"name": "take_module",
@@ -250,10 +286,13 @@
 			"owner": "pr",
 			"objectname": "module__mod_lun10",
 			"startpoints": [],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 95,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"supModule": 8,
+				"infModule": 0
+			},
 			"orders":[{
 				"dest": "unitgrabber",
 				"name": "take_module",
@@ -269,10 +308,13 @@
 			"owner": "pr",
 			"objectname": "module__mod_lun11",
 			"startpoints": [],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 94,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"supModule": 8,
+				"infModule": 0
+			},
 			"orders":[{
 				"dest": "unitgrabber",
 				"name": "take_module",
@@ -292,10 +334,12 @@
                 "y": 1100,
                 "a": 3.1415
 			}],
-			"direction": "whatever",
-			"priority": 93,
+			"direction": "backward",
+			"priority": 103,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"infModule": 3
+			},
 			"preparation_orders":[{
 				"dest": "baseconstructor",
 				"name": "prepare_module",
@@ -322,10 +366,12 @@
                 "y": 1350,
                 "a": -0.7853
 			}],
-			"direction": "whatever",
+			"direction": "backward",
 			"priority": 92,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"infModule": 3
+			},
 			"preparation_orders":[{
 				"dest": "baseconstructor",
 				"name": "prepare_module",
@@ -350,10 +396,12 @@
                 "y": 1450,
                 "a": 2.3561
 			}],
-			"direction": "whatever",
+			"direction": "backward",
 			"priority": 92,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"infModule": 3
+			},
 			"preparation_orders":[{
 				"dest": "baseconstructor",
 				"name": "prepare_module",
@@ -378,10 +426,12 @@
                 "y": 1250,
                 "a": 0
 			}],
-			"direction": "whatever",
+			"direction": "backward",
 			"priority": 91,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"infModule": 3
+			},
 			"preparation_orders":[{
 				"dest": "baseconstructor",
 				"name": "prepare_module",
@@ -406,10 +456,12 @@
                 "y": 1350,
                 "a": 3.1415
 			}],
-			"direction": "whatever",
+			"direction": "backward",
 			"priority": 90,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"infModule": 3
+			},
 			"preparation_orders":[{
 				"dest": "baseconstructor",
 				"name": "prepare_module",
@@ -434,10 +486,12 @@
                 "y": 1350,
                 "a": 0.7853
 			}],
-			"direction": "whatever",
+			"direction": "backward",
 			"priority": 89,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"infModule": 3
+			},
 			"preparation_orders":[{
 				"dest": "baseconstructor",
 				"name": "prepare_module",
@@ -462,10 +516,12 @@
                 "y": 1450,
                 "a": -2.3561
 			}],
-			"direction": "whatever",
+			"direction": "backward",
 			"priority": 88,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"infModule": 3
+			},
 			"preparation_orders":[{
 				"dest": "baseconstructor",
 				"name": "prepare_module",
@@ -490,10 +546,12 @@
                 "y": 1100,
                 "a": 0
 			}],
-			"direction": "whatever",
+			"direction": "backward",
 			"priority": 93,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"infModule": 3
+			},
 			"preparation_orders":[{
 				"dest": "baseconstructor",
 				"name": "prepare_module",
@@ -520,10 +578,9 @@
                 "y": 1650,
                 "a": 1.5707
 			}],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 87,
 			"dependency": "",
-			"duration": 1,
 			"orders":[{
 				"dest": "sweeper",
 				"name": "swallow_balls",
@@ -540,10 +597,9 @@
                 "y": 540,
                 "a": 2.3561
 			}],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 87,
 			"dependency": "",
-			"duration": 1,
 			"orders":[{
 				"dest": "sweeper",
 				"name": "swallow_balls",
@@ -560,10 +616,9 @@
                 "y": 1650,
                 "a": 1.5707
 			}],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 87,
 			"dependency": "",
-			"duration": 1,
 			"orders":[{
 				"dest": "sweeper",
 				"name": "swallow_balls",
@@ -580,10 +635,9 @@
                 "y": 540,
                 "a": 2.3561
 			}],
-			"direction": "whatever",
+			"direction": "forward",
 			"priority": 87,
 			"dependency": "",
-			"duration": 1,
 			"orders":[{
 				"dest": "sweeper",
 				"name": "swallow_balls",
@@ -603,7 +657,6 @@
 			"direction": "whatever",
 			"priority": 89,
 			"dependency": "",
-			"duration": 1,
 			"orders":[],
 			"kill": null
 		},
@@ -619,7 +672,6 @@
 			"direction": "whatever",
 			"priority": 89,
 			"dependency": "",
-			"duration": 1,
 			"orders":[],
 			"kill": null
 		}
