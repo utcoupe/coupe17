@@ -12,13 +12,25 @@ class TibotDisplay extends RobotDisplay {
     }
 
     // Actuators
-    openUnitGrabber () {
-		this.client.send("unit_grabber", "open");
+    openGrabber () {
+		this.client.send("unit_grabber", "upGrabber");
 	}
 
-	closeUnitGrabber () {
-        this.client.send("unit_grabber", "close");
+	closeGrabber () {
+        this.client.send("unit_grabber", "downGrabber");
 	}
+
+	openArms () {
+        this.client.send("unit_grabber", "openArm");
+	}
+
+	closeArms () {
+        this.client.send("unit_grabber", "closeArm");
+	}
+
+    takeModule () {
+        this.client.send("unit_grabber", "take_module");
+    }
 
 	drop () {
 		this.client.send("base_constructor", "drop");
