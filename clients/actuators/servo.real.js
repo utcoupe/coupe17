@@ -98,6 +98,13 @@ class ServoReal extends Servo {
         }
     }
 
+    stop() {
+        if (this.serialPort.isOpen()) {
+            this.serialPort.close()
+        }
+        this.logger.info("Servo real stopped");
+    }
+
 }
 
 // Exports an object to be sure to have a single instance in the system

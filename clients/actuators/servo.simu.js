@@ -32,6 +32,10 @@ class ServoSimu extends Servo {
         setTimeout(callback, 200);
     }
 
+    stop() {
+        this.logger.info("Servo simu stopped");
+    }
+
 }
 
 // Exports an object to be sure to have a single instance in the system
