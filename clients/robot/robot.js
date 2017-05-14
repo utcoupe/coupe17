@@ -10,11 +10,8 @@
 
 "use strict";
 
-const SerialPort = require("serialport");
 const Client = require('../shared/client');
 const Fifo = require('../shared/fifo');
-const AsservSimu = require('../asserv/asserv.simu');
-const AsservReal = require('../asserv/asserv.real');
 
 
 //TODO Look if use other.class and other_simu
@@ -70,6 +67,8 @@ class Robot extends Client{
 
 		this.queue = [];
 		this.started = false;
+        // Flag to know that factory has been created and wait it returns
+        this.starting = false;
 		this.orderInProgress = false;
 
 
@@ -119,56 +118,44 @@ class Robot extends Client{
 	/**
 	 * Start the Robot
 	 */
-	start(){
-		if (this.started) {
+	start() {
+
+		if (this.started || this.starting) {
 			this.logger.warn(this.robotName + " already started !");
 			return;
 		}
 
-		super.start();
-		this.logger.info("Starting "+ this.robotName +"  :)");
-		// add all starts
-		
-		this.queue = [];
+        this.logger.info("Starting "+ this.robotName +"  :)");
 
-		// Tests devices and connect
-		this.openExtensions();
+        // Send struct to server
+        this.sendChildren({
+            status: "starting",
+            children:[]
+        });
 
-		// Send struct to server
-		this.sendChildren({
-			status: "starting",
-			children:[]
-		});
+        super.start();
 
+        this.starting = true;
 
-		// let testAsserv = new SerialPort("/dev/ttyACM0", {
-		// 	baudrate: 57600,
-		// 	parser:SerialPort.parsers.readline('\n')
-		// });
-		// testAsserv.on("error", function(data){ /* Do nothing */ });
-		// let asservReal = testAsserv.isOpen();
-		// testAsserv.close();
-        //
-		// if (asservReal) {
-		// 	// There's a match with the asserv Arduino ! Let's open a connection ;)
-		// 	this.asserv = new AsservReal( this.client, this.robotName, this.fifo, this.sendStatus,
-		// 		new SerialPort("/dev/ttyACM0", {
-		// 			baudrate: 57600,
-		// 			parser:SerialPort.parsers.readline('\n')
-		// 		})
-		// 	);
-		// } else {
-			this.logger.fatal("Lancement de l'asserv "+ this.robotName +" en mode simu !");
-			this.asserv = new AsservSimu(this);
-		// }
+        this.factory = require("../shared/factory.js")(this, function() {
+            this.asserv = this.factory.createObject("asserv");
+            // add all starts
 
-		// Send struct to server
-		this.sendChildren({
-			status: "ok", // TODO : make it everything is awesome
-			children:[]
-		});
+            this.queue = [];
 
-		this.started = true;
+            // Tests devices and connect
+            this.openExtensions();
+
+            // Send struct to server
+            this.sendChildren({
+                status: "ok", // TODO : make it everything is awesome
+                children:[]
+            });
+
+            this.started = true;
+
+            this.logger.info(this.robotName + " has started !");
+        }.bind(this));
 	}
 
 	

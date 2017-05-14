@@ -6,9 +6,10 @@ const Log4js = require('log4js');
 const SerialPort = require('serialport');
 
 class Factory {
-    constructor(robotName, callback) {
+    constructor(robot, callback) {
         this.logger = Log4js.getLogger("factory");
-        this.robotName = robotName;
+        this.robot = robot;
+        this.robotName = robot.getName();
         //when factory is ready, call this callback, this is mandatory because of node async way to work
         this.factoryReadyCallback = callback;
         //map of all devices found ("device_name","port")
@@ -46,9 +47,9 @@ class Factory {
                         //todo parameters
                         returnedObject = require('../asserv/asserv.real')();
                     } else {
-                        this.logger.fatal("Servo is simu");
+                        this.logger.fatal("Asserv is simu");
                         //todo parameters
-                        returnedObject = require('../asserv/asserv.simu')();
+                        returnedObject = require('../asserv/asserv.simu')(this.robot);
                     }
                     break;
                 }
