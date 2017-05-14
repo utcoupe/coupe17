@@ -9,7 +9,7 @@ class Factory {
     constructor(robot, callback) {
         this.logger = Log4js.getLogger("factory");
         this.robot = robot;
-        this.robotName = robot.getName();
+        this.robotName = this.robot.getName();
         //when factory is ready, call this callback, this is mandatory because of node async way to work
         this.factoryReadyCallback = callback;
         //map of all devices found ("device_name","port")
@@ -42,13 +42,11 @@ class Factory {
             switch (type) {
                 case "asserv" :
                 {
-                    if (this.devicesPortMap[this.robotName + "_" + type] !== undefined) {
-                        this.logger.info("Asserv is real, arduino detected");
-                        //todo parameters
-                        returnedObject = require('../asserv/asserv.real')();
+                    if (this.devicesPortMap[this.robotName + "_asserv"] !== undefined) {
+                        this.logger.info("Asserv is real, arduino detected on port : " + this.devicesPortMap[this.robotName + "_asserv"]);
+                        returnedObject = require('../asserv/asserv.real')(this.robot, this.devicesPortMap[this.robotName + "_asserv"]);
                     } else {
                         this.logger.fatal("Asserv is simu");
-                        //todo parameters
                         returnedObject = require('../asserv/asserv.simu')(this.robot);
                     }
                     break;

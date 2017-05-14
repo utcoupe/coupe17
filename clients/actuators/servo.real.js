@@ -100,9 +100,12 @@ class ServoReal extends Servo {
 
     stop() {
         if (this.serialPort.isOpen()) {
-            this.serialPort.close()
+            this.ordersSerial.sendOrder(this.actuatorCommands.HALT, function() {
+                this.serialPort.close();
+                this.logger.info("Asserv real has stopped");
+            }.bind(this));
         }
-        this.logger.info("Servo real stopped");
+        this.serialPortConnected = false;
     }
 
 }

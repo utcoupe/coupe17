@@ -10,11 +10,11 @@ const Log4js = require('log4js');
 const Fifo = require('../shared/fifo');
 
 class Asserv{
-	constructor(robot){
-        this.robotName = robot.getName();
-        this.logger = Log4js.getLogger(this.robotName + '_asserv');
+	constructor(robot) {
         // Robot is used to send data
         this.robot = robot;
+        this.robotName = this.robot.getName();
+        this.logger = Log4js.getLogger(this.robotName + '_asserv');
 		this.pos = {};
         this.fifo = new Fifo();
 		// this.orderInProgress = false;
