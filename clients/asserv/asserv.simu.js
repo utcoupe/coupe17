@@ -235,4 +235,7 @@ class AsservSimu extends Asserv{
     }
 }
 
-module.exports = AsservSimu;
+// Exports an object to be sure to have a single instance in the system
+module.exports = function(robot) {
+    return new AsservSimu(robot);
+};
