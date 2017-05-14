@@ -37,4 +37,7 @@ class Ax12Simu extends Ax12 {
     }
 }
 
-module.exports = Ax12Simu;
+// Exports an object to be sure to have a single instance in the system
+module.exports = function() {
+    return new Ax12Simu();
+};
