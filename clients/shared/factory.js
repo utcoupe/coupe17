@@ -59,7 +59,7 @@ class Factory {
                         returnedObject = require('../actuators/servo.real')(this.devicesPortMap[this.robotName + "_others"]);
                     } else {
                         this.logger.fatal("Servo is simu");
-                        //todo
+                        returnedObject = require('../actuators/servo.simu')();
                     }
                     break;
                 }
