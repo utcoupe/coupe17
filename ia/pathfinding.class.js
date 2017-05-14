@@ -51,7 +51,7 @@ module.exports = (function () {
 
 
 		var instance = Child_process.spawn(program, [ image ]);*/
-		var instance = Child_process.spawn("bash", ["-c", "pkill pathfinding;"+program+" -m "+image + " -r 1"]); // +" -r" for bmp export
+		var instance = Child_process.spawn("bash", ["-c", "pkill pathfinding;"+program+" -m "+image + " -r"]); // +" -r" for bmp export
 
 		instance.on('error', function(err) {
 			if(err.code === 'ENOENT'){
