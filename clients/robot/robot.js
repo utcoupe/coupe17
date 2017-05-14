@@ -81,7 +81,7 @@ class Robot extends Client{
 
 			if(classe == "asserv"){
 				// this.logger.debug("order send to asserv : "+OrderSubname);
-				this.asserv.addOrder2Queue(from,OrderSubname,params);
+				this.asserv.addOrderToFifo(OrderSubname,params);
 			// } else if (classe == this.robotName){
 			} else {
 				switch (name){
@@ -111,6 +111,10 @@ class Robot extends Client{
 		}.bind(this));
 	}
 
+	getName() {
+        return this.robotName;
+    }
+
 
 	/**
 	 * Start the Robot
@@ -137,26 +141,26 @@ class Robot extends Client{
 		});
 
 
-		let testAsserv = new SerialPort("/dev/ttyACM0", {
-			baudrate: 57600,
-			parser:SerialPort.parsers.readline('\n')
-		});
-		testAsserv.on("error", function(data){ /* Do nothing */ });
-		let asservReal = testAsserv.isOpen();
-		testAsserv.close();
-
-		if (asservReal) {
-			// There's a match with the asserv Arduino ! Let's open a connection ;)
-			this.asserv = new AsservReal( this.client, this.robotName, this.fifo, this.sendStatus, 
-				new SerialPort("/dev/ttyACM0", {
-					baudrate: 57600,
-					parser:SerialPort.parsers.readline('\n')
-				})
-			);
-		} else {
+		// let testAsserv = new SerialPort("/dev/ttyACM0", {
+		// 	baudrate: 57600,
+		// 	parser:SerialPort.parsers.readline('\n')
+		// });
+		// testAsserv.on("error", function(data){ /* Do nothing */ });
+		// let asservReal = testAsserv.isOpen();
+		// testAsserv.close();
+        //
+		// if (asservReal) {
+		// 	// There's a match with the asserv Arduino ! Let's open a connection ;)
+		// 	this.asserv = new AsservReal( this.client, this.robotName, this.fifo, this.sendStatus,
+		// 		new SerialPort("/dev/ttyACM0", {
+		// 			baudrate: 57600,
+		// 			parser:SerialPort.parsers.readline('\n')
+		// 		})
+		// 	);
+		// } else {
 			this.logger.fatal("Lancement de l'asserv "+ this.robotName +" en mode simu !");
-			this.asserv = new AsservSimu(this.client, this.robotName, this.fifo);
-		}
+			this.asserv = new AsservSimu(this);
+		// }
 
 		// Send struct to server
 		this.sendChildren({
@@ -367,6 +371,10 @@ class Robot extends Client{
 	sendPos() {
 		this.client.send('ia', this.who+'.pos', this.asserv.sendPos());
 	}
+
+	sendDataToIA(destination, params) {
+        this.client.send('ia', destination, params);
+    }
 }
 
 module.exports = Robot;

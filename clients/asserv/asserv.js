@@ -6,42 +6,18 @@
 
 "use strict";
 
-/**
- * Class Asserv.
- *
- * @memberof module:clients/Asserv/Asserv
- */
+const Log4js = require('log4js');
+const Fifo = require('../shared/fifo');
+
 class Asserv{
-	/**
-	 * Creates an instance of Asserv.
-	 * @param {any} client
-	 * @param {any} robotName
-	 * @param {any} fifo
-	 */
-	constructor(client, robotName, fifo){
-		/** @type {Log4js} */
-		this.logger = require('log4js').getLogger(robotName + '.asserv');
-
-		/** @type {Object} */
-		this.client = client;
-
-		/** @type {Object} */
-		this.robotName = robotName;
-
-		/** @type {Object} */
+	constructor(robot){
+        this.robotName = robot.getName();
+        this.logger = Log4js.getLogger(this.robotName + '_asserv');
+        // Robot is used to send data
+        this.robot = robot;
 		this.pos = {};
-
-		/** @type {clients/fifo.Fifo} */
-		if(fifo === undefined || fifo === null){
-			var Fifo = require('../shared/fifo');
-			this.fifo = new Fifo();
-		}
-		else 
-			this.fifo = fifo;
-
-		/** @type {Array}*/
-		this.queue = []
-		this.orderInProgress = false;
+        this.fifo = new Fifo();
+		// this.orderInProgress = false;
 
 		this.getInitPos();
 	}
@@ -51,8 +27,9 @@ class Asserv{
 	 *
 	 * @param {int} a Angle
 	 */
-	// Attention, c'est une fonction a la base, pas une methode
-	convertA(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
+	convertA(a) {
+        return Math.atan2(Math.sin(a), Math.cos(a));
+	}
 
 	/**
 	 * Set Angle
@@ -64,31 +41,18 @@ class Asserv{
 	}
 
 	/**
-	 * Position ?
+	 * Sets the position and angle
 	 *
 	 * @param {Object} pos
 	 */
-	Pos(pos) {
-		this.pos.x = pos.x;
-		this.pos.y = pos.y;
-		this.setA(pos.a);
-	}
+	setPos(pos){}
 
 	/**
-	 * Sets Position
+	 * Gets initial position
 	 *
-	 * @param {Object} pos
-	 * @param {Object} callback
 	 */
-	setPos(pos, callback){}
-
-	/**
-	 * Gets Position
-	 *
-	 * @param {Object} pos
-	 */
-	getInitPos(pos) {
-		this.client.send('ia', this.robotName+'.getinitpos');
+	getInitPos() {
+        this.robot.sendDataToIA(this.robotName+'.getinitpos');
 	}
 
 
@@ -96,7 +60,7 @@ class Asserv{
 	 * Sends Position
 	 */
 	sendPos() {
-		this.client.send('ia', this.robotName+'.pos', this.pos);
+        this.robot.sendDataToIA(this.robotName+'.pos', this.pos);
 	}
 
 	/**
@@ -104,27 +68,24 @@ class Asserv{
 	 *
 	 * @param {int} x
 	 * @param {int} a Angle
-	 * @param {Object} callback
 	 */
-	calageX(x, a, callback){}
+	calageX(x, a){}
 
 	/**
 	 * Calage Y
 	 *
 	 * @param {int} y
 	 * @param {int} a Angle
-	 * @param {Object} callback
 	 */
-	calageY(y, a, callback){}
+	calageY(y, a){}
 
 	/**
 	 * Set Vitesse
 	 *
 	 * @param {int} v Speed
 	 * @param {float} r Rotation
-	 * @param {Object} callback
 	 */
-	setVitesse(v, r, callback){}
+	setSpeed(v, r){}
 
 	/**
 	 * Speed ?
@@ -132,9 +93,8 @@ class Asserv{
 	 * @param {int} l
 	 * @param {int} a Angle
 	 * @param {int} ms
-	 * @param {Object} callback
 	 */
-	speed(l, a, ms, callback){}
+	speed(l, a, ms){}
 
 	/**
 	 * Pulse Width Modulation
@@ -142,9 +102,8 @@ class Asserv{
 	 * @param {int} left
 	 * @param {int} right
 	 * @param {int} ms
-	 * @param {Object} callback
 	 */
-	pwm(left, right, ms, callback){}
+	pwm(left, right, ms){}
 
 	/**
 	 * Go X Y
@@ -152,19 +111,15 @@ class Asserv{
 	 * @param {int} x
 	 * @param {int} y
 	 * @param {string} sens
-	 * @param {Object} callback
-	 * @param {boolean} no_fifo
 	 */
-	goxy(x, y, sens, callback, no_fifo){}
+	goxy(x, y, sens){}
 
 	/**
 	 * Simu Go Angle
 	 *
 	 * @param {int} a Angle
-	 * @param {Object} callback
-	 * @param {boolean} no_fifo
 	 */
-	goa(a, callback, no_fifo){}
+	goa(a, callback){}
 
 	/**
 	 * Set P I D
@@ -172,65 +127,48 @@ class Asserv{
 	 * @param {int} p
 	 * @param {int} i
 	 * @param {int} d
-	 * @param {Object} callback
 	 */
-	setPid(p, i, d, callback){}
+	setPid(p, i, d){}
 
-	/**
-	 * Launch the next order TODO : put in fifo class
-	 */
-	actionFinished(){
-		if(this.orderInProgress !== false) {
-			this.logger.info("Asserv simu actionFinished : " + this.orderInProgress);
-
-			this.orderInProgress = false;
-			this.executeNextOrder();
-		}
-	}
-
-	executeNextOrder(){
-	 	if((this.queue.length > 0) && (!this.orderInProgress)) {
-	 		var order = this.queue.shift();
-
-	 		this.orderInProgress = order.name;
-
-			this.logger.info("Executing " + this.orderInProgress);
-	 		// this.logger.debug(order.params);
-
- 			switch (order.name){
-				case "send_message":
-					// logger.debug("Send message %s", order.params.name);
-					this.client.send('ia', order.params.name, order.params || {});
-					this.actionFinished();
-					this.executeNextOrder();
-				break;
-				case "pwm":
-					this.pwm(order.params.left, order.params.right, order.params.ms, this.actionFinished);
-				break;
-				case "setvit":
-					this.setVitesse(order.params.v, order.params.r, this.actionFinished);
-				break;
-				case "clean":
-					this.clean(this.actionFinished);
-				break;
-				case "goa":
-					this.goa(order.params.a, this.actionFinished, true);
-				break;
-				case "goxy":
-					this.goxy(order.params.x, order.params.y, order.params.sens, this.actionFinished, true);
-				break;
-				case "setpos":
-					this.setPos(order.params, this.actionFinished);
-				break;
-				case "setpid":
-					this.setPid(order.params.p, order.params.i, order.params.d, this.actionFinished);
-				break;
-				default:
-					this.logger.fatal("This order is unknown for the " + this.robotName + " AsservSimu : " + order.name);
-					this.actionFinished();
-					this.executeNextOrder();
-			}
-	 	}
+	addOrderToFifo(name, params){
+        this.logger.debug("Adding order to fifo : " + name);
+        // this.logger.debug(order.params);
+        var callback;
+        switch(name) {
+            case "send_message":
+                callback = function() {
+                    this.robot.sendDataToIA(params.name, params || {});
+                    //todo, will not work...
+                    this.fifo.orderFinished();
+                }.bind(this);
+            break;
+            case "pwm":
+                callback = function() {this.pwm(params.left, params.right, params.ms)}.bind(this);
+            break;
+            case "setvit":
+                callback = function() {this.setSpeed(params.v, params.r)}.bind(this);
+            break;
+            case "clean":
+                this.fifo.clean(this.fifo.orderFinished);
+            break;
+            case "goa":
+                callback = function() {this.goa(params.a)}.bind(this);
+            break;
+            case "goxy":
+                callback = function() {this.goxy(params.x, params.y, params.sens)}.bind(this);
+            break;
+            case "setpos":
+                callback = function() {this.setPos(params)}.bind(this);
+            break;
+            case "setpid":
+                callback = function() {this.setPid(params.p, params.i, params.d)}.bind(this);
+            break;
+            default:
+                this.logger.fatal("This order is unknown for the " + this.robotName + " AsservSimu : " + name);
+        }
+        if (callback !== undefined) {
+            this.fifo.newOrder(callback, name);
+        }
 	}
 }
 
