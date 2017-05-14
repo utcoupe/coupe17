@@ -25,6 +25,8 @@ class Servo {
 
     moduleRotate(callback) {}
 
+    stop() {}
+
 }
 
 module.exports = Servo;
