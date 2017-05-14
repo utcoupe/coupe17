@@ -64,7 +64,8 @@ class Factory {
                 }
                 case "ax12" :
                 {
-                    this.logger.info("Ax12 not implemented yet");
+                    this.logger.info("Ax12 not implemented yet, always return simu");
+                    returnedObject = require('../actuators/ax12.simu')();
                     break;
                 }
                 default:
