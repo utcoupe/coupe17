@@ -4,9 +4,8 @@
 
 "use strict";
 
-const Servo = require('./servo.js');
-const defineParser = require("../../Shared/defineParser.js");
-// const OrdersSerial = require("../../Shared/ordersserial.js");
+const Servo = require('./servo');
+const defineParser = require("../shared/defineparser");
 const SerialPort = require('serialport');
 
 //serialPort is defined as /dev/ttyXx
@@ -51,7 +50,7 @@ class ServoReal extends Servo {
                 // Trigger on reception of ack from arduino that it has started
                 if (receivedCommand.indexOf("0;") == 0) {
                     this.serialPortConnected = true;
-                    this.ordersSerial = require("../../Shared/ordersserial")(this.serialPort);
+                    this.ordersSerial = require("../shared/orders.serial")(this.serialPort);
                 }
             }
         }

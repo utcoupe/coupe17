@@ -4,7 +4,7 @@
 
 "use strict";
 
-const OrdersManager = require('./ordersmanager.js');
+const OrdersManager = require('./orders.manager.js');
 
 //orders for inter process communication
 class OrdersProcess extends OrdersManager {

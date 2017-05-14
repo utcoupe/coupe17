@@ -7,8 +7,8 @@
 
 "use strict";
 
-const Client = require('../client.class.js');
-const Fifo = require('../fifo.class.js');
+const Client = require('../shared/client');
+const Fifo = require('../shared/fifo');
 
 /**
  * Classe abstraite représentant les extensions

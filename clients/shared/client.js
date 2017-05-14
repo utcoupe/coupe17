@@ -10,8 +10,8 @@
 "use strict";
 
 const Log4js = require('log4js');
-const CONFIG = require('../config.js');
-const SocketClient = require('../server/socket_client.class.js');
+const CONFIG = require('../../config.js');
+const SocketClient = require('../../server/socket_client.class.js');
 
 /**
  * Client abstrait

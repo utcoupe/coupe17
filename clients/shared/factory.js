@@ -44,11 +44,11 @@ class Factory {
                     if (this.devicesPortMap[this.robotName + "_" + type] !== undefined) {
                         this.logger.info("Asserv is real, arduino detected");
                         //todo parameters
-                        returnedObject = require('../Asserv/Asserv.class.js')();
+                        returnedObject = require('../asserv/asserv.real')();
                     } else {
                         this.logger.fatal("Servo is simu");
                         //todo parameters
-                        returnedObject = require('../Asserv/AsservSimu.class.js')();
+                        returnedObject = require('../asserv/asserv.simu')();
                     }
                     break;
                 }
@@ -56,7 +56,7 @@ class Factory {
                 {
                     if (this.devicesPortMap[this.robotName + "_others"] !== undefined) {
                         this.logger.info("Servo is real, arduino detected");
-                        returnedObject = require('../Extension/Actuators/servoreal.js')(this.devicesPortMap[this.robotName + "_others"]);
+                        returnedObject = require('../actuators/servo.real')(this.devicesPortMap[this.robotName + "_others"]);
                     } else {
                         this.logger.fatal("Servo is simu");
                         //todo

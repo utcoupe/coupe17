@@ -7,7 +7,7 @@
 
 "use strict";
 
-const Extension = require('./extension.class.js');
+const Extension = require('../extension/extension');
 
 /**
  * Classe définissant le jack

@@ -8,8 +8,8 @@
 
 "use strict";
 
-const Extension = require('./extension.class.js');
-var servos = require ("./Actuators/servo.class.js");
+const Extension = require('./extension');
+var servos = require('../actuators/servo');
 
 /**
  * Classe définissant le canon

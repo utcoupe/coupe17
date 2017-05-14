@@ -7,9 +7,9 @@
 
 "use strict";
 
-const Robot = require('./robot.class.js');
-const Canon = require('../Extension/canon.class.js');
-const Sweeper = require('../Extension/sweeper.class.js');
+const Robot = require('./robot');
+const Canon = require('../extension/canon');
+const Sweeper = require('../extension/sweeper');
 
 /**
  * Grand Robot

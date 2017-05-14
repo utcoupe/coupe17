@@ -12,9 +12,9 @@
 
 //TODO Find a way to replace detect
 
-const Robot = require('./robot.class.js');
-const UnitGrabber = require('../Extension/unitgrabber.class.js');
-const BaseConstructor = require('../Extension/baseconstructor.class.js');
+const Robot = require('./robot');
+const UnitGrabber = require('../extension/unitgrabber');
+const BaseConstructor = require('../extension/baseconstructor');
 
 /**
  * Petit Robot

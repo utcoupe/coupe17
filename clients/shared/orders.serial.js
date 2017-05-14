@@ -4,7 +4,7 @@
 
 "use strict";
 
-const OrdersManager = require('./ordersmanager.js');
+const OrdersManager = require('./orders.manager');
 
 class OrdersSerial extends OrdersManager {
     constructor(communicationLine) {

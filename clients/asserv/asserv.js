@@ -33,7 +33,7 @@ class Asserv{
 
 		/** @type {clients/fifo.Fifo} */
 		if(fifo === undefined || fifo === null){
-			var Fifo = require('../fifo.class.js');
+			var Fifo = require('../shared/fifo');
 			this.fifo = new Fifo();
 		}
 		else 

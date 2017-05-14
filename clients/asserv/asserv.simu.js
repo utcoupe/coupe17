@@ -7,7 +7,7 @@
 
 "use strict";
 
-const Asserv = require('./Asserv.class.js');
+const Asserv = require('./asserv');
 
 /**
  * Classe héritant de l'asservissement, mode simulateur

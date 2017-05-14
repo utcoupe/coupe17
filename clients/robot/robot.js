@@ -11,10 +11,10 @@
 "use strict";
 
 const SerialPort = require("serialport");
-const Client = require('../client.class.js');
-const Fifo = require('../fifo.class.js');
-const AsservSimu = require('../Asserv/AsservSimu.class.js');
-const AsservReal = require('../Asserv/AsservReal.class.js');
+const Client = require('../shared/client');
+const Fifo = require('../shared/fifo');
+const AsservSimu = require('../asserv/asserv.simu');
+const AsservReal = require('../asserv/asserv.real');
 
 
 //TODO Look if use other.class and other_simu

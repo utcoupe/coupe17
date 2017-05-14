@@ -7,9 +7,9 @@
 
 "use strict";
 
-const Asserv = require('./Asserv.class.js');
+const Asserv = require('./asserv');
 const SerialPort = require('serialport');
-const defineParser = require("../Shared/defineParser.js");
+const defineParser = require('../shared/defineparser');
 const fs = require('fs');
 
 /**
