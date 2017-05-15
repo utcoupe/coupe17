@@ -192,6 +192,7 @@ class Robot extends Client{
         super.stop();
 
 		this.started = false;
+		this.starting = false;
 	}
 	
 
