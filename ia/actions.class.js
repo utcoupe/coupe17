@@ -334,7 +334,7 @@ class Actions{
 	 */
 	pathDoAction(callback, actions, id, otherRobotPos) {
 		if(id != this.valid_id_do_action) {
-			this.logger.Debug('id different');
+			this.logger.debug('id different');
 			return;
 		}
 		// Va choisir l'action la plus proche, demander le path et faire doAction
