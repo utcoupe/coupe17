@@ -8,7 +8,6 @@
 "use strict";
 
 const Extension = require('./extension');
-var servos = require('../actuators/servo');
 
 /**
  * Extension permettant de construire la base lunaire
@@ -20,7 +19,7 @@ var servos = require('../actuators/servo');
 class BaseConstructor extends Extension {
     constructor(){
         super("base_constructor");
-        this.servos = servos;
+        this.servos = null;
         this.hasAPreparedModule = false;
         this.pushTowards = "dont";
         this.color = "null";
