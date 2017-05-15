@@ -17,8 +17,8 @@ var Convert = require('ansi-to-html');
 
 var logger = Log4js.getLogger('Server');
 var spawn = require('child_process').spawn;
-var convert = new Convert({newLine: true})
-var os = require('os');;
+var convert = new Convert({newLine: true});
+var os = require('os');
 
 /**
  * Serveur pour toutes les communications
@@ -248,10 +248,10 @@ class Server {
 				case 'pr':
 					//this.progs[prog] = spawn('ssh', ['igep', '/root/main.sh']);
                     //todo launch remote client
-					this.progs[prog] = spawn('node', ['./clients/Robot/main_tibot.js']);
+					this.progs[prog] = spawn('node', ['./clients/main/main.pr.js']);
 				break;
 				case 'gr':
-					this.progs[prog] = spawn('node', ['./clients/Robot/main_grobot.js']);
+					this.progs[prog] = spawn('node', ['./clients/main/main.gr.js']);
 				break;
 				case 'hokuyo':
 					// this.progs[prog] = spawn('ssh', ['raspi', './hokuyo/main.js']);

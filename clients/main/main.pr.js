@@ -10,7 +10,7 @@
 (function () {
 	"use strict";
 
-	const Tibot = require('./tibot.class.js');
+	const Tibot = require('../robot/pr');
 
 	var tibot = new Tibot('pr');
 	//tibot.sendChildren(tibot.lastStatus);

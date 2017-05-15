@@ -12,9 +12,9 @@
 
 //TODO Find a way to replace detect
 
-const Robot = require('./robot.class.js');
-const UnitGrabber = require('../Extension/unitgrabber.class.js');
-const BaseConstructor = require('../Extension/baseconstructor.class.js');
+const Robot = require('./robot');
+const UnitGrabber = require('../extension/unitgrabber');
+const BaseConstructor = require('../extension/baseconstructor');
 
 /**
  * Petit Robot
@@ -34,8 +34,14 @@ class Tibot extends Robot{
 	
 	// called by start
 	openExtensions () {
-        this.unitGrabber.start();
-        this.baseConstructor.start();
+        this.servo = this.factory.createObject("servo");
+
+        let actuators = {
+        	servos: this.servo
+        }
+
+        this.unitGrabber.start(actuators);
+        this.baseConstructor.start(actuators);
 	}
 	
 	// called by stop and exit

@@ -1,0 +1,209 @@
+/**
+ * Module permettant de construire la base lunaire
+ * 
+ * @module clients/Extension/baseconstructor
+ * @requires module:clients/Extension/extension
+ */
+
+"use strict";
+
+const Extension = require('./extension');
+
+/**
+ * Extension permettant de construire la base lunaire
+ * 
+ * @class BaseConstructor
+ * @memberof module:clients/Extension/baseconstructor
+ * @extends clients/Extension/extension.Extension
+ */
+class BaseConstructor extends Extension {
+    constructor(){
+        super("base_constructor");
+        this.servos = null;
+        this.hasAPreparedModule = false;
+        this.pushTowards = "dont";
+        this.color = "null";
+        this.nbModulesToDrop = 0;
+    }
+
+    takeOrder (from, name, param) {
+        this.logger.info("Order received : " + name);
+
+        if (!this.started) {
+            this.logger.error("BaseConstructor isn't started");
+            return;
+        }
+
+        switch (name) {
+            
+            case "prepare_module":
+                this.prepareModule(param);
+                break;
+            
+            case "drop_module":
+                this.dropModule(param);
+                break;
+            
+            case "clean":
+                this.logger.debug("Cleaning FiFo");
+                this.fifo.clean();
+                break;
+            
+            case "stop":
+                this.stop();
+                break;
+
+            case "send_message":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder(name, param);
+                }, name);
+                break;
+            
+            // ************ tests only ! ************
+            case "drop":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder(name);
+                }, name);
+                this.fifo.newOrder(() => {
+                    this.sendDataToIA("pr.module--", {});
+                }, "sendModule--");
+                break;
+            case "engage":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder(name);
+                }, name);
+                break;
+            case "push":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder(name, {towards: param.push_towards});
+                }, name);
+                break;
+            case "rotate":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder(name, {color: param.color});
+                }, name);
+                break;
+            
+            default :
+                this.logger.error("Order " + name + " does not exist !");
+        }
+    }
+
+    processFifoOrder (name, param) {
+        this.logger.info("Order executing : " + name);
+
+        if (!this.started) {
+            this.logger.error("BaseConstructor isn't started");
+            return;
+        }
+
+        switch (name) {
+            case "drop":
+                this.servos.moduleDrop( () => {
+                    this.fifo.orderFinished();
+                });
+                if (this.nbModulesToDrop > 0)
+                    this.nbModulesToDrop--;
+                else
+                    this.logger.error("Aucun module à déposer !");
+                break;
+            case "engage":
+                this.servos.moduleEngage( () => {
+                    this.fifo.orderFinished();
+                });
+                break;
+            case "rotate":
+                this.servos.moduleRotate( () => {
+                    this.fifo.orderFinished();
+                });
+                break;
+            case "push":
+                /// TODO AX12 action with param.towards
+                this.fifo.orderFinished();
+                break;
+            case "send_message":
+                this.sendDataToIA(param.name, param || {});
+                this.fifo.orderFinished();
+                break;
+            
+            default:
+                this.logger.error("Order " + name + " does not exist !");
+                this.fifo.orderFinished();
+        }
+    }
+
+    start(actuators) {
+        super.start();
+        if (!!actuators.servos) {
+            this.servos = actuators.servos;
+        } else {
+            this.logger.error("Servos must be provided to BaseConstructor");
+        }
+    }
+
+    // Inherited from client
+    stop() {
+        if (!!this.servos) {
+            this.servos.stop();
+        }
+        super.stop();
+    }
+
+    /**
+     * Engage a module in drop servos and rotate it
+     * 
+     * @param {Object} [params]
+     * @param {String} params.color
+     * @param {String} params.push_towards
+     */
+    prepareModule (params) {
+        if (params && params.push_towards)
+            this.pushTowards = params.push_towards;
+        // push_towards -> oposite direction
+        var opositPush = "dont";
+        if (this.push_towards == "left")
+            opositPush = "right";
+        else if (this.push_towards == "right")
+            opositPush = "left";
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("push", {towards: opositPush});
+        }, "push");
+        // open
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("engage");
+        }, "engage");
+        // rotate
+        if (params && params.color)
+            this.color = params.color;
+        if (this.color != "null")
+            this.fifo.newOrder(() => {
+                this.processFifoOrder("rotate", {color: this.color})
+            });
+        this.hasAPreparedModule = true;
+    }
+
+    /**
+     * Drop a module after preparing it (according to prepare_module)
+     * 
+     * @param {Object} params 
+     * @param {Number} params.nb_modules_to_drop number of iterations
+     */
+    dropModule (params) {
+        for (var idModule = 0; idModule < params.nb_modules_to_drop; idModule++) {
+            this.nbModulesToDrop++;
+            // Preparation
+            if (!this.hasAPreparedModule)
+                this.prepareModule();
+            // close
+            this.fifo.newOrder(() => {
+                this.processFifoOrder("drop");
+            }, "drop");
+            this.fifo.newOrder(() => {
+                this.processFifoOrder("push", {towards: this.push_towards});
+            }, "push");
+            this.hasAPreparedModule = false;
+        }
+    }
+}
+
+module.exports = BaseConstructor;

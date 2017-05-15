@@ -12,8 +12,8 @@
 
 	"use strict";
 
-	var Grobot = (require('./grobot.class.js'));
-  var grobot = new Grobot('gr');
+	var Grobot = (require('../robot/gr'));
+    var grobot = new Grobot('gr');
   //grobot.sendChildren(tibot.grobot);
 
 	grobot.start();

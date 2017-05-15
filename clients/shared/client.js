@@ -10,8 +10,8 @@
 "use strict";
 
 const Log4js = require('log4js');
-const CONFIG = require('../config.js');
-const SocketClient = require('../server/socket_client.class.js');
+const CONFIG = require('../../config.js');
+const SocketClient = require('../../server/socket_client.class.js');
 
 /**
  * Client abstrait
@@ -45,8 +45,8 @@ class Client {
         throw new TypeError("client:takeOrder is abstract !");
     }
 
-	send(){
-
+	sendDataToIA(name, params){
+		this.client.send('ia', name, params);
 	}
 
 	start(){

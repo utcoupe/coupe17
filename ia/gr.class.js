@@ -33,7 +33,7 @@ class Gr extends Robot{
 		this.size = {
 			l: 290,
 			L: 290,
-			d: 420
+			d: 390
 		};
 
 		/** Initial position */

@@ -20,6 +20,8 @@
 //  multiplied by FLOAT_PRECISION
 
 // BEGIN_ORDERS - Do not remove this comment
+#define START       'S'     //no args, start the program
+#define HALT        'H'     //no args, halt the program
 #define	GOTOA 		'c' 	// x(int);y(int);a(decimal);direction(int) - (mm and radian), direction is optionnal : 1 is forward, -1 is backward, 0 is any
 #define	GOTO 		'd' 	// x(int);y(int);direction(int) - (mm), direction is optionnal : 1 is forward, -1 is backward, 0 is any
 #define	ROT 		'e' 	// a(decimal) - (radian), can't turn more than 1 turn

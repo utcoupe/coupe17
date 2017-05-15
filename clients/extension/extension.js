@@ -7,8 +7,8 @@
 
 "use strict";
 
-const Client = require('../client.class.js');
-const Fifo = require('../fifo.class.js');
+const Client = require('../shared/client');
+const Fifo = require('../shared/fifo');
 
 /**
  * Classe abstraite représentant les extensions
@@ -20,12 +20,13 @@ class Extension extends Client {
     constructor(extensionName){
         super(extensionName);
         this.extensionName = extensionName;
+        this.started = false;
 
         this.fifo = new Fifo();
     }
 
     takeOrder(from, name, param) {
-        this.fifo.newOrder(() => {this.processFifoOrder(name, param)}, name);
+        throw new TypeError("extension:takeOrder is pure virtual !");
     }
 
     processFifoOrder (name, param) {
@@ -34,11 +35,13 @@ class Extension extends Client {
 
     // Inherited from client
     stop() {
+        this.started = false;
         this.fifo.clean();
         super.stop();
     }
 
-    start() {
+    start(actuators) {
+        this.started = true;
         super.start();
     }
 }

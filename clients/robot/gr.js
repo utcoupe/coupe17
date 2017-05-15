@@ -7,9 +7,9 @@
 
 "use strict";
 
-const Robot = require('./robot.class.js');
-const Canon = require('../Extension/canon.class.js');
-const Sweeper = require('../Extension/sweeper.class.js');
+const Robot = require('./robot');
+const Canon = require('../extension/canon');
+const Sweeper = require('../extension/sweeper');
 
 /**
  * Grand Robot
@@ -30,8 +30,14 @@ class Grobot extends Robot{
 	
 	// called by start
 	openExtensions () {
-		this.sweeper.start();
-		this.canon.start();
+        this.servo = this.factory.createObject("servo");
+
+        let actuators = {
+        	servos: this.servo
+        }
+        
+		this.sweeper.start(actuators);
+		this.canon.start(actuators);
 	}
 	
 	// called by stop and exit

@@ -3,18 +3,19 @@
         "front_left": {
             "pos":
             {
-                "x": 350,
-                "y": 1650
+                "x": 0,
+                "y": 2000
             },
+			"d": 510,
             "color": "both",
             "status": "initial"
         },
         "small_left": {
-            "pos":
-            {
-                "x": 650,
-                "y": 540
-            },
+			"pos":{
+				"x": 650,
+				"y": 540
+			},
+			"d": 240,
             "color": "both",
             "status": "initial"
         },
@@ -24,15 +25,36 @@
                 "x": 2350,
                 "y": 540
             },
+			"d": 240,
+            "color": "both",
+            "status": "initial"
+        },
+        "small_front_left": {
+			"pos":{
+				"x": 1070,
+				"y": 1870
+			},
+			"d": 240,
+            "color": "both",
+            "status": "initial"
+        },
+        "small_front_right": {
+            "pos":
+            {
+                "x": 1930,
+                "y": 1870
+            },
+			"d": 240,
             "color": "both",
             "status": "initial"
         },
         "front_right": {
             "pos":
             {
-                "x": 2650,
-                "y": 1650
+                "x": 3000,
+                "y": 2000
             },
+			"d": 510,
             "color": "both",
             "status": "initial"
         }
@@ -44,6 +66,7 @@
                 "x": 200,
                 "y": 600
             },
+            "d": 63,
             "color": "blue",
             "status": "initial"
         },
@@ -53,6 +76,7 @@
                 "x": 800,
                 "y": 1850
             },
+            "d": 63,
             "color": "blue",
             "status": "initial"
         },
@@ -62,6 +86,7 @@
                 "x": 2800,
                 "y": 600
             },
+            "d": 63,
             "color": "yellow",
             "status": "initial"
         },
@@ -71,6 +96,7 @@
                 "x": 2200,
                 "y": 1850
             },
+            "d": 63,
             "color": "yellow",
             "status": "initial"
         },
@@ -80,6 +106,7 @@
                 "x": 500,
                 "y": 1100
             },
+            "d": 63,
             "color": "both",
             "status": "initial"
         },
@@ -89,6 +116,7 @@
                 "x": 900,
                 "y": 1400
             },
+            "d": 63,
             "color": "both",
             "status": "initial"
         },
@@ -98,6 +126,7 @@
                 "x": 1000,
                 "y": 600
             },
+            "d": 63,
             "color": "both",
             "status": "initial"
         },
@@ -107,6 +136,7 @@
                 "x": 2500,
                 "y": 1100
             },
+            "d": 63,
             "color": "both",
             "status": "initial"
         },
@@ -116,6 +146,7 @@
                 "x": 2100,
                 "y": 1400
             },
+            "d": 63,
             "color": "both",
             "status": "initial"
         },
@@ -125,6 +156,7 @@
                 "x": 2000,
                 "y": 600
             },
+            "d": 63,
             "color": "both",
             "status": "initial"
         }
