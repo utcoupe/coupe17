@@ -262,9 +262,12 @@ module.exports = (function () {
 		// Add modules still on the table
 		let modulesArray = [];
 		for (let name in this.ia.data.module) {
-			modulesArray.push(this.ia.data.module[name]);
+			let m = this.ia.data.module[name];
+			if ((m.status == "initial") && !((m.pos.x == except.x) && (m.pos.y == except.y))) {
+				modulesArray.push(this.ia.data.module[name]);
+			}
 		}
-		objects = objects.concat(modulesArray.filter( (m) => { return (m.status ==  "initial" && (m.pos.x != except.x) && (m.pos.y != except.y)); } ));
+		objects = objects.concat(modulesArray);
 
 		// logger.debug(objects);
 

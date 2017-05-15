@@ -22,6 +22,10 @@ class Asserv{
 		this.getInitPos();
 	}
 
+	stop() {
+		this.logger.warn("TODO: stop asserv");
+	}
+
 	/**
 	 * Convert Angle
 	 *

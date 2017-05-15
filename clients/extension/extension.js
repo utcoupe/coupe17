@@ -20,6 +20,7 @@ class Extension extends Client {
     constructor(extensionName){
         super(extensionName);
         this.extensionName = extensionName;
+        this.started = false;
 
         this.fifo = new Fifo();
     }
@@ -34,11 +35,13 @@ class Extension extends Client {
 
     // Inherited from client
     stop() {
+        this.started = false;
         this.fifo.clean();
         super.stop();
     }
 
-    start() {
+    start(actuators) {
+        this.started = true;
         super.start();
     }
 }

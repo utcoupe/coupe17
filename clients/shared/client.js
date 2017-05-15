@@ -45,8 +45,8 @@ class Client {
         throw new TypeError("client:takeOrder is abstract !");
     }
 
-	send(){
-
+	sendDataToIA(name, params){
+		this.client.send('ia', name, params);
 	}
 
 	start(){

@@ -20,11 +20,18 @@ var servos = require('../actuators/servo');
 class UnitGrabber extends Extension {
     constructor(){
         super("unit_grabber");
-        this.servos = servos;
+        // this.servos = servos;
     }
 
     takeOrder (from, name, param) {
         this.logger.info("Order received " + name);
+
+
+        if (!this.started) {
+            this.logger.error("BaseConstructor isn't started");
+            return;
+        }
+
         switch (name) {
             case "take_module":
                 this.takeModule();
@@ -32,24 +39,18 @@ class UnitGrabber extends Extension {
             
             // **************** tests only ************
             case "openArm":
-                this.fifo.newOrder(() => {
-                    this.processFifoOrder("openArm");
-                }, "openArm");
-                break;
             case "closeArm":
-                this.fifo.newOrder(() => {
-                    this.processFifoOrder("closeArm");
-                }, "closeArm");
-                break;
             case "upGrabber":
-                this.fifo.newOrder(() => {
-                    this.processFifoOrder("upGrabber");
-                }, "upGrabber");
-                break;
             case "downGrabber":
                 this.fifo.newOrder(() => {
-                    this.processFifoOrder("downGrabber");
-                }, "downGrabber");
+                    this.processFifoOrder(name);
+                }, name);
+                break;
+
+            case "send_message":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder(name, param);
+                }, name);
                 break;
             
             case "stop":
@@ -67,6 +68,13 @@ class UnitGrabber extends Extension {
 
    processFifoOrder (name, param) {
         this.logger.info("Executing order : " + name);
+
+
+        if (!this.started) {
+            this.logger.error("BaseConstructor isn't started");
+            return;
+        }
+
         switch (name) {
             case "openArm":
                 this.servos.moduleArmOpen(() => {
@@ -80,22 +88,40 @@ class UnitGrabber extends Extension {
                 break;
             case "upGrabber":
                 // TODO AX12 up
-                this.fifo.orderFinished();
+                setTimeout(() => {
+                    this.fifo.orderFinished();
+                }, 200);
                 break;
             case "downGrabber":
                 // TODO AX12 down
+                setTimeout(() => {
+                    this.fifo.orderFinished();
+                }, 200);
+                break;
+            case "send_message":
+                this.sendDataToIA(param.name, param || {});
                 this.fifo.orderFinished();
                 break;
-            
             default:
                 this.logger.error("Order " + name + " does not exist !");
                 this.fifo.orderFinished();
         }
     }
 
+    start(actuators) {
+        super.start();
+        if (!!actuators.servos) {
+            this.servos = actuators.servos;
+        } else {
+            this.logger.error("Servos must be provided to UnitGrabber");
+        }
+    }
+
     // Inherited from client
     stop() {
-        this.servos.stop();
+        if (!!this.servos) {
+            this.servos.stop();
+        }
         super.stop();
     }
 
@@ -118,6 +144,10 @@ class UnitGrabber extends Extension {
         this.fifo.newOrder(() => {
             this.processFifoOrder("closeArm");
         }, "closeArm");
+        this.fifo.newOrder(() => {
+            this.sendDataToIA("pr.module++", {});
+            this.fifo.orderFinished();
+        }, "sendModule++");
     }
 }
 

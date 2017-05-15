@@ -23,7 +23,11 @@ class AsservSimu extends Asserv{
 		this.FPS = 30;
 		this.timeouts = [];
 		this.pos = {x:0,y:0,a:0};
-		this.speed = 300; // 800;
+		this.speed = 600; // 800;
+	}
+
+	stop() {
+		this.clean();
 	}
 
     simuDistRotation(angle) {

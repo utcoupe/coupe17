@@ -67,6 +67,10 @@ class Canon extends Extension {
                 // TODO something
                 this.fifo.orderFinished();
                 break;
+            case "send_message":
+                this.sendDataToIA(param.name, param || {});
+                this.fifo.orderFinished();
+                break;
 
             default:
                 this.logger.error ("Order " + name + " does not exist!");
@@ -74,8 +78,20 @@ class Canon extends Extension {
         }
     }
 
-    stop () {
-        this.servos.stop();
+    start(actuators) {
+        super.start();
+        if (!!actuators.servos) {
+            this.servos = actuators.servos;
+        } else {
+            this.logger.error("Servos must be provided to Canon");
+        }
+    }
+
+    // Inherited from client
+    stop() {
+        if (!!this.servos) {
+            this.servos.stop();
+        }
         super.stop();
     }
 }

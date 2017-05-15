@@ -11,14 +11,14 @@
 				"a": -1.5707
 			}],
 			"direction": "forward",
-			"priority": 100,
+			"priority": 88,
 			"dependency": "",
 			"dependencyRobotContent": {
 				"supModule": 5,
 				"infModule": 0
 			},
 			"orders":[{
-				"dest": "unitgrabber",
+				"dest": "unit_grabber",
 				"name": "take_module",
 				"params": {
 					"rocket": true,
@@ -37,14 +37,14 @@
 				"a": -3.1415
 			}],
 			"direction": "forward",
-			"priority": 101,
+			"priority": 88,
 			"dependency": "",
 			"dependencyRobotContent": {
 				"supModule": 5,
 				"infModule": 0
 			},
 			"orders":[{
-				"dest": "unitgrabber",
+				"dest": "unit_grabber",
 				"name": "take_module",
 				"params": {
 					"rocket": true,
@@ -63,14 +63,14 @@
 				"a": -1.5707
 			}],
 			"direction": "forward",
-			"priority": 100,
+			"priority": 88,
 			"dependency": "",
 			"dependencyRobotContent": {
 				"supModule": 5,
 				"infModule": 0
 			},
 			"orders":[{
-				"dest": "unitgrabber",
+				"dest": "unit_grabber",
 				"name": "take_module",
 				"params": {
 					"rocket": true,
@@ -89,14 +89,14 @@
 				"a": 0
 			}],
 			"direction": "forward",
-			"priority": 101,
+			"priority": 88,
 			"dependency": "",
 			"dependencyRobotContent": {
 				"supModule": 5,
 				"infModule": 0
 			},
 			"orders":[{
-				"dest": "unitgrabber",
+				"dest": "unit_grabber",
 				"name": "take_module",
 				"params": {
 					"rocket": true,
@@ -118,7 +118,7 @@
 				"infModule": 0
 			},
 			"orders":[{
-				"dest": "unitgrabber",
+				"dest": "unit_grabber",
 				"name": "take_module",
 				"params": {
 					"rocket": false,
@@ -140,7 +140,7 @@
 				"infModule": 0
 			},
 			"orders":[{
-				"dest": "unitgrabber",
+				"dest": "unit_grabber",
 				"name": "take_module",
 				"params": {
 					"rocket": false,
@@ -162,7 +162,7 @@
 				"infModule": 0
 			},
 			"orders":[{
-				"dest": "unitgrabber",
+				"dest": "unit_grabber",
 				"name": "take_module",
 				"params": {
 					"rocket": false,
@@ -184,7 +184,7 @@
 				"infModule": 0
 			},
 			"orders":[{
-				"dest": "unitgrabber",
+				"dest": "unit_grabber",
 				"name": "take_module",
 				"params": {
 					"rocket": false,
@@ -206,7 +206,7 @@
 				"infModule": 0
 			},
 			"orders":[{
-				"dest": "unitgrabber",
+				"dest": "unit_grabber",
 				"name": "take_module",
 				"params": {
 					"rocket": false,
@@ -228,7 +228,7 @@
 				"infModule": 0
 			},
 			"orders":[{
-				"dest": "unitgrabber",
+				"dest": "unit_grabber",
 				"name": "take_module",
 				"params": {
 					"rocket": false,
@@ -250,7 +250,7 @@
 				"infModule": 0
 			},
 			"orders":[{
-				"dest": "unitgrabber",
+				"dest": "unit_grabber",
 				"name": "take_module",
 				"params": {
 					"rocket": false,
@@ -272,7 +272,7 @@
 				"infModule": 0
 			},
 			"orders":[{
-				"dest": "unitgrabber",
+				"dest": "unit_grabber",
 				"name": "take_module",
 				"params": {
 					"rocket": false,
@@ -294,7 +294,7 @@
 				"infModule": 0
 			},
 			"orders":[{
-				"dest": "unitgrabber",
+				"dest": "unit_grabber",
 				"name": "take_module",
 				"params": {
 					"rocket": false,
@@ -316,7 +316,7 @@
 				"infModule": 0
 			},
 			"orders":[{
-				"dest": "unitgrabber",
+				"dest": "unit_grabber",
 				"name": "take_module",
 				"params": {
 					"rocket": false,
@@ -335,13 +335,13 @@
                 "a": 3.1415
 			}],
 			"direction": "backward",
-			"priority": 103,
+			"priority": 93,
 			"dependency": "",
 			"dependencyRobotContent": {
 				"infModule": 3
 			},
 			"preparation_orders":[{
-				"dest": "baseconstructor",
+				"dest": "base_constructor",
 				"name": "prepare_module",
 				"params": {
 					"color": "TO_BE_FILLED_BY_IA",
@@ -349,7 +349,7 @@
 				}
 			}],
 			"orders":[{
-				"dest": "baseconstructor",
+				"dest": "base_constructor",
 				"name": "drop_module",
 				"params": {
 					"nb_modules_to_drop": 3
@@ -373,7 +373,7 @@
 				"infModule": 3
 			},
 			"preparation_orders":[{
-				"dest": "baseconstructor",
+				"dest": "base_constructor",
 				"name": "prepare_module",
 				"params": {
 					"color": "TO_BE_FILLED_BY_IA",
@@ -381,7 +381,7 @@
 				}
 				}],
 			"orders":[{
-				"dest": "baseconstructor",
+				"dest": "base_constructor",
 				"name": "drop_module",
 				"params": {}
 				}],
@@ -403,7 +403,7 @@
 				"infModule": 3
 			},
 			"preparation_orders":[{
-				"dest": "baseconstructor",
+				"dest": "base_constructor",
 				"name": "prepare_module",
 				"params": {
 					"color": "TO_BE_FILLED_BY_IA",
@@ -411,7 +411,7 @@
 				}
 				}],
 			"orders":[{
-				"dest": "baseconstructor",
+				"dest": "base_constructor",
 				"name": "drop_module",
 				"params": {}
 				}],
@@ -433,7 +433,7 @@
 				"infModule": 3
 			},
 			"preparation_orders":[{
-				"dest": "baseconstructor",
+				"dest": "base_constructor",
 				"name": "prepare_module",
 				"params": {
 					"color": "TO_BE_FILLED_BY_IA",
@@ -441,7 +441,7 @@
 				}
 				}],
 			"orders":[{
-				"dest": "baseconstructor",
+				"dest": "base_constructor",
 				"name": "drop_module",
 				"params": {}
 				}],
@@ -463,7 +463,7 @@
 				"infModule": 3
 			},
 			"preparation_orders":[{
-				"dest": "baseconstructor",
+				"dest": "base_constructor",
 				"name": "prepare_module",
 				"params": {
 					"color": "TO_BE_FILLED_BY_IA",
@@ -471,7 +471,7 @@
 				}
 				}],
 			"orders":[{
-				"dest": "baseconstructor",
+				"dest": "base_constructor",
 				"name": "drop_module",
 				"params": {}
 				}],
@@ -493,7 +493,7 @@
 				"infModule": 3
 			},
 			"preparation_orders":[{
-				"dest": "baseconstructor",
+				"dest": "base_constructor",
 				"name": "prepare_module",
 				"params": {
 					"color": "TO_BE_FILLED_BY_IA",
@@ -501,7 +501,7 @@
 				}
 				}],
 			"orders":[{
-				"dest": "baseconstructor",
+				"dest": "base_constructor",
 				"name": "drop_module",
 				"params": {}
 				}],
@@ -523,7 +523,7 @@
 				"infModule": 3
 			},
 			"preparation_orders":[{
-				"dest": "baseconstructor",
+				"dest": "base_constructor",
 				"name": "prepare_module",
 				"params": {
 					"color": "TO_BE_FILLED_BY_IA",
@@ -531,7 +531,7 @@
 				}
 				}],
 			"orders":[{
-				"dest": "baseconstructor",
+				"dest": "base_constructor",
 				"name": "drop_module",
 				"params": {}
 				}],
@@ -553,7 +553,7 @@
 				"infModule": 3
 			},
 			"preparation_orders":[{
-				"dest": "baseconstructor",
+				"dest": "base_constructor",
 				"name": "prepare_module",
 				"params": {
 					"color": "TO_BE_FILLED_BY_IA",
@@ -561,7 +561,7 @@
 				}
 			}],
 			"orders":[{
-				"dest": "baseconstructor",
+				"dest": "base_constructor",
 				"name": "drop_module",
 				"params": {
 					"nb_modules_to_drop": 3

@@ -80,7 +80,11 @@ class Robot extends Client{
 
 			if(classe == "asserv"){
 				// this.logger.debug("order send to asserv : "+OrderSubname);
-				this.asserv.addOrderToFifo(OrderSubname,params);
+				if (!!this.asserv) {
+					this.asserv.addOrderToFifo(OrderSubname,params);
+				} else {
+					this.logger.error("Asserv not initialized");
+				}
 			// } else if (classe == this.robotName){
 			} else {
 				switch (name){
@@ -143,7 +147,7 @@ class Robot extends Client{
 
             this.queue = [];
 
-            // Tests devices and connect
+            // Connect to devices
             this.openExtensions();
 
             // Send struct to server
@@ -178,6 +182,10 @@ class Robot extends Client{
 			status: "waiting",
 			children:[]
 		});
+
+		if (!!this.asserv) {
+			this.asserv.stop();
+		}
 
         this.closeExtensions();
 

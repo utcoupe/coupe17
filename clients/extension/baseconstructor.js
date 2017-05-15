@@ -29,6 +29,12 @@ class BaseConstructor extends Extension {
 
     takeOrder (from, name, param) {
         this.logger.info("Order received : " + name);
+
+        if (!this.started) {
+            this.logger.error("BaseConstructor isn't started");
+            return;
+        }
+
         switch (name) {
             
             case "prepare_module":
@@ -47,27 +53,36 @@ class BaseConstructor extends Extension {
             case "stop":
                 this.stop();
                 break;
+
+            case "send_message":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder(name, param);
+                }, name);
+                break;
             
             // ************ tests only ! ************
             case "drop":
                 this.fifo.newOrder(() => {
-                    this.processFifoOrder("drop");
-                }, "drop");
+                    this.processFifoOrder(name);
+                }, name);
+                this.fifo.newOrder(() => {
+                    this.sendDataToIA("pr.module--", {});
+                }, "sendModule--");
                 break;
             case "engage":
                 this.fifo.newOrder(() => {
-                    this.processFifoOrder("engage");
-                }, "engage");
+                    this.processFifoOrder(name);
+                }, name);
                 break;
             case "push":
                 this.fifo.newOrder(() => {
-                    this.processFifoOrder("push", {towards: param.push_towards});
-                }, "push");
+                    this.processFifoOrder(name, {towards: param.push_towards});
+                }, name);
                 break;
             case "rotate":
                 this.fifo.newOrder(() => {
-                    this.processFifoOrder("rotate", {color: param.color});
-                }, "rotate");
+                    this.processFifoOrder(name, {color: param.color});
+                }, name);
                 break;
             
             default :
@@ -77,6 +92,12 @@ class BaseConstructor extends Extension {
 
     processFifoOrder (name, param) {
         this.logger.info("Order executing : " + name);
+
+        if (!this.started) {
+            this.logger.error("BaseConstructor isn't started");
+            return;
+        }
+
         switch (name) {
             case "drop":
                 this.servos.moduleDrop( () => {
@@ -101,6 +122,10 @@ class BaseConstructor extends Extension {
                 /// TODO AX12 action with param.towards
                 this.fifo.orderFinished();
                 break;
+            case "send_message":
+                this.sendDataToIA(param.name, param || {});
+                this.fifo.orderFinished();
+                break;
             
             default:
                 this.logger.error("Order " + name + " does not exist !");
@@ -108,9 +133,20 @@ class BaseConstructor extends Extension {
         }
     }
 
+    start(actuators) {
+        super.start();
+        if (!!actuators.servos) {
+            this.servos = actuators.servos;
+        } else {
+            this.logger.error("Servos must be provided to BaseConstructor");
+        }
+    }
+
     // Inherited from client
     stop() {
-        this.servos.stop();
+        if (!!this.servos) {
+            this.servos.stop();
+        }
         super.stop();
     }
 

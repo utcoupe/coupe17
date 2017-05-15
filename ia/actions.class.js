@@ -446,6 +446,7 @@ class Actions{
 		if(this.inprogress !== null) {
 			this.done[this.inprogress.name] = this.inprogress;
 			this.logger.info('Action %s est finie !', this.inprogress.name);
+			this.inprogress.object.status = "taken";
 			this.inprogress = null;
 			var temp = this.callback;
 			this.callback = function() {this.logger.warn('callback vide'); };

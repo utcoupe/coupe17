@@ -30,8 +30,14 @@ class Grobot extends Robot{
 	
 	// called by start
 	openExtensions () {
-		this.sweeper.start();
-		this.canon.start();
+        this.servo = this.factory.createObject("servo");
+
+        let actuators = {
+        	servos: this.servo
+        }
+        
+		this.sweeper.start(actuators);
+		this.canon.start(actuators);
 	}
 	
 	// called by stop and exit

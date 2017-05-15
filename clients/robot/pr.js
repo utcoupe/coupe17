@@ -34,8 +34,14 @@ class Tibot extends Robot{
 	
 	// called by start
 	openExtensions () {
-        this.unitGrabber.start();
-        this.baseConstructor.start();
+        this.servo = this.factory.createObject("servo");
+
+        let actuators = {
+        	servos: this.servo
+        }
+
+        this.unitGrabber.start(actuators);
+        this.baseConstructor.start(actuators);
 	}
 	
 	// called by stop and exit

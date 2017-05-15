@@ -27,17 +27,18 @@ class Sweeper extends Extension {
     takeOrder (from, name, param) {
         this.logger.info ("Order received: " + name);
         switch (name) {
-            case "smallow_ball":
+            case "swallow_balls":
+            case "send_message":
                 this.fifo.newOrder (() => {
-                    this.processFifoOrder("smallow_ball", param);
-                });
+                    this.processFifoOrder(name, param);
+                }, name);
                 break;
                 
             case "turn_on":
             case "turn_off":
                 this.fifo.newOrder (() => {
                     this.processFifoOrder(name, param);
-                });
+                }, name);
                 break;
             
             default:
@@ -54,14 +55,33 @@ class Sweeper extends Extension {
             case "turn_off":
                 this.fifo.orderFinished();
                 break;
+            case "swallow_balls":
+                this.logger.warn("TODO: make swallow_balls work");
+                this.fifo.orderFinished();
+                break;
+            case "send_message":
+                this.sendDataToIA(param.name, param || {});
+                this.fifo.orderFinished();
+                break;
             default:
                 this.logger.error("Order " + name + " does not exist!");
                 this.fifo.orderFinished();
         }
     }
 
+    start(actuators) {
+        super.start();
+        if (!!actuators.servos) {
+            this.servos = actuators.servos;
+        } else {
+            this.logger.error("Servos must be provided to Sweeper");
+        }
+    }
+
     stop () {
-        this.servos.stop();
+        if (!!this.servos) {
+            this.servos.stop();
+        }
         super.stop();
     }
 }
