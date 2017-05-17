@@ -119,6 +119,7 @@ class BaseConstructor extends Extension {
                 break;
             case "push":
                 /// TODO AX12 action with param.towards
+                this.logger.error("TODO: do AX12 push action");
                 this.fifo.orderFinished();
                 break;
             case "send_message":
@@ -139,12 +140,20 @@ class BaseConstructor extends Extension {
         } else {
             this.logger.error("Servos must be provided to BaseConstructor");
         }
+        if (!!actuators.ax12) {
+            this.ax12 = actuators.ax12;
+        } else {
+            this.logger.error("AX12 must be provided to BaseConstructor");
+        }
     }
 
     // Inherited from client
     stop() {
         if (!!this.servos) {
             this.servos.stop();
+        }
+        if (!!this.ax12) {
+            this.ax12.stop();
         }
         super.stop();
     }

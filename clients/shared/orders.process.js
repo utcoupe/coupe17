@@ -11,11 +11,14 @@ class OrdersProcess extends OrdersManager {
     constructor(communicationLine) {
         super(communicationLine);
 
-        //todo
+        // We replace the callback set by the Servo class
+        this.comLine.out.on("data", function(data){
+            this.parseCommand(data);
+        }.bind(this));
     }
 
     comLineSend(order) {
-        //todo
+        this.comLine.in.write(order);
     }
 }
 

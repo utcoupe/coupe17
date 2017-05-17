@@ -4,6 +4,8 @@
 
 "use strict";
 
+const Ax12 = require('./ax12');
+
 class Ax12Simu extends Ax12 {
     /**
      * Creates an instance of Ax12.
