@@ -16,9 +16,15 @@
 #include "sender.h"
 #include <Timer.h>
 
+/**
+ * Main loop function, check if emergency stop and computes the new command to apply.
+ * The asserv is working with an internal fifo to execute orders.
+ * The loop is activate through a Timer (see arduino library).
+ */
 void asservLoop();
 
-Timer asservLoopTimer = Timer(100, &asservLoop);
+// Run the loop for asserv at 100 Hz
+Timer asservLoopTimer = Timer(10, &asservLoop);
 
 //TODO make it proper with others
 // Flag to know if a computer is connected to the arduino
@@ -26,6 +32,11 @@ static unsigned char flagConnected = 0;
 
 //todo debug level as a parameter
 
+/**
+ * Read a \n ending string from serial port.
+ * The timeout is 50ms.
+ * When a string is received, execute the corresponding order.
+ */
 void serialRead() {
     String receivedString;
     receivedString = Serial.readStringUntil('\n');
@@ -35,26 +46,9 @@ void serialRead() {
     }
 }
 
-unsigned long nextTime = 0;
-
-#ifdef PIN_JACK
-int JackCheck(void) {
-	static int last_jack_status = 1;
-	int i, jack_status, sent_bytes = 0;
-	jack_status = digitalRead(PIN_JACK);
-	digitalWrite(LED_JACK, !jack_status);
-	if (last_jack_status == 0 && jack_status == 1) {
-		for (i=0; i<JACK_SEND_NR; i++) {
-			Serial.write(JACK);
-			Serial.write('\n');
-			sent_bytes += 2;
-		}
-	}
-	last_jack_status = jack_status;
-	return sent_bytes;
-}
-#endif
-
+/**
+ * Arduino setup function, initialize pins and registers.
+ */
 void setup() {
 	SERIAL_MAIN.begin(BAUDRATE, SERIAL_TYPE);
     Serial.setTimeout(50);
@@ -67,12 +61,15 @@ void setup() {
 #endif
 #endif
 	initPins();
-	nextTime = micros();
 	ControlInit();
 
     asservLoopTimer.Start();
 }
 
+/**
+ * Arduino loop function, read from serial port and send internal serial port data.
+ * If it is the time to execute asserv, execute it.
+ */
 void loop() {
     serialRead();
     if (!flagArduinoConnected) {
@@ -85,19 +82,6 @@ void loop() {
 }
 
 void asservLoop(){
-	int available, sent_bytes;
-#if DEBUG_MAINLOOP
-	static unsigned long start_overtime = micros();
-	unsigned long now;
-#endif
-
-	nextTime = nextTime + DT*1000000;
-	sent_bytes = 0;
-	digitalWrite(LED_MAINLOOP, HIGH);
-
-//#ifdef PIN_JACK
-//	sent_bytes += JackCheck();
-//#endif
 
 	//Action asserv
 	ComputeEmergency();
@@ -105,17 +89,4 @@ void asservLoop(){
 	ControlCompute();
 
     ProtocolAutoSendStatus();
-
-	digitalWrite(LED_MAINLOOP, LOW);
-
-#if DEBUG_MAINLOOP
-	now = micros();
-	if (now - start_overtime > 10000000) {
-		digitalWrite(LED_DEBUG, LOW);
-	}
-	if (now >= nextTime) {
-		start_overtime = micros();
-		digitalWrite(LED_DEBUG, HIGH);
-	}
-#endif
 }
