@@ -6,6 +6,7 @@
 #ifndef CONTROL_H
 #define CONTROL_H
 
+#include <stdint.h>
 #include "PID.h"
 #include "parameters.h"
 
@@ -24,8 +25,9 @@ typedef struct control {
 		float angular_speed, linear_speed;
 	} speeds;
 	float max_acc, max_spd, rot_spd_ratio;
-	int reset, last_finished_id;
-	int order_started;
+	uint8_t reset;
+    uint16_t last_finished_id;
+    uint16_t order_started;
 	int status_bits;
 } control_t;
 

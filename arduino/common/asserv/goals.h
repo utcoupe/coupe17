@@ -6,6 +6,7 @@
 #ifndef GOALS_H
 #define GOALS_H
 
+#include <stdint.h>
 #include "parameters.h"
 #define MAX_GOALS 15 //nombre max de goals dans la file, évite surcharge mémoire
 
@@ -44,7 +45,7 @@ typedef union goal_data {
 typedef struct goal {
 	goal_data_t data;
 	int type;
-	int ID;
+	uint16_t ID;
 	int is_reached;
 } goal_t;
 

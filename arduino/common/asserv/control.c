@@ -12,6 +12,7 @@
 #include "motor.h"
 #include "local_math.h"
 #include "emergency.h"
+#include "sender_wrapper.h"
 #include <math.h>
 
 #define ANG_REACHED (0x1)
@@ -133,6 +134,8 @@ void ControlCompute(void) {
 
 	if (current_goal->is_reached) {
 		control.last_finished_id = current_goal->ID;
+		//todo test that it's working fine...
+        SerialSendWrapVar(SERIAL_INFO, "%d;", (int)control.last_finished_id);
 		FifoNextGoal();
 		ControlPrepareNewGoal();
 #if TIME_BETWEEN_ORDERS
