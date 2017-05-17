@@ -87,7 +87,7 @@ void parseAndExecuteOrder(const String& order) {
             digitalWrite(LED_DEBUG, LOW);
             break;
         case GET_CODER:
-            SerialSender::SerialSend(SERIAL_INFO, "%d;%d;%d", order_id, left_ticks, right_ticks);
+            SerialSender::SerialSend(SERIAL_INFO, "%d;%d;%d;", order_id, left_ticks, right_ticks);
             break;
         case GOTO:
         {
