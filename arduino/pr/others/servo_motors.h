@@ -18,12 +18,10 @@ struct servoInformation {
 extern servoInformation servoData[];
 
 void servoAttach();
-void servoDemo();
-void servoAction(uint8_t servo_id, SERVO_POSITION position);
+void servoAction(uint8_t servo_id, SERVO_POSITION position, uint16_t order_id);
 void servoChangeParameter(const uint8_t servo_id, const SERVO_POSITION servo_position, const uint8_t servo_value);
-void open();
 //color is the colo to reach
-void servoRotate(MODULE_COLOR color);
+void servoRotate(MODULE_COLOR color, uint16_t order_id);
 void servoTimerUpdate();
 void servoRotateCallback();
 //todo unique method with mapped structure ?

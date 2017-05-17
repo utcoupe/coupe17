@@ -21,7 +21,8 @@ Servo pr_module_drop_r;
 Servo pr_module_drop_l;
 Servo pr_module_rotate;
 
-// parameters are : INIT, OPEN, CLOSE, ACTION_TIME(ms)
+// Parameters are : INIT, OPEN, CLOSE, ACTION_TIME(ms)
+// INIT, OPEN and CLOSE are PWM values for position of the servo motor (0 - 180 max)
 uint8_t servoValues[4][4] = {
         {90, 10, 170, 100},      //PR_MODULE_ARM
         {80, 180, 80, 100},      //PR_MODULE_DROP_R
@@ -36,23 +37,12 @@ Timer dropLTimer = Timer(servoValues[PR_MODULE_DROP_L][TIMER], &servoDropLCallba
 Timer rotateTimer = Timer(servoValues[PR_MODULE_ROTATE][TIMER], &servoRotateCallback);
 
 //todo dynamic structure with mapping servo_id - order_id ?
-// 0 is the default value, stands for no order
+// 0 is the default value, means no order
 uint16_t armLastId = 0;
 uint16_t dropRLastId = 0;
 uint16_t dropLLastId = 0;
+uint16_t servoRotateLastId = 0;
 MODULE_COLOR servoRotateColor = WHATEVER;
-
-//todo find a way for the size
-//servoInformation servoData[MAX_SERVO]= {
-//        {PR_MODULE_ARM, INIT, 90},
-//        {PR_MODULE_ARM, OPEN, 0},
-//        {PR_MODULE_ARM, CLOSE, 150},
-//        {PR_MODULE_DROP_R, OPEN, 90},
-//        {PR_MODULE_DROP_R, CLOSE, 90},
-//        {PR_MODULE_DROP_L, OPEN, 90},
-//        {PR_MODULE_DROP_L, CLOSE, 90},
-//        {PR_MODULE_ROTATE, OPEN, 90},
-//};
 
 void servoAttach() {
     pr_module_arm.attach(PR_MODULE_ARM_PIN);
@@ -66,22 +56,6 @@ void servoAttach() {
     pr_module_rotate.write(servoValues[PR_MODULE_ROTATE][INIT]);
 }
 
-void servoDemo() {
-    //todo assume to be the min
-    pr_module_arm.write(0);
-    delay(1000);
-    //todo assume to be the max
-//    pr_module_arm.write(90);
-//    delay(1000);
-    pr_module_arm.write(170);
-    delay(1000);
-}
-
-void open() {
-    pr_module_arm.write(0);
-    delay(400);
-}
-
 void servoAction(uint8_t servo_id, SERVO_POSITION position) {
     //todo maximal servo id as define
     if ((servo_id < 4) && (position < NB_POS)) {
@@ -92,28 +66,26 @@ void servoAction(uint8_t servo_id, SERVO_POSITION position) {
 }
 
 //todo put the timer start in another function to avoid multiple call ba protocol.cpp
-void servoApplyCommand(uint8_t servo_id, uint8_t value) {
+void servoApplyCommand(uint8_t servo_id, uint8_t value, uint16_t order_id) {
     if (value < MAX_UINT8_T_VALUE) {
         switch (servo_id) {
             case PR_MODULE_ARM:
                 armTimer.Start();
-                //todo use real order id...
-                armLastId = 36;
+                armLastId = order_id;
                 pr_module_arm.write(value);
                 break;
             case PR_MODULE_DROP_R:
                 dropRTimer.Start();
-                //todo use real order id...
-                dropRLastId = 36;
+                dropRLastId = order_id;
                 pr_module_drop_r.write(value);
                 break;
             case PR_MODULE_DROP_L:
                 dropLTimer.Start();
-                //todo use real order id...
-                dropLLastId = 36;
+                dropLLastId = order_id;
                 pr_module_drop_l.write(value);
                 break;
             case PR_MODULE_ROTATE:
+                servoRotateLastId = order_id;
                 pr_module_rotate.write(value);
                 break;
             default:
@@ -135,12 +107,12 @@ void servoChangeParameter(const uint8_t servo_id, const SERVO_POSITION servo_pos
     }
 }
 
-void servoRotate(MODULE_COLOR color) {
+void servoRotate(MODULE_COLOR color, uint16_t order_id) {
     //if color is whatever, no need to rotate
     SerialSender::SerialSend(SERIAL_INFO, "servoRotate color : %d", color);
     if (color != WHATEVER) {
         // Activate rotation
-        servoAction(PR_MODULE_ROTATE, OPEN);
+        servoAction(PR_MODULE_ROTATE, OPEN, order_id);
         servoRotateColor = color;
         rotateTimer.Start();
     }
@@ -153,7 +125,9 @@ void servoRotateCallback() {
             servoAction(PR_MODULE_ROTATE, INIT);
             // Put the global variable to default value
             servoRotateColor = WHATEVER;
-            //todo send a message to the IA to advertise that color is ok
+            // Send order id to ack that arduino has process the order
+            SerialSender::SerialSend(SERIAL_INFO, "%d;", servoRotateLastId);
+            servoRotateLastId = 0;
             rotateTimer.Stop();
         }
     }
@@ -161,6 +135,7 @@ void servoRotateCallback() {
 
 void servoArmCallback() {
     if (armLastId != 0) {
+        // Send order id to ack that arduino has process the order
         SerialSender::SerialSend(SERIAL_INFO, "%d;", armLastId);
         armLastId = 0;
         armTimer.Stop();
@@ -169,6 +144,7 @@ void servoArmCallback() {
 
 void servoDropRCallback() {
     if (dropRLastId != 0) {
+        // Send order id to ack that arduino has process the order
         SerialSender::SerialSend(SERIAL_INFO, "%d;", dropRLastId);
         dropRLastId = 0;
         dropRTimer.Stop();
@@ -177,6 +153,7 @@ void servoDropRCallback() {
 
 void servoDropLCallback() {
     if (dropLLastId != 0) {
+        // Send order id to ack that arduino has process the order
         SerialSender::SerialSend(SERIAL_INFO, "%d;", dropLLastId);
         dropLLastId = 0;
         dropLTimer.Stop();

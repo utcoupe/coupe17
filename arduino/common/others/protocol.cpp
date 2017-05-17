@@ -47,6 +47,8 @@ void parseAndExecuteOrder(const String& order) {
             unsigned int servo_id, servo_position, servo_value;
             sscanf(receivedOrderPtr, "%u;%u;%u;", &servo_id, &servo_position, &servo_value);
             servoChangeParameter((uint8_t)servo_id, (SERVO_POSITION)servo_position, (uint8_t)servo_value);
+            // Send order id to ack that arduino has process the order
+            SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
             break;
         }
         case MODULE_ROTATE:
