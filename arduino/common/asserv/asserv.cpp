@@ -24,7 +24,7 @@
 void asservLoop();
 
 // Run the loop for asserv at 100 Hz
-Timer asservLoopTimer = Timer(10, &asservLoop);
+Timer asservLoopTimer = Timer(DT, &asservLoop);
 
 //TODO make it proper with others
 // Flag to know if a computer is connected to the arduino
