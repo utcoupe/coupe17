@@ -24,8 +24,8 @@ void serialRead() {
 }
 
 void setup() {
-    Serial.begin(BAUDRATE, SERIAL_TYPE);
-    Serial.setTimeout(50);
+//    Serial.begin(BAUDRATE, SERIAL_TYPE);
+//    Serial.setTimeout(50);
     servoAttach();
     setupColorSensor();
 }
