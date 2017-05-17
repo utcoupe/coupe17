@@ -3,7 +3,16 @@
 "use strict";
 
 const Log4js = require('log4js');
+
+// For Arduinos
 const SerialPort = require('serialport');
+
+// For AX12
+const Path = require('path');
+const Child_process = require('child_process');
+const Byline = require('byline');
+const program = Path.normalize("./bin/ax12");
+
 
 class Factory {
     constructor(robot, callback) {
@@ -19,10 +28,13 @@ class Factory {
         //flag to know if the factory is ready, if not, can't build any object
         this.factoryReady = false;
 
-        // Last step, detects devices
-        this.detectArduino();
         //todo do not launch both at the same time to avoid /dev/ttyX conflicts
         this.detectAx12();
+
+        setTimeout(function(){
+            // Last step, detects devices
+            this.detectArduino();
+        }.bind(this), 2000);
 
         setTimeout(this.closeAllPorts.bind(this), 3000);
     }
@@ -55,17 +67,23 @@ class Factory {
                 {
                     if (this.devicesPortMap[this.robotName + "_others"] !== undefined) {
                         this.logger.info("Servo is real, arduino detected");
-                        returnedObject = require('../actuators/servo.real')(this.devicesPortMap[this.robotName + "_others"]);
+                        returnedObject = require('../actuators/servo.real')(this.robot, this.devicesPortMap[this.robotName + "_others"]);
                     } else {
                         this.logger.fatal("Servo is simu");
-                        returnedObject = require('../actuators/servo.simu')();
+                        returnedObject = require('../actuators/servo.simu')(this.robot);
                     }
                     break;
                 }
                 case "ax12" :
                 {
-                    this.logger.info("Ax12 not implemented yet, always return simu");
-                    returnedObject = require('../actuators/ax12.simu')();
+                    this.logger.debug("Ax12 not tested yet !");
+                    if (this.devicesPortMap["ax12"] !== undefined) {
+                        this.logger.info("AX12 is real, usb2ax detected");
+                        returnedObject = require('../actuators/ax12.real')(this.robot, this.devicesPortMap["ax12"]);
+                    } else {
+                        this.logger.fatal("AX12 is simu");
+                        returnedObject = require('../actuators/ax12.simu')(this.robot);
+                    }
                     break;
                 }
                 default:
@@ -101,7 +119,45 @@ class Factory {
 
     //todo
     detectAx12() {
-        this.logger.info("Detect ax12 is not implemented yet");
+        this.logger.info("Detect ax12 is not tested yet");
+
+        var ax12 = Child_process.spawn("bash", ["-c", "pkill ax12;"+program]);
+
+        ax12.on('error', function(err) {
+            if(err.code === 'ENOENT'){
+                this.logger.fatal("ax12 program executable not found! Is it compiled ? :) Was looking in \""+Path.resolve(program)+"\"");
+                process.exit();
+            }
+            this.logger.error("c++ subprocess terminated with error:", err);
+            console.log(err);
+        }.bind(this));
+        ax12.on('exit', function(code) {
+            this.logger.fatal("c++ subprocess terminated with code:"+code);
+        }.bind(this));
+
+        process.on('exit', function(){ //ensure child process is killed
+            if(ax12.connected){ //and was still connected (dont kill another process)
+                ax12.kill();
+            }
+        });
+
+        var stdout = Byline.createStream(ax12.stdout);
+        stdout.setEncoding('utf8')
+        stdout.on('data', function(data) {
+            this.logger.debug("ax12 just gave : "+data);
+            // If not connected, wait the ID of the arduino before doing something else
+
+            if (data.indexOf("ax12") == 0) {
+                this.devicesPortMap["ax12"] = "I don't know";
+                if(ax12.connected){ //and was still connected (dont kill another process)
+                    ax12.kill();
+                }
+            }
+        }.bind(this));
+
+        ax12.stderr.on('data', function(data) {
+            this.logger.error("stderr :"+data.toString());
+        }.bind(this));
     }
 
     closeAllPorts() {

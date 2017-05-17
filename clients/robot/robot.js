@@ -14,10 +14,6 @@ const Client = require('../shared/client');
 const Fifo = require('../shared/fifo');
 
 
-//TODO Look if use other.class and other_simu
-//And define_parser
-//Par défault objet simulé, toujours simulé. Voir pour detect
-
 /**
  * Robot abstrait
  *
@@ -31,7 +27,7 @@ class Robot extends Client{
 
 	/**
 	 * Creates an instance of Robot.
-	 * 
+	 *
 	 * @param {String} robotName Identifiant réseau du robot
 	 */
 	constructor(robotName){
@@ -51,19 +47,6 @@ class Robot extends Client{
 
 		// ??? classe abstraite !
 		// this.acts = new (require('../Extension/Actuators/actuator.class.js'))(this.client, this.sendChildren);
-
-		//TODO replace devicedetected
-		//this.detect = null; this.detect = new (require('./detect.class.js'))(devicesDetected);
-					//ADD it tmp, to replace the previos one
-					// var struct = {
-					// 	others: false,
-					// 	asserv: false,
-					// 	ax12: false,
-					// 	servos: false
-					// };
-
-					// this.devicesDetected(struct); //TODO Replace it
-
 
 		this.queue = [];
 		this.started = false;
@@ -162,7 +145,7 @@ class Robot extends Client{
         }.bind(this));
 	}
 
-	
+
 	openExtensions () {
         this.logger.fatal("This function openExtensions must be overriden");
 	}
@@ -194,7 +177,7 @@ class Robot extends Client{
 		this.started = false;
 		this.starting = false;
 	}
-	
+
 
 	/**
 	 * Tries to exit
@@ -250,71 +233,9 @@ class Robot extends Client{
 	}
 
 	// devicesDetected(struct){
-	// // Verify content
-
-	// if (!struct.others)
-	// 	this.logger.warn("Missing others Mega");
-
-	// if (!struct.servos)
-	// 	this.logger.warn("Missing servos Nano");
-
-	// if (!struct.asserv)
-	// 	this.logger.warn("Missing asserv Nano");
-
-	// if (!struct.ax12)
-	// 	this.logger.warn("Missing USB2AX");
-
-	// // Connect to what's detected
-	// //TODO IMPLEMENT IT WITH ACTUATORS
-	// //this.acts.connectTo(struct);
-	// 				//HACK, do in acts normaly. See how integrate it
-	// 				// if (!struct.asserv) {
-	// 				// 			this.logger.fatal("Lancement de l'asserv pr en mode simu !");
-	// 				// 			this.asserv = new AsservSimu(this.client, 'pr', this.fifo);
-	// 				// 		} else {
-	// 				// 			this.asserv = new AsservReal( this.client, 'pr', this.fifo, this.sendStatus, 
-	// 				// 				new SerialPort("/dev/ttyACM0", {
-	// 				// 					baudrate: 57600,
-	// 				// 					parser:SerialPort.parsers.readline('\n')
-	// 				// 				})
-	// 				// 			);
-	// 				// 		}
-
-	// // Send struct to server
-	// //TODO DO AFTER actuators done
-	// //this.sendChildren(acts.getStatus());
-	// //This une replace the acts.getStatus()
-	// 		var data = {
-	// 			"status": "",
-	// 			"children": []
-	// 		};
-
-	// 		data.status = "everythingIsAwesome";
-	// 		//Code of actuators.getStatus()
-	// 				/*if(others && !!others.ready)
-	// 					data.children.push("Arduino others");
-	// 				else
-	// 					data.status = "ok";
-
-	// 				if(ax12 && !!ax12.ready)
-	// 					data.children.push("USB2AX");
-	// 				else
-	// 					data.status = "ok";
-
-	// 				if(asserv && !!asserv.ready)
-	// 					data.children.push("Arduino asserv");
-	// 				else
-	// 					data.status = "error";
-	// 			*/
-	// 				//data.children.push("Arduino others");
-	// 				//data.children.push("USB2AX");
-	// 		data.status = "ok";
-	// 		data.children.push("Arduino asserv");
-
-	// 		this.sendChildren(data);
-
+	// // Useless
 	// }
-	
+
 	executeNextOrder(){
 		if ((this.queue.length > 0) && (!this.orderInProgress)) {
 			var order = this.queue.shift();
@@ -331,9 +252,6 @@ class Robot extends Client{
 				//TODO DECOMMENT IT AFTER acts done
 				//this.acts.orderHandler(order.from, order.name, order.params, this.actionFinished);
 
-
-			// Asserv HACK
-			//var callback = this.actionFinished
 				switch (order.name){
 					case "sync_git":
 						spawn('/root/sync_git.sh', [], {

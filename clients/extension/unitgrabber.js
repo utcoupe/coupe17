@@ -88,6 +88,7 @@ class UnitGrabber extends Extension {
                 break;
             case "upGrabber":
                 // TODO AX12 up
+                this.logger.error("TODO: do AX12 upGrabber action");
                 setTimeout(() => {
                     this.fifo.orderFinished();
                 }, 200);
