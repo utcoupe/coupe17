@@ -10,6 +10,8 @@ class Ax12Real {
      */
     constructor () {
         super();
+
+        // this.actuatorCommands = defineParser(process.env.UTCOUPE_WORKSPACE + "/ax12/XXX");
     }
 
     parseCommand(receivedCommand) {
@@ -31,27 +33,52 @@ class Ax12Real {
         //     }
         // }
 
-        this.logger.error("TODO: ")
+        this.logger.error("TODO: parse command")
     }
 
     openGrabber(callback) {
-        this.logger.error("TODO: AX12 real openGrabber()");
+        if (false) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.OPEN_GRABBER, null, callback);
+        } else {
+            this.logger.error("TODO: AX12 real openGrabber()");
+            // this.logger.error("Serial port not connected...");
+        }
     }
 
     closeGrabber(callback) {
-        this.logger.error("TODO: AX12 real closeGrabber()");
+        if (false) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.CLOSE_GRABBER, null, callback);
+        } else {
+            this.logger.error("TODO: AX12 real closeGrabber()");
+            // this.logger.error("Serial port not connected...");
+        }
     }
 
     sendDummyLeft(callback) {
-        this.logger.error("TODO: AX12 real sendDummyLeft()");
+        if (false) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.DUMMY_LEFT, null, callback);
+        } else {
+            this.logger.error("TODO: AX12 real sendDummyLeft()");
+            // this.logger.error("Serial port not connected...");
+        }
     }
 
     sendDummyRight(callback) {
-        this.logger.error("TODO: AX12 real sendDummyRight()");
+        if (false) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.DUMMY_RIGHT, null, callback);
+        } else {
+            this.logger.error("TODO: AX12 real sendDummyRight()");
+            // this.logger.error("Serial port not connected...");
+        }
     }
 
     sendDummyCenter(callback) {
-        this.logger.error("TODO: AX12 real sendDummyCenter()");
+        if (false) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.DUMMY_CENTER, null, callback);
+        } else {
+            this.logger.error("TODO: AX12 real sendDummyCenter()");
+            // this.logger.error("Serial port not connected...");
+        }
     }
 
     stop() {
