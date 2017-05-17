@@ -156,7 +156,7 @@ class Factory {
         }.bind(this));
 
         ax12.stderr.on('data', function(data) {
-            this.logger.error("stderr :"+data.toString());
+            // this.logger.error("stderr :"+data.toString());
         }.bind(this));
     }
 

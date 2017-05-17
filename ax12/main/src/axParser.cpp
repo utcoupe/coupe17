@@ -21,7 +21,6 @@ std::string GetLineFromCin() {
 
 axParser::axParser():started(false), baudnum(1),deviceIndex(0), future(std::async(std::launch::async, GetLineFromCin)) {
    //file.open("input.txt", ios::in);
-	int CommStatus;
 	string command ;
 
 
@@ -119,9 +118,8 @@ int axParser::detection(){
 
 
 
-bool axParser::changeParameter(int id, int parameter, int value ){
+void axParser::changeParameter(int id, int parameter, int value ){
 	servos[id]->setPositions(parameter, value);
-	return true;
 }
  std::regex pattern { "abc" };
  bool axParser::checkMessage(const string& mes){
@@ -139,7 +137,7 @@ bool axParser::checkAxId(int id){
 
 void axParser::parseAndExecuteOrder(const std::string& order, bool startOnly) {
 	if (checkMessage(order) ==  false) return;
-	int receivedOrder, id_order, id_ax, numberDigits, j=0, i = 0;
+	int receivedOrder, id_order, id_ax, j=0, i = 0;
 	char c = '0';
 	int s = order.size();
     int orderChar = order[0];
@@ -150,7 +148,7 @@ void axParser::parseAndExecuteOrder(const std::string& order, bool startOnly) {
 			c = order[++j];
 		};
 	    id_order = std::stoi(order.substr(i,j-1));
-	    numberDigits = getLog10(id_order);
+	    
 		i = j+1;
 		j = j+1;
 		if (orderChar != 'S' && orderChar !='h') {
@@ -197,7 +195,7 @@ void axParser::parseAndExecuteOrder(const std::string& order, bool startOnly) {
 				cout << "Receive parameter value " <<order[receivedOrder] << ", order " << id_order << endl;
 				if (int position = positionToIndex(order[receivedOrder]) != -1){
 					int value = std::stoi(order.substr(receivedOrder+2, s-1));
-					bool ok = changeParameter(id_ax, position, value);
+					changeParameter(id_ax, position, value);
 				}else{
 					cout << "error on order " << id_order <<endl;
 				}

@@ -41,7 +41,7 @@ class axParser{
     int getLog10(const uint16_t number);
     void waitStart();
     std::map <int, ax*> servos;
-    bool changeParameter(int id, int parameter, int value );
+    void changeParameter(int id, int parameter, int value );
     std::future<std::string> future;
     std::string checkOrder();
     bool checkMessage(const std::string& mes);
