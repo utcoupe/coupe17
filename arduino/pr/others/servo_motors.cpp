@@ -12,7 +12,7 @@
 
 //todo create a real servo object ??
 
-void servoApplyCommand(uint8_t servo_id, uint8_t value);
+void servoApplyCommand(uint8_t servo_id, uint8_t value, uint16_t order_id);
 
 //todo min & max values for all servo
 
@@ -56,10 +56,10 @@ void servoAttach() {
     pr_module_rotate.write(servoValues[PR_MODULE_ROTATE][INIT]);
 }
 
-void servoAction(uint8_t servo_id, SERVO_POSITION position) {
+void servoAction(uint8_t servo_id, SERVO_POSITION position, uint16_t order_id) {
     //todo maximal servo id as define
     if ((servo_id < 4) && (position < NB_POS)) {
-        servoApplyCommand(servo_id, servoValues[servo_id][position]);
+        servoApplyCommand(servo_id, servoValues[servo_id][position], order_id);
     } else {
         SerialSender::SerialSend(SERIAL_INFO, "Servo %d doesn't exist or position %d is unknown...", servo_id, position);
     }
@@ -121,8 +121,8 @@ void servoRotate(MODULE_COLOR color, uint16_t order_id) {
 void servoRotateCallback() {
     if (servoRotateColor != WHATEVER) {
         if (computeColor() == servoRotateColor) {
-            // Stop the rotate servo motor
-            servoAction(PR_MODULE_ROTATE, INIT);
+            // Stop the rotate servo motor (id 0 because motor is stopped)
+            servoAction(PR_MODULE_ROTATE, INIT, 0);
             // Put the global variable to default value
             servoRotateColor = WHATEVER;
             // Send order id to ack that arduino has process the order

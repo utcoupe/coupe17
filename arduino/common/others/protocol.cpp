@@ -56,28 +56,28 @@ void parseAndExecuteOrder(const String& order) {
             unsigned int servo_id, servo_color;
             sscanf(receivedOrderPtr, "%u;%u;", &servo_id, &servo_color);
             SerialSender::SerialSend(SERIAL_INFO, "Rotate order, color : %d", servo_color);
-            servoRotate((MODULE_COLOR)servo_color);
+            servoRotate((MODULE_COLOR)servo_color, order_id);
             break;
         }
         case SERVO_OPEN:
         {
             unsigned int servo_id;
             sscanf(receivedOrderPtr, "%u;", &servo_id);
-            servoAction((uint8_t)servo_id, OPEN);
+            servoAction((uint8_t)servo_id, OPEN, order_id);
             break;
         }
         case SERVO_CLOSE:
         {
             unsigned int servo_id;
             sscanf(receivedOrderPtr, "%u;", &servo_id);
-            servoAction((uint8_t)servo_id, CLOSE);
+            servoAction((uint8_t)servo_id, CLOSE, order_id);
             break;
         }
         case SERVO_INIT:
         {
             unsigned int servo_id;
             sscanf(receivedOrderPtr, "%u;", &servo_id);
-            servoAction((uint8_t)servo_id, INIT);
+            servoAction((uint8_t)servo_id, INIT, order_id);
             break;
         }
         default:
