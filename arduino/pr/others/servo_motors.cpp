@@ -25,9 +25,9 @@ Servo pr_module_rotate;
 // INIT, OPEN and CLOSE are PWM values for position of the servo motor (0 - 180 max)
 uint8_t servoValues[4][4] = {
         {90, 10, 170, 100},      //PR_MODULE_ARM
-        {80, 180, 80, 100},      //PR_MODULE_DROP_R
-        {90, 10, 90, 100},       //PR_MODULE_DROP_L
-        {90, 10, 170, 200}       //PR_MODULE_ROTATE
+        {10, 90, 10, 100},      //PR_MODULE_DROP_R
+        {180, 90, 180, 100},       //PR_MODULE_DROP_L
+        {90, 180, 255, 200}       //PR_MODULE_ROTATE
 };
 
 //todo adjust timer time
