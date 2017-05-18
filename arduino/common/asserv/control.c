@@ -12,7 +12,6 @@
 #include "motor.h"
 #include "local_math.h"
 #include "emergency.h"
-#include "sender_wrapper.h"
 #include <math.h>
 
 #define ANG_REACHED (0x1)
@@ -20,6 +19,8 @@
 #define REACHED (ANG_REACHED | POS_REACHED)
 
 #define sign(x) ((x)>=0?1:-1)
+
+uint16_t lastReachedID = 0;
 
 control_t control;
 
@@ -134,8 +135,9 @@ void ControlCompute(void) {
 
 	if (current_goal->is_reached) {
 		control.last_finished_id = current_goal->ID;
-		//todo test that it's working fine...
-        SerialSendWrapVar(SERIAL_INFO, "%d;", (int)control.last_finished_id);
+        // Instead of calling SerialSend directly (does not work), we use a global variable to send the id from main
+//        SerialSendWrapVar(SERIAL_INFO, "%d;", (int)control.last_finished_id);
+        lastReachedID = control.last_finished_id;
 		FifoNextGoal();
 		ControlPrepareNewGoal();
 #if TIME_BETWEEN_ORDERS

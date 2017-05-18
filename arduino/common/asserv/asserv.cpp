@@ -93,5 +93,12 @@ void asservLoop(){
 	ComputeIsBlocked();
 	ControlCompute();
 
+    // That's an ugly way to do it, but not working in another way...
+    // lastReachedID is defined in control.h file
+    if(lastReachedID != 0) {
+        SerialSender::SerialSend(SERIAL_INFO, "%d;", (int)lastReachedID);
+        lastReachedID = 0;
+    }
+
     ProtocolAutoSendStatus();
 }

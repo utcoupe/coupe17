@@ -47,4 +47,12 @@ void ControlInit(void);
 void ControlCompute(void);
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+extern uint16_t lastReachedID;
+#ifdef __cplusplus
+}
+#endif
+
 #endif
