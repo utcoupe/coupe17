@@ -16,26 +16,31 @@ void ax::executeAction(int finalPos, int idOrder){
      dxl_write_word(id, P_GOAL_POSITION_L, finalPos);
      lockSerial.unlock();
      std::this_thread::sleep_for(std::chrono::milliseconds(500));
-
+     time_t start    = time(0);
      do{
          lockSerial.lock();
          dxl_read_word(id, 36);
          currentPos[0] = dxl_get_rxpacket_parameter(0);
          currentPos[1] = dxl_get_rxpacket_parameter(1) << 8;
-         current = currentPos[0] | currentPos[1];
          lockSerial.unlock();
-         //std::cout << "Position actuelle: " << current  << std::endl;
+         current = currentPos[0] | currentPos[1];
+         std::cout << "Position actuelle: " << current  << std::endl;
          if(killAction == true){
              break;
          }
          std::this_thread::sleep_for(std::chrono::milliseconds(500));
-             //to be continued
+         if(time(0) - start > vals::timeOut){
+             cout << idOrder << ";"  << "0" << endl;
+             return;
+         }
+
      }while(current < finalPos-3 || current > finalPos + 3);
      cout << idOrder << ";"  << endl;
      //string message = (string)idOrder + "action done";
      killAction = false;
 
  }
+
 
  void ax::goTo(int pos, int idOrder){
 

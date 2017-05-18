@@ -21,6 +21,7 @@ std::string GetLineFromCin() {
 
 axParser::axParser():started(false), baudnum(1),deviceIndex(0), future(std::async(std::launch::async, GetLineFromCin)) {
    //file.open("input.txt", ios::in);
+	//int CommStatus;
 	string command ;
 
 
@@ -47,6 +48,7 @@ axParser::axParser():started(false), baudnum(1),deviceIndex(0), future(std::asyn
 	ax ax2(PR_MODULE_DUMMY , vals::posDummy);
 	servos[PR_MODULE_GRABBER] = &ax1;
 	servos[PR_MODULE_DUMMY] =&ax2;
+	//initializeServos();
     //dxl_write_word(1, 34, 1000);
     while(1)
     {
@@ -64,6 +66,12 @@ axParser::axParser():started(false), baudnum(1),deviceIndex(0), future(std::asyn
     //cout <<"Press Enter key to terminate...\n" ;
     //getchar();
 }
+
+/*void axParser::initializeServos(){
+	for (std::map<int, ax*>::iterator it=servos.begin(); it!=servos.end(); ++it){
+		*it->initialize();
+	}
+}*/
 
 string axParser::checkOrder(){
 	string command;
@@ -137,7 +145,7 @@ bool axParser::checkAxId(int id){
 
 void axParser::parseAndExecuteOrder(const std::string& order, bool startOnly) {
 	if (checkMessage(order) ==  false) return;
-	int receivedOrder, id_order, id_ax, j=0, i = 0;
+	int receivedOrder, id_order, id_ax,j=0, i = 0;
 	char c = '0';
 	int s = order.size();
     int orderChar = order[0];
@@ -148,7 +156,6 @@ void axParser::parseAndExecuteOrder(const std::string& order, bool startOnly) {
 			c = order[++j];
 		};
 	    id_order = std::stoi(order.substr(i,j-1));
-	    
 		i = j+1;
 		j = j+1;
 		if (orderChar != 'S' && orderChar !='h') {
