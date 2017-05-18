@@ -10,14 +10,15 @@ const SerialPort = require('serialport');
 
 //serialPort is defined as /dev/ttyXx
 class ServoReal extends Servo {
-    constructor(serialPort) {
-        super();
+    constructor(robot, serialPort) {
+        super(robot);
 
         //todo robot name
         this.actuatorCommands = defineParser(process.env.UTCOUPE_WORKSPACE + "/arduino/common/others/protocol.h");
         this.ordersSerial = undefined;
         // Connected means that the node has started the device through serial port
         this.serialPortConnected = false;
+        
         this.serialPort = new SerialPort(serialPort, {
             baudrate: 57600,
             parser : SerialPort.parsers.readline("\n")
@@ -111,6 +112,6 @@ class ServoReal extends Servo {
 }
 
 // Exports an object to be sure to have a single instance in the system
-module.exports = function(serialPort) {
-    return new ServoReal(serialPort);
+module.exports = function(robot, serialPort) {
+    return new ServoReal(robot, serialPort);
 };

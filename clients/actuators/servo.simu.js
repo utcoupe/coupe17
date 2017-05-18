@@ -8,8 +8,8 @@ const Servo = require('./servo');
 
 //serialPort is defined as /dev/ttyXx
 class ServoSimu extends Servo {
-    constructor() {
-        super();
+    constructor(robot) {
+        super(robot);
     }
 
     moduleArmClose(callback) {
@@ -39,6 +39,6 @@ class ServoSimu extends Servo {
 }
 
 // Exports an object to be sure to have a single instance in the system
-module.exports = function() {
-    return new ServoSimu();
+module.exports = function(robot) {
+    return new ServoSimu(robot);
 };

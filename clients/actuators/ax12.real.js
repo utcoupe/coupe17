@@ -15,8 +15,8 @@ class Ax12Real extends Ax12 {
     /**
      * Creates an instance of Ax12.
      */
-    constructor () {
-        super();
+    constructor (robot) {
+        super(robot);
 
 
         this.actuatorCommands = defineParser(process.env.UTCOUPE_WORKSPACE + "/ax12/src/define.h");

@@ -66,7 +66,7 @@ class Factory {
                 case "servo" :
                 {
                     if (this.devicesPortMap[this.robotName + "_others"] !== undefined) {
-                        this.logger.info("Servo is real, arduino detected");
+                        this.logger.info("Servo is real, arduino detected on " + this.devicesPortMap[this.robotName + "_others"]);
                         returnedObject = require('../actuators/servo.real')(this.robot, this.devicesPortMap[this.robotName + "_others"]);
                     } else {
                         this.logger.fatal("Servo is simu");

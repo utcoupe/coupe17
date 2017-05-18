@@ -8,7 +8,7 @@ class Ax12 {
     /**
      * Creates an instance of Ax12.
      */
-    constructor () {
+    constructor (robot) {
         // This is an abstract class, throw an error if it is directly instantiated or if missing virtual functions
         if (this.constructor === Ax12) {
             throw new TypeError("Cannot construct Abstract instances directly");

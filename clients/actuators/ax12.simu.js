@@ -10,8 +10,8 @@ class Ax12Simu extends Ax12 {
     /**
      * Creates an instance of Ax12.
      */
-    constructor () {
-        super();
+    constructor (robot) {
+        super(robot);
     }
 
     openGrabber(callback) {
