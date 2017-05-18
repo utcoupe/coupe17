@@ -16,12 +16,13 @@
 QueueList<String> SerialSender::dataToSend;
 
 SerialSender::SerialSender() {
-#ifdef __AVR_ATmega32U4__
-    Serial.begin(BAUDRATE);
-#else
-    Serial.begin(BAUDRATE, SERIAL_TYPE);
-#endif
-    Serial.setTimeout(50);
+    // Init done in main, because not working correctly here
+//#ifdef __AVR_ATmega32U4__
+//    Serial.begin(BAUDRATE);
+//#else
+//    Serial.begin(BAUDRATE, SERIAL_TYPE);
+//#endif
+//    Serial.setTimeout(50);
 }
 
 void SerialSender::SerialSend(SerialSendEnum level, String data) {

@@ -27,11 +27,11 @@ SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../bin)
 #set(TARGET_PROGRAM asserv)
 
 file(GLOB_RECURSE SRC_FILES	${TARGET_ROBOT}/${TARGET_PROGRAM}/*.cpp ${TARGET_ROBOT}/${TARGET_PROGRAM}/*.c)
-include_directories(${TARGET_ROBOT}/${TARGET_PROGRAM} common/${TARGET_PROGRAM})
+include_directories(${TARGET_ROBOT}/${TARGET_PROGRAM} common/${TARGET_PROGRAM} common/shared)
 
 #asserv or others extra common stuff
 #set(EXTRA_SRC_FILES "")
-file(GLOB_RECURSE EXTRA_SRC_FILES common/${TARGET_PROGRAM}/*.c common/${TARGET_PROGRAM}/*.cpp)
+file(GLOB_RECURSE EXTRA_SRC_FILES common/${TARGET_PROGRAM}/*.c common/${TARGET_PROGRAM}/*.cpp common/shared/*.cpp)
 #if (TARGET_PROGRAM STREQUAL "asserv")
 #	message("asserv program detected")
 #	file(GLOB_RECURSE EXTRA_SRC_FILES common/${TARGET_PROGRAM}/*.c common/${TARGET_PROGRAM}/*.cpp)

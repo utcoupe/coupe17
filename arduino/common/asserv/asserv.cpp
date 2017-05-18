@@ -50,8 +50,13 @@ void serialRead() {
  * Arduino setup function, initialize pins and registers.
  */
 void setup() {
-	SERIAL_MAIN.begin(BAUDRATE, SERIAL_TYPE);
+#ifdef __AVR_ATmega32U4__
+    Serial.begin(BAUDRATE);
+#else
+    Serial.begin(BAUDRATE, SERIAL_TYPE);
+#endif
     Serial.setTimeout(50);
+
 #ifdef __AVR_ATmega2560__
 	TCCR3B = (TCCR3B & 0xF8) | 0x01 ;
 	TCCR1B = (TCCR1B & 0xF8) | 0x01 ;

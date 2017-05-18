@@ -24,8 +24,13 @@ void serialRead() {
 }
 
 void setup() {
-//    Serial.begin(BAUDRATE, SERIAL_TYPE);
-//    Serial.setTimeout(50);
+#ifdef __AVR_ATmega32U4__
+    Serial.begin(BAUDRATE);
+#else
+    Serial.begin(BAUDRATE, SERIAL_TYPE);
+#endif
+    Serial.setTimeout(50);
+
     servoAttach();
     setupColorSensor();
 }
