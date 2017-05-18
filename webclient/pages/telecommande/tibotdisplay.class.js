@@ -6,18 +6,33 @@ class TibotDisplay extends RobotDisplay {
 
         // Specific to tibot
         // example : this.PID_P = 0.5
+        this.moduleColor = "null";
+        this.pushTowards = "dont";
+        this.nbModules = 0;
     }
 
     // Actuators
-    openUnitGrabber () {
-		this.client.send("unit_grabber", "open");
+    openGrabber () {
+		this.client.send("unit_grabber", "upGrabber");
 	}
 
-	closeUnitGrabber () {
-        this.client.send("unit_grabber", "close");
+	closeGrabber () {
+        this.client.send("unit_grabber", "downGrabber");
 	}
 
-	dropModule () {
+	openArms () {
+        this.client.send("unit_grabber", "openArm");
+	}
+
+	closeArms () {
+        this.client.send("unit_grabber", "closeArm");
+	}
+
+    takeModule () {
+        this.client.send("unit_grabber", "take_module");
+    }
+
+	drop () {
 		this.client.send("base_constructor", "drop");
 	}
 
@@ -26,26 +41,23 @@ class TibotDisplay extends RobotDisplay {
     }
 
     rotateModule () {
-        this.client.send("base_constructor", "rotate");
+        this.client.send("base_constructor", "rotate", {color: this.moduleColor});
     }
 
-    take_1 () {
-        this.client.send("unit_grabber", "take_1");
+    pushModule () {
+        this.client.send("base_constructor", "push", {push_towards: this.pushTowards});
     }
 
-    take_4 () {
-        this.client.send("unit_grabber", "take_4");
+    prepareModule () {
+        this.client.send("base_constructor", "prepare_module", {
+            color: this.moduleColor,
+            push_towards: this.pushTowards
+        });
     }
 
-    drop_border () {
-        this.client.send("base_constructor", "drop_border");
-    }
-
-    drop_middle_1 () {
-        this.client.send("base_constructor", "drop_middle_1");
-    }
-
-    drop_middle_2 () {
-        this.client.send("base_constructor", "drop_middle_2");
+    dropModule () {
+        this.client.send("base_constructor", "drop_module", {
+            nb_modules_to_drop: this.nbModules
+        });
     }
 }

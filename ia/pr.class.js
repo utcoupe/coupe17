@@ -57,25 +57,13 @@ class Pr extends Robot{
 
 		/** This robot content */
 		this.content = {
-			nb_modules: 0
+			nb_modules: 0,
+			modules_color: this.ia.color
 		};
 
 		/** Robot actions */
 		this.actions = new (this.Actions)(this.ia, this);
 	}
-
-	/**
-	 * Send initial position
-	 */
-	sendInitialPos () {
-		logger.debug("TODO TEST: check this function");
-		this.ia.client.send("pr", "asserv.setpos", {
-			x: 142,
-			y: 1000,
-			a: 0,
-			color: this.color
-		});
-	};
 
 	// /**
 	//  * Place
@@ -96,9 +84,20 @@ class Pr extends Robot{
 		switch(name) {
 			case 'module++':
 				this.content.nb_modules += 1;
+				if (this.content.modules_color != "both"
+					&& this.actions.inprogress.object.color == "both") {
+					// We only have blue or yellow modules
+					// but we take a multicolor module
+					this.content.modules_color = "both";
+				}
 			break;
 			case 'module--':
 				this.content.nb_modules -= 1;
+				if (this.content.nb_modules == 0) {
+					// If we don't have any module left, we consider having only modules of our color
+					// until we take a multicolor module
+					this.content.modules_color = this.ia.color;
+				}
 			break;
 			default:
 				logger.warn('Unknown order in ia.pr: '+name);

@@ -136,7 +136,6 @@ class Actions{
 	 * @param {Object} params Parameters of the action
 	 */
 	parseOrder (from, name, params) {
-		this.logger.debug("parseOrder: verify this function");
 		switch(name) {
 			case 'action_finished':
 			// this.logger.debug('received action_finished');
@@ -173,7 +172,7 @@ class Actions{
 	 */
 	exists (action_name){
 		if (!this.todo[action_name]){
-			if (!this.killed[action_name] && !this.inprogress[action_name] && !this.done[action_name])
+			if (!this.killed[action_name] && (this.inprogress.name != action_name) && /*!this.inprogress[action_name] &&*/ !this.done[action_name])
 				this.logger.warn("Action named '"+ action_name +"' doesn't exist");
 			else
 				this.logger.warn("Action named '"+ action_name +"' already killed in progress or done !");
@@ -222,7 +221,7 @@ class Actions{
 	 * @param {string} an Action name
 	 */
 	getPriorityAction(an) {
-		return this.todo[an].object.status == "lost" ? -1000 : this.todo[an].priority;
+		return this.todo[an].object.status == "lost" ? (this.todo[an].priority - 100) : this.todo[an].priority;
 	};
 	
 	/**
@@ -241,27 +240,32 @@ class Actions{
 		if (action.dependencyRobotContent !== undefined){
 			// Depends on the robot content
 
-			if ((action.dependencyRobotContent.gobelet !== undefined) &&
-				(this.robot.content.gobelet !== action.dependencyRobotContent.gobelet)){
-				// The cup holder position isn't consistent with needed state
-				return false;
-			}
+			// if ((action.dependencyRobotContent.gobelet !== undefined) &&
+			// 	(this.robot.content.gobelet !== action.dependencyRobotContent.gobelet)){
+			// 	// The cup holder position isn't consistent with needed state
+			// 	return false;
+			// }
 
-			// If there's a constraint about the current number of cylinders
-			if ((action.dependencyRobotContent.invPlot !== undefined)  &&
-				(this.robot.content.nb_plots < action.dependencyRobotContent.invPlot)){
+			// If there's a constraint about the current number of modules
+			if ((action.dependencyRobotContent.supModule  !== undefined)
+				&& (this.robot.content.nb_modules  !== undefined)
+				&& (this.robot.content.nb_modules > action.dependencyRobotContent.supModule)){
+				// More than the supremum
 				return false;
 			}
-			if ((action.dependencyRobotContent.subPlot !== undefined)  &&
-				(this.robot.content.nb_plots > action.dependencyRobotContent.subPlot)){
+			if ((action.dependencyRobotContent.infModule  !== undefined)
+				&& (this.robot.content.nb_modules  !== undefined)
+				&& (this.robot.content.nb_modules < action.dependencyRobotContent.infModule)){
+				// Less than the infimum
 				return false;
 			}
 		 
 		}
 
-		if (action.object.status == "lost"){
-			return false;
-		}
+		// Lost objects are actually done in priority
+		// if (action.object.status == "lost"){
+		// 	return false;
+		// }
 
 		return true;
 	};
@@ -330,7 +334,7 @@ class Actions{
 	 */
 	pathDoAction(callback, actions, id, otherRobotPos) {
 		if(id != this.valid_id_do_action) {
-			this.logger.Debug('id different');
+			this.logger.debug('id different');
 			return;
 		}
 		// Va choisir l'action la plus proche, demander le path et faire doAction
@@ -338,11 +342,12 @@ class Actions{
 			var actionName = actions.shift();
 			var action = this.todo[actionName];
 			var startpoint = this.getNearestStartpoint(this.robot.pos, action.startpoints);
-			if (!startpoint) {
-				this.logger.warn("TMP startpoint");
+			if (startpoint === null
+				&& action.type == "module") {
+				this.logger.warn("TMP startpoint for module");
 				startpoint = {
-					x: 1500,
-					y: 1000,
+					x: action.object.pos.x,
+					y: action.object.pos.y,
 					a: 0
 				}
 			}
@@ -363,7 +368,7 @@ class Actions{
 				}
 			}.bind(this));
 		} else {
-			this.logger.debug("all paths not found");
+			this.logger.debug("No valid path were found, trying again in 0.5s");
 			setTimeout(function() {
 				this.doNextAction(callback, otherRobotPos);
 			}.bind(this), 500);
@@ -406,13 +411,24 @@ class Actions{
 		if (!!action.preparation_orders) {
 
 			action.preparation_orders.forEach(function (order, index, array){
+				if (!!this.robot.modules_color
+					&& order.params.color == "TO_BE_FILLED_BY_IA") {
+					logger.warn("TODO: drop color depending on robot content");
+					if (this.robot.modules_color == this.ia.color) {
+						// If all the modules are of our color, it doesn't matter how we drop them
+						order.params.color = "null";
+					} else {
+						// Some modules are multicolor, we must rotate the modules
+						order.params.color = this.ia.color;
+					}
+				}
 				let dest = !!order.dest ? order.dest : this.robot.name;
 				this.ia.client.send(dest, order.name, order.params);
 			}.bind(this));
 		}
 
 
-		this.ia.client.send(this.robot.name, "send_message", {
+		this.ia.client.send(this.robot.name, "asserv.send_message", {
 			name: this.robot.name + ".actions.path_finished"
 		});
 
@@ -430,6 +446,7 @@ class Actions{
 		if(this.inprogress !== null) {
 			this.done[this.inprogress.name] = this.inprogress;
 			this.logger.info('Action %s est finie !', this.inprogress.name);
+			this.inprogress.object.status = "taken";
 			this.inprogress = null;
 			var temp = this.callback;
 			this.callback = function() {this.logger.warn('callback vide'); };
@@ -445,7 +462,7 @@ class Actions{
 		this.robot.path = [];
 
 		// 1 order for 1 action -> not any more
-		let dest = null;
+		let dest = this.robot.name;
 		this.inprogress.orders.forEach(function (order, index, array){
 			// this.ia.client.send(this.robot.name, action.orders[0].name, action.orders[0].params);
 			dest = !!order.dest ? order.dest : this.robot.name;

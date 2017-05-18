@@ -11,6 +11,9 @@ angular.module('app').service('Orders', ['$rootScope', 'Client', function($rootS
 			// Be careful, some orders are filtered by the server, set verbose mode to see them or go to server.server.class.js:175
 
 			if (name != "logger"
+				&& name != "serverVerbosity"
+				&& name != "utcoupe"
+				&& name != "reseau"
 				&& name != "simulateur") {
 				this.orders.unshift({
 					from: from,

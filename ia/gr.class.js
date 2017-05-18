@@ -33,7 +33,7 @@ class Gr extends Robot{
 		this.size = {
 			l: 290,
 			L: 290,
-			d: 420
+			d: 390
 		};
 
 		/** Initial position */
@@ -84,7 +84,7 @@ class Gr extends Robot{
 			// 	this.content.nb_modules -= 1;
 			// break;
 			default:
-				logger.warn('Unknown order in ia.pr: '+name);
+				logger.warn('Unknown order in ' + this.name + ': '+name);
 			break;
 		}
 	};

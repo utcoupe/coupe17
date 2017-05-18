@@ -67,6 +67,19 @@ class Robot{
 		this.Actions = require('./actions.class.js');
 	}
 
+	/**
+	 * Send initial position
+	 */
+	sendInitialPos () {
+		logger.debug("TODO TEST: check this function");
+		this.ia.client.send(this.name, "asserv.setpos", {
+			x: this.initialPos.x,
+			y: this.initialPos.y,
+			a: this.initialPos.a,
+			color: this.color
+		});
+	};
+
 	getDistance (spot1, spot2) {
 		return Math.sqrt(Math.pow(spot1.x - spot2.x, 2) + Math.pow(spot1.y - spot2.y, 2));
 	};
@@ -232,6 +245,11 @@ class Robot{
 		params.x = borne(params.x, 0, 3000);
 		params.y = borne(params.y, 0, 2000);
 		this.pos = params;
+
+		if (this.path.length > 0
+			&& this.getDistance(this.pos, this.path[0]) < this.size.d/2) {
+			this.path.shift();
+		}
 	};
 
 
