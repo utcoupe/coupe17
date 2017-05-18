@@ -23,7 +23,7 @@ class Ax12Real extends Ax12 {
 
         this.ax12 = Child_process.spawn("bash", ["-c", "pkill ax12;"+program]);
 
-        this.stdStreamConnected = false;
+        this.stdStreamConnected = this.stdStreamConnected;
 
         this.ax12.on('error', function(err) {
             if(err.code === 'ENOENT'){
@@ -34,7 +34,7 @@ class Ax12Real extends Ax12 {
             console.log(err);
         }.bind(this));
         this.ax12.on('exit', function(code) {
-            this.stdStreamConnected = false;
+            this.stdStreamConnected = this.stdStreamConnected;
             this.logger.fatal("c++ subprocess terminated with code:"+code);
         }.bind(this));
 
@@ -76,6 +76,7 @@ class Ax12Real extends Ax12 {
                         out: this.stdout
                     });
                 }
+                this.ordersSerial.sendOrder(this.actuatorCommands.PARAMETER, [], callback);
             }
         }
 
@@ -83,8 +84,8 @@ class Ax12Real extends Ax12 {
     }
 
     openGrabber(callback) {
-        if (false) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.OPEN_GRABBER, null, callback);
+        if (this.stdStreamConnected) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.AX12_ONE, [this.actuatorCommands.PR_MODULE_GRABBER], callback);
         } else {
             this.this.logger.error("TODO: AX12 real openGrabber()");
             // this.this.logger.error("Serial port not connected...");
@@ -92,8 +93,8 @@ class Ax12Real extends Ax12 {
     }
 
     closeGrabber(callback) {
-        if (false) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.CLOSE_GRABBER, null, callback);
+        if (this.stdStreamConnected) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.AX12_TWO, [this.actuatorCommands.PR_MODULE_GRABBER], callback);
         } else {
             this.this.logger.error("TODO: AX12 real closeGrabber()");
             // this.this.logger.error("Serial port not connected...");
@@ -101,8 +102,8 @@ class Ax12Real extends Ax12 {
     }
 
     sendDummyLeft(callback) {
-        if (false) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.DUMMY_LEFT, null, callback);
+        if (this.stdStreamConnected) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.AX12_ONE, [this.actuatorCommands.PR_MODULE_DUMMY], callback);
         } else {
             this.this.logger.error("TODO: AX12 real sendDummyLeft()");
             // this.this.logger.error("Serial port not connected...");
@@ -110,8 +111,8 @@ class Ax12Real extends Ax12 {
     }
 
     sendDummyRight(callback) {
-        if (false) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.DUMMY_RIGHT, null, callback);
+        if (this.stdStreamConnected) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.AX12_TWO, [this.actuatorCommands.PR_MODULE_DUMMY], callback);
         } else {
             this.this.logger.error("TODO: AX12 real sendDummyRight()");
             // this.this.logger.error("Serial port not connected...");
@@ -119,8 +120,8 @@ class Ax12Real extends Ax12 {
     }
 
     sendDummyCenter(callback) {
-        if (false) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.DUMMY_CENTER, null, callback);
+        if (this.stdStreamConnected) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.AX12_INIT, [this.actuatorCommands.PR_MODULE_DUMMY], callback);
         } else {
             this.this.logger.error("TODO: AX12 real sendDummyCenter()");
             // this.this.logger.error("Serial port not connected...");
@@ -129,6 +130,13 @@ class Ax12Real extends Ax12 {
 
     stop() {
         this.this.logger.error("TODO: AX12 real stop()");
+        if (this.stdStreamConnected) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.HALT, [], callback);
+        } else {
+            this.this.logger.error("TODO: AX12 real stop()");
+            // this.this.logger.error("Serial port not connected...");
+        }
+
         this.this.logger.info("AX12 real stopped");
     }
 }
