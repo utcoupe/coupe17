@@ -36,7 +36,7 @@ class Factory {
             this.detectArduino();
         }.bind(this), 2000);
 
-        setTimeout(this.closeAllPorts.bind(this), 3000);
+        setTimeout(this.closeAllPorts.bind(this), 5000);
     }
 
     //force to return a simulated object
