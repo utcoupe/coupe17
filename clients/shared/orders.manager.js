@@ -30,6 +30,7 @@ class OrdersManager {
             if (this.ordersCallback[index][0] == orderId) {
                 // Call the callback
                 if (this.ordersCallback[index][1] != null) {
+                    this.logger.debug("Callback for order " + orderId);
                     this.ordersCallback[index][1](params);
                 } else {
                     this.logger.error("Callback for order " + orderId + " is null...");
@@ -58,7 +59,8 @@ class OrdersManager {
     //todo find a way to reboot arduino if it doesn't send its ID (previously started)
     parseCommand(receivedCommand) {
         // Check if the received command is a debug string or a response from an order
-        if (receivedCommand.indexOf(";") == 1) {
+        // As the received command is a string, the ; index is depending on the number of digits of the order id received
+        if (receivedCommand.indexOf(";") != -1) {
             // It's an order response
             var splittedCommand = receivedCommand.split(";");
             console.log("splitted command : " + splittedCommand);
