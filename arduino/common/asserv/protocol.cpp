@@ -85,6 +85,7 @@ void parseAndExecuteOrder(const String& order) {
             digitalWrite(LED_DEBUG, HIGH);
             delay(1);
             digitalWrite(LED_DEBUG, LOW);
+            SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
             break;
         case GET_CODER:
             SerialSender::SerialSend(SERIAL_INFO, "%d;%d;%d;", order_id, left_ticks, right_ticks);
@@ -171,18 +172,22 @@ void parseAndExecuteOrder(const String& order) {
                 PIDSet(&PID_left, p, i, d, LEFT_BIAS);
                 PIDSet(&PID_right, p, i, d, RIGHT_BIAS);
             }
+            SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
             break;
         }
         case KILLG:
             FifoNextGoal();
             ControlPrepareNewGoal();
+            SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
             break;
         case CLEANG:
             FifoClearGoals();
             ControlPrepareNewGoal();
+            SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
             break;
         case RESET_ID:
             control.last_finished_id = 0;
+            SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
             break;
         case SET_POS:
         {
@@ -191,6 +196,7 @@ void parseAndExecuteOrder(const String& order) {
             sscanf(receivedOrderPtr, "%i;%i;%i", &x, &y, &a_int);
             angle = a_int / (float)FLOAT_PRECISION;
             RobotStateSetPos(x, y, angle);
+            SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
             break;
         }
         case GET_POS:
@@ -239,6 +245,7 @@ void parseAndExecuteOrder(const String& order) {
             r = r_int / (float)FLOAT_PRECISION;
             control.max_spd = s;
             control.rot_spd_ratio = r;
+            SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
             break;
         }
         case ACCMAX:
@@ -246,6 +253,7 @@ void parseAndExecuteOrder(const String& order) {
             int a;
             sscanf(receivedOrderPtr, "%i", &a);
             control.max_acc = a;
+            SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
             break;
         }
         case GET_LAST_ID:
@@ -253,18 +261,21 @@ void parseAndExecuteOrder(const String& order) {
             break;
         case PAUSE:
             ControlSetStop(PAUSE_BIT);
+            SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
             break;
         case RESUME:
             ControlUnsetStop(PAUSE_BIT);
+            SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
             break;
         case WHOAMI:
-            SerialSender::SerialSend(SERIAL_INFO, ARDUINO_ID);
+            SerialSender::SerialSend(SERIAL_INFO, "%d;%s;", order_id, ARDUINO_ID);
             break;
         case SETEMERGENCYSTOP:
         {
             int enable;
             sscanf(receivedOrderPtr, "%i", &enable);
             EmergencySetStatus(enable);
+            SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
             break;
         }
         default:
