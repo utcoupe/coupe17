@@ -164,6 +164,9 @@ class Asserv{
             case "goxy":
                 callback = function() {this.goxy(params.x, params.y, params.sens)}.bind(this);
             break;
+            case "speed":
+                callback = function() {this.speed(params.l, params.a, params.ms)}.bind(this);
+                break;
             case "setpos":
                 callback = function() {this.setPos(params)}.bind(this);
             break;
