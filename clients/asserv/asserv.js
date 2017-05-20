@@ -152,6 +152,9 @@ class Asserv{
             case "setvit":
                 callback = function() {this.setSpeed(params.v, params.r)}.bind(this);
             break;
+            case "setacc":
+                callback = function() {this.setAcc(params.v)}.bind(this);
+                break;
             case "clean":
                 this.fifo.clean(this.fifo.orderFinished);
             break;
@@ -168,7 +171,7 @@ class Asserv{
                 callback = function() {this.setPid(params.p, params.i, params.d)}.bind(this);
             break;
             default:
-                this.logger.fatal("This order is unknown for the " + this.robotName + " AsservSimu : " + name);
+                this.logger.fatal("This order is unknown for the " + this.robotName + " asserv : " + name);
         }
         if (callback !== undefined) {
             this.fifo.newOrder(callback, name);

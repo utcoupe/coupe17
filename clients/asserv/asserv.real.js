@@ -100,6 +100,12 @@ class AsservReal extends Asserv{
         this.ordersSerial.sendOrder(this.asservCommands.SPD, [parseInt(l), parseInt(a), parseInt(ms)], function() { this.fifo.orderFinished(); }.bind(this));
     };
 
+    setAcc(acc) {
+        // this.logger.debug(myWriteFloat(r));
+        this.ordersSerial.sendOrder(this.asservCommands.ACCMAX, [parseInt(acc)], function() { this.fifo.orderFinished(); }.bind(this));
+    }
+
+
     pwm(left, right, ms) {
         this.ordersSerial.sendOrder(this.asservCommands.PWM, [parseInt(left), parseInt(right), parseInt(ms)], function() { this.fifo.orderFinished(); }.bind(this));
     }
@@ -119,17 +125,6 @@ class AsservReal extends Asserv{
 
     setPid(p, i, d){
         this.ordersSerial.sendOrder(this.asservCommands.PIDALL, [this.myWriteFloat(p), this.myWriteFloat(i), this.myWriteFloat(d)], function() { this.fifo.orderFinished(); }.bind(this));
-    }
-
-    /********************************************************************\
-     *
-     *  OTHER SERIAL FUNCTIONS
-     *
-     /********************************************************************/
-
-    setAcc(acc) {
-        // this.logger.debug(myWriteFloat(r));
-        this.ordersSerial.sendOrder(this.asservCommands.ACCMAX, [parseInt(acc)], function() { this.fifo.orderFinished(); }.bind(this));
     }
 
     /********************************************************************\

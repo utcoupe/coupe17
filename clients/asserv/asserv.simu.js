@@ -24,6 +24,8 @@ class AsservSimu extends Asserv{
 		this.timeouts = [];
 		this.pos = {x:0,y:0,a:0};
 		this.speed = 600; // 800;
+        // Not used in simu
+        this.acc = 0;
 	}
 
 	stop() {
@@ -75,6 +77,11 @@ class AsservSimu extends Asserv{
 		this.speed = parseInt(v);
         this.fifo.orderFinished();
 	}
+
+    setAcc(acc) {
+        this.acc = parseInt(acc);
+        this.fifo.orderFinished();
+    }
 
 	/**
 	 * Calage X
