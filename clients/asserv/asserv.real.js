@@ -84,8 +84,7 @@ class AsservReal extends Asserv{
     }
 
     setSpeed(v, r) {
-        this.speed = parseInt(v);
-        this.fifo.orderFinished();
+        this.ordersSerial.sendOrder(this.asservCommands.SPDMAX, [parseInt(v), this.myWriteFloat(r)], function() { this.fifo.orderFinished(); }.bind(this));
     }
 
     calageX(x, a) {
