@@ -15,12 +15,12 @@ class RobotDisplay {
         this.set_x = 0;
         this.set_y = 0;
         this.set_a = 0;
-        this.v = 1500;
+        this.v = 1000;
         this.r = 0.4;
         this.PID_P = 0.5;
         this.PID_I = 50;
         this.PID_D = 10;
-        this.acc = 750;
+        this.acc = 1500;
     }
 
 
