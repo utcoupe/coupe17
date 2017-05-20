@@ -153,7 +153,7 @@ class Asserv{
                 callback = function() {this.setSpeed(params.v, params.r)}.bind(this);
             break;
             case "setacc":
-                callback = function() {this.setAcc(params.v)}.bind(this);
+                callback = function() {this.setAcc(params.acc)}.bind(this);
                 break;
             case "clean":
                 this.fifo.clean(this.fifo.orderFinished);
