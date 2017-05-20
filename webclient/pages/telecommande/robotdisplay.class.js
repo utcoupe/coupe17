@@ -6,9 +6,12 @@ class RobotDisplay {
 		this.client = client;
 
         // Default for all robots
-        this.pwm_gauche = 50;
-        this.pwm_droite = 50;
+        this.pwm_left = 50;
+        this.pwm_right = 50;
         this.pwm_ms = 1000;
+        this.speed_l = 1000;
+        this.speed_a = 0;
+        this.speed_ms = 1000;
         this.a = 0;
         this.x = 0;
         this.y = 0;
@@ -16,10 +19,10 @@ class RobotDisplay {
         this.set_y = 0;
         this.set_a = 0;
         this.v = 1000;
-        this.r = 0.4;
-        this.PID_P = 0.5;
-        this.PID_I = 50;
-        this.PID_D = 10;
+        this.r = 0.6;
+        this.PID_P = 0.25;
+        this.PID_I = 130;
+        this.PID_D = 0;
         this.acc = 1500;
     }
 
@@ -37,8 +40,8 @@ class RobotDisplay {
     // Asserv
     setPWM () {
 		this.client.send(this.name, "asserv.pwm", {
-			left: this.pwm_droite,
-			right: this.pwm_gauche,
+			left: this.pwm_right,
+			right: this.pwm_left,
 			ms: this.pwm_ms
 		});
 	}
@@ -60,6 +63,14 @@ class RobotDisplay {
 		this.goPos();
 		this.goAngle();
 	}
+
+    goSpeed () {
+        this.client.send(this.name, "asserv.speed", {
+            l: this.speed_l,
+            a: this.speed_a,
+            ms: this.speed_ms
+        });
+    }
 
 	setVit () {
 		this.client.send(this.name, "asserv.setvit",{

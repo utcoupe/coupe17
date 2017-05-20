@@ -46,8 +46,8 @@
 		<div>
 			<h3>Asserv</h3>
 			<p>
-				Gauche : <input type="number" ng-model="tibot.pwm_gauche" />
-				Droite : <input type="number" ng-model="tibot.pwm_droite" />
+				Left : <input type="number" ng-model="tibot.pwm_left" />
+				Right : <input type="number" ng-model="tibot.pwm_right" />
 				<input type="number" ng-model="tibot.pwm_ms" /> ms
 				<button type="button" class="btn" ng-click="tibot.setPWM()">Set PWM</button>
 			</p>
@@ -65,9 +65,9 @@
 			<p>
 				<input type="number" ng-model="tibot.v" /> mm/s
 				<input type="text" class="nombreVirgule" ng-model="tibot.r" /> <!-- les champs de type number n'acceptent que des nombres entiers -->
-				<button type="button" class="btn" ng-click="tibot.setVit()">Set vitesse</button>
-				Accélération : <input type="number" ng-model="tibot.acc" /> 
-				<button type="button" class="btn" ng-click="tibot.setAcc()">Set accélération</button>
+				<button type="button" class="btn" ng-click="tibot.setVit()">Set speed</button>
+				Acceleration : <input type="number" ng-model="tibot.acc" />
+				<button type="button" class="btn" ng-click="tibot.setAcc()">Set acceleration</button>
 			</p>
 
 			<p>
@@ -82,6 +82,12 @@
 				D : <input type="number" ng-model="tibot.PID_D" />
 				<button type="button" class="btn" ng-click="tibot.setPID()">Set PID</button>
 			</p>
+            <p>
+                l : <input type="number" ng-model="tibot.speed_l" />;
+                a : <input type="number" ng-model="tibot.speed_a" />;
+                ms : <input type="number" ng-model="tibot.speed_ms" />
+                <button type="button" class="btn" ng-click="tibot.goSpeed()">Speed</button>
+            </p>
 		</div>
 
 		<div>
@@ -164,6 +170,12 @@
 				D : <input type="number" ng-model="grobot.PID_D" />
 				<button type="button" class="btn" ng-click="grobot.setPID()">Set PID</button>
 			</p>
+            <p>
+                l : <input type="number" ng-model="grobot.speed_l" />;
+                a : <input type="number" ng-model="grobot.speed_a" />;
+                ms : <input type="number" ng-model="grobot.speed_ms" />
+                <button type="button" class="btn" ng-click="grobot.goSpeed()">Speed</button>
+            </p>
 		</div>
 
 		<div>
