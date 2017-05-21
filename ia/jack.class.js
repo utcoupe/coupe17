@@ -8,12 +8,13 @@
  */
 
 const gpio = require('rpi-gpio');
-const PLUS = 7; 	// LED side pin, OUTPUT +3.3V
-const MINUS = 0; 	// Switch side pin, INPUT
+const PLUS = 13; 	// Switch pin 3, OUTPUT +3.3V
+const MINUS = 11; 	// Switch pin 1, INPUT
+const LED = 7;		// LED pin, OUTPUT +3.3V
+const logger = require('log4js').getLogger('ia.jack');
 
 module.exports = (function () {
 	"use strict";
-	const logger = require('log4js').getLogger('ia.jack');
 
 	/**
 	 * Jack Constructor
@@ -25,42 +26,60 @@ module.exports = (function () {
 	function Jack(ia) {
 		/** IA */
 		this.ia = ia;
-
+		this.prevVal = false;
+		this.ledReady = false;
 		this.setup();
 	}
 	/**
 	 * Setup Jack
 	 */
 	Jack.prototype.setup = function() {
-		gpio.setup(PLUS, gpio.DIR_OUT, () => {
+		gpio.setup(PLUS, gpio.DIR_OUT, function() {
 			gpio.write(PLUS, true, function(err) {
 			    if (err) throw err;
-			    logger.log('Written to pin ' + PLUS);
+			    // logger.info("Jack cocked between " + PLUS + " and " + MINUS);
 			});
 		});
 
+		gpio.setup(LED, gpio.DIR_OUT, function() {
+                        gpio.write(LED, this.prevVal, function(err) {
+                            if (err) throw err;
+                            // logger.info("Lit up jack LED on " + LED);
+				this.ledReady = true;
+                        }.bind(this));
+                }.bind(this));
+
 		gpio.setup(MINUS, gpio.DIR_IN, gpio.EDGE_BOTH);
-		gpio.on('change', this.valueChanged);
+		gpio.on('change', (c, v) => {
+			this.valueChanged(c, v);
+		});
 	};
 
 	/**
 	 * Read on GPIO, react accordingly
 	 */
 	Jack.prototype.valueChanged = function(channel, value) {
-	    logger.log('Channel ' + channel + ' value is now ' + value);
+		if(channel == MINUS && value && !this.prevVal) {
+			logger.info("Cocked !");
+			this.prevVal = value;
+		} else if (channel == MINUS && !value && this.prevVal) {
+			logger.info("JAAAAAACCCKK");
+			this.ia.client.send("ia", "ia.jack", {});
+			this.prevVal = value;
+		}
+		if(this.ledReady) {
+			gpio.write(LED, value, function(err) {
+                            if (err) throw err;
+                        }.bind(this));
+		}
 	};
 
 	/**
 	 * Read on GPIO, react accordingly
 	 */
-	Jack.prototype.stop = function() {
-		gpio.write(PLUS, true, function(err) {
-		    if (err) throw err;
-		    logger.log('Written to pin ' + PLUS);
-		    
-	        gpio.destroy(function() {
-		        console.log('All pins unexported');
-		    });
+	Jack.prototype.stop = function() {    
+		gpio.destroy(function() {
+	        	logger.info('All pins unexported');
 		});
 	};
 

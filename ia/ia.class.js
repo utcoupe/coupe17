@@ -139,7 +139,7 @@ module.exports = (function () {
 				if(classe == 'ia') {
 					switch(name) {
 						case 'ia.jack':
-							this.jack();
+							this.doJack();
 						break;
 						case 'ia.stop':
 							this.stop();
@@ -184,7 +184,7 @@ module.exports = (function () {
 	 * 
 	 * Starts the robots
 	 */
-	Ia.prototype.jack = function() {
+	Ia.prototype.doJack = function() {
 		if(!this.timer.match_started) {
 			this.timer.start();
 			this.pr.start();
