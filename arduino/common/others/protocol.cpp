@@ -53,8 +53,8 @@ void parseAndExecuteOrder(const String& order) {
         }
         case MODULE_ROTATE:
         {
-            unsigned int servo_id, servo_color;
-            sscanf(receivedOrderPtr, "%u;%u;", &servo_id, &servo_color);
+            unsigned int servo_color;
+            sscanf(receivedOrderPtr, "%u;", &servo_color);
             SerialSender::SerialSend(SERIAL_INFO, "Rotate order, color : %d", servo_color);
             servoRotate((MODULE_COLOR)servo_color, order_id);
             break;
