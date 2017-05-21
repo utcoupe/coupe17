@@ -8,15 +8,6 @@
 #include "protocol.h"
 #include <stdint.h>
 
-
-struct servoInformation {
-    uint8_t servoId;
-    SERVO_POSITION position;
-    uint8_t value;
-};
-
-extern servoInformation servoData[];
-
 void servoAttach();
 void servoAction(uint8_t servo_id, SERVO_POSITION position, uint16_t order_id);
 void servoChangeParameter(const uint8_t servo_id, const SERVO_POSITION servo_position, const uint8_t servo_value);
