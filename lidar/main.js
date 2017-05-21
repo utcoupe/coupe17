@@ -81,7 +81,7 @@
 						});
 						break;
 					default:
-						logger.warn("Name " + name + " not understood : " + !!data?data:"");
+						logger.warn("Name " + name + " not understood : " + !!params?params:"");
 				}
 			// } else {
 			// 	logger.warn("Received two orders too closely !");
