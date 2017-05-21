@@ -58,7 +58,7 @@ class OrdersManager {
     //todo find a way to reboot arduino if it doesn't send its ID (previously started)
     parseCommand(receivedCommand) {
         // Check if the received command is a debug string or a response from an order
-        if (receivedCommand.indexOf(";") == 1) {
+        if (receivedCommand.indexOf(";") != -1) {
             // It's an order response
             var splittedCommand = receivedCommand.split(";");
             console.log("splitted command : " + splittedCommand);

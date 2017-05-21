@@ -73,7 +73,7 @@ void ax::executeAction(int finalPos, int idOrder){
              killAction = false;
         }
     }
-    killAction = false;
+    // killAction = false;
 
 
      actions.push_back(std::thread(&ax::executeAction, this, positions[pos], idOrder));

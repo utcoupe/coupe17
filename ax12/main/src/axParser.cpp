@@ -201,7 +201,7 @@ void axParser::parseAndExecuteOrder(const std::string& order, bool startOnly) {
 	        case HALT:
 	        {
 	            // Ack that arduino has stopped
-				cout << "Receive halt order" <<endl;
+				// cout << "Receive halt order" <<endl;
 				started = false;
 				waitStart();
 	            break;
@@ -209,12 +209,12 @@ void axParser::parseAndExecuteOrder(const std::string& order, bool startOnly) {
 	        case PARAMETER:
 	        {
 	            //todo try to be able to use uint8_t
-				cout << "Receive parameter value " <<order[receivedOrder] << ", order " << id_order << endl;
+				// cout << "Receive parameter value " <<order[receivedOrder] << ", order " << id_order << endl;
 				if (int position = positionToIndex(order[receivedOrder]) != -1){
 					int value = std::stoi(order.substr(receivedOrder+2, s-2));
 					changeParameter(id_ax, position, value);
 				}else{
-					cout << "error on order " << id_order <<endl;
+					cerr << "error on order " << id_order <<endl;
 				}
 	            break;
 	        }
