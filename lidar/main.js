@@ -73,6 +73,7 @@
 						break;
 					case "kill":
 						hokMng.stop();
+						process.exit();
 						// quitC("stop");
 						break;
 					case "sync_git":
