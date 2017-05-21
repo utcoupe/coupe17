@@ -12,10 +12,11 @@
 #define NB_SERVO 4
 
 // Set the pins corresponding to the used servo motors
-#define PR_MODULE_ARM_PIN       9
-#define PR_MODULE_DROP_R_PIN    6
-#define PR_MODULE_DROP_L_PIN    5
-#define PR_MODULE_ROTATE_PIN    3
+#define PR_MODULE_ARM_PIN           9
+#define PR_MODULE_DROP_R_PIN        6
+#define PR_MODULE_DROP_L_PIN        5
+#define PR_MODULE_ROTATE_PIN        3
+#define PR_MODULE_ARM_ROTATE_PIN    11
 
 //todo remove ?
 #define HZ 100
