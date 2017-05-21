@@ -50,7 +50,7 @@ axParser::axParser():started(false), baudnum(1),deviceIndex(0), future(std::asyn
 	servos[PR_MODULE_GRABBER] = &ax1;
 	servos[PR_MODULE_DUMMY] =&ax2;
 	initializeServos();
-    dxl_write_word(3, 38, 300);
+    
     while(1)
     {
         // Write goal position

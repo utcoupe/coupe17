@@ -28,11 +28,11 @@ void ax::executeAction(int finalPos, int idOrder){
          currentPos[1] = dxl_get_rxpacket_parameter(1) << 8;
          lockSerial.unlock();
          current = currentPos[0] | currentPos[1];
-         std::cout << "Position actuelle: " << current  << std::endl;
+         //std::cout << "Position actuelle: " << current  << std::endl;
         //  cerr <<"kill:" <<killAction << endl;
 
          if(killAction == true){
-             cout << "Action killed" << endl;
+             //cout << "Action killed" << endl;
              goto end;
          }
          std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -65,10 +65,6 @@ void ax::executeAction(int finalPos, int idOrder){
 
 
  void ax::goTo(int pos, int idOrder){
-     //cerr << "goto\n";
-     //cerr <<"kill:" <<killAction <<", id:" << idOrder << endl;
-     //cerr <<"kill:" <<killAction <<", id:" << idOrder << endl;
-     //cerr << "goTo\n";
      if (actions.size() > 0){
          std::thread& lastThread = actions.back();
          if(lastThread.joinable() == true){
