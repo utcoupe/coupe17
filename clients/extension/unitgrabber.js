@@ -41,6 +41,11 @@ class UnitGrabber extends Extension {
             case "openArm":
             case "closeArm":
             case "upGrabber":
+                this.logger.info("Order added to fifo " + name);            
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder(name);
+                }, name);
+                break;
             case "downGrabber":
                 this.fifo.newOrder(() => {
                     this.processFifoOrder(name);

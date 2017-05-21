@@ -243,22 +243,22 @@ class Server {
 		if(!this.utcoupe[prog]) {
 			switch(prog) {
 				case 'ia':
-					this.progs[prog] = spawn('node', ['./ia/main.js', params.color, params.we_have_hats/*, params.nb_erobots, params.EGR_d, params.EPR_d*/]);
+					this.progs[prog] = spawn('node', [process.env["UTCOUPE_WORKSPACE"] + '/ia/main.js', params.color, params.we_have_hats/*, params.nb_erobots, params.EGR_d, params.EPR_d*/]);
 				break;
 				case 'pr':
-					//this.progs[prog] = spawn('ssh', ['igep', '/root/main.sh']);
+					//this.progs[prog] = spawn('ssh', ['igep', process.env["UTCOUPE_WORKSPACE"] + '/root/main.sh']);
                     //todo launch remote client
-					this.progs[prog] = spawn('node', ['./clients/main/main.pr.js']);
+					this.progs[prog] = spawn('node', [ process.env["UTCOUPE_WORKSPACE"] + '/clients/main/main.pr.js']);
 				break;
 				case 'gr':
-					this.progs[prog] = spawn('node', ['./clients/main/main.gr.js']);
+					this.progs[prog] = spawn('node', [ process.env["UTCOUPE_WORKSPACE"] + '/clients/main/main.gr.js']);
 				break;
 				case 'hokuyo':
-					// this.progs[prog] = spawn('ssh', ['raspi', './hokuyo/main.js']);
-					this.progs[prog] = spawn('node', ['./hokuyo/main.js']);
+					// this.progs[prog] = spawn('ssh', ['raspi', process.env["UTCOUPE_WORKSPACE"] + '/hokuyo/main.js']);
+					this.progs[prog] = spawn('node', [ process.env["UTCOUPE_WORKSPACE"] + '/hokuyo/main.js']);
 				break;
 				case 'lidar':
-					this.progs[prog] = spawn('node', ['./lidar/main.js'/*, params.color, params.nb_erobots, params.EGR_d, params.EPR_d*/]);
+					this.progs[prog] = spawn('node', [ process.env["UTCOUPE_WORKSPACE"] + '/lidar/main.js'/*, params.color, params.nb_erobots, params.EGR_d, params.EPR_d*/]);
 				break;
 			}
 

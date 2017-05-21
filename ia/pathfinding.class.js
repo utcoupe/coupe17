@@ -14,10 +14,10 @@ module.exports = (function () {
 
 	var Path = require('path');
 
-	// var program = Path.normalize("./bin/pathfinding");
-	var program = Path.normalize("./bin/pathfinding");
-	// var image = Path.normalize("./pathfinding/img/map-20mm-yellow.bmp");
-	var image = Path.normalize("./pathfinding/img/map.bmp");
+	// var program = Path.normalize(process.env["UTCOUPE_WORKSPACE"] + "/bin/pathfinding");
+	var program = Path.normalize(process.env["UTCOUPE_WORKSPACE"] + "/bin/pathfinding");
+	// var image = Path.normalize(process.env["UTCOUPE_WORKSPACE"] + "/pathfinding/img/map-20mm-yellow.bmp");
+	var image = Path.normalize(process.env["UTCOUPE_WORKSPACE"] + "/pathfinding/img/map.bmp");
 	var RATIO = 20;
 	var SEPARATOR = ";";
 

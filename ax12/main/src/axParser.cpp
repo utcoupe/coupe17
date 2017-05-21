@@ -50,7 +50,7 @@ axParser::axParser():started(false), baudnum(1),deviceIndex(0), future(std::asyn
 	servos[PR_MODULE_GRABBER] = &ax1;
 	servos[PR_MODULE_DUMMY] =&ax2;
 	initializeServos();
-    dxl_write_word(3, 38, 300);
+    
     while(1)
     {
         // Write goal position
@@ -69,9 +69,9 @@ axParser::axParser():started(false), baudnum(1),deviceIndex(0), future(std::asyn
 }
 
 void axParser::initializeServos(){
-    cout << "initializeServos" << endl;
+    // cout << "initializeServos" << endl;
 	for (std::map<int, int>::const_iterator it=vals::paramValuesW.begin(); it!=vals::paramValuesW.end(); ++it){
-        cout << "Initilizing " << it->first << " with " << it->second << endl;
+        // cout << "Initilizing " << it->first << " with " << it->second << endl;
 		dxl_write_word(254, it->first, it->second);
 	}
 }
@@ -201,7 +201,7 @@ void axParser::parseAndExecuteOrder(const std::string& order, bool startOnly) {
 	        case HALT:
 	        {
 	            // Ack that arduino has stopped
-				cout << "Receive halt order" <<endl;
+				// cout << "Receive halt order" <<endl;
 				started = false;
 				waitStart();
 	            break;
@@ -209,12 +209,12 @@ void axParser::parseAndExecuteOrder(const std::string& order, bool startOnly) {
 	        case PARAMETER:
 	        {
 	            //todo try to be able to use uint8_t
-				cout << "Receive parameter value " <<order[receivedOrder] << ", order " << id_order << endl;
+				// cout << "Receive parameter value " <<order[receivedOrder] << ", order " << id_order << endl;
 				if (int position = positionToIndex(order[receivedOrder]) != -1){
 					int value = std::stoi(order.substr(receivedOrder+2, s-2));
 					changeParameter(id_ax, position, value);
 				}else{
-					cout << "error on order " << id_order <<endl;
+					cerr << "error on order " << id_order <<endl;
 				}
 	            break;
 	        }
