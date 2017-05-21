@@ -164,8 +164,8 @@ class Lidar {
 		}
 
 		// Tell the robots about the ennemy pos, and let them react accordingly
-		this.ia.pr.detectCollision(robots);
-		this.ia.gr.detectCollision(robots);
+		this.ia.pr.detectCollision(robots.concat(this.ia.gr));
+		this.ia.gr.detectCollision(robots.concat(this.ia.pr));
 
 		// Tell the robots about the ennemy pos, and let them react accordingly
 		this.ia.pr.actions.killObjects(robots);
