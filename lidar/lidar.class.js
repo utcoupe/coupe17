@@ -214,7 +214,7 @@ module.exports = (function () {
 		// Save
 
 		this.lastCartSpots[hokuyoName] = {};
-		this.lastCartSpots[hokuyoName].isWorking = function() { return Date.now() - this.time <  2 * DELTA_T; }; // we had some data no long ago
+		this.lastCartSpots[hokuyoName].isWorking = function() { return Date.now() - this.time <  3 * DELTA_T; }; // we had some data no long ago
 		this.lastCartSpots[hokuyoName].time = Date.now();
 		this.lastCartSpots[hokuyoName].filteredSpots = spots;
 
