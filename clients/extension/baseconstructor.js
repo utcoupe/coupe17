@@ -120,6 +120,23 @@ class BaseConstructor extends Extension {
             case "push":
                 /// TODO AX12 action with param.towards
                 this.logger.error("TODO: do AX12 push action");
+                switch(param.towards){
+                    case "dont":
+                        this.ax12.sendDummyCenter(() => {
+                            this.fifo.orderFinished();
+                        });
+                        break;
+                    case "left":
+                        this.ax12.sendDummyLeft(() => {
+                            this.fifo.orderFinished();
+                        });
+                        break;
+                    case "right":
+                        this.ax12.sendDummyRight(() => {
+                            this.fifo.orderFinished();
+                        });
+                        break;
+                }
                 this.fifo.orderFinished();
                 break;
             case "send_message":
