@@ -23,10 +23,10 @@
 
 #define YELLOW_MIN_THRESHOLD    40
 #define YELLOW_MAX_THRESHOLD    70
-#define BLUE_MIN_THRESHOLD    220
-#define BLUE_MAX_THRESHOLD    250
-#define WHITE_MIN_THRESHOLD    180
-#define WHITE_MAX_THRESHOLD    200
+#define BLUE_MIN_THRESHOLD    180
+#define BLUE_MAX_THRESHOLD    200
+#define WHITE_MIN_THRESHOLD    0
+#define WHITE_MAX_THRESHOLD    20
 
 //red, green, blue
 uint8_t rgbValues[3];
