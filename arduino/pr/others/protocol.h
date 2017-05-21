@@ -18,7 +18,7 @@ class String;
 #define START               'S'     //no args, start the program
 #define HALT                'h'     //no args, halt the program
 #define PARAMETER           'p'     //servo_id(int);position(int);value(int), respond TODO, position = open or close
-#define MODULE_ROTATE       'r'     //color(int) = 0 (whatever color), 1 (blue), 2 (yellow), respond TODO
+#define MODULE_ROTATE       'r'     //color(int) = 0 (whatever color), 1 (blue), 2 (yellow)
 #define SERVO_OPEN          'o'     //servo_id(int), respond ack when done
 #define SERVO_CLOSE         'c'     //servo_id(int), respond ack when done
 #define SERVO_INIT          'i'     //servo_id(int), respond ack when done
@@ -47,7 +47,7 @@ enum MODULE_COLOR {
 #define ORDER_INDEX (uint8_t)0
 #define ID_INDEX    (uint8_t)2
 
-#define MAX_SERVO   (uint8_t)8
+#define MAX_SERVO   (uint8_t)4
 
 extern unsigned char flagArduinoConnected;
 
