@@ -71,7 +71,7 @@
 					case "color":
 						hokMng.changeColor()
 						break;
-					case "stop":
+					case "kill":
 						hokMng.stop();
 						// quitC("stop");
 						break;

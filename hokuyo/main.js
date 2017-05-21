@@ -77,7 +77,8 @@
 					quitC("stop");
 					spawn('sudo', ['halt']);
 					break;
-				case "stop":
+				case "kill":
+					started = false;
 					quitC("stop");
 					break;
 				case "sync_git":

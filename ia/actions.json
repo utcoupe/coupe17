@@ -1,212 +1,678 @@
 {
-	"__comment": "\nAdd durations, priority\nAdd actions without objects",
+	"__comment": "\nUse duration ?\nDetermine priorities\nFront of robots ? -> angles\nDuplicate uncolored actions, mirror colored",
 	"actions":{
-		"faire_les_claps_1":{
-			"type": "clap",
+		"take_4_modules_rear_left":{
+			"type": "module",
 			"owner": "pr",
-			"objectname": "clap__1",
+			"objectname": "rocket__rear_left_12>15",
 			"startpoints": [{
-				"x": 140,
-				"y": 140,
-				"a": 3.1416
+				"x": 1150,
+				"y": 100,
+				"a": -1.5707
 			}],
-			"sens": "osef",
-			"priority": 18,
+			"direction": "forward",
+			"priority": 88,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"supModule": 5,
+				"infModule": 0
+			},
 			"orders":[{
-				"name": "clap_1",
-				"params": {}
-				}],
+				"dest": "unit_grabber",
+				"name": "take_module",
+				"params": {
+					"rocket": true,
+					"nb_modules_to_take": 4
+				}
+			}],
 			"kill": null
 		},
-		"faire_les_claps_3":{
-			"type": "clap",
+		"take_4_modules_border_left":{
+			"type": "module",
 			"owner": "pr",
-			"objectname": "clap__3",
+			"objectname": "rocket__front_left_20>23",
 			"startpoints": [{
-				"x": 730,
-				"y": 140,
-				"a": 3.1416
+				"x": 38,
+				"y": 1350,
+				"a": -3.1415
 			}],
-			"sens": "osef",
-			"priority": 17,
+			"direction": "forward",
+			"priority": 88,
 			"dependency": "",
-			"duration": 1,
+			"dependencyRobotContent": {
+				"supModule": 5,
+				"infModule": 0
+			},
 			"orders":[{
-				"name": "clap_3",
-				"params": {}
-				}],
+				"dest": "unit_grabber",
+				"name": "take_module",
+				"params": {
+					"rocket": true,
+					"nb_modules_to_take": 4
+				}
+			}],
 			"kill": null
 		},
-		"prendre_gobelet_et_2_plots_front_left":{
-			"type": "gobelet",
+		"take_4_modules_rear_right":{
+			"type": "module",
 			"owner": "pr",
-			"objectname": "gobelet__front_left",
-			"startpoints": [
-			{
-				"x": 450,
-				"y": 350,
+			"objectname": "rocket__rear_right_16>19",
+			"startpoints": [{
+				"x": 1850,
+				"y": 38,
+				"a": -1.5707
+			}],
+			"direction": "forward",
+			"priority": 88,
+			"dependency": "",
+			"dependencyRobotContent": {
+				"supModule": 5,
+				"infModule": 0
+			},
+			"orders":[{
+				"dest": "unit_grabber",
+				"name": "take_module",
+				"params": {
+					"rocket": true,
+					"nb_modules_to_take": 4
+				}
+			}],
+			"kill": null
+		},
+		"take_4_modules_border_right":{
+			"type": "module",
+			"owner": "pr",
+			"objectname": "rocket__front_right_24>27",
+			"startpoints": [{
+				"x": 2962,
+				"y": 1350,
 				"a": 0
 			}],
-			"sens": "arriere",
-			"priority": 19,
+			"direction": "forward",
+			"priority": 88,
 			"dependency": "",
 			"dependencyRobotContent": {
-				"gobelet": false,
-				"subPlot": 2,
-				"invPlot": 0
-				},
-			"duration": 1,
+				"supModule": 5,
+				"infModule": 0
+			},
 			"orders":[{
-				"name": "prendre_gobelet_et_2_plots_front",
-				"params": {}
-				}],
+				"dest": "unit_grabber",
+				"name": "take_module",
+				"params": {
+					"rocket": true,
+					"nb_modules_to_take": 4
+				}
+			}],
 			"kill": null
 		},
-		"prendre_plot_middle_left1":{
-			"type": "plot",
+		"take_module_01":{
+			"type": "module",
 			"owner": "pr",
-			"objectname": "plot__middle_left1",
+			"objectname": "module__mod_lun01",
 			"startpoints": [],
-			"sens": "avant",
-			"priority": 21, 
+			"direction": "forward",
+			"priority": 98,
 			"dependency": "",
 			"dependencyRobotContent": {
-				"subPlot": 3,
-				"invPlot": 0
-				},
-			"duration": 1,
+				"supModule": 8,
+				"infModule": 0
+			},
 			"orders":[{
-				"name": "prendre_plot",
-				"params": {}
-				}],
+				"dest": "unit_grabber",
+				"name": "take_module",
+				"params": {
+					"rocket": false,
+					"nb_modules_to_take": 1
+				}
+			}],
 			"kill": null
 		},
-		"prendre_plot_middle_left2":{
-			"type": "plot",
+		"take_module_02":{
+			"type": "module",
 			"owner": "pr",
-			"objectname": "plot__middle_left2",
+			"objectname": "module__mod_lun02",
 			"startpoints": [],
-			"sens": "avant",
-			"priority": 20, 
+			"direction": "forward",
+			"priority": 97,
 			"dependency": "",
 			"dependencyRobotContent": {
-				"subPlot": 3,
-				"invPlot": 0
-				},
-			"duration": 1,
+				"supModule": 8,
+				"infModule": 0
+			},
 			"orders":[{
-				"name": "prendre_plot",
-				"params": {}
-				}],
+				"dest": "unit_grabber",
+				"name": "take_module",
+				"params": {
+					"rocket": false,
+					"nb_modules_to_take": 1
+				}
+			}],
 			"kill": null
 		},
-		"pousser_plot_middle_left3":{
-			"type": "plot",
+		"take_module_04":{
+			"type": "module",
 			"owner": "pr",
-			"objectname": "plot__middle_left3",
+			"objectname": "module__mod_lun04",
 			"startpoints": [],
-			"sens": "avant",
-			"priority": 21,  
+			"direction": "forward",
+			"priority": 98,
 			"dependency": "",
 			"dependencyRobotContent": {
-				"subPlot": 3,
-				"invPlot": 0
-				},
-			"duration": 1,
+				"supModule": 8,
+				"infModule": 0
+			},
 			"orders":[{
-				"name": "pousser_plot",
-				"params": {}
-				}],
+				"dest": "unit_grabber",
+				"name": "take_module",
+				"params": {
+					"rocket": false,
+					"nb_modules_to_take": 1
+				}
+			}],
 			"kill": null
 		},
-		"deposer_pile_gobelet_gauche":{
-			"type": "depot_pile",
+		"take_module_05":{
+			"type": "module",
 			"owner": "pr",
-			"objectname": "pile__left",
+			"objectname": "module__mod_lun05",
+			"startpoints": [],
+			"direction": "forward",
+			"priority": 97,
+			"dependency": "",
+			"dependencyRobotContent": {
+				"supModule": 8,
+				"infModule": 0
+			},
+			"orders":[{
+				"dest": "unit_grabber",
+				"name": "take_module",
+				"params": {
+					"rocket": false,
+					"nb_modules_to_take": 1
+				}
+			}],
+			"kill": null
+		},
+		"take_module_06":{
+			"type": "module",
+			"owner": "pr",
+			"objectname": "module__mod_lun06",
+			"startpoints": [],
+			"direction": "forward",
+			"priority": 96,
+			"dependency": "",
+			"dependencyRobotContent": {
+				"supModule": 8,
+				"infModule": 0
+			},
+			"orders":[{
+				"dest": "unit_grabber",
+				"name": "take_module",
+				"params": {
+					"rocket": false,
+					"nb_modules_to_take": 1
+				}
+			}],
+			"kill": null
+		},
+		"take_module_07":{
+			"type": "module",
+			"owner": "pr",
+			"objectname": "module__mod_lun07",
+			"startpoints": [],
+			"direction": "forward",
+			"priority": 95,
+			"dependency": "",
+			"dependencyRobotContent": {
+				"supModule": 8,
+				"infModule": 0
+			},
+			"orders":[{
+				"dest": "unit_grabber",
+				"name": "take_module",
+				"params": {
+					"rocket": false,
+					"nb_modules_to_take": 1
+				}
+			}],
+			"kill": null
+		},
+		"take_module_08":{
+			"type": "module",
+			"owner": "pr",
+			"objectname": "module__mod_lun08",
+			"startpoints": [],
+			"direction": "forward",
+			"priority": 94,
+			"dependency": "",
+			"dependencyRobotContent": {
+				"supModule": 8,
+				"infModule": 0
+			},
+			"orders":[{
+				"dest": "unit_grabber",
+				"name": "take_module",
+				"params": {
+					"rocket": false,
+					"nb_modules_to_take": 1
+				}
+			}],
+			"kill": null
+		},
+		"take_module_09":{
+			"type": "module",
+			"owner": "pr",
+			"objectname": "module__mod_lun09",
+			"startpoints": [],
+			"direction": "forward",
+			"priority": 96,
+			"dependency": "",
+			"dependencyRobotContent": {
+				"supModule": 8,
+				"infModule": 0
+			},
+			"orders":[{
+				"dest": "unit_grabber",
+				"name": "take_module",
+				"params": {
+					"rocket": false,
+					"nb_modules_to_take": 1
+				}
+			}],
+			"kill": null
+		},
+		"take_module_10":{
+			"type": "module",
+			"owner": "pr",
+			"objectname": "module__mod_lun10",
+			"startpoints": [],
+			"direction": "forward",
+			"priority": 95,
+			"dependency": "",
+			"dependencyRobotContent": {
+				"supModule": 8,
+				"infModule": 0
+			},
+			"orders":[{
+				"dest": "unit_grabber",
+				"name": "take_module",
+				"params": {
+					"rocket": false,
+					"nb_modules_to_take": 1
+				}
+			}],
+			"kill": null
+		},
+		"take_module_11":{
+			"type": "module",
+			"owner": "pr",
+			"objectname": "module__mod_lun11",
+			"startpoints": [],
+			"direction": "forward",
+			"priority": 94,
+			"dependency": "",
+			"dependencyRobotContent": {
+				"supModule": 8,
+				"infModule": 0
+			},
+			"orders":[{
+				"dest": "unit_grabber",
+				"name": "take_module",
+				"params": {
+					"rocket": false,
+					"nb_modules_to_take": 1
+				}
+			}],
+			"kill": null
+		},
+		"drop_module_border_left":{
+			"type": "drop_module",
+			"owner": "pr",
+			"objectname": "mountedModules__left",
 			"startpoints": [{
-					"x": 700,
-					"y": 1000,
-					"a": 3.1416
-				}],
-			"sens": "avant",
-			"priority": 14,
+				"x": 150,
+                "y": 1100,
+                "a": 3.1415
+			}],
+			"direction": "backward",
+			"priority": 93,
 			"dependency": "",
 			"dependencyRobotContent": {
-				"invPlot": 1
-				},
-			"duration": 1,
+				"infModule": 3
+			},
+			"preparation_orders":[{
+				"dest": "base_constructor",
+				"name": "prepare_module",
+				"params": {
+					"color": "TO_BE_FILLED_BY_IA",
+					"push_toward": "right"
+				}
+			}],
 			"orders":[{
-				"name": "deposer_pile_et_gobelet",
+				"dest": "base_constructor",
+				"name": "drop_module",
+				"params": {
+					"nb_modules_to_drop": 3
+				}
+			}],
+			"kill": null
+		},
+		"drop_module_middle_left_1":{
+			"type": "drop_module",
+			"owner": "pr",
+			"objectname": "mountedModules__middle_left",
+			"startpoints": [{
+				"x": 1020,
+                "y": 1350,
+                "a": -0.7853
+			}],
+			"direction": "backward",
+			"priority": 92,
+			"dependency": "",
+			"dependencyRobotContent": {
+				"infModule": 3
+			},
+			"preparation_orders":[{
+				"dest": "base_constructor",
+				"name": "prepare_module",
+				"params": {
+					"color": "TO_BE_FILLED_BY_IA",
+					"push_toward": "right"
+				}
+				}],
+			"orders":[{
+				"dest": "base_constructor",
+				"name": "drop_module",
 				"params": {}
 				}],
 			"kill": null
 		},
-		"prendre_plot_rear_left":{
-			"type": "plot",
+		"drop_module_middle_left_2":{
+			"type": "drop_module",
 			"owner": "pr",
-			"objectname": "plot__rear_left",
+			"objectname": "mountedModules__middle_left",
+			"startpoints": [{
+				"x": 1120,
+                "y": 1450,
+                "a": 2.3561
+			}],
+			"direction": "backward",
+			"priority": 92,
+			"dependency": "",
+			"dependencyRobotContent": {
+				"infModule": 3
+			},
+			"preparation_orders":[{
+				"dest": "base_constructor",
+				"name": "prepare_module",
+				"params": {
+					"color": "TO_BE_FILLED_BY_IA",
+					"push_toward": "left"
+				}
+				}],
+			"orders":[{
+				"dest": "base_constructor",
+				"name": "drop_module",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"drop_module_middle_center_1":{
+			"type": "drop_module",
+			"owner": "pr",
+			"objectname": "mountedModules__middle_center",
+			"startpoints": [{
+				"x": 1450,
+                "y": 1250,
+                "a": 0
+			}],
+			"direction": "backward",
+			"priority": 91,
+			"dependency": "",
+			"dependencyRobotContent": {
+				"infModule": 3
+			},
+			"preparation_orders":[{
+				"dest": "base_constructor",
+				"name": "prepare_module",
+				"params": {
+					"color": "TO_BE_FILLED_BY_IA",
+					"push_toward": "right"
+				}
+				}],
+			"orders":[{
+				"dest": "base_constructor",
+				"name": "drop_module",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"drop_module_middle_center_2":{
+			"type": "drop_module",
+			"owner": "pr",
+			"objectname": "mountedModules__middle_center",
+			"startpoints": [{
+				"x": 1550,
+                "y": 1350,
+                "a": 3.1415
+			}],
+			"direction": "backward",
+			"priority": 90,
+			"dependency": "",
+			"dependencyRobotContent": {
+				"infModule": 3
+			},
+			"preparation_orders":[{
+				"dest": "base_constructor",
+				"name": "prepare_module",
+				"params": {
+					"color": "TO_BE_FILLED_BY_IA",
+					"push_toward": "left"
+				}
+				}],
+			"orders":[{
+				"dest": "base_constructor",
+				"name": "drop_module",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"drop_module_middle_right_1":{
+			"type": "drop_module",
+			"owner": "pr",
+			"objectname": "mountedModules__middle_right",
+			"startpoints": [{
+				"x": 1880,
+                "y": 1350,
+                "a": 0.7853
+			}],
+			"direction": "backward",
+			"priority": 89,
+			"dependency": "",
+			"dependencyRobotContent": {
+				"infModule": 3
+			},
+			"preparation_orders":[{
+				"dest": "base_constructor",
+				"name": "prepare_module",
+				"params": {
+					"color": "TO_BE_FILLED_BY_IA",
+					"push_toward": "right"
+				}
+				}],
+			"orders":[{
+				"dest": "base_constructor",
+				"name": "drop_module",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"drop_module_middle_right_2":{
+			"type": "drop_module",
+			"owner": "pr",
+			"objectname": "mountedModules__middle_right",
+			"startpoints": [{
+				"x": 1980,
+                "y": 1450,
+                "a": -2.3561
+			}],
+			"direction": "backward",
+			"priority": 88,
+			"dependency": "",
+			"dependencyRobotContent": {
+				"infModule": 3
+			},
+			"preparation_orders":[{
+				"dest": "base_constructor",
+				"name": "prepare_module",
+				"params": {
+					"color": "TO_BE_FILLED_BY_IA",
+					"push_toward": "left"
+				}
+				}],
+			"orders":[{
+				"dest": "base_constructor",
+				"name": "drop_module",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"drop_module_border_right":{
+			"type": "drop_module",
+			"owner": "pr",
+			"objectname": "mountedModules__right",
+			"startpoints": [{
+				"x": 2850,
+                "y": 1100,
+                "a": 0
+			}],
+			"direction": "backward",
+			"priority": 93,
+			"dependency": "",
+			"dependencyRobotContent": {
+				"infModule": 3
+			},
+			"preparation_orders":[{
+				"dest": "base_constructor",
+				"name": "prepare_module",
+				"params": {
+					"color": "TO_BE_FILLED_BY_IA",
+					"push_toward": "left"
+				}
+			}],
+			"orders":[{
+				"dest": "base_constructor",
+				"name": "drop_module",
+				"params": {
+					"nb_modules_to_drop": 3
+				}
+			}],
+			"kill": null
+		},
+		"catch_balls_front_left":{
+			"type": "catch_balls",
+			"owner": "gr",
+			"objectname": "balls__front_left",
+			"startpoints": [{
+				"x": 350,
+                "y": 1650,
+                "a": 1.5707
+			}],
+			"direction": "forward",
+			"priority": 87,
+			"dependency": "",
+			"orders":[{
+				"dest": "sweeper",
+				"name": "swallow_balls",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"catch_balls_small_left":{
+			"type": "catch_balls",
+			"owner": "gr",
+			"objectname": "balls__small_left",
 			"startpoints": [{
 				"x": 650,
-				"y": 1450,
-				"a": 0
+                "y": 540,
+                "a": 2.3561
 			}],
-			"sens": "avant",
-			"priority": 13,
-			"dependency": "deposer_pile_gobelet_gauche",
-			"dependencyRobotContent": {
-				"subPlot": 3
-				},
-			"duration": 1,
+			"direction": "forward",
+			"priority": 87,
+			"dependency": "",
 			"orders":[{
-				"name": "prendre_plot_rear_left_calage",
-				"params": {}
-			}],
-			"kill": null
-		},
-		"prendre_2_plots_stairs_left":{
-			"type": "plot",
-			"owner": "pr",
-			"objectname": "plot__stairs_left2",
-			"startpoints": [{
-				"x": 705,
-				"y": 1640,
-				"a": 0
-			}],
-			"sens": "avant",
-			"priority": 12,
-			"dependency": "prendre_plot_rear_left",
-			"dependencyRobotContent": {
-				"subPlot": 2
-				},
-			"duration": 2,
-				"orders":[{
-				"name": "prendre_2_plots_stairs",
-				"params": {}
-			}],
-			"kill": null
-		},
-		"deposer_pile_gauche_2":{
-			"type": "depot_pile",
-			"owner": "pr",
-			"objectname": "pile__left2",
-			"startpoints": [{
-				"x": 700,
-				"y": 1000,
-				"a": -1.5708
-			}],
-			"sens": "avant",
-			"priority": 9,
-			"dependency": "deposer_pile_gobelet_gauche",
-			"dependencyRobotContent": {
-				"invPlot": 1
-				},
-			"duration": 1,
-			"orders":[{
-				"name": "deposer_pile_left_2",
+				"dest": "sweeper",
+				"name": "swallow_balls",
 				"params": {}
 				}],
+			"kill": null
+		},
+		"catch_balls_front_right":{
+			"type": "catch_balls",
+			"owner": "gr",
+			"objectname": "balls__front_right",
+			"startpoints": [{
+				"x": 2650,
+                "y": 1650,
+                "a": 1.5707
+			}],
+			"direction": "forward",
+			"priority": 87,
+			"dependency": "",
+			"orders":[{
+				"dest": "sweeper",
+				"name": "swallow_balls",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"catch_balls_small_right":{
+			"type": "catch_balls",
+			"owner": "gr",
+			"objectname": "balls__small_right",
+			"startpoints": [{
+				"x": 2350,
+                "y": 540,
+                "a": 2.3561
+			}],
+			"direction": "forward",
+			"priority": 87,
+			"dependency": "",
+			"orders":[{
+				"dest": "sweeper",
+				"name": "swallow_balls",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"seesaw_left":{
+			"type": "seesaw",
+			"owner": "gr",
+			"objectname": "seesaw__left",
+			"startpoints": [{
+				"x": 500,
+                "y": 200,
+                "a": 0
+			}],
+			"direction": "whatever",
+			"priority": 89,
+			"dependency": "",
+			"orders":[],
+			"kill": null
+		},
+		"seesaw_right":{
+			"type": "seesaw",
+			"owner": "gr",
+			"objectname": "seesaw__right",
+			"startpoints": [{
+				"x": 2500,
+                "y": 200,
+                "a": 3.1415
+			}],
+			"direction": "whatever",
+			"priority": 89,
+			"dependency": "",
+			"orders":[],
 			"kill": null
 		}
 	}

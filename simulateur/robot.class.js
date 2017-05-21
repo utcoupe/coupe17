@@ -100,7 +100,9 @@ class Robot extends Object3d
      */
     clearPath()
     {
-        this.pathLine.geometry.vertices(0, this.pathLine.geometry.vertices.length);
+        for(var idVertice = 0; idVertice < this.PATH_MAX_POINTS; idVertice++) {
+            this.pathLine.geometry.vertices[idVertice] = new THREE.Vector3( 0, 0, 0 );
+        }
         
         this.pathLine.geometry.verticesNeedUpdate = true;
     }

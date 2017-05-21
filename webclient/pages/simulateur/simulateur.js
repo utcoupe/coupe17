@@ -19,6 +19,8 @@ angular.module('app').controller('SimulateurCtrl', ['$rootScope', '$scope', 'Cli
 		$scope.rot_pr = new Position();
 		$scope.pos_gr = new Position();
 		$scope.rot_gr = new Position();
+		$scope.pos_epr = new Position();
+		$scope.pos_egr = new Position();
 		$scope.vueDeFace = function () { Simulateur.controllerSimu.selectView("front"); }
 		$scope.vueDeDessus = function () { Simulateur.controllerSimu.selectView("top"); }
 		$scope.vueDeDerriere = function () { Simulateur.controllerSimu.selectView("behind"); }
@@ -30,10 +32,12 @@ angular.module('app').controller('SimulateurCtrl', ['$rootScope', '$scope', 'Cli
 		$scope.iaStop = function () { Client.send("ia", "ia.stop"); }
 
 		Simulateur.updateInterface = function () {
-			$scope.pos_pr = Simulateur.controllerSimu.objects3d.get("pr_jaune").position;
-			$scope.rot_pr = Simulateur.controllerSimu.objects3d.get("pr_jaune").rotation;
-			$scope.pos_gr = Simulateur.controllerSimu.objects3d.get("gr_jaune").position;
-			$scope.rot_gr = Simulateur.controllerSimu.objects3d.get("gr_jaune").rotation;
+			$scope.pos_pr = Simulateur.controllerSimu.objects3d.get("pr_" + this.robots.pr.color).position;
+			$scope.rot_pr = Simulateur.controllerSimu.objects3d.get("pr_" + this.robots.pr.color).rotation;
+			$scope.pos_gr = Simulateur.controllerSimu.objects3d.get("gr_" + this.robots.gr.color).position;
+			$scope.rot_gr = Simulateur.controllerSimu.objects3d.get("gr_" + this.robots.gr.color).rotation;
+			$scope.pos_epr = Simulateur.controllerSimu.objects3d.get("pr_" + this.robots.epr.color).position;
+			$scope.pos_egr = Simulateur.controllerSimu.objects3d.get("gr_" + this.robots.egr.color).position;
 		}
 	}]);
 
@@ -63,23 +67,26 @@ function convertPosNew(pos) {
  * @param {Object} Simulateur
  * @param {String} type Type de Robot
  */
-function updatePr(data_robot, Simulateur, type) {
-	if (data_robot.x && Simulateur.controllerSimu.objects3d.has(type + "_jaune")) {
+function updateRobot(data_robot, simulateur, type) {
+	if (data_robot.x && simulateur.controllerSimu.objects3d.has(type + "_" + data_robot.color)) {
 		act_pos = convertPosNew(data_robot);
 		position = new Position(act_pos.x, 0, act_pos.z);
 		position.roundAll(-3);
 		rotation = new Position(0, data_robot.a, 0);
 		rotation.roundAll(-2);
-		Simulateur.controllerSimu.objects3d.get(type + "_jaune").updateParams({
+		simulateur.controllerSimu.objects3d.get(type + "_" + data_robot.color).updateParams({
 			pos: position,
 			rotation: rotation
 		});
-		if(data_robot.path)
-			updatePath(data_robot.path, Simulateur, type + "_jaune");
-		else
-			clearPath(data_robot.path, Simulateur, type + "_jaune");
 
-		Simulateur.updateInterface();
+		if(!!data_robot.path && data_robot.path.length > 1){
+			updatePath(data_robot.path, simulateur, type + "_" + data_robot.color);
+		} else {
+			clearPath(simulateur, type + "_" + data_robot.color);
+		}
+
+	} else {
+		console.warn("Given robot not found or properly formed");
 	}
 }
 
@@ -87,15 +94,13 @@ function updatePr(data_robot, Simulateur, type) {
  * Met à jour le chemin du robot
  * 
  * @param {Array<Number>} path 
- * @param {Object} Simulateur 
+ * @param {Object} simulateur 
  * @param {String} robot 
  */
-function updatePath(path, Simulateur, robot)
+function updatePath(path, simulateur, robot)
 {
-	if(path.length <= 1) // Impossible de tracer une ligne si on n'a pas au moins 2 points
-		return;
 	var PATH_HIGHT = 0.1;
-	Simulateur.controllerSimu.objects3d.get(robot).showPath(
+	simulateur.controllerSimu.objects3d.get(robot).showPath(
 		path.map( (pos) => {
 			act_pos = convertPosNew({x: pos[0], y: pos[1]});
 			return new Position(act_pos.x, PATH_HIGHT, act_pos.z);
@@ -107,28 +112,30 @@ function updatePath(path, Simulateur, robot)
  * Supprime le chemin du robot
  * 
  * @param {Array<Number>} path 
- * @param {Object} Simulateur 
+ * @param {Object} simulateur 
  * @param {String} robot 
  */
-function clearPath(path, Simulateur, robot)
+function clearPath(simulateur, robot)
 {
-	if(path.length <= 1) // Impossible de tracer une ligne si on n'a pas au moins 2 points
-		return;
-	var PATH_HIGHT = 0.1;
-	Simulateur.controllerSimu.objects3d.get(robot).clearPath();
+	simulateur.controllerSimu.objects3d.get(robot).clearPath();
 }
 
 angular.module('app').service('Simulateur', ['$rootScope', 'Client', function ($rootScope, Client) {
 	this.init = function () {
 		Client.order(function (from, name, data) {
 			if (name == 'simulateur' && $rootScope.act_page == 'simulateur') {
-				clearPath();
+				this.robots = data.robots;
 
 				// Met à jour le pr (s'il existe)
-				updatePr(data.robots.pr, this, "pr");
+				updateRobot(data.robots.pr, this, "pr");
 				// Met à jour le gr (s'il existe)
-				updatePr(data.robots.gr, this, "gr");
+				updateRobot(data.robots.gr, this, "gr");
+
+				updateRobot(data.robots.epr, this, "pr");
+				updateRobot(data.robots.egr, this, "gr");
 				$rootScope.$apply();
+
+				this.updateInterface();
 			}
 		}.bind(this));
 	};

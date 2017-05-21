@@ -201,10 +201,12 @@ angular.module('app').service('Reseau', ['$rootScope', 'Client', function($rootS
 					    // addDiv("clients", i, "hok", client.status, "Hokuyo", client.ip);
 					    addDiv("children", i, "hok", client.status, "Hokuyo", client.ip);
 
-			            links.push({
-			            	start: lidarKeys[0],
-			            	end: i
-			            });
+					    if (!!lidarKeys[0]) {
+				            links.push({
+				            	start: lidarKeys[0],
+				            	end: i
+				            });
+					    }
 
 					    // if(!!client.children)
 					    //     for(var j=0; j<client.children.length; j++) {

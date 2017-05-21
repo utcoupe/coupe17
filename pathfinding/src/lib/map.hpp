@@ -96,7 +96,7 @@ public:
 
     unsigned int get_map_h() const { return map_h; };
     unsigned int get_map_w() const { return map_w; };
-    void add_dynamic_circle(unsigned int x, unsigned int y, float f_r);
+    void add_dynamic_circle(unsigned int x, unsigned int y, unsigned int f_r);
     void clear_dynamic_barriers();
 
     bool solve(vertex_descriptor source, vertex_descriptor dest);

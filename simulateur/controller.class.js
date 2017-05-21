@@ -153,11 +153,11 @@ class Controller {
 
         // Permet de changer la taille du canva de THREE en fonction de la taille de la fenêtre
         window.addEventListener('resize', () => {
-            var HEIGHT = Math.max(
+            const HEIGHT = Math.max(
                 $('body').height() - $('#div_menu').outerHeight() - 2 * $('#simu_before').outerHeight(),
                 200
             );
-            var WIDTH = $('#simulateur_container').width();
+            const WIDTH = $('#simulateur_container').width();
             this.renderer.setSize(WIDTH, HEIGHT);
             this.camera.aspect = WIDTH / HEIGHT;
             this.camera.updateProjectionMatrix();
@@ -226,39 +226,48 @@ class Controller {
      * @param {String} view Vue désirée
      */
     selectView(view) {
+        const X_MAX = 3;
+        const Z_MAX = 2;
         console.log("Changement de vue : " + view);
-        if (view == "front") {
-            this.controls.reset();
-            this.camera.position.set(1, 1.5, 3.5);
-            this.camera.rotation.set(-0.5, 0, 0);
-            this.controls.target.set(1, 0, 1);
+        switch (view) {
+            case "front":
+                this.controls.reset();
+                this.camera.position.set(1.5, 1.5, 3.5);
+                this.camera.rotation.set(-0.5, 0, 0);
+                this.controls.target.set(X_MAX/2, 0, Z_MAX/2);
+                break;
+            
+            case "top":
+                this.controls.reset();
+                this.camera.position.set(1.5, 3, 1);
+                this.camera.rotation.set(-1.6, 0, 0);
+                this.controls.target.set(X_MAX/2, 0, Z_MAX/2);
+                break;
+
+            case "behind":
+                this.controls.reset();
+                this.camera.position.set(1.5, 1, -1.5);
+                this.camera.rotation.set(-2.5, 0, 3.0);
+                this.controls.target.set(X_MAX/2, 0, Z_MAX/2);
+                break;
+
+            case "left":
+                this.controls.reset();
+                this.camera.position.set(-0.8, 1.5, 1);
+                this.camera.rotation.set(-1.6, -1, -1.6);
+                this.controls.target.set(X_MAX/2, 0, Z_MAX/2);
+                break;
+            
+            case "right":
+                this.controls.reset();
+                this.camera.position.set(4, 0.5, 1);
+                this.camera.rotation.set(-1.5, 1.5, 1.5);
+                this.controls.target.set(X_MAX/2, 0, Z_MAX/2);
+                break;
+
+            default: // Invalide
+                console.warn("Attention : \"" + view + "\" n'est pas une vue valide.");
         }
-        else if (view == "top") {
-            this.controls.reset();
-            this.camera.position.set(1, 3, 1);
-            this.camera.rotation.set(-1.6, 0, 0);
-            this.controls.target.set(1, 0, 1);
-        }
-        else if (view == "behind") {
-            this.controls.reset();
-            this.camera.position.set(1.5, 1, -1.5);
-            this.camera.rotation.set(-2.5, 0, 3.0);
-            this.controls.target.set(1, 0, 1);
-        }
-        else if (view == "left") {
-            this.controls.reset();
-            this.camera.position.set(-0.8, 1.5, 1);
-            this.camera.rotation.set(-1.6, -1, -1.6);
-            this.controls.target.set(1, 0, 1);
-        }
-        else if (view == "right") {
-            this.controls.reset();
-            this.camera.position.set(4, 0.5, 1);
-            this.camera.rotation.set(-1.5, 1.5, 1.5);
-            this.controls.target.set(1, 0, 1);
-        }
-        else // Invalide
-            console.warn("Attention : \"" + view + "\" n'est pas une vue valide.");
     }
 
     /**
@@ -282,11 +291,11 @@ class Controller {
         /*if (!this.objects3d) // Pour que la fonction ne soit pas lancée lorsque la table n'est pas construite
             return;*/
         var blacklist = ["pr", "gr", "plateau"];
-        this.objects3d.forEach(function (object3d) {
+        this.objects3d.forEach((object3d) => {
             if (blacklist.indexOf(object3d.type) == -1) {
                 if (object3d.position.get2dDistance(pos) <= radius) {
                     //console.log("Make invisible : " + object3d.name);
-                    object3d.mesh.traverse( function ( object ) { object.visible = false; } );
+                    object3d.mesh.traverse( ( object ) => { object.visible = false; } );
                 }
             }
         }, this)

@@ -51,6 +51,7 @@ function env_setup() {
 		green_echo "Env variable is not set."
 		if [ "$SHELL" = "/bin/zsh" ]; then
 			echo "export UTCOUPE_WORKSPACE=$PWD" >> $HOME/.zshrc
+
 			printf "Warning :\n"
 			printf "Please \"source ~/.zshrc\" and run again this script if necessary\n"
 			exit 1
@@ -67,6 +68,12 @@ function env_setup() {
 	# Add the current user to the dialout group (to r/w in /dev files)
 	if ! id -Gn $USER | grep -qw "dialout"; then
 	        sudo usermod -a -G dialout $USER
+	fi
+	# Setup GPIO + add the current user to the gpio group (to r/w in /dev files)
+	if ! id -Gn $USER | grep -qw "gpio"; then
+			sudo chgrp -R gpio /sys/class/gpio
+			sudo chmod -R g+rw /sys/class/gpio
+	        sudo usermod -a -G gpio $USER
 	fi
 	# Create the utcoupe folder where log files are stored
 	if [ ! -d "/var/log/utcoupe" ]; then
@@ -120,22 +127,22 @@ function launch_script() {
 		install_apt
 	fi
 	
-	printf "Compile urg library (mandatory for hokuyo) ? [Y/n]?"
-	read answer
-	if [ "$answer" = "" ] || [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
-		compile_urg
-	fi
-	
 	printf "Compile archer library (mandatory for 5 GHz usb wifi key) ? [Y/n]?"
 	read answer
 	if [ "$answer" = "" ] || [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
 		compile_archer
 	fi
 	
-	printf "Compile UTCoupe exe (pathfinding and hokuyo) ? [Y/n]?"
+	printf "Compile pathfinding ? [Y/n]?"
 	read answer
 	if [ "$answer" = "" ] || [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
 		compile_pathfinding
+	fi
+	
+	printf "Compiled hokuyo (+ urg mandatory library) ? [Y/n]?"
+	read answer
+	if [ "$answer" = "" ] || [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
+		compile_urg
 		compile_hokuyo
 	fi
 }

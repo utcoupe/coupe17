@@ -63,8 +63,7 @@ module.exports = (function () {
 			}
 		}
 
-		// If other color
-		logger.warn("TODO: change Lidar color depending ours");
+		this.logInterval = {};
 
 		this.sendStatus(this.status, 0);
 
@@ -75,7 +74,7 @@ module.exports = (function () {
 
 	Lidar.prototype.convertXA = function(obj) {
 		obj.x = 300 - obj.x;
-		obj.a = 180 - obj.a;
+		obj.w = 180 - obj.w;
 
 		return obj;
 	};
@@ -100,6 +99,7 @@ module.exports = (function () {
 	 		}
 		}
 
+		// If other color
 		if (this.color == "yellow"){
 			this.hokuyoPositions.one = this.convertXA(this.hokuyoPositions.one);
 			this.hokuyoPositions.two = this.convertXA(this.hokuyoPositions.two);
@@ -150,7 +150,7 @@ module.exports = (function () {
 	};
 
 	Lidar.prototype.changeStatus = function(newStatus) {
-		logger.info("New lidar status : " + newStatus);
+		logger.info(newStatus);
 		this.status = newStatus;
 		this.sendStatus(this.status, this.hokuyosWorking().length);
 	};
@@ -260,14 +260,30 @@ module.exports = (function () {
 			this.calibration(spots, hokuyoName)
 		}
 
-		if (!!this.lastCartSpots[hokuyoName]
-			&& !this.lastCartSpots[hokuyoName].isWorking()) {
-			logger.warn("Hearing from " + hokuyoName + " for the first time since " + (Date.now() - this.lastCartSpots[hokuyoName].time) + " ms");
+		// // Logging interval betwen 2 hokuyo polar
+		// if (!!this.logInterval[hokuyoName]
+		// 	&& this.logInterval[hokuyoName].length > 30) {
+		// 	logger.debug(hokuyoName + " -> " + this.logInterval[hokuyoName]);
+		// 	this.logInterval[hokuyoName] = [];
+		// }
+
+		// if (!this.logInterval[hokuyoName]) {
+		// 	this.logInterval[hokuyoName] = [];
+		// }
+
+		if (!!this.logInterval[hokuyoName]
+			&& !!this.lastCartSpots[hokuyoName]) {
+			if (!this.lastCartSpots[hokuyoName].isWorking()) {
+				logger.warn("Hearing from " + hokuyoName + " for the first time since " + (Date.now() - this.lastCartSpots[hokuyoName].time) + " ms");
+			}
+			
+			// this.logInterval[hokuyoName].push([Date.now(), Date.now() - this.lastCartSpots[hokuyoName].time]);
 		}
+
 
 		// Save
 		this.lastCartSpots[hokuyoName] = {};
-		this.lastCartSpots[hokuyoName].isWorking = function() { return Date.now() - this.time <  2 * DELTA_T; }; // we had some data no long ago
+		this.lastCartSpots[hokuyoName].isWorking = function() { return Date.now() - this.time <  3 * DELTA_T; }; // we had some data no long ago
 		this.lastCartSpots[hokuyoName].time = Date.now();
 		this.lastCartSpots[hokuyoName].filteredSpots = spots;
 
@@ -310,7 +326,7 @@ module.exports = (function () {
 			if(this.status == "error"){
 				logger.warn("Fell in an error while computing !");
 			} else {
-                this.send("lidar.all", toBeSent);
+                // this.send("lidar.all", toBeSent);
                 this.send("lidar.light", toBeSentLight);
                 this.lastDataSent = Date.now();
             }
@@ -333,7 +349,7 @@ module.exports = (function () {
 					"position": this.hokuyoPositions[hokName]
 				});
 			} else {
-				logger.warn(hokName + " not working since " + (Date.now() - lastData[hokName].time));
+				// logger.warn(hokName + " not working since " + (Date.now() - lastData[hokName].time));
 			}
 		}
 

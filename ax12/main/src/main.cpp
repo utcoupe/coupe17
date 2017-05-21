@@ -9,7 +9,7 @@
 #include <termio.h>
 #include <time.h>
 #include <iostream>
-#include "protocol.h"
+#include "axParser.h"
 #include <vector>
 
 
@@ -32,8 +32,8 @@ void PrintErrorCode(void);
 using namespace std;
 int main()
 {
-		axParser ax;
-		return 0;
+	axParser ax;
+	return 0;
 }
 
 

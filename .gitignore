@@ -11,6 +11,9 @@ CMakeCache*
 CMakeFiles*
 cmake_install*
 
+# Generated make associated files
+Makefile*
+
 # Generated scons / arduino files
 .sconsign.dblite
 *find_port
