@@ -24,8 +24,8 @@ Servo pr_module_rotate;
 // Parameters are : INIT, OPEN, CLOSE, ACTION_TIME(ms)
 // INIT, OPEN and CLOSE are PWM values for position of the servo motor (0 - 180 max)
 uint8_t servoValues[4][4] = {
-        {90, 10, 170, 100},      //PR_MODULE_ARM
-        {10, 90, 10, 100},      //PR_MODULE_DROP_R
+        {90, 20, 165, 100},      //PR_MODULE_ARM
+        {10, 90, 5, 100},      //PR_MODULE_DROP_R
         {180, 90, 180, 100},       //PR_MODULE_DROP_L
         {90, 180, 255, 200}       //PR_MODULE_ROTATE
 };
@@ -49,6 +49,8 @@ void servoAttach() {
     pr_module_drop_r.attach(PR_MODULE_DROP_R_PIN);
     pr_module_drop_l.attach(PR_MODULE_DROP_L_PIN);
     pr_module_rotate.attach(PR_MODULE_ROTATE_PIN);
+    // Setup the motor on the arm
+    pinMode(PR_MODULE_ARM_ROTATE_PIN, OUTPUT);
     // Apply default values
     pr_module_arm.write(servoValues[PR_MODULE_ARM][INIT]);
     pr_module_drop_r.write(servoValues[PR_MODULE_DROP_R][INIT]);
@@ -73,6 +75,8 @@ void servoApplyCommand(uint8_t servo_id, uint8_t value, uint16_t order_id) {
                 armTimer.Start();
                 armLastId = order_id;
                 pr_module_arm.write(value);
+                // Activate the motor on the arm
+                digitalWrite(PR_MODULE_ARM_ROTATE_PIN, HIGH);
                 break;
             case PR_MODULE_DROP_R:
                 dropRTimer.Start();
@@ -110,7 +114,7 @@ void servoChangeParameter(const uint8_t servo_id, const SERVO_POSITION servo_pos
 void servoRotate(MODULE_COLOR color, uint16_t order_id) {
     //if color is whatever, no need to rotate
     SerialSender::SerialSend(SERIAL_INFO, "servoRotate color : %d", color);
-    if (color != WHATEVER) {
+    if (color > WHATEVER && color <= YELLOW) {
         // Activate rotation
         servoAction(PR_MODULE_ROTATE, OPEN, order_id);
         servoRotateColor = color;
@@ -139,6 +143,8 @@ void servoArmCallback() {
         SerialSender::SerialSend(SERIAL_INFO, "%d;", armLastId);
         armLastId = 0;
         armTimer.Stop();
+        // Stop the motor on the arm
+        digitalWrite(PR_MODULE_ARM_ROTATE_PIN, LOW);
     }
 }
 
