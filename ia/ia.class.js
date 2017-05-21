@@ -84,7 +84,9 @@ module.exports = (function () {
 		/** Socket client */
 		this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip: require('../config.js').server });
 		/** Jack */
-		this.jack = new (require('./jack.class.js'))(this);
+		if (process.arch == 'arm') {
+			this.jack = new (require('./jack.class.js'))(this);
+		}
 		/** Timer */
 		this.timer = new (require('./timer.class.js'))(this);
 		/** Pathfinding */
