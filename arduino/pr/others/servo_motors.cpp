@@ -113,7 +113,6 @@ void servoChangeParameter(const uint8_t servo_id, const SERVO_POSITION servo_pos
 
 void servoRotate(MODULE_COLOR color, uint16_t order_id) {
     //if color is whatever, no need to rotate
-    SerialSender::SerialSend(SERIAL_INFO, "servoRotate color : %d", color);
     if (color > WHATEVER && color <= YELLOW) {
         // Activate rotation
         servoAction(PR_MODULE_ROTATE, OPEN, order_id);
@@ -125,12 +124,12 @@ void servoRotate(MODULE_COLOR color, uint16_t order_id) {
 void servoRotateCallback() {
     if (servoRotateColor != WHATEVER) {
         if (computeColor() == servoRotateColor) {
+            // Send order id to ack that arduino has process the order
+            SerialSender::SerialSend(SERIAL_INFO, "%d;", servoRotateLastId);
             // Stop the rotate servo motor (id 0 because motor is stopped)
             servoAction(PR_MODULE_ROTATE, INIT, 0);
             // Put the global variable to default value
             servoRotateColor = WHATEVER;
-            // Send order id to ack that arduino has process the order
-            SerialSender::SerialSend(SERIAL_INFO, "%d;", servoRotateLastId);
             servoRotateLastId = 0;
             rotateTimer.Stop();
         }
