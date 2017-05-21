@@ -115,7 +115,7 @@ class BaseConstructor extends Extension {
             case "rotate":
                 this.servos.moduleRotate( () => {
                     this.fifo.orderFinished();
-                });
+                }, param);
                 break;
             case "push":
                 /// TODO AX12 action with param.towards

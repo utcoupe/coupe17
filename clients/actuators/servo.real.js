@@ -91,9 +91,19 @@ class ServoReal extends Servo {
         }
     }
 
-    moduleRotate(callback) {
+    moduleRotate(callback, params) {
         if (this.serialPortConnected) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.MODULE_ROTATE, [this.actuatorCommands.PR_MODULE_ROTATE, 1], callback);
+            var color_number = 0;
+            if (params.color == "yellow") {
+                color_number = 2;
+            } else if (params.color == "blue") {
+                color_number = 1;
+            } else if (params.color == "null") {
+                color_number = 0;
+            } else {
+                this.logger.error("Rotate color " + params + " does not exists");
+            }
+            this.ordersSerial.sendOrder(this.actuatorCommands.MODULE_ROTATE, [color_number], callback);
         } else {
             this.logger.error("Serial port not connected...");
         }

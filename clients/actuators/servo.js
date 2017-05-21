@@ -23,7 +23,7 @@ class Servo {
 
     moduleDrop(callback) {}
 
-    moduleRotate(callback) {}
+    moduleRotate(callback, params) {}
 
     stop() {}
 

@@ -28,7 +28,7 @@ class ServoSimu extends Servo {
         setTimeout(callback, 200);
     }
 
-    moduleRotate(callback) {
+    moduleRotate(callback, params) {
         setTimeout(callback, 200);
     }
 
