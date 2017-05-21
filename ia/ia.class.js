@@ -83,6 +83,8 @@ module.exports = (function () {
 		
 		/** Socket client */
 		this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip: require('../config.js').server });
+		/** Jack */
+		this.jack = new (require('./jack.class.js'))(this);
 		/** Timer */
 		this.timer = new (require('./timer.class.js'))(this);
 		/** Pathfinding */
@@ -203,6 +205,7 @@ module.exports = (function () {
 			this.gr.funnyAction();
 			this.pr.stop();
 			this.lidar.stop();
+			this.jack.stop();
 			setTimeout(function(){
 				this.gr.stop();
 			}.bind(this), 1000);
