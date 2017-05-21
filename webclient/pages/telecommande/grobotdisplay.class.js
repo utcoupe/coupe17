@@ -8,6 +8,14 @@ class GrobotDisplay extends RobotDisplay {
         // example : this.PID_P = 0.5
     }
 
+    openTrunk () {
+        this.client.send("canon", "open_trunk");
+    }
+
+    throwBalls () {
+        this.client.send("canon", "throw_balls");
+    }
+
     turnOnCanon () {
         this.client.send("canon", "turn_on");
     }
