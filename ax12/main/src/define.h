@@ -19,7 +19,7 @@
 
 
 namespace vals{
-    const std::vector<int> posDummy = {442, 512, 579}; //init (centre), one (gauche), two (droite, bras vu de face)
+    const std::vector<int> posDummy = {512, 442, 579}; //init (centre), one (gauche), two (droite, bras vu de face)
     const std::vector<int> posGrabber = {547, 145, 345}; //init (replie), one (ouvert), two (porte)
     const int timeOut = 5;
     const int NB_POS = 3;

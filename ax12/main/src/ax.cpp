@@ -11,7 +11,7 @@ void ax::executeAction(int finalPos, int idOrder){
      int currentPos[2];
      int current = 1, lastValue =0;
      currentPos[0] = 10000; currentPos[1] = 10000;
-     finalPos = toAxValue(finalPos);
+     // finalPos = toAxValue(finalPos);
      //std::cout << "ok thread, position =" << finalPos << ", id=" << id <<", reg=" << P_GOAL_POSITION_L<< std::endl;
      lockSerial.lock();
      dxl_write_word(id, 34, 1023);
@@ -28,7 +28,7 @@ void ax::executeAction(int finalPos, int idOrder){
          currentPos[1] = dxl_get_rxpacket_parameter(1) << 8;
          lockSerial.unlock();
          current = currentPos[0] | currentPos[1];
-         //std::cout << "Position actuelle: " << current  << std::endl;
+         // std::cout << "Position actuelle: " << current  << ", position visee :" << finalPos << std::endl;
         //  cerr <<"kill:" <<killAction << endl;
 
          if(killAction == true){

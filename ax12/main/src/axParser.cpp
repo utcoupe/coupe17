@@ -69,9 +69,9 @@ axParser::axParser():started(false), baudnum(1),deviceIndex(0), future(std::asyn
 }
 
 void axParser::initializeServos(){
-    cout << "initializeServos" << endl;
+    // cout << "initializeServos" << endl;
 	for (std::map<int, int>::const_iterator it=vals::paramValuesW.begin(); it!=vals::paramValuesW.end(); ++it){
-        cout << "Initilizing " << it->first << " with " << it->second << endl;
+        // cout << "Initilizing " << it->first << " with " << it->second << endl;
 		dxl_write_word(254, it->first, it->second);
 	}
 }

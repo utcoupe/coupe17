@@ -46,6 +46,7 @@ class TibotDisplay extends RobotDisplay {
 
     pushModule () {
         this.client.send("base_constructor", "push", {push_towards: this.pushTowards});
+        this.logger.error("ok");
     }
 
     prepareModule () {
