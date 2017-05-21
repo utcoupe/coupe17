@@ -77,17 +77,23 @@
 					quitC("stop");
 					spawn('sudo', ['halt']);
 					break;
-				case "kill":
+				case "stop":
 					started = false;
 					quitC("stop");
 					break;
+				/*
+                                case "kill":
+                                        started = false;
+                                        quitC("stop");
+                                        break;
+				*/
 				case "sync_git":
 					spawn('/root/sync_git.sh', [], {
 						detached: true
 					});
 					break;
 				default:
-					logger.warn("Name not understood : " + data);
+					logger.warn("Name " + name + " not understood : " + params);
 			}
 		} else {
 			logger.warn("Received two orders too closely !");

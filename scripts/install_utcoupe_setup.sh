@@ -69,6 +69,12 @@ function env_setup() {
 	if ! id -Gn $USER | grep -qw "dialout"; then
 	        sudo usermod -a -G dialout $USER
 	fi
+	# Setup GPIO + add the current user to the gpio group (to r/w in /dev files)
+	if ! id -Gn $USER | grep -qw "gpio"; then
+			sudo chgrp -R gpio /sys/class/gpio
+			sudo chmod -R g+rw /sys/class/gpio
+	        sudo usermod -a -G gpio $USER
+	fi
 	# Create the utcoupe folder where log files are stored
 	if [ ! -d "/var/log/utcoupe" ]; then
 		sudo mkdir /var/log/utcoupe

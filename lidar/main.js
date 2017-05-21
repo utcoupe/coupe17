@@ -73,6 +73,7 @@
 						break;
 					case "kill":
 						hokMng.stop();
+						process.exit();
 						// quitC("stop");
 						break;
 					case "sync_git":
@@ -81,7 +82,7 @@
 						});
 						break;
 					default:
-						logger.warn("Name " + name + " not understood : " + !!data?data:"");
+						logger.warn("Name " + name + " not understood : " + !!params?params:"");
 				}
 			// } else {
 			// 	logger.warn("Received two orders too closely !");

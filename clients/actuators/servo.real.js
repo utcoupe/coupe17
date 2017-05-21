@@ -109,6 +109,30 @@ class ServoReal extends Servo {
         }
     }
 
+    turnOn(callback) {
+        if (serialPortConnected) {
+            // TODO
+        } else {
+            this.logger.error("Serial port not connected...");
+        }
+    }
+
+    turnOff(callback) {
+        if (serialPortConnected) {
+            // TODO something
+        } else {
+            this.logger.error("Serial port not connected...");
+        }
+    }
+
+    openTrunk(callback) {
+        if (serialPortConnected) {
+            // TODO something
+        } else {
+            this.logger.error("Serial port not connected...");
+        }
+    }
+
     stop() {
         if (this.serialPort.isOpen()) {
             this.ordersSerial.sendOrder(this.actuatorCommands.HALT, function() {

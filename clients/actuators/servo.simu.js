@@ -32,6 +32,18 @@ class ServoSimu extends Servo {
         setTimeout(callback, 200);
     }
 
+    turnOn(callback) {
+        setTimeout(callback, 200);
+    }
+
+    turnoff(callback) {
+        setTimeout(callback, 200);
+    }
+
+    openTruck(callback) {
+        setTimeout(callback, 200);
+    }
+
     stop() {
         this.logger.info("Servo simu stopped");
     }

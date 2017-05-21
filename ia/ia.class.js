@@ -83,6 +83,10 @@ module.exports = (function () {
 		
 		/** Socket client */
 		this.client = new (require('../server/socket_client.class.js'))({type: 'ia', server_ip: require('../config.js').server });
+		/** Jack */
+		if (process.arch == 'arm') {
+			this.jack = new (require('./jack.class.js'))(this);
+		}
 		/** Timer */
 		this.timer = new (require('./timer.class.js'))(this);
 		/** Pathfinding */
@@ -137,7 +141,7 @@ module.exports = (function () {
 				if(classe == 'ia') {
 					switch(name) {
 						case 'ia.jack':
-							this.jack();
+							this.doJack();
 						break;
 						case 'ia.stop':
 							this.stop();
@@ -182,7 +186,7 @@ module.exports = (function () {
 	 * 
 	 * Starts the robots
 	 */
-	Ia.prototype.jack = function() {
+	Ia.prototype.doJack = function() {
 		if(!this.timer.match_started) {
 			this.timer.start();
 			this.pr.start();
@@ -203,6 +207,7 @@ module.exports = (function () {
 			this.gr.funnyAction();
 			this.pr.stop();
 			this.lidar.stop();
+			this.jack.stop();
 			setTimeout(function(){
 				this.gr.stop();
 			}.bind(this), 1000);

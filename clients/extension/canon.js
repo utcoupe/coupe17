@@ -38,7 +38,10 @@ class Canon extends Extension {
                 });
                 break;
 
-            case "engage_ball":
+            case "open_trunk":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder (name, params);
+                });
             case "turn_off":
             case "turn_on":
                 this.fifo.newOrder(() => {
@@ -56,15 +59,30 @@ class Canon extends Extension {
         switch (name) {
             case "turn_on":
                 // TODO turn on motors
+
+                // add something like that :
+                // this.servos.turnOn(() => {
+                //     this.fifo.orderFinished();
+                // });
                 this.fifo.orderFinished();
                 break;
             case "turn_off":
                 // TODO turn off motors
+
+                // add something like that :
+                // this.servos.turnOff(() => {
+                //     this.fifo.orderFinished();
+                // });
                 this.fifo.orderFinished();
                 break;
             
-            case "engage_ball":
+            case "open_trunk":
                 // TODO something
+
+                // add something like that :
+                // this.servos.openTrunk(() => {
+                //     this.fifo.orderFinished();
+                // });
                 this.fifo.orderFinished();
                 break;
             case "send_message":

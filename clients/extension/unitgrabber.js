@@ -1,6 +1,6 @@
 /**
  * Module permettant de ramacer les modules
- * 
+ *
  * @module clients/Extension/unitgrabber
  * @requires module:clients/Extension/extension
  */
@@ -12,7 +12,7 @@ var servos = require('../actuators/servo');
 
 /**
  * Extension permettant de ramasser les modules lunaires
- * 
+ *
  * @class UnitGrabber
  * @memberof module:clients/Extension/unitgrabber
  * @extends {clients/Extension/extension.Extension}
@@ -36,7 +36,7 @@ class UnitGrabber extends Extension {
             case "take_module":
                 this.takeModule();
                 break;
-            
+
             // **************** tests only ************
             case "openArm":
             case "closeArm":
@@ -52,7 +52,7 @@ class UnitGrabber extends Extension {
                     this.processFifoOrder(name, param);
                 }, name);
                 break;
-            
+
             case "stop":
                 this.stot();
                 break;
@@ -60,7 +60,7 @@ class UnitGrabber extends Extension {
                 this.logger.debug("Cleaning Fifo...");
                 this.fifo.clean();
                 break;
-            
+
             default:
                 this.logger.error("Order " + name + " does not exist !");
         }
@@ -88,16 +88,15 @@ class UnitGrabber extends Extension {
                 break;
             case "upGrabber":
                 // TODO AX12 up
-                this.logger.error("TODO: do AX12 upGrabber action");
-                setTimeout(() => {
+                this.ax12.closeGrabber(() => {
                     this.fifo.orderFinished();
-                }, 200);
+                });
                 break;
             case "downGrabber":
                 // TODO AX12 down
-                setTimeout(() => {
+                this.ax12.openGrabber(() => {
                     this.fifo.orderFinished();
-                }, 200);
+                });
                 break;
             case "send_message":
                 this.sendDataToIA(param.name, param || {});
@@ -116,12 +115,20 @@ class UnitGrabber extends Extension {
         } else {
             this.logger.error("Servos must be provided to UnitGrabber");
         }
+        if (!!actuators.ax12) {
+            this.ax12 = actuators.ax12;
+        } else {
+            this.logger.error("AX12 must be provided to UnitGrabber");
+        }
     }
 
     // Inherited from client
     stop() {
         if (!!this.servos) {
             this.servos.stop();
+        }
+        if (!!this.ax12) {
+            this.ax12.stop();
         }
         super.stop();
     }

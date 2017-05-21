@@ -25,6 +25,12 @@ class Servo {
 
     moduleRotate(callback, params) {}
 
+    turnOn(callback) {}
+
+    turnoff(callback) {}
+
+    openTruck(callback) {}
+
     stop() {}
 
 }

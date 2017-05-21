@@ -47,6 +47,7 @@ class axParser{
     bool checkMessage(const std::string& mes);
     int positionToIndex(char c);
     bool checkAxId(int id);
+    void initializeServos();
 public:
     axParser();
 };
