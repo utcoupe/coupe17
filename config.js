@@ -11,7 +11,7 @@ module.exports = {
 	 * @type {String}
 	 */
 	server: "127.0.0.1:3128",
-	// "server": "192.168.1.131:3128",
+	// server: "192.168.1.131:3128",
 
 	/**
 	 * Commande pour démarrer les hokuyos
