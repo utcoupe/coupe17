@@ -29,6 +29,7 @@ class ax{
     static mutex lockCout;
     int id;
     std::atomic<bool> killAction;
+    std::mutex m;
     std::vector<int> positions;
     std::mutex lockAction;
     std::vector<std::thread> actions;
@@ -40,10 +41,12 @@ class ax{
 public:
     ax(int id, std::vector<int> pos):id(id), positions(std::vector<int> (vals ::NB_POS)){
         positions = pos;
+        killAction = false;
 
     }
     void executeAction(int finalPos, int idOrder);
     void goTo(int pos, int idOrder);
+     void initialize();
     void setPositions(int i, int value){
         positions[i] = value;
     }

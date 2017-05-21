@@ -29,12 +29,10 @@ class Factory {
         this.factoryReady = false;
 
         //todo do not launch both at the same time to avoid /dev/ttyX conflicts
-        this.detectAx12();
-
-        setTimeout(function(){
+        this.detectAx12(function(){
             // Last step, detects devices
             this.detectArduino();
-        }.bind(this), 2000);
+        }.bind(this));
 
         setTimeout(this.closeAllPorts.bind(this), 3000);
     }
@@ -97,6 +95,7 @@ class Factory {
 
     //open all serial devices and set a callback, waiting to receive data in order to set the devicePortMap
     detectArduino() {
+        this.logger.info("Detecting Arduinos...");
         SerialPort.list(function (err, ports) {
             // Open each listed serial port and add a callback to detect if it is an arduino
             for(var currentPort in ports) {
@@ -118,10 +117,15 @@ class Factory {
     }
 
     //todo
-    detectAx12() {
-        this.logger.info("Detect ax12 is not tested yet");
+    detectAx12(callback) {
+        this.logger.info("Detecting AX12...");
 
-        var ax12 = Child_process.spawn("bash", ["-c", "pkill ax12;"+program]);
+        var detectionTimeout = setTimeout(() => {
+            this.logger.info("AX12 detection timeout");
+            callback();
+        }, 1000);
+
+        var ax12 = Child_process.spawn(program);
 
         ax12.on('error', function(err) {
             if(err.code === 'ENOENT'){
@@ -131,9 +135,13 @@ class Factory {
             this.logger.error("c++ subprocess terminated with error:", err);
             console.log(err);
         }.bind(this));
-        ax12.on('exit', function(code) {
-            this.logger.fatal("c++ subprocess terminated with code:"+code);
+        ax12.on('exit', function(code, signal) {
+            // this.logger.fatal("c++ subprocess terminated with code : "+code + " or signal " + signal);
         }.bind(this));
+
+        ax12.on('error', (code) => {
+            this.logger.fatal("c++ subprocess error with code:"+code);
+        });
 
         process.on('exit', function(){ //ensure child process is killed
             if(ax12.connected){ //and was still connected (dont kill another process)
@@ -144,14 +152,15 @@ class Factory {
         var stdout = Byline.createStream(ax12.stdout);
         stdout.setEncoding('utf8')
         stdout.on('data', function(data) {
-            this.logger.debug("ax12 just gave : "+data);
+            // this.logger.debug("ax12 just gave : "+data);
             // If not connected, wait the ID of the arduino before doing something else
 
             if (data.indexOf("ax12") == 0) {
                 this.devicesPortMap["ax12"] = "I don't know";
-                if(ax12.connected){ //and was still connected (dont kill another process)
-                    ax12.kill();
-                }
+                clearTimeout(detectionTimeout)
+                ax12.kill();
+                this.logger.info("AX12 detection end");
+                callback();
             }
         }.bind(this));
 

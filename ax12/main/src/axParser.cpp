@@ -22,6 +22,7 @@ std::string GetLineFromCin() {
 axParser::axParser():started(false), baudnum(1),deviceIndex(0), future(std::async(std::launch::async, GetLineFromCin)) {
    //file.open("input.txt", ios::in);
 	//int CommStatus;
+    //cout << "init" << endl;
 	string command ;
 
 
@@ -37,10 +38,10 @@ axParser::axParser():started(false), baudnum(1),deviceIndex(0), future(std::asyn
     {
         cerr <<"Failed to open USB2Dynamixel!\n" ;
         cerr <<"Terminating\n" ;
-        //getchar();
+        return;
     }
     else{
-        cerr << "Succeed to open USB2Dynamixel!\n";
+        // cerr << "Succeed to open USB2Dynamixel!\n";
         waitStart();
     }
 //vector<int> positions = {150, 0, 300};
@@ -48,8 +49,8 @@ axParser::axParser():started(false), baudnum(1),deviceIndex(0), future(std::asyn
 	ax ax2(PR_MODULE_DUMMY , vals::posDummy);
 	servos[PR_MODULE_GRABBER] = &ax1;
 	servos[PR_MODULE_DUMMY] =&ax2;
-	//initializeServos();
-    //dxl_write_word(1, 34, 1000);
+	initializeServos();
+    dxl_write_word(3, 38, 300);
     while(1)
     {
         // Write goal position
@@ -67,11 +68,13 @@ axParser::axParser():started(false), baudnum(1),deviceIndex(0), future(std::asyn
     //getchar();
 }
 
-/*void axParser::initializeServos(){
-	for (std::map<int, ax*>::iterator it=servos.begin(); it!=servos.end(); ++it){
-		*it->initialize();
+void axParser::initializeServos(){
+    cout << "initializeServos" << endl;
+	for (std::map<int, int>::const_iterator it=vals::paramValuesW.begin(); it!=vals::paramValuesW.end(); ++it){
+        cout << "Initilizing " << it->first << " with " << it->second << endl;
+		dxl_write_word(254, it->first, it->second);
 	}
-}*/
+}
 
 string axParser::checkOrder(){
 	string command;
@@ -131,7 +134,7 @@ void axParser::changeParameter(int id, int parameter, int value ){
 }
  std::regex pattern { "abc" };
  bool axParser::checkMessage(const string& mes){
-	 std::regex pattern { "^(?:([A-Za-z];[0-9]+;[0-9]+)|([S|h];[0-9]+)|(p;[0-9]+;[0-9]+;[a-z];[0-9]+))$" };
+	 std::regex pattern { "^(?:([A-Za-z];[0-9]+;[0-9]+)|([S|h];[0-9]+)|(p;[0-9]+;[0-9]+;[a-z];[0-9]+));$" };
 	 return std::regex_match(mes, pattern);
  }
 //order is order;id_order;id_servo;params
@@ -168,7 +171,11 @@ void axParser::parseAndExecuteOrder(const std::string& order, bool startOnly) {
 		//cout << "i = " << i << ", j = " << j<< ", size = " << s << endl;
 	    receivedOrder = j+1;
 		//cout << "id : " << id_ax <<endl;
-		if(checkAxId(id_ax) == false) return;
+		if(checkAxId(id_ax) == false) {
+            cerr << "undeclared id" << endl;
+            return;
+        }
+
 		}
 
 
@@ -176,7 +183,9 @@ void axParser::parseAndExecuteOrder(const std::string& order, bool startOnly) {
 	if(startOnly){
 		if(orderChar == START){
 			//cout << "Receive start order" <<endl;
+
 			started = true;
+            cout <<  id_order << ";" << endl;
 		}
 	}
 	else{
@@ -186,6 +195,7 @@ void axParser::parseAndExecuteOrder(const std::string& order, bool startOnly) {
 	        {
 	            // Ack that arduino has started
 	            started = true;
+                cout <<  id_order << ";" << endl;
 	            break;
 	        }
 	        case HALT:
@@ -201,7 +211,7 @@ void axParser::parseAndExecuteOrder(const std::string& order, bool startOnly) {
 	            //todo try to be able to use uint8_t
 				cout << "Receive parameter value " <<order[receivedOrder] << ", order " << id_order << endl;
 				if (int position = positionToIndex(order[receivedOrder]) != -1){
-					int value = std::stoi(order.substr(receivedOrder+2, s-1));
+					int value = std::stoi(order.substr(receivedOrder+2, s-2));
 					changeParameter(id_ax, position, value);
 				}else{
 					cout << "error on order " << id_order <<endl;
@@ -210,19 +220,19 @@ void axParser::parseAndExecuteOrder(const std::string& order, bool startOnly) {
 	        }
 	        case AX12_INIT:
 	        {
-				cout << "Going to init position, order " << id_order<<endl;
+				cerr << "Going to init position, order " << id_order<<endl;
 	            servos[id_ax]->goTo(vals::INIT, id_order);
 				break;
 	        }
 	        case AX12_ONE:
 	        {
-				cout << "Going to position one, order " << id_order<<endl;
+				cerr << "Going to position one, order " << id_order<<endl;
 	            servos[id_ax]->goTo(vals::ONE, id_order);
 	            break;
 	        }
 	        case AX12_TWO:
 	        {
-				cout << "Going to position two, order " << id_order<<endl;
+				cerr << "Going to position two, order " << id_order<<endl;
 	            servos[id_ax]->goTo(vals::TWO, id_order);
 	            break;
 	        }
