@@ -15,8 +15,6 @@ void servoApplyCommand(uint8_t servo_id, uint8_t value, uint16_t order_id);
 
 //todo min & max values for all servo
 
-Servo gr_sweeper;
-Servo gr_canon;
 Servo gr_rocket;
 Servo gr_loader;
 
@@ -39,10 +37,11 @@ uint16_t rocketLastId = 0;
 uint16_t loaderLastId = 0;
 
 void servoAttach() {
-    gr_sweeper.attach(GR_SWEEPER_PIN);
-    gr_canon.attach(GR_CANON_PIN);
     gr_rocket.attach(GR_ROCKET_PIN);
     gr_loader.attach(GR_LOADER_PIN);
+    // Use regular pins for sweeper and canon
+    pinMode(GR_SWEEPER_PIN, OUTPUT);
+    pinMode(GR_CANON_PIN, OUTPUT);
     // Apply default values
     gr_sweeper.write(servoValues[GR_SWEEPER][INIT]);
     gr_canon.write(servoValues[GR_CANON][INIT]);
@@ -63,11 +62,11 @@ void servoApplyCommand(uint8_t servo_id, uint8_t value, uint16_t order_id) {
     if (value < MAX_UINT8_T_VALUE) {
         switch (servo_id) {
             case GR_SWEEPER:
-                gr_sweeper.write(value);
+                analogWrite(GR_SWEEPER_PIN, value);
                 SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
                 break;
             case GR_CANON:
-                gr_canon.write(value);
+                analogWrite(GR_CANON_PIN, value);
                 SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
                 break;
             case GR_ROCKET:
