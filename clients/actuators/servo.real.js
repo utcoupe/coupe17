@@ -81,7 +81,7 @@ class ServoReal extends Servo {
 
     moduleArmOpen(callback) {
         if (this.serialPortConnected) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, this.actuatorCommands.PR_MODULE_ARM, callback);
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.PR_MODULE_ARM], callback);
         } else {
             this.logger.error("Serial port not connected...");
         }
@@ -89,8 +89,8 @@ class ServoReal extends Servo {
     
     moduleEngage(callback) {
         if (this.serialPortConnected) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, this.actuatorCommands.PR_MODULE_DROP_R, callback);
-            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, this.actuatorCommands.PR_MODULE_DROP_L, callback);
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, [this.actuatorCommands.PR_MODULE_DROP_R], callback);
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, [this.actuatorCommands.PR_MODULE_DROP_L], callback);
         } else {
             this.logger.error("Serial port not connected...");
         }
@@ -98,8 +98,8 @@ class ServoReal extends Servo {
 
     moduleDrop(callback) {
         if (this.serialPortConnected) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, this.actuatorCommands.PR_MODULE_DROP_R, callback);
-            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, this.actuatorCommands.PR_MODULE_DROP_L, callback);
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.PR_MODULE_DROP_R], callback);
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.PR_MODULE_DROP_L], callback);
         } else {
             this.logger.error("Serial port not connected...");
         }
@@ -129,7 +129,7 @@ class ServoReal extends Servo {
 
     turnOnCanon(callback) {
         if (this.serialPortConnected) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, this.actuatorCommands.GR_CANON, callback);
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.GR_CANON], callback);
         } else {
             this.logger.error("Serial port not connected...");
         }
@@ -137,7 +137,7 @@ class ServoReal extends Servo {
 
     turnOffCanon(callback) {
         if (this.serialPortConnected) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, this.actuatorCommands.GR_CANON, callback);
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, [this.actuatorCommands.GR_CANON], callback);
         } else {
             this.logger.error("Serial port not connected...");
         }
@@ -145,7 +145,7 @@ class ServoReal extends Servo {
 
     turnOnSweeper(callback) {
         if (this.serialPortConnected) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, this.actuatorCommands.GR_SWEEPER, callback);
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.GR_SWEEPER], callback);
         } else {
             this.logger.error("Serial port not connected...");
         }
@@ -153,7 +153,7 @@ class ServoReal extends Servo {
 
     turnOffSweeper(callback) {
         if (this.serialPortConnected) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, this.actuatorCommands.GR_SWEEPER, callback);
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, [this.actuatorCommands.GR_SWEEPER], callback);
         } else {
             this.logger.error("Serial port not connected...");
         }
@@ -161,7 +161,7 @@ class ServoReal extends Servo {
 
     launchRocket(callback) {
         if (this.serialPortConnected) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, this.actuatorCommands.GR_ROCKET, callback);
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.GR_ROCKET], callback);
         } else {
             this.logger.error("Serial port not connected...");
         }
@@ -169,7 +169,7 @@ class ServoReal extends Servo {
 
     openTrunk(callback) {
         if (this.serialPortConnected) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, this.actuatorCommands.GR_LOADER, callback);
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.GR_LOADER], callback);
         } else {
             this.logger.error("Serial port not connected...");
         }
@@ -177,7 +177,7 @@ class ServoReal extends Servo {
 
     closeTrunk(callback) {
         if (this.serialPortConnected) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, this.actuatorCommands.GR_LOADER, callback);
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, [this.actuatorCommands.GR_LOADER], callback);
         } else {
             this.logger.error("Serial port not connected...");
         }
