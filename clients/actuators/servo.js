@@ -26,6 +26,8 @@ class Servo {
 
     moduleArmOpen(callback) {}
 
+    moduleArmInit(callback) {}
+
     moduleEngage(callback) {}
 
     moduleDrop(callback) {}

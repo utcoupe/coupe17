@@ -86,6 +86,14 @@ class ServoReal extends Servo {
             this.logger.error("Serial port not connected...");
         }
     }
+
+    moduleArmInit(callback) {
+        if (this.serialPortConnected) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_INIT, [this.actuatorCommands.PR_MODULE_ARM], callback);
+        } else {
+            this.logger.error("Serial port not connected...");
+        }
+    }
     
     moduleEngage(callback) {
         if (this.serialPortConnected) {

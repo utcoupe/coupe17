@@ -91,6 +91,11 @@ class UnitGrabber extends Extension {
                     this.fifo.orderFinished();
                 });
                 break;
+            case "initArm":
+                this.servos.moduleArmInit(() => {
+                    this.fifo.orderFinished();
+                });
+                break;
             case "upGrabber":
                 // TODO AX12 up
                 this.ax12.closeGrabber(() => {
