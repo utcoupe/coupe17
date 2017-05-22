@@ -40,13 +40,13 @@ class UnitGrabber extends Extension {
             // **************** tests only ************
             case "openArm":
             case "closeArm":
-            case "upGrabber":
+            case "closeGrabber":
                 this.logger.info("Order added to fifo " + name);            
                 this.fifo.newOrder(() => {
                     this.processFifoOrder(name);
                 }, name);
                 break;
-            case "downGrabber":
+            case "openGrabber":
                 this.fifo.newOrder(() => {
                     this.processFifoOrder(name);
                 }, name);
@@ -96,13 +96,13 @@ class UnitGrabber extends Extension {
                     this.fifo.orderFinished();
                 });
                 break;
-            case "upGrabber":
+            case "closeGrabber":
                 // TODO AX12 up
                 this.ax12.closeGrabber(() => {
                     this.fifo.orderFinished();
                 });
                 break;
-            case "downGrabber":
+            case "openGrabber":
                 // TODO AX12 down
                 this.ax12.openGrabber(() => {
                     this.fifo.orderFinished();
@@ -148,7 +148,7 @@ class UnitGrabber extends Extension {
             this.processFifoOrder("openArm");
         }, "openArm");
         this.fifo.newOrder(() => {
-            this.processFifoOrder("downGrabber");
+            this.processFifoOrder("openGrabber");
         }, "openGrabber");
         this.fifo.newOrder(() => {
             this.processFifoOrder("initArm");
@@ -160,7 +160,7 @@ class UnitGrabber extends Extension {
             this.processFifoOrder("openArm");
         }, "openArm");
         this.fifo.newOrder(() => {
-            this.processFifoOrder("upGrabber");
+            this.processFifoOrder("closeGrabber");
         }, "closeGrabber");
         this.fifo.newOrder(() => {
             this.processFifoOrder("closeArm");
