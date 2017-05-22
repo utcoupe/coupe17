@@ -19,5 +19,6 @@ void servoRotateCallback();
 void servoArmCallback();
 void servoDropRCallback();
 void servoDropLCallback();
+void servoArmRotateCallback();
 
 #endif //ARDUINO_SERVO_MOTORS_H

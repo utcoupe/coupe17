@@ -38,10 +38,19 @@ class UnitGrabber extends Extension {
                 break;
 
             // **************** tests only ************
+            case "startArmRotate":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder(name);
+                }, name);
+                break;
+            case "stopArmRotate":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder(name);
+                }, name);
+                break;
             case "openArm":
             case "closeArm":
-            case "closeGrabber":
-                this.logger.info("Order added to fifo " + name);            
+            case "closeGrabber":            
                 this.fifo.newOrder(() => {
                     this.processFifoOrder(name);
                 }, name);
@@ -81,6 +90,14 @@ class UnitGrabber extends Extension {
         }
 
         switch (name) {
+            case "startArmRotate":
+                this.servos.moduleArmStartRotate(() => {
+                    this.fifo.orderFinished();
+                });
+            case "stopArmRotate":
+                this.servos.moduleArmStopRotate(() => {
+                    this.fifo.orderFinished();
+                });
             case "openArm":
                 this.servos.moduleArmOpen(() => {
                     this.fifo.orderFinished();

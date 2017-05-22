@@ -26,6 +26,7 @@ class String;
 #define PR_MODULE_DROP_R    1       //right servo controlling the drop of the module
 #define PR_MODULE_DROP_L    2       //left servo controlling the drop of the module
 #define PR_MODULE_ROTATE    3       //continuous rotation servo to turn modules
+#define PR_MODULE_ARM_ROTATE 4		//continuous rotation servo on arm
 // END_ORDERS - Do not remove this comment
 
 enum SERVO_POSITION {
