@@ -20,6 +20,7 @@ class BaseConstructor extends Extension {
     constructor(){
         super("base_constructor");
         this.servos = null;
+        this.ax12 = null;
         this.hasAPreparedModule = false;
         this.pushTowards = "dont";
         this.color = "null";

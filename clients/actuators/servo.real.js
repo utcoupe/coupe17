@@ -14,7 +14,7 @@ class ServoReal extends Servo {
         super(robot);
 
         //todo robot name
-        this.actuatorCommands = defineParser(process.env.UTCOUPE_WORKSPACE + "/arduino/common/others/protocol.h");
+        this.actuatorCommands = defineParser(process.env.UTCOUPE_WORKSPACE + "/arduino/" + this.robotName + "/others/protocol.h");
         this.ordersSerial = undefined;
         // Connected means that the node has started the device through serial port
         this.serialPortConnected = false;
@@ -41,7 +41,7 @@ class ServoReal extends Servo {
         if (!this.serialPortConnected) {
             //todo robot+"_others"
             // If not connected, wait the ID of the arduino before doing something else
-            if (receivedCommand.indexOf("pr_others") == 0) {
+            if (receivedCommand.indexOf(this.robotName + "_others") == 0) {
                 //todo find a way to make it proper
                 var order = [this.actuatorCommands.START,0].join(";")+";\n";
                 this.logger.debug(order);
@@ -56,6 +56,20 @@ class ServoReal extends Servo {
             }
         }
     }
+
+    stop() {
+        if (this.serialPort.isOpen()) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.HALT, function() {
+                this.serialPort.close();
+                this.logger.info("Asserv real has stopped");
+            }.bind(this));
+        }
+        this.serialPortConnected = false;
+    }
+
+    ////////////////////////////////
+    //          PR ORDERS         //
+    ////////////////////////////////
 
     moduleArmClose(callback) {
         if (this.serialPortConnected) {
@@ -109,38 +123,64 @@ class ServoReal extends Servo {
         }
     }
 
-    turnOn(callback) {
-        if (serialPortConnected) {
-            // TODO
+    ////////////////////////////////
+    //          GR ORDERS         //
+    ////////////////////////////////
+
+    turnOnCanon(callback) {
+        if (this.serialPortConnected) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, this.actuatorCommands.GR_CANON, callback);
         } else {
             this.logger.error("Serial port not connected...");
         }
     }
 
-    turnOff(callback) {
-        if (serialPortConnected) {
-            // TODO something
+    turnOffCanon(callback) {
+        if (this.serialPortConnected) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, this.actuatorCommands.GR_CANON, callback);
+        } else {
+            this.logger.error("Serial port not connected...");
+        }
+    }
+
+    turnOnSweeper(callback) {
+        if (this.serialPortConnected) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, this.actuatorCommands.GR_SWEEPER, callback);
+        } else {
+            this.logger.error("Serial port not connected...");
+        }
+    }
+
+    turnOffSweeper(callback) {
+        if (this.serialPortConnected) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, this.actuatorCommands.GR_SWEEPER, callback);
+        } else {
+            this.logger.error("Serial port not connected...");
+        }
+    }
+
+    launchRocket(callback) {
+        if (this.serialPortConnected) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, this.actuatorCommands.GR_ROCKET, callback);
         } else {
             this.logger.error("Serial port not connected...");
         }
     }
 
     openTrunk(callback) {
-        if (serialPortConnected) {
-            // TODO something
+        if (this.serialPortConnected) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, this.actuatorCommands.GR_LOADER, callback);
         } else {
             this.logger.error("Serial port not connected...");
         }
     }
 
-    stop() {
-        if (this.serialPort.isOpen()) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.HALT, function() {
-                this.serialPort.close();
-                this.logger.info("Asserv real has stopped");
-            }.bind(this));
+    closeTrunk(callback) {
+        if (this.serialPortConnected) {
+            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, this.actuatorCommands.GR_LOADER, callback);
+        } else {
+            this.logger.error("Serial port not connected...");
         }
-        this.serialPortConnected = false;
     }
 
 }

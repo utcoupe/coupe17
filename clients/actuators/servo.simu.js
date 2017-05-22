@@ -12,6 +12,14 @@ class ServoSimu extends Servo {
         super(robot);
     }
 
+    stop() {
+        this.logger.info("Servo simu stopped");
+    }
+
+    ////////////////////////////////
+    //          PR ORDERS         //
+    ////////////////////////////////
+
     moduleArmClose(callback) {
         setTimeout(callback, 200);
     }
@@ -32,20 +40,36 @@ class ServoSimu extends Servo {
         setTimeout(callback, 200);
     }
 
-    turnOn(callback) {
+    ////////////////////////////////
+    //          GR ORDERS         //
+    ////////////////////////////////
+
+    turnOnCanon(callback) {
         setTimeout(callback, 200);
     }
 
-    turnoff(callback) {
+    turnOffCanon(callback) {
         setTimeout(callback, 200);
     }
 
-    openTruck(callback) {
+    turnOnSweeper(callback) {
         setTimeout(callback, 200);
     }
 
-    stop() {
-        this.logger.info("Servo simu stopped");
+    turnOffSweeper(callback) {
+        setTimeout(callback, 200);
+    }
+
+    launchRocket(callback) {
+        setTimeout(callback, 200);
+    }
+
+    openTrunk(callback) {
+        setTimeout(callback, 200);
+    }
+
+    closeTrunk(callback) {
+        setTimeout(callback, 200);
     }
 
 }

@@ -10,6 +10,7 @@
 const Robot = require('./robot');
 const Canon = require('../extension/canon');
 const Sweeper = require('../extension/sweeper');
+const Rocket = require('../extension/rocket');
 
 /**
  * Grand Robot
@@ -25,6 +26,7 @@ class Grobot extends Robot{
 
 		this.canon = new Canon();
 		this.sweeper = new Sweeper();
+        this.rocket = new Rocket();
   	}
 
 	
@@ -34,16 +36,18 @@ class Grobot extends Robot{
 
         let actuators = {
         	servos: this.servo
-        }
+        };
         
 		this.sweeper.start(actuators);
 		this.canon.start(actuators);
+        this.rocket.start(actuators);
 	}
 	
 	// called by stop and exit
 	closeExtensions () {
 		this.sweeper.stop();
 		this.canon.stop();
+        this.rocket.stop();
 	}
 
 	// Exiting :
