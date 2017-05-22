@@ -28,11 +28,19 @@ class Factory {
         //flag to know if the factory is ready, if not, can't build any object
         this.factoryReady = false;
 
-        //todo do not launch both at the same time to avoid /dev/ttyX conflicts
-        this.detectAx12(function(){
-            // Last step, detects devices
-            this.detectArduino();
-        }.bind(this));
+        // Last step, detects devices
+        this.detectArduino(() => {
+            //todo do not launch both at the same time to avoid /dev/ttyX conflicts
+            this.closeAllPorts();
+
+            this.detectAx12(() => {
+                if (this.factoryReadyCallback !== undefined) {
+                    this.factoryReady = true;
+                    this.factoryReadyCallback();
+                }
+            });
+        });
+
     }
 
     //force to return a simulated object
@@ -92,9 +100,9 @@ class Factory {
     }
 
     //open all serial devices and set a callback, waiting to receive data in order to set the devicePortMap
-    detectArduino() {
+    detectArduino(callback) {
         this.logger.info("Detecting Arduinos...");
-        setTimeout(this.closeAllPorts.bind(this), 10000);
+        setTimeout(callback.bind(this), 10000);
         SerialPort.list(function (err, ports) {
             // Open each listed serial port and add a callback to detect if it is an arduino
             for(var currentPort in ports) {
@@ -172,10 +180,6 @@ class Factory {
     closeAllPorts() {
         for (var port in this.openedSerialPort) {
             this.openedSerialPort[port].close();
-        }
-        if (this.factoryReadyCallback !== undefined) {
-            this.factoryReady = true;
-            this.factoryReadyCallback();
         }
     }
 }
