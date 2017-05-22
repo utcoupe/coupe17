@@ -30,5 +30,6 @@ namespace vals{
         {32, 400},      //Moving speed
         {34, 1023}      //Torque limit
     };
+    const int nbDetection = 300;
 };
 #endif
