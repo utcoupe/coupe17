@@ -164,6 +164,9 @@ class UnitGrabber extends Extension {
 
     takeModule () {
         this.fifo.newOrder(() => {
+            this.processFifoOrder("startArmRotate");
+        }, "startArmRotate");
+        this.fifo.newOrder(() => {
             this.processFifoOrder("openArm");
         }, "openArm");
         this.fifo.newOrder(() => {
@@ -173,11 +176,17 @@ class UnitGrabber extends Extension {
             this.processFifoOrder("initArm");
         }, "initArm");
         this.fifo.newOrder(() => {
+            this.processFifoOrder("openArm");
+        }, "openArm");
+        this.fifo.newOrder(() => {
             this.processFifoOrder("closeArm");
         }, "closeArm");
         this.fifo.newOrder(() => {
             this.processFifoOrder("openArm");
         }, "openArm");
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("stopArmRotate");
+        }, "stopArmRotate");
         this.fifo.newOrder(() => {
             this.processFifoOrder("closeGrabber");
         }, "closeGrabber");
