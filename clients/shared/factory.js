@@ -33,8 +33,6 @@ class Factory {
             // Last step, detects devices
             this.detectArduino();
         }.bind(this));
-
-        setTimeout(this.closeAllPorts.bind(this), 5000);
     }
 
     //force to return a simulated object
@@ -96,11 +94,13 @@ class Factory {
     //open all serial devices and set a callback, waiting to receive data in order to set the devicePortMap
     detectArduino() {
         this.logger.info("Detecting Arduinos...");
+        setTimeout(this.closeAllPorts.bind(this), 10000);
         SerialPort.list(function (err, ports) {
             // Open each listed serial port and add a callback to detect if it is an arduino
             for(var currentPort in ports) {
                 this.openedSerialPort[currentPort] = new SerialPort(ports[currentPort].comName, { baudrate: 57600, parser: SerialPort.parsers.readline('\n') });
                 this.openedSerialPort[currentPort].on("data", function (currentPort, data) {
+                    this.logger.debug(data.toString());
                     if (data.toString().indexOf(this.robotName + "_asserv") != -1) {
                         this.logger.info("Real asserv detected");
                         this.devicesPortMap[this.robotName + "_asserv"] =  ports[currentPort].comName;
