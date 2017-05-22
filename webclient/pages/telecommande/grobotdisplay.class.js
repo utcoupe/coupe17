@@ -12,6 +12,10 @@ class GrobotDisplay extends RobotDisplay {
         this.client.send("canon", "open_trunk");
     }
 
+    closeTrunk () {
+        this.client.send("canon", "close_trunk");
+    }
+
     throwBalls () {
         this.client.send("canon", "throw_balls");
     }

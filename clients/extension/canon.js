@@ -31,6 +31,7 @@ class Canon extends Extension {
                 });
                 break;
             case "open_trunk":
+            case "close_trunk":
                 this.fifo.newOrder(() => {
                     this.processFifoOrder (name, params);
                 });
@@ -61,6 +62,11 @@ class Canon extends Extension {
                 break;
             case "open_trunk":
                 this.servos.openTrunk(() => {
+                    this.fifo.orderFinished();
+                });
+                break;
+            case "close_trunk":
+                this.servos.closeTrunk(() => {
                     this.fifo.orderFinished();
                 });
                 break;
