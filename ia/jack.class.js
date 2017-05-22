@@ -49,7 +49,17 @@ module.exports = (function () {
                         }.bind(this));
                 }.bind(this));
 
-		gpio.setup(MINUS, gpio.DIR_IN, gpio.EDGE_BOTH);
+		gpio.setup(MINUS, gpio.DIR_IN, () => {
+			gpio.read(MINUS, function(err, value) {
+				if (value) {
+					// In case the jack is already cocked when the AI starts
+					this.cockJack();
+				}
+				this.updateLight(value);
+				gpio.setup(MINUS, gpio.DIR_IN, gpio.EDGE_BOTH);
+	    		}.bind(this));
+		});
+
 		gpio.on('change', (c, v) => {
 			this.valueChanged(c, v);
 		});
@@ -59,20 +69,29 @@ module.exports = (function () {
 	 * Read on GPIO, react accordingly
 	 */
 	Jack.prototype.valueChanged = function(channel, value) {
+		// logger.debug("Channel " + channel + " -> " + value);
 		if(channel == MINUS && value && !this.prevVal) {
-			logger.info("Cocked !");
-			this.prevVal = value;
+			this.cockJack();
 		} else if (channel == MINUS && !value && this.prevVal) {
 			logger.info("JAAAAAACCCKK");
 			this.ia.client.send("ia", "ia.jack", {});
 			this.prevVal = value;
 		}
+		this.updateLight(value);
+	};
+
+	Jack.prototype.cockJack = function() {
+		logger.info("Cocked !");
+		this.prevVal = true;
+	}
+
+	Jack.prototype.updateLight = function(value) {
 		if(this.ledReady) {
-			gpio.write(LED, value, function(err) {
+                        gpio.write(LED, value, function(err) {
                             if (err) throw err;
                         }.bind(this));
-		}
-	};
+                }
+	}
 
 	/**
 	 * Read on GPIO, react accordingly
