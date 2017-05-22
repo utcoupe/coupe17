@@ -12,10 +12,10 @@
 #define NB_SERVO 4
 
 // Set the pins corresponding to the used servo motors
-#define GR_SWEEPER_PIN  9
-#define GR_CANON_PIN    6
+#define GR_SWEEPER_PIN  2
+#define GR_CANON_PIN    3
 #define GR_ROCKET_PIN   5
-#define GR_LOADER_PIN   3
+#define GR_LOADER_PIN   4
 
 //todo remove ?
 #define HZ 100
