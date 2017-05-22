@@ -151,6 +151,9 @@ class UnitGrabber extends Extension {
             this.processFifoOrder("downGrabber");
         }, "openGrabber");
         this.fifo.newOrder(() => {
+            this.processFifoOrder("initArm");
+        }, "initArm");
+        this.fifo.newOrder(() => {
             this.processFifoOrder("closeArm");
         }, "closeArm");
         this.fifo.newOrder(() => {
