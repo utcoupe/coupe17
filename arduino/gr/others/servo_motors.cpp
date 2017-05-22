@@ -25,8 +25,8 @@ Servo gr_loader;
 uint8_t servoValues[4][4] = {
         {0, 180, 0, 100},       //GR_SWEEPER
         {0, 90, 0, 100},        //GR_CANON
-        {10, 90, 5, 100},       //GR_ROCKET
-        {180, 90, 180, 100},    //GR_LOADER
+        {49, 70, 49, 100},       //GR_ROCKET
+        {100, 180, 100, 100},    //GR_LOADER
 };
 
 //todo adjust timer time
