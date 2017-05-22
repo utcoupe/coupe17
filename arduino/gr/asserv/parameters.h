@@ -43,10 +43,13 @@
 #define DT (1.0/HZ)
 #define AUTO_STATUS_HZ 10 // must be a divider a HZ or 0 to disable
 
-#define SPD_MAX 500 //mm/s
-#define ACC_MAX 1000  //mm/s2
+#define SPD_MAX 2000 //mm/s
+#define ACC_MAX 6000  //mm/s2
 #define RATIO_ROT_SPD_MAX 0.3
 #define K_DISTANCE_REDUCTION 10 // réduction de la vitesse linéaire quand on tourne
+
+#define BLOCK_TIME 5000 // ms - time between each block check
+#define BLOCK_MIN_DIST 5 // mm - distance to move to consider we moved
 
 #define ENC_RESOLUTION 1024 //resolution du codeur
 
@@ -60,7 +63,7 @@
 
 #define CONE_ALIGNEMENT 100 // NEVER
 
-#define PID_P 1 //1.5
+#define PID_P 0.1 //1.5
 #define PID_I 0 //30
 #define PID_D 0 //5
 #define PID_BIAS 0
