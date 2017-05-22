@@ -11,7 +11,7 @@ const SerialPort = require('serialport');
 const Path = require('path');
 const Child_process = require('child_process');
 const Byline = require('byline');
-const program = Path.normalize("./bin/ax12");
+const program = Path.normalize(process.env["UTCOUPE_WORKSPACE"] + "/bin/ax12");
 
 
 class Factory {
