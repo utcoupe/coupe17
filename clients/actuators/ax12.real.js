@@ -95,7 +95,7 @@ class Ax12Real extends Ax12 {
 
     openGrabber(callback) {
         if (this.stdStreamConnected) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.AX12_INIT, [this.actuatorCommands.PR_MODULE_GRABBER], callback);
+            this.ordersSerial.sendOrder(this.actuatorCommands.AX12_ONE, [this.actuatorCommands.PR_MODULE_GRABBER], callback);
         } else {
             this.logger.error("TODO: AX12 real openGrabber()");
             // this.logger.error("Serial port not connected...");
@@ -104,7 +104,7 @@ class Ax12Real extends Ax12 {
 
     closeGrabber(callback) {
         if (this.stdStreamConnected) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.AX12_ONE, [this.actuatorCommands.PR_MODULE_GRABBER], callback);
+            this.ordersSerial.sendOrder(this.actuatorCommands.AX12_INIT, [this.actuatorCommands.PR_MODULE_GRABBER], callback);
         } else {
             this.logger.error("TODO: AX12 real closeGrabber()");
             // this.logger.error("Serial port not connected...");
