@@ -27,6 +27,12 @@ class ServoSimu extends Servo {
     moduleArmOpen(callback) {
         setTimeout(callback, 200);
     }
+    moduleArmStartRotate(callback) {
+        setTimeout(callback, 200);
+    }
+    moduleArmStopRotate(callback) {
+        setTimeout(callback, 200);
+    }
 
     moduleArmInit(callback) {
         setTimeout(callback, 200);
