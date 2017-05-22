@@ -52,7 +52,7 @@ void servoAttach() {
     // Setup the motor on the arm
     pinMode(PR_MODULE_ARM_ROTATE_PIN, OUTPUT);
     // Apply default values
-    pr_module_arm.write(servoValues[PR_MODULE_ARM][INIT]);
+    pr_module_arm.write(servoValues[PR_MODULE_ARM][OPEN]); //put the open value to avoid conflict with the module grabber
     pr_module_drop_r.write(servoValues[PR_MODULE_DROP_R][INIT]);
     pr_module_drop_l.write(servoValues[PR_MODULE_DROP_L][INIT]);
     pr_module_rotate.write(servoValues[PR_MODULE_ROTATE][INIT]);
