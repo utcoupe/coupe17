@@ -10,8 +10,8 @@ echo "UTCOUPE_WORKSPACE=$PWD" >> /etc/default/utcoupe
 exit
 ```
 * create log directory :
-```bashfvd
-mkdir -p /var/log/utcoupe
+```bash
+sudo mkdir -p /var/log/utcoupe
 ```
 * copy those files to `/etc/init.d/`
 ```bash
