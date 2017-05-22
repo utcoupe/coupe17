@@ -20,7 +20,7 @@ class Ax12Real extends Ax12 {
         super(robot);
 
 
-        this.actuatorCommands = defineParser(process.env.UTCOUPE_WORKSPACE + "/ax12/main/src/define.h");
+        this.actuatorCommands = defineParser(process.env.UTCOUPE_WORKSPACE + "/ax12/prgm_ax12/src/define.h");
 
         // this.logger.debug("Launching ax12 cpp");
         this.ax12 = Child_process.spawn(program);
