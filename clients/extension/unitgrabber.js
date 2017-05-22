@@ -94,10 +94,12 @@ class UnitGrabber extends Extension {
                 this.servos.moduleArmStartRotate(() => {
                     this.fifo.orderFinished();
                 });
+                break;
             case "stopArmRotate":
                 this.servos.moduleArmStopRotate(() => {
                     this.fifo.orderFinished();
                 });
+                break;
             case "openArm":
                 this.servos.moduleArmOpen(() => {
                     this.fifo.orderFinished();

@@ -28,7 +28,7 @@ uint8_t servoValues[5][4] = {
         {10, 90, 5, 100},      //PR_MODULE_DROP_R
         {180, 90, 180, 100},       //PR_MODULE_DROP_L
         {90, 180, 255, 200},       //PR_MODULE_ROTATE
-        {0, 0, 1, 500}
+        {0, 1, 0, 500}
 };
 
 //todo adjust timer time
@@ -79,14 +79,14 @@ void servoApplyCommand(uint8_t servo_id, uint8_t value, uint16_t order_id) {
                 armLastId = order_id;
                 pr_module_arm.write(value);
                 break;
-            case PR_MODULE_ARM_ROTATE: // id to create
+            case PR_MODULE_ARM_ROTATE: 
                 armRotateTimer.Start();
                 armRotateLastId = order_id;
                 switch(value){
-                    case 0 :
+                    case 0 : //open
                         digitalWrite(PR_MODULE_ARM_ROTATE_PIN, LOW);
                         break;
-                    case 1:
+                    case 1: //close, init
                         digitalWrite(PR_MODULE_ARM_ROTATE_PIN, HIGH);
                         break;
                     default:
@@ -192,6 +192,8 @@ void servoTimerUpdate() {
     dropRTimer.Update();
     dropLTimer.Update();
     rotateTimer.Update();
+    armRotateTimer.Update();
+
 }
 
 
