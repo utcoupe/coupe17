@@ -9,25 +9,18 @@
 "use strict";
 
 const Extension = require('./extension');
-var servos = require('../actuators/servo');
 
-/**
- * Classe définissant le canon
- * 
- * @class Canon
- * @memberof module:clients/Extension/canon
- * @extends {clients/Extension/extension.Extension}
- */
 class Canon extends Extension {
     constructor(){
-        super ("canon");
-        this.servos = servos;
+        super("canon");
+        this.servos = null;
     }
 
     takeOrder(from, name, params) {
         this.logger.info ("Order received: " + name);
         switch (name) {
             case "throw_balls":
+                //TODO does not work yet
                 this.fifo.order (() => {
                     this.processFifoOrder("turn_on", params);
                 });
@@ -37,18 +30,17 @@ class Canon extends Extension {
                     });
                 });
                 break;
-
             case "open_trunk":
                 this.fifo.newOrder(() => {
                     this.processFifoOrder (name, params);
                 });
+                break;
             case "turn_off":
             case "turn_on":
                 this.fifo.newOrder(() => {
                     this.processFifoOrder (name, params);
                 });
                 break;
-            
             default:
                 this.logger.error ("Order " + name + "does not exist!");
         }
@@ -58,32 +50,19 @@ class Canon extends Extension {
         this.logger.info ("Executing order: " + name);
         switch (name) {
             case "turn_on":
-                // TODO turn on motors
-
-                // add something like that :
-                // this.servos.turnOn(() => {
-                //     this.fifo.orderFinished();
-                // });
-                this.fifo.orderFinished();
+                this.servos.turnOnCanon(() => {
+                    this.fifo.orderFinished();
+                });
                 break;
             case "turn_off":
-                // TODO turn off motors
-
-                // add something like that :
-                // this.servos.turnOff(() => {
-                //     this.fifo.orderFinished();
-                // });
-                this.fifo.orderFinished();
+                this.servos.turnOffCanon(() => {
+                    this.fifo.orderFinished();
+                });
                 break;
-            
             case "open_trunk":
-                // TODO something
-
-                // add something like that :
-                // this.servos.openTrunk(() => {
-                //     this.fifo.orderFinished();
-                // });
-                this.fifo.orderFinished();
+                this.servos.openTrunk(() => {
+                    this.fifo.orderFinished();
+                });
                 break;
             case "send_message":
                 this.sendDataToIA(param.name, param || {});

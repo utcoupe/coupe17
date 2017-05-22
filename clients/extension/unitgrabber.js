@@ -8,7 +8,6 @@
 "use strict";
 
 const Extension = require('./extension');
-var servos = require('../actuators/servo');
 
 /**
  * Extension permettant de ramasser les modules lunaires
@@ -20,7 +19,8 @@ var servos = require('../actuators/servo');
 class UnitGrabber extends Extension {
     constructor(){
         super("unit_grabber");
-        // this.servos = servos;
+        this.servos = null;
+        this.ax12 = null;
     }
 
     takeOrder (from, name, param) {
@@ -163,12 +163,5 @@ class UnitGrabber extends Extension {
         }, "sendModule++");
     }
 }
-
-/* new way to work :
-    IA is sending an order from the action.json orders list
-    Extension has to store this in a FIFO, because IA sends the order and next ask the extension to ack
-    In the Extension, call the corresponding Actuator (with an order ID ?), add manage callbacks in order
-    to go to the next order
- */
 
 module.exports = UnitGrabber;

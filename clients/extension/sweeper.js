@@ -9,31 +9,18 @@
 "use strict";
 
 const Extension = require('./extension');
-var servos = require('../actuators/servo');
 
-/**
- * Classe définissant la balayeuse
- * 
- * @class Sweeper
- * @memberof module:clients/Extension/sweeper
- * @extends {clients/Extension/extension.Extension}
- */
 class Sweeper extends Extension {
     constructor(){
-        super ("sweeper");
-        this.servos = servos;
+        super("sweeper");
+        this.servos = null;
     }
 
     takeOrder (from, name, param) {
         this.logger.info ("Order received: " + name);
         switch (name) {
-            case "swallow_balls":
             case "send_message":
-                this.fifo.newOrder (() => {
-                    this.processFifoOrder(name, param);
-                }, name);
-                break;
-                
+            case "swallow_balls":
             case "turn_on":
             case "turn_off":
                 this.fifo.newOrder (() => {
@@ -50,12 +37,17 @@ class Sweeper extends Extension {
         this.logger.info("Executing order " + name);
         switch (name) {
             case "turn_on":
-                this.fifo.orderFinished();
+                this.servos.turnOnSweeper(() => {
+                    this.fifo.orderFinished();
+                });
                 break;
             case "turn_off":
-                this.fifo.orderFinished();
+                this.servos.turnOffSweeper(() => {
+                    this.fifo.orderFinished();
+                });
                 break;
             case "swallow_balls":
+                //TODO
                 this.logger.warn("TODO: make swallow_balls work");
                 this.fifo.orderFinished();
                 break;
