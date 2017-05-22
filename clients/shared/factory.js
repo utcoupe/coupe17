@@ -100,7 +100,7 @@ class Factory {
             for(var currentPort in ports) {
                 this.openedSerialPort[currentPort] = new SerialPort(ports[currentPort].comName, { baudrate: 57600, parser: SerialPort.parsers.readline('\n') });
                 this.openedSerialPort[currentPort].on("data", function (currentPort, data) {
-                    this.logger.debug(data.toString());
+                    // this.logger.debug(data.toString());
                     if (data.toString().indexOf(this.robotName + "_asserv") != -1) {
                         this.logger.info("Real asserv detected");
                         this.devicesPortMap[this.robotName + "_asserv"] =  ports[currentPort].comName;
