@@ -123,7 +123,7 @@ class Factory {
         var detectionTimeout = setTimeout(() => {
             this.logger.info("AX12 detection timeout");
             callback();
-        }, 1000);
+        }, 3000);
 
         var ax12 = Child_process.spawn(program);
 
