@@ -64,9 +64,11 @@ void servoApplyCommand(uint8_t servo_id, uint8_t value, uint16_t order_id) {
         switch (servo_id) {
             case GR_SWEEPER:
                 gr_sweeper.write(value);
+                SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
                 break;
             case GR_CANON:
                 gr_canon.write(value);
+                SerialSender::SerialSend(SERIAL_INFO, "%d;", order_id);
                 break;
             case GR_ROCKET:
                 rocketTimer.Start();
