@@ -89,7 +89,8 @@ class Server {
 			unit_grabber: {},
 			base_constructor: {},
 			canon: {},
-			sweeper: {}
+			sweeper: {},
+            rocket : {}
 		};
 		/** @type {Object} */
 		this.utcoupe = {

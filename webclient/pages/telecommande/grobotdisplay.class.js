@@ -31,4 +31,8 @@ class GrobotDisplay extends RobotDisplay {
     turnOffSweeper () {
         this.client.send("sweeper", "turn_off");
     }
+
+    funnyAction () {
+        this.client.send("rocket", "funny_action");
+    }
 }
