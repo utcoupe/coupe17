@@ -74,7 +74,7 @@ module.exports = (function () {
 
 	Lidar.prototype.convertXYA = function(obj) {
 		obj.x = 300 - obj.x;
-		obj.y = obj.y - 3;		// because of the rotation
+		obj.y = obj.y + (obj.w > 90 ? 1 : -1) * 3;		// because of the rotation
 		obj.w = 180 - obj.w;
 
 		return obj;
