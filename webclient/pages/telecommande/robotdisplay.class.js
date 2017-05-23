@@ -15,7 +15,7 @@ class RobotDisplay {
         this.a = 0;
         this.x = 0;
         this.y = 0;
-        this.sens = "forward";
+        this.direction = "forward";
         this.set_x = 0;
         this.set_y = 0;
         this.set_a = 0;
@@ -51,7 +51,7 @@ class RobotDisplay {
 		this.client.send(this.name, "asserv.goxy", {
 			x: parseInt(this.x),
 			y: parseInt(this.y),
-            sens : this.sens
+            direction : this.direction
 		});
 	}
 

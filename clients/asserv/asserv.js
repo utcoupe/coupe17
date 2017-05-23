@@ -114,9 +114,9 @@ class Asserv{
 	 *
 	 * @param {int} x
 	 * @param {int} y
-	 * @param {string} sens
+	 * @param {string} direction
 	 */
-	goxy(x, y, sens){}
+	goxy(x, y, direction){}
 
 	/**
 	 * Simu Go Angle
@@ -135,6 +135,11 @@ class Asserv{
 	setPid(p, i, d){}
 
 	doStartSequence(params) {}
+
+    callCallback(callback) {
+        callback();
+        this.fifo.orderFinished();
+    }
 
 	addOrderToFifo(name, params){
         this.logger.debug("Adding order to fifo : " + name);
@@ -164,7 +169,7 @@ class Asserv{
                 callback = function() {this.goa(params.a)}.bind(this);
                 break;
             case "goxy":
-                callback = function() {this.goxy(params.x, params.y, params.sens)}.bind(this);
+                callback = function() {this.goxy(params.x, params.y, params.direction)}.bind(this);
                 break;
             case "speed":
                 callback = function() {this.speed(params.l, params.a, params.ms)}.bind(this);
@@ -174,6 +179,9 @@ class Asserv{
                 break;
             case "setpid":
                 callback = function() {this.setPid(params.p, params.i, params.d)}.bind(this);
+                break;
+            case "callCallback":
+                callback = function() {this.callCallback(params.callback)}.bind(this);
                 break;
             default:
                 this.logger.fatal("This order is unknown for the " + this.robotName + " asserv : " + name);

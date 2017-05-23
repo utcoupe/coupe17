@@ -70,6 +70,18 @@ class ServoReal extends Servo {
                             this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, [this.actuatorCommands.PR_MODULE_DROP_L], () => {});
                             
                         });
+                    } else {
+                        this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.GR_CANON], () => {
+                            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, [this.actuatorCommands.GR_CANON], () => {});
+                        });
+
+                        this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.GR_SWEEPER], () => {
+                            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, [this.actuatorCommands.GR_SWEEPER], () => {});
+                        });
+
+                        this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.GR_LOADER], () => {
+                            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, [this.actuatorCommands.GR_LOADER], () => {});
+                        });
                     }
 
 

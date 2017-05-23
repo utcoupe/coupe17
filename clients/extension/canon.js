@@ -21,14 +21,20 @@ class Canon extends Extension {
         switch (name) {
             case "throw_balls":
                 //TODO does not work yet
-                this.fifo.order (() => {
+                this.fifo.newOrder(() => {
                     this.processFifoOrder("turn_on", params);
                 });
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder("open_trunk", params);
+                });
                 setTimeout(() => {
-                    this.fifo.order_in_progress (() => {
+                    this.fifo.newOrder (() => {
+                        this.processFifoOrder("close_trunk", params);
+                    });
+                    this.fifo.newOrder (() => {
                         this.processFifoOrder("turn_off", params);
                     });
-                });
+                }, 5000);
                 break;
             case "open_trunk":
             case "close_trunk":

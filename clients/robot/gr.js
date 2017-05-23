@@ -55,21 +55,23 @@ class Grobot extends Robot{
         //todo add timeout to wait the seesaw to seesaw
         //TODO : color management
         //TODO : ia ?
-        this.name = "climbSeesaw";
-        this.asserv.addOrderToFifo(this.name, "asserv.goxy", {
-			x: parseInt(780),
-			y: parseInt(180),
-            sens : "forward"
+        var orderName = "climbSeesaw";
+        this.asserv.addOrderToFifo("goxy", {
+			x: 780,
+			y: 180,
+            direction : "backward"
 		});
-		this.asserv.addOrderToFifo(this.name, "asserv.goa", {
-			a: parseFloat(-25)*Math.PI/180
+		// this.asserv.addOrderToFifo("goa", {
+		// 	a: -7*Math.PI/8
+		// });
+		this.asserv.addOrderToFifo("goxy", {
+			x: 800,
+			y: 180,
+            direction : "backward"
 		});
-		this.asserv.addOrderToFifo(this.name, "asserv.goxy", {
-			x: parseInt(800),
-			y: parseInt(180),
-            sens : "forward"
+		this.asserv.addOrderToFifo("callCallback", {
+        	callback: callback
 		});
-        callback();
     }
 
 	posArduinoToIa(x, y, a) {

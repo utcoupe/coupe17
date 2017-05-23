@@ -133,16 +133,16 @@ class AsservReal extends Asserv{
         this.ordersSerial.sendOrder(this.asservCommands.PWM, [parseInt(left), parseInt(right), parseInt(ms)], function() { this.fifo.orderFinished(); }.bind(this));
     }
 
-    goxy(x, y, sens) {
-        var sensInt;
-        if(sens == "forward") sensInt = 1;
-        else if(sens == "backward") sensInt = -1;
-        else sensInt = 0;
+    goxy(x, y, direction) {
+        var directionInt;
+        if(direction == "forward") directionInt = 1;
+        else if(direction == "backward") directionInt = -1;
+        else directionInt = 0;
         var posToArduino = this.robot.posIaToArduino({
             x: parseInt(x),
             y: parseInt(y)
         });
-        this.ordersSerial.sendOrder(this.asservCommands.GOTO, [posToArduino.x, posToArduino.y, parseInt(sensInt)], function() { this.fifo.orderFinished(); }.bind(this));
+        this.ordersSerial.sendOrder(this.asservCommands.GOTO, [posToArduino.x, posToArduino.y, parseInt(directionInt)], function() { this.fifo.orderFinished(); }.bind(this));
     }
 
     goa(a, callback){
