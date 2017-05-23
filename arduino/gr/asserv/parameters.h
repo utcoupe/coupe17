@@ -68,6 +68,10 @@
 #define PID_D 0 //5
 #define PID_BIAS 0
 
+// Control feed-forward, pwm = a*spd + b
+#define SPD_TO_PWM_A 0
+#define SPD_TO_PWM_B 0
+
 #define LEFT_P (PID_P)
 #define LEFT_I (PID_I)
 #define LEFT_D (PID_D)

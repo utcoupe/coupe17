@@ -329,6 +329,10 @@ void applyPwm(void) {
 	set_pwm_right(control.speeds.pwm_right);
 }
 
+float speedToPwm(float speed) {
+    return SPD_TO_PWM_A*speed + SPD_TO_PWM_B;
+}
+
 void applyPID(void) {
 	float left_spd, right_spd;
 	float left_ds, right_ds;
@@ -336,6 +340,6 @@ void applyPID(void) {
 	right_spd = control.speeds.linear_speed + control.speeds.angular_speed;
 	left_ds = left_spd - wheels_spd.left;
 	right_ds = right_spd - wheels_spd.right;
-	control.speeds.pwm_left = PIDCompute(&PID_left, left_ds);
-	control.speeds.pwm_right = PIDCompute(&PID_right, right_ds);
+        control.speeds.pwm_left = speedToPwm(left_spd) + PIDCompute(&PID_left, left_ds);
+        control.speeds.pwm_right = speedToPwm(right_spd) + PIDCompute(&PID_right, right_ds);
 }
