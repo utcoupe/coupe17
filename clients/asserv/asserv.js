@@ -147,34 +147,34 @@ class Asserv{
                     //todo, will not work...
                     this.fifo.orderFinished();
                 }.bind(this);
-            break;
+                break;
             case "pwm":
                 callback = function() {this.pwm(params.left, params.right, params.ms)}.bind(this);
-            break;
+                break;
             case "setvit":
                 callback = function() {this.setSpeed(params.v, params.r)}.bind(this);
-            break;
+                break;
             case "setacc":
                 callback = function() {this.setAcc(params.acc)}.bind(this);
                 break;
             case "clean":
                 this.fifo.clean(this.fifo.orderFinished);
-            break;
+                break;
             case "goa":
                 callback = function() {this.goa(params.a)}.bind(this);
-            break;
+                break;
             case "goxy":
                 callback = function() {this.goxy(params.x, params.y, params.sens)}.bind(this);
-            break;
+                break;
             case "speed":
                 callback = function() {this.speed(params.l, params.a, params.ms)}.bind(this);
                 break;
             case "setpos":
                 callback = function() {this.setPos(params)}.bind(this);
-            break;
+                break;
             case "setpid":
                 callback = function() {this.setPid(params.p, params.i, params.d)}.bind(this);
-            break;
+                break;
             default:
                 this.logger.fatal("This order is unknown for the " + this.robotName + " asserv : " + name);
         }
