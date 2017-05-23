@@ -657,7 +657,11 @@
 			"direction": "whatever",
 			"priority": 89,
 			"dependency": "",
-			"orders":[],
+			"orders":[{
+				"dest": "gr",
+				"name": "climb_seesaw",
+				"params": {}
+				}],
 			"kill": null
 		},
 		"seesaw_right":{
@@ -672,7 +676,11 @@
 			"direction": "whatever",
 			"priority": 89,
 			"dependency": "",
-			"orders":[],
+			"orders":[{
+				"dest": "gr",
+				"name": "climb_seesaw",
+				"params": {}
+				}],
 			"kill": null
 		}
 	}
