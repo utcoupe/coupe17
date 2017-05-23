@@ -11,7 +11,7 @@ const SerialPort = require('serialport');
 const Path = require('path');
 const Child_process = require('child_process');
 const Byline = require('byline');
-const program = Path.normalize("./bin/ax12");
+const program = Path.normalize(process.env["UTCOUPE_WORKSPACE"] + "/bin/ax12");
 
 
 class Factory {
@@ -28,13 +28,19 @@ class Factory {
         //flag to know if the factory is ready, if not, can't build any object
         this.factoryReady = false;
 
-        //todo do not launch both at the same time to avoid /dev/ttyX conflicts
-        this.detectAx12(function(){
-            // Last step, detects devices
-            this.detectArduino();
-        }.bind(this));
+        // Last step, detects devices
+        this.detectArduino(() => {
+            //todo do not launch both at the same time to avoid /dev/ttyX conflicts
+            this.closeAllPorts();
 
-        setTimeout(this.closeAllPorts.bind(this), 5000);
+            this.detectAx12(() => {
+                if (this.factoryReadyCallback !== undefined) {
+                    this.factoryReady = true;
+                    this.factoryReadyCallback();
+                }
+            });
+        });
+
     }
 
     //force to return a simulated object
@@ -94,13 +100,15 @@ class Factory {
     }
 
     //open all serial devices and set a callback, waiting to receive data in order to set the devicePortMap
-    detectArduino() {
+    detectArduino(callback) {
         this.logger.info("Detecting Arduinos...");
+        setTimeout(callback.bind(this), 10000);
         SerialPort.list(function (err, ports) {
             // Open each listed serial port and add a callback to detect if it is an arduino
             for(var currentPort in ports) {
                 this.openedSerialPort[currentPort] = new SerialPort(ports[currentPort].comName, { baudrate: 57600, parser: SerialPort.parsers.readline('\n') });
                 this.openedSerialPort[currentPort].on("data", function (currentPort, data) {
+                    // this.logger.debug(data.toString());
                     if (data.toString().indexOf(this.robotName + "_asserv") != -1) {
                         this.logger.info("Real asserv detected");
                         this.devicesPortMap[this.robotName + "_asserv"] =  ports[currentPort].comName;
@@ -116,14 +124,15 @@ class Factory {
         }.bind(this));
     }
 
-    //todo
     detectAx12(callback) {
         this.logger.info("Detecting AX12...");
 
         var detectionTimeout = setTimeout(() => {
             this.logger.info("AX12 detection timeout");
+            // Kill the ax12 program, has to be started by the extension using the ax12 program
+            ax12.kill();
             callback();
-        }, 1000);
+        }, 3000);
 
         var ax12 = Child_process.spawn(program);
 
@@ -150,14 +159,15 @@ class Factory {
         });
 
         var stdout = Byline.createStream(ax12.stdout);
-        stdout.setEncoding('utf8')
+        stdout.setEncoding('utf8');
         stdout.on('data', function(data) {
             // this.logger.debug("ax12 just gave : "+data);
             // If not connected, wait the ID of the arduino before doing something else
 
             if (data.indexOf("ax12") == 0) {
                 this.devicesPortMap["ax12"] = "I don't know";
-                clearTimeout(detectionTimeout)
+                clearTimeout(detectionTimeout);
+                // ax12 killed if detected
                 ax12.kill();
                 this.logger.info("AX12 detection end");
                 callback();
@@ -172,10 +182,6 @@ class Factory {
     closeAllPorts() {
         for (var port in this.openedSerialPort) {
             this.openedSerialPort[port].close();
-        }
-        if (this.factoryReadyCallback !== undefined) {
-            this.factoryReady = true;
-            this.factoryReadyCallback();
         }
     }
 }

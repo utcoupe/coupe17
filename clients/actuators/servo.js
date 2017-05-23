@@ -13,11 +13,20 @@ class Servo {
             throw new TypeError("Cannot construct Abstract instances directly");
         }
         this.logger = Log4js.getLogger("servo");
+        this.robotName = robot.getName();
     }
+
+    stop() {}
+
+    ////////////////////////////////
+    //          PR ORDERS         //
+    ////////////////////////////////
 
     moduleArmClose(callback) {}
 
     moduleArmOpen(callback) {}
+
+    moduleArmInit(callback) {}
 
     moduleEngage(callback) {}
 
@@ -25,13 +34,23 @@ class Servo {
 
     moduleRotate(callback, params) {}
 
-    turnOn(callback) {}
+    ////////////////////////////////
+    //          GR ORDERS         //
+    ////////////////////////////////
 
-    turnoff(callback) {}
+    turnOnCanon(callback) {}
 
-    openTruck(callback) {}
+    turnOffCanon(callback) {}
 
-    stop() {}
+    turnOnSweeper(callback) {}
+
+    turnOffSweeper(callback) {}
+
+    launchRocket(callback) {}
+
+    openTrunk(callback) {}
+
+    closeTrunk(callback) {}
 
 }
 

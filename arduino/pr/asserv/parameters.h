@@ -42,7 +42,7 @@
 #define AUTO_STATUS_HZ 10 // must be a divider a HZ or 0 to disable
 
 #define SPD_MAX 1000 //mm/s
-#define ACC_MAX 1500  //mm/s2
+#define ACC_MAX 1500 //mm/s2
 #define RATIO_ROT_SPD_MAX 0.6
 #define K_DISTANCE_REDUCTION 20 // réduction de la vitesse linéaire quand on tourne
 #define EMERGENCY_WAIT_TIME 30 // seconds
@@ -63,9 +63,9 @@
 
 #define CONE_ALIGNEMENT (M_PI/2.0) 
 
-#define PID_P 0.25
-#define PID_I 130
-#define PID_D 13
+#define PID_P 0.1 //0.25
+#define PID_I 130 //130
+#define PID_D 0 //13
 #define PID_BIAS 0
 
 #define LEFT_P (PID_P)

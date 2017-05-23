@@ -1,6 +1,8 @@
 /**
- * Module de la balayeuse
- * 
+ * Extension controlling the rocket launch (it's the funny action)
+ *
+ * Created by tfuhrman on 22/05/17.
+ *
  * @module clients/Extension/sweeper
  * @requires module:clients/Extension/extension
  * @requires module:clients/Extension/Actuators/servo
@@ -9,25 +11,22 @@
 "use strict";
 
 const Extension = require('./extension');
+var servos = require('../actuators/servo');
 
-class Sweeper extends Extension {
+class Rocket extends Extension {
     constructor(){
-        super("sweeper");
+        super ("rocket");
         this.servos = null;
     }
 
     takeOrder (from, name, param) {
         this.logger.info ("Order received: " + name);
         switch (name) {
-            case "send_message":
-            case "swallow_balls":
-            case "turn_on":
-            case "turn_off":
+            case "funny_action":
                 this.fifo.newOrder (() => {
-                    this.processFifoOrder(name, param);
-                }, name);
+                    this.processFifoOrder("launch", param);
+                });
                 break;
-            
             default:
                 this.logger.error("Order " + name + " does not exist!");
         }
@@ -36,24 +35,10 @@ class Sweeper extends Extension {
     processFifoOrder (name, param) {
         this.logger.info("Executing order " + name);
         switch (name) {
-            case "turn_on":
-                this.servos.turnOnSweeper(() => {
+            case "launch":
+                this.servos.launchRocket(() => {
                     this.fifo.orderFinished();
                 });
-                break;
-            case "turn_off":
-                this.servos.turnOffSweeper(() => {
-                    this.fifo.orderFinished();
-                });
-                break;
-            case "swallow_balls":
-                //TODO
-                this.logger.warn("TODO: make swallow_balls work");
-                this.fifo.orderFinished();
-                break;
-            case "send_message":
-                this.sendDataToIA(param.name, param || {});
-                this.fifo.orderFinished();
                 break;
             default:
                 this.logger.error("Order " + name + " does not exist!");
@@ -78,4 +63,4 @@ class Sweeper extends Extension {
     }
 }
 
-module.exports = Sweeper;
+module.exports = Rocket;

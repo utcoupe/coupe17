@@ -20,6 +20,7 @@ class BaseConstructor extends Extension {
     constructor(){
         super("base_constructor");
         this.servos = null;
+        this.ax12 = null;
         this.hasAPreparedModule = false;
         this.pushTowards = "dont";
         this.color = "null";
@@ -183,7 +184,7 @@ class BaseConstructor extends Extension {
      * @param {String} params.push_towards
      */
     prepareModule (params) {
-        if (params && params.push_towards)
+        /*if (params && params.push_towards)
             this.pushTowards = params.push_towards;
         // push_towards -> oposite direction
         var opositPush = "dont";
@@ -193,6 +194,9 @@ class BaseConstructor extends Extension {
             opositPush = "left";
         this.fifo.newOrder(() => {
             this.processFifoOrder("push", {towards: opositPush});
+        }, "push");*/
+        /*this.fifo.newOrder(() => {
+            this.processFifoOrder("push", {towards: "right"});
         }, "push");
         // open
         this.fifo.newOrder(() => {
@@ -206,6 +210,28 @@ class BaseConstructor extends Extension {
                 this.processFifoOrder("rotate", {color: this.color})
             });
         this.hasAPreparedModule = true;
+        */
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("push", {towards: "right"});
+        }, "push");
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("engage");
+        }, "engage");
+
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("drop");
+        }, "drop");
+        
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("engage");
+        }, "engage");
+        if (params && params.color)
+            this.color = params.color;
+        if (this.color != "null")
+            this.fifo.newOrder(() => {
+                this.processFifoOrder("rotate", {color: this.color})
+            });
+
     }
 
     /**
@@ -215,7 +241,7 @@ class BaseConstructor extends Extension {
      * @param {Number} params.nb_modules_to_drop number of iterations
      */
     dropModule (params) {
-        for (var idModule = 0; idModule < params.nb_modules_to_drop; idModule++) {
+        /*for (var idModule = 0; idModule < params.nb_modules_to_drop; idModule++) {
             this.nbModulesToDrop++;
             // Preparation
             if (!this.hasAPreparedModule)
@@ -228,7 +254,21 @@ class BaseConstructor extends Extension {
                 this.processFifoOrder("push", {towards: this.push_towards});
             }, "push");
             this.hasAPreparedModule = false;
-        }
+        }*/
+
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("drop");
+        }, "drop");
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("engage");
+        }, "engage");
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("push", {towards: "left"});
+        }, "push");
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("push", {towards: "right"});
+        }, "push");
+
     }
 }
 

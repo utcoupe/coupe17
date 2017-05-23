@@ -27,11 +27,11 @@ axParser::axParser():started(false), baudnum(1),deviceIndex(0), future(std::asyn
 
 
 	//cout << "\n\nSyncWrite example for Linux\n\n";
-    for(int i = 0; i<5; i++){
+    for(int i = 0; i<vals::nbDetection; i++){
 		deviceIndex = detection();
 		if (deviceIndex != -1 ) break;
 		cerr << "Failed to find USB2Dynamixel" << endl;
-		cerr << "Trying " << 5-i << " times"<<endl;
+		cerr << "Trying " << vals::nbDetection-i << " times"<<endl;
 	}
 
     if( dxl_initialize(deviceIndex, baudnum) == 0 )
@@ -114,6 +114,7 @@ int axParser::detection(){
 		//cout << "Recherche sur ACM" << j << endl;
 		if(dxl_initialize(j, baudnum) == 1){
 			dxl_ping(ID_DETECTION);
+			usleep(10000);
 			CommStatus = dxl_get_result();
 			if( CommStatus == COMM_RXSUCCESS )
 			{

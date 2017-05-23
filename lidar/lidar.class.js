@@ -72,8 +72,9 @@ module.exports = (function () {
 		this.updateStatus();
 	}
 
-	Lidar.prototype.convertXA = function(obj) {
+	Lidar.prototype.convertXYA = function(obj) {
 		obj.x = 300 - obj.x;
+		obj.y = obj.y - 3;		// because of the rotation
 		obj.w = 180 - obj.w;
 
 		return obj;
@@ -82,16 +83,16 @@ module.exports = (function () {
 	Lidar.prototype.setColor = function(){
 		this.hokuyoPositions = {
 			one: {
-	 			"x": -6.2, //-6.2
-	 			"y": 206.2,	//-6.2
+	 			"x": -4.7, //-6.2
+	 			"y": 204.7,	//206.2
 	 			"w": 0 ,	//0
 				"decalage" : [],
 				"init" : 0, //Nb de boucles de recalage
 				"rockets" : ["one", "two"]
 	 		},
 			two: {
-	 			"x": 306.2, //306.2
-	 			"y": 100,	//100
+	 			"x": 304.7, //306.2
+	 			"y": 98.5,	//100
 	 			"w": 180 ,	//180
 				"decalage" : [],
 				"init" : 0,
@@ -101,8 +102,8 @@ module.exports = (function () {
 
 		// If other color
 		if (this.color == "yellow"){
-			this.hokuyoPositions.one = this.convertXA(this.hokuyoPositions.one);
-			this.hokuyoPositions.two = this.convertXA(this.hokuyoPositions.two);
+			this.hokuyoPositions.one = this.convertXYA(this.hokuyoPositions.one);
+			this.hokuyoPositions.two = this.convertXYA(this.hokuyoPositions.two);
 		}
 
 

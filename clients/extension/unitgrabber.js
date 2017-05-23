@@ -8,7 +8,6 @@
 "use strict";
 
 const Extension = require('./extension');
-var servos = require('../actuators/servo');
 
 /**
  * Extension permettant de ramasser les modules lunaires
@@ -20,7 +19,8 @@ var servos = require('../actuators/servo');
 class UnitGrabber extends Extension {
     constructor(){
         super("unit_grabber");
-        // this.servos = servos;
+        this.servos = null;
+        this.ax12 = null;
     }
 
     takeOrder (from, name, param) {
@@ -38,15 +38,24 @@ class UnitGrabber extends Extension {
                 break;
 
             // **************** tests only ************
-            case "openArm":
-            case "closeArm":
-            case "upGrabber":
-                this.logger.info("Order added to fifo " + name);            
+            case "startArmRotate":
                 this.fifo.newOrder(() => {
                     this.processFifoOrder(name);
                 }, name);
                 break;
-            case "downGrabber":
+            case "stopArmRotate":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder(name);
+                }, name);
+                break;
+            case "openArm":
+            case "closeArm":
+            case "closeGrabber":            
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder(name);
+                }, name);
+                break;
+            case "openGrabber":
                 this.fifo.newOrder(() => {
                     this.processFifoOrder(name);
                 }, name);
@@ -81,6 +90,16 @@ class UnitGrabber extends Extension {
         }
 
         switch (name) {
+            case "startArmRotate":
+                this.servos.moduleArmStartRotate(() => {
+                    this.fifo.orderFinished();
+                });
+                break;
+            case "stopArmRotate":
+                this.servos.moduleArmStopRotate(() => {
+                    this.fifo.orderFinished();
+                });
+                break;
             case "openArm":
                 this.servos.moduleArmOpen(() => {
                     this.fifo.orderFinished();
@@ -91,13 +110,18 @@ class UnitGrabber extends Extension {
                     this.fifo.orderFinished();
                 });
                 break;
-            case "upGrabber":
+            case "initArm":
+                this.servos.moduleArmInit(() => {
+                    this.fifo.orderFinished();
+                });
+                break;
+            case "closeGrabber":
                 // TODO AX12 up
                 this.ax12.closeGrabber(() => {
                     this.fifo.orderFinished();
                 });
                 break;
-            case "downGrabber":
+            case "openGrabber":
                 // TODO AX12 down
                 this.ax12.openGrabber(() => {
                     this.fifo.orderFinished();
@@ -140,11 +164,20 @@ class UnitGrabber extends Extension {
 
     takeModule () {
         this.fifo.newOrder(() => {
+            this.processFifoOrder("startArmRotate");
+        }, "startArmRotate");
+        this.fifo.newOrder(() => {
             this.processFifoOrder("openArm");
         }, "openArm");
         this.fifo.newOrder(() => {
-            this.processFifoOrder("downGrabber");
+            this.processFifoOrder("openGrabber");
         }, "openGrabber");
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("initArm");
+        }, "initArm");
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("openArm");
+        }, "openArm");
         this.fifo.newOrder(() => {
             this.processFifoOrder("closeArm");
         }, "closeArm");
@@ -152,7 +185,10 @@ class UnitGrabber extends Extension {
             this.processFifoOrder("openArm");
         }, "openArm");
         this.fifo.newOrder(() => {
-            this.processFifoOrder("upGrabber");
+            this.processFifoOrder("stopArmRotate");
+        }, "stopArmRotate");
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("closeGrabber");
         }, "closeGrabber");
         this.fifo.newOrder(() => {
             this.processFifoOrder("closeArm");
@@ -163,12 +199,5 @@ class UnitGrabber extends Extension {
         }, "sendModule++");
     }
 }
-
-/* new way to work :
-    IA is sending an order from the action.json orders list
-    Extension has to store this in a FIFO, because IA sends the order and next ask the extension to ack
-    In the Extension, call the corresponding Actuator (with an order ID ?), add manage callbacks in order
-    to go to the next order
- */
 
 module.exports = UnitGrabber;

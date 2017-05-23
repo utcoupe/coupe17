@@ -11,14 +11,8 @@
 void servoAttach();
 void servoAction(uint8_t servo_id, SERVO_POSITION position, uint16_t order_id);
 void servoChangeParameter(const uint8_t servo_id, const SERVO_POSITION servo_position, const uint8_t servo_value);
-//color is the colo to reach
-void servoRotate(MODULE_COLOR color, uint16_t order_id);
 void servoTimerUpdate();
-void servoRotateCallback();
-//todo unique method with mapped structure ?
-void servoArmCallback();
-void servoDropRCallback();
-void servoDropLCallback();
-void servoArmRotateCallback();
+void servoRocketCallback();
+void servoLoaderCallback();
 
 #endif //ARDUINO_SERVO_MOTORS_H

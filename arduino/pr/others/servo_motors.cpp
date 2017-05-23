@@ -23,15 +23,17 @@ Servo pr_module_rotate;
 
 // Parameters are : INIT, OPEN, CLOSE, ACTION_TIME(ms)
 // INIT, OPEN and CLOSE are PWM values for position of the servo motor (0 - 180 max)
-uint8_t servoValues[4][4] = {
-        {90, 20, 165, 100},      //PR_MODULE_ARM
-        {10, 90, 5, 100},      //PR_MODULE_DROP_R
-        {180, 90, 180, 100},       //PR_MODULE_DROP_L
-        {90, 180, 255, 200}       //PR_MODULE_ROTATE
+uint16_t servoValues[5][4] = {
+        {90, 0, 165, 1000},      //PR_MODULE_ARM
+        {10, 90, 5, 500},      //PR_MODULE_DROP_R
+        {180, 90, 180, 500},       //PR_MODULE_DROP_L
+        {90, 180, 255, 200},       //PR_MODULE_ROTATE
+        {0, 1, 0, 500}
 };
 
 //todo adjust timer time
 Timer armTimer = Timer(servoValues[PR_MODULE_ARM][TIMER], &servoArmCallback);
+Timer armRotateTimer = Timer(servoValues[PR_MODULE_ARM_ROTATE][TIMER], &servoArmRotateCallback);
 Timer dropRTimer = Timer(servoValues[PR_MODULE_DROP_R][TIMER], &servoDropRCallback);
 Timer dropLTimer = Timer(servoValues[PR_MODULE_DROP_L][TIMER], &servoDropLCallback);
 Timer rotateTimer = Timer(servoValues[PR_MODULE_ROTATE][TIMER], &servoRotateCallback);
@@ -39,6 +41,7 @@ Timer rotateTimer = Timer(servoValues[PR_MODULE_ROTATE][TIMER], &servoRotateCall
 //todo dynamic structure with mapping servo_id - order_id ?
 // 0 is the default value, means no order
 uint16_t armLastId = 0;
+uint16_t armRotateLastId = 0;
 uint16_t dropRLastId = 0;
 uint16_t dropLLastId = 0;
 uint16_t servoRotateLastId = 0;
@@ -52,7 +55,7 @@ void servoAttach() {
     // Setup the motor on the arm
     pinMode(PR_MODULE_ARM_ROTATE_PIN, OUTPUT);
     // Apply default values
-    pr_module_arm.write(servoValues[PR_MODULE_ARM][INIT]);
+    pr_module_arm.write(servoValues[PR_MODULE_ARM][OPEN]); //put the open value to avoid conflict with the module grabber
     pr_module_drop_r.write(servoValues[PR_MODULE_DROP_R][INIT]);
     pr_module_drop_l.write(servoValues[PR_MODULE_DROP_L][INIT]);
     pr_module_rotate.write(servoValues[PR_MODULE_ROTATE][INIT]);
@@ -60,7 +63,7 @@ void servoAttach() {
 
 void servoAction(uint8_t servo_id, SERVO_POSITION position, uint16_t order_id) {
     //todo maximal servo id as define
-    if ((servo_id < 4) && (position < NB_POS)) {
+    if ((servo_id < 5) && (position < NB_POS)) {
         servoApplyCommand(servo_id, servoValues[servo_id][position], order_id);
     } else {
         SerialSender::SerialSend(SERIAL_INFO, "Servo %d doesn't exist or position %d is unknown...", servo_id, position);
@@ -75,8 +78,20 @@ void servoApplyCommand(uint8_t servo_id, uint8_t value, uint16_t order_id) {
                 armTimer.Start();
                 armLastId = order_id;
                 pr_module_arm.write(value);
-                // Activate the motor on the arm
-                digitalWrite(PR_MODULE_ARM_ROTATE_PIN, HIGH);
+                break;
+            case PR_MODULE_ARM_ROTATE: 
+                armRotateTimer.Start();
+                armRotateLastId = order_id;
+                switch(value){
+                    case 0 : //open
+                        digitalWrite(PR_MODULE_ARM_ROTATE_PIN, LOW);
+                        break;
+                    case 1: //close, init
+                        digitalWrite(PR_MODULE_ARM_ROTATE_PIN, HIGH);
+                        break;
+                    default:
+                        break;
+                }
                 break;
             case PR_MODULE_DROP_R:
                 dropRTimer.Start();
@@ -142,8 +157,15 @@ void servoArmCallback() {
         SerialSender::SerialSend(SERIAL_INFO, "%d;", armLastId);
         armLastId = 0;
         armTimer.Stop();
-        // Stop the motor on the arm
-        digitalWrite(PR_MODULE_ARM_ROTATE_PIN, LOW);
+    }
+}
+
+void servoArmRotateCallback() {
+    if (armRotateLastId != 0) {
+        // Send order id to ack that arduino has process the order
+        SerialSender::SerialSend(SERIAL_INFO, "%d;", armRotateLastId);
+        armRotateLastId = 0;
+        armRotateTimer.Stop();
     }
 }
 
@@ -170,6 +192,8 @@ void servoTimerUpdate() {
     dropRTimer.Update();
     dropLTimer.Update();
     rotateTimer.Update();
+    armRotateTimer.Update();
+
 }
 
 

@@ -17,7 +17,7 @@ ARCH=$(uname -m)
 ### Install the linux packages
 function install_apt() {
 	green_echo "Install missing packages..."
-	sudo apt-get install git build-essential python cmake libboost-dev libsdl1.2-dev
+	sudo apt-get install git build-essential python cmake libboost-dev libsdl1.2-dev gcc-avr avrdude avr-libc
 
 	# Check if it's a PC or a raspi
 	if [ "$ARCH" = "x86_64" ]; then
@@ -79,6 +79,8 @@ function env_setup() {
 	if [ ! -d "/var/log/utcoupe" ]; then
 		sudo mkdir /var/log/utcoupe
 	fi
+	# "Install" Arduino libs
+	sudo ln -s $UTCOUPE_WORKSPACE/libs/arduino-1.0 /opt/
 	# Change the ownership of the utcoupe log folder
 	sudo chown $USER:$USER /var/log/utcoupe
 	# Install the hokuyo automatic startup script (only for raspberry pi zero)

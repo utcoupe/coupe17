@@ -56,7 +56,8 @@
 			<p>
 				x : <input type="number" ng-model="tibot.x" /> mm;
 				y : <input type="number" ng-model="tibot.y" /> mm;
-				a : <input type="number" ng-model="tibot.a" /> deg
+				a : <input type="number" ng-model="tibot.a" /> deg;
+                sens : <input type="text" ng-model="tibot.sens" /> (avant, arriere)
 				<button type="button" class="btn" ng-click="tibot.goPos()">Go to position</button>
 				<button type="button" class="btn" ng-click="tibot.goAngle()">Go to angle</button>
 				<button type="button" class="btn" ng-click="tibot.goPosAngle()">Go to position and angle</button>
@@ -73,7 +74,7 @@
 			<p>
 				x : <input type="number" ng-model="tibot.set_x" /> mm;
 				y : <input type="number" ng-model="tibot.set_y" /> mm;
-				a : <input type="number" ng-model="tibot.set_a" /> deg
+				a : <input type="number" ng-model="tibot.set_a" /> deg;
 				<button type="button" class="btn" ng-click="tibot.setPos()">Set Pos</button>
 			</p>
 			<p>
@@ -98,6 +99,8 @@
 				<button type="button" class="btn" ng-click="tibot.closeGrabber()">Close Grabber</button>
 				<button type="button" class="btn" ng-click="tibot.openArms()">Open Arms</button>
 				<button type="button" class="btn" ng-click="tibot.closeArms()">Close Arms</button>
+				<button type="button" class="btn" ng-click="tibot.startRotate()">Start Rotate</button>
+				<button type="button" class="btn" ng-click="tibot.stopRotate()">Stop Rotate</button>
 				<button type="button" class="btn" ng-click="tibot.takeModule()">Take Module</button>
 				
 			</p>
@@ -135,8 +138,8 @@
 		<div>
 			<h3>Asserv</h3>
 			<p>
-				Gauche : <input type="number" ng-model="grobot.pwm_gauche" />
-				Droite : <input type="number" ng-model="grobot.pwm_droite" />
+				Gauche : <input type="number" ng-model="grobot.pwm_left" />
+				Droite : <input type="number" ng-model="grobot.pwm_right" />
 				<input type="number" ng-model="grobot.pwm_ms" /> ms
 				<button type="button" class="btn" ng-click="grobot.setPWM()">Set PWM</button>
 			</p>
@@ -144,7 +147,8 @@
 			<p>
 				x : <input type="number" ng-model="grobot.x" /> mm;
 				y : <input type="number" ng-model="grobot.y" /> mm;
-				a : <input type="number" ng-model="grobot.a" /> deg
+				a : <input type="number" ng-model="grobot.a" /> deg;
+                sens : <input type="text" ng-model="grobot.sens" /> (avant, arriere)
 				<button type="button" class="btn" ng-click="grobot.goPos()">Go to position</button>
 				<button type="button" class="btn" ng-click="grobot.goAngle()">Go to angle</button>
 				<button type="button" class="btn" ng-click="grobot.goPosAngle()">Go to position and angle</button>
@@ -184,6 +188,7 @@
 				Canon :
 				<button type="button" class="btn" ng-click="grobot.throwBalls()">Throw balls</button>
 				<button type="button" class="btn" ng-click="grobot.openTrunk()">Open trunk</button>
+                <button type="button" class="btn" ng-click="grobot.closeTrunk()">Close trunk</button>
 				<button type="button" class="btn" ng-click="grobot.turnOnCanon()">Turn on</button>
 				<button type="button" class="btn" ng-click="grobot.turnOffCanon()">Turn off</button>
 			</p>
@@ -192,6 +197,10 @@
 				<button type="button" class="btn" ng-click="grobot.turnOnSweeper()">Turn on</button>
 				<button type="button" class="btn" ng-click="grobot.turnOffSweeper()">Turn off</button>
 			</p>
+            <p>
+                Funny action :
+                <button type="button" class="btn" ng-click="grobot.funnyAction()">Launch rocket</button>
+            </p>
 		</div>
 	</section>
 </div>
