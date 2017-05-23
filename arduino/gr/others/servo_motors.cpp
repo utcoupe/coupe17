@@ -22,7 +22,7 @@ Servo gr_loader;
 // INIT, OPEN and CLOSE are PWM values for position of the servo motor (0 - 180 max)
 uint8_t servoValues[4][4] = {
         {0, 180, 0, 100},       //GR_SWEEPER
-        {0, 90, 0, 100},        //GR_CANON
+        {0, 70, 0, 100},        //GR_CANON
         {49, 70, 49, 100},       //GR_ROCKET
         {100, 180, 100, 100},    //GR_LOADER
 };
@@ -43,10 +43,10 @@ void servoAttach() {
     pinMode(GR_SWEEPER_PIN, OUTPUT);
     pinMode(GR_CANON_PIN, OUTPUT);
     // Apply default values
-    gr_sweeper.write(servoValues[GR_SWEEPER][INIT]);
-    gr_canon.write(servoValues[GR_CANON][INIT]);
     gr_rocket.write(servoValues[GR_ROCKET][INIT]);
     gr_loader.write(servoValues[GR_LOADER][INIT]);
+    analogWrite(GR_SWEEPER_PIN, 0);
+    analogWrite(GR_CANON_PIN, 0);
 }
 
 void servoAction(uint8_t servo_id, SERVO_POSITION position, uint16_t order_id) {

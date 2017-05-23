@@ -4,6 +4,10 @@ class GrobotDisplay extends RobotDisplay {
     constructor (name, client) {
         super(name, client);
 
+        this.PID_P = 0.5;
+        this.PID_I = 0;
+        this.PID_D = 0;
+
         // Specific to grobot
         // example : this.PID_P = 0.5
     }
