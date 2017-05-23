@@ -203,9 +203,9 @@ class Robot extends Client{
 						// });
 					    break;
                     case "climb_seesaw":
-                        this.asserv.pwm(125, 125, 500);
-                        //todo add timeout to wait the seesaw to seesaw
-                        this.actionFinished();
+                        this.climbSeesaw(() => {
+                            this.actionFinished();
+                        });
                         break;
 					default:
 						this.logger.warn("Unknown order for "+ this.robotName +" : " + order.name);
@@ -238,6 +238,8 @@ class Robot extends Client{
 	sendDataToIA(destination, params) {
         this.client.send('ia', destination, params);
     }
+
+    climbSeesaw(callback) {}
 }
 
 module.exports = Robot;
