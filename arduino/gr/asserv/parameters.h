@@ -43,8 +43,8 @@
 #define DT (1.0/HZ)
 #define AUTO_STATUS_HZ 10 // must be a divider a HZ or 0 to disable
 
-#define SPD_MAX 2000 //mm/s
-#define ACC_MAX 6000  //mm/s2
+#define SPD_MAX 1200 //mm/s
+#define ACC_MAX 1000  //mm/s2
 #define RATIO_ROT_SPD_MAX 0.3
 #define K_DISTANCE_REDUCTION 10 // réduction de la vitesse linéaire quand on tourne
 
@@ -63,10 +63,14 @@
 
 #define CONE_ALIGNEMENT 100 // NEVER
 
-#define PID_P 0.1 //1.5
+#define PID_P 0.0005 //1.5
 #define PID_I 0 //30
 #define PID_D 0 //5
 #define PID_BIAS 0
+
+// Control feed-forward, pwm = a*spd + b
+#define SPD_TO_PWM_A 0.2
+#define SPD_TO_PWM_B 0
 
 #define LEFT_P (PID_P)
 #define LEFT_I (PID_I)

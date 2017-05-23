@@ -102,7 +102,7 @@ class Factory {
     //open all serial devices and set a callback, waiting to receive data in order to set the devicePortMap
     detectArduino(callback) {
         this.logger.info("Detecting Arduinos...");
-        setTimeout(callback.bind(this), 10000);
+        setTimeout(callback.bind(this), 5000);
         SerialPort.list(function (err, ports) {
             // Open each listed serial port and add a callback to detect if it is an arduino
             for(var currentPort in ports) {
@@ -132,7 +132,7 @@ class Factory {
             // Kill the ax12 program, has to be started by the extension using the ax12 program
             ax12.kill();
             callback();
-        }, 3000);
+        }, 1000);
 
         var ax12 = Child_process.spawn(program);
 

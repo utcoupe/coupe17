@@ -41,7 +41,7 @@ class AsservSimu extends Asserv{
     }
 
     simuDist(pwm, dt, speed) {
-        return (speed*SIMU_FACTOR_VIT)*dt;
+        return (speed*this.SIMU_FACTOR_VIT)*dt;
     }
 
 	/**

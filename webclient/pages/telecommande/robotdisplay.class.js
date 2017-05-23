@@ -48,7 +48,6 @@ class RobotDisplay {
 	}
 
 	goPos () {
-        console.log(this.sens);
 		this.client.send(this.name, "asserv.goxy", {
 			x: parseInt(this.x),
 			y: parseInt(this.y),

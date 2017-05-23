@@ -50,6 +50,12 @@ class Grobot extends Robot{
         this.rocket.stop();
 	}
 
+	climbSeesaw(callback) {
+        // this.asserv.pwm(125, 125, 500);
+        //todo add timeout to wait the seesaw to seesaw
+        callback();
+    }
+
 	// Exiting :
 	//do something when app is closing
 	//process.on('exit', quit);
