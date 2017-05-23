@@ -28,6 +28,14 @@ class TibotDisplay extends RobotDisplay {
         this.client.send("unit_grabber", "closeArm");
 	}
 
+    startRotate () {
+        this.client.send("unit_grabber", "startArmRotate");
+    }
+
+    stopRotate () {
+        this.client.send("unit_grabber", "stopArmRotate");
+    }
+
     takeModule () {
         this.client.send("unit_grabber", "take_module");
     }

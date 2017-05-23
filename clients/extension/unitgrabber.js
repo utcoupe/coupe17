@@ -38,10 +38,19 @@ class UnitGrabber extends Extension {
                 break;
 
             // **************** tests only ************
+            case "startArmRotate":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder(name);
+                }, name);
+                break;
+            case "stopArmRotate":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder(name);
+                }, name);
+                break;
             case "openArm":
             case "closeArm":
-            case "closeGrabber":
-                this.logger.info("Order added to fifo " + name);            
+            case "closeGrabber":            
                 this.fifo.newOrder(() => {
                     this.processFifoOrder(name);
                 }, name);
@@ -81,6 +90,16 @@ class UnitGrabber extends Extension {
         }
 
         switch (name) {
+            case "startArmRotate":
+                this.servos.moduleArmStartRotate(() => {
+                    this.fifo.orderFinished();
+                });
+                break;
+            case "stopArmRotate":
+                this.servos.moduleArmStopRotate(() => {
+                    this.fifo.orderFinished();
+                });
+                break;
             case "openArm":
                 this.servos.moduleArmOpen(() => {
                     this.fifo.orderFinished();
@@ -145,6 +164,9 @@ class UnitGrabber extends Extension {
 
     takeModule () {
         this.fifo.newOrder(() => {
+            this.processFifoOrder("startArmRotate");
+        }, "startArmRotate");
+        this.fifo.newOrder(() => {
             this.processFifoOrder("openArm");
         }, "openArm");
         this.fifo.newOrder(() => {
@@ -154,11 +176,17 @@ class UnitGrabber extends Extension {
             this.processFifoOrder("initArm");
         }, "initArm");
         this.fifo.newOrder(() => {
+            this.processFifoOrder("openArm");
+        }, "openArm");
+        this.fifo.newOrder(() => {
             this.processFifoOrder("closeArm");
         }, "closeArm");
         this.fifo.newOrder(() => {
             this.processFifoOrder("openArm");
         }, "openArm");
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("stopArmRotate");
+        }, "stopArmRotate");
         this.fifo.newOrder(() => {
             this.processFifoOrder("closeGrabber");
         }, "closeGrabber");
