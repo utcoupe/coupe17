@@ -15,6 +15,7 @@ class RobotDisplay {
         this.a = 0;
         this.x = 0;
         this.y = 0;
+        this.sens = "avant";
         this.set_x = 0;
         this.set_y = 0;
         this.set_a = 0;
@@ -47,9 +48,11 @@ class RobotDisplay {
 	}
 
 	goPos () {
+        console.log(this.sens);
 		this.client.send(this.name, "asserv.goxy", {
 			x: parseInt(this.x),
-			y: parseInt(this.y)
+			y: parseInt(this.y),
+            sens : this.sens
 		});
 	}
 
