@@ -65,6 +65,9 @@ class BaseConstructor extends Extension {
                 this.fifo.newOrder(() => {
                     this.processFifoOrder(name);
                 }, name);
+                this.fifo.newOrder(() => {
+                    this.sendDataToIA("pr.module--", {});
+                }, "sendModule--");
                 break;
             case "engage":
                 this.fifo.newOrder(() => {
@@ -97,19 +100,14 @@ class BaseConstructor extends Extension {
 
         switch (name) {
             case "drop":
-                if (this.nbModulesToDrop > 0) {
-                    this.nbModulesToDrop--;
-                } else {
-                    this.logger.error("Aucun module à déposer !");
-                    this.fifo.orderFinished();
-                }
                 this.servos.moduleDrop( () => {
-                    this.logger.fatal("Entering in moduleDrop callback");
-                    this.fifo.orderFinished();
+                    
+			this.fifo.orderFinished();
                 });
-                this.fifo.newOrder(() => {
-                    this.sendDataToIA("pr.module--", {});
-                }, "sendModule--");
+                if (this.nbModulesToDrop > 0)
+                    this.nbModulesToDrop--;
+                else
+                    this.logger.error("Aucun module à déposer !");
                 break;
             case "engage":
                 this.servos.moduleEngage( () => {
@@ -214,28 +212,20 @@ class BaseConstructor extends Extension {
             });
         this.hasAPreparedModule = true;
         */
-
-        // Prepare to take module
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("push", {towards: "right"});
+        }, "push");
         this.fifo.newOrder(() => {
             this.processFifoOrder("engage");
         }, "engage");
 
-        // Move arm
-        this.fifo.newOrder(() => {
-            this.processFifoOrder("push", {towards: "right"});
-        }, "push");
-
-        // Engage module in front of light
         this.fifo.newOrder(() => {
             this.processFifoOrder("drop");
         }, "drop");
         
-        // Change to easier position to rotate
         this.fifo.newOrder(() => {
             this.processFifoOrder("engage");
         }, "engage");
-
-        // Find color
         if (params && params.color)
             this.color = params.color;
         if (this.color != "null")

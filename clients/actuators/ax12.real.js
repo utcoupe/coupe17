@@ -139,7 +139,7 @@ class Ax12Real extends Ax12 {
     }
 
     stop() {
-        this.logger.error("TODO: AX12 real stop()");
+        // this.logger.error("TODO: AX12 real stop()");
         if (this.stdStreamConnected) {
             this.ordersSerial.sendOrder(this.actuatorCommands.HALT, []);
         } else {

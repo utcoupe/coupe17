@@ -63,7 +63,7 @@ class OrdersManager {
         if (receivedCommand.indexOf(";") != -1) {
             // It's an order response
             var splittedCommand = receivedCommand.split(";");
-            console.log("splitted command : " + splittedCommand);
+            // console.log("splitted command : " + splittedCommand);
             this.callOrderCallback(parseInt(splittedCommand[0]), splittedCommand.slice(0, 2));
         } else {
             // It's a debug string
