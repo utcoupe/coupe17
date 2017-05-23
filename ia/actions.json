@@ -576,11 +576,16 @@
 			"startpoints": [{
 				"x": 350,
                 "y": 1650,
-                "a": 1.5707
+                "a": -1.5707
 			}],
-			"direction": "forward",
-			"priority": 90,
+			"direction": "backward",
+			"priority": 120,
 			"dependency": "",
+			"preparation_orders":[{
+				"dest": "sweeper",
+				"name": "turn_on",
+				"params": {}
+			}],
 			"orders":[{
 				"dest": "sweeper",
 				"name": "swallow_balls",
@@ -595,11 +600,16 @@
 			"startpoints": [{
 				"x": 650,
                 "y": 540,
-                "a": 2.3561
+                "a": 0
 			}],
-			"direction": "forward",
+			"direction": "backward",
 			"priority": 87,
 			"dependency": "",
+			"preparation_orders":[{
+				"dest": "sweeper",
+				"name": "turn_on",
+				"params": {}
+			}],
 			"orders":[{
 				"dest": "sweeper",
 				"name": "swallow_balls",
@@ -614,10 +624,10 @@
 			"startpoints": [{
 				"x": 300,
                 "y": 800,
-                "a": 1.570796
+                "a": -1.570796
 			}],
-			"direction": "whatever",
-			"priority": 87,
+			"direction": "forward",
+			"priority": 119,
 			"dependency": "",
 			"orders":[{
 				"dest": "canon",
@@ -635,11 +645,16 @@
 			"startpoints": [{
 				"x": 2650,
                 "y": 1650,
-                "a": 1.5707
+                "a": -1.5707
 			}],
-			"direction": "forward",
-			"priority": 90,
+			"direction": "backward",
+			"priority": 120,
 			"dependency": "",
+			"preparation_orders":[{
+				"dest": "sweeper",
+				"name": "turn_on",
+				"params": {}
+			}],
 			"orders":[{
 				"dest": "sweeper",
 				"name": "swallow_balls",
@@ -654,11 +669,16 @@
 			"startpoints": [{
 				"x": 2350,
                 "y": 540,
-                "a": 2.3561
+                "a": 0
 			}],
-			"direction": "forward",
+			"direction": "backward",
 			"priority": 87,
 			"dependency": "",
+			"preparation_orders":[{
+				"dest": "sweeper",
+				"name": "turn_on",
+				"params": {}
+			}],
 			"orders":[{
 				"dest": "sweeper",
 				"name": "swallow_balls",
@@ -673,10 +693,10 @@
 			"startpoints": [{
 				"x": 2700,
                 "y": 800,
-                "a": 1.570796
+                "a": -1.570796
 			}],
-			"direction": "whatever",
-			"priority": 87,
+			"direction": "forward",
+			"priority": 119,
 			"dependency": "",
 			"orders":[{
 				"dest": "canon",
@@ -696,8 +716,8 @@
                 "y": 200,
                 "a": 0
 			}],
-			"direction": "whatever",
-			"priority": 89,
+			"direction": "backward",
+			"priority": 200,
 			"dependency": "",
 			"orders":[{
 				"dest": "gr",
@@ -715,8 +735,8 @@
                 "y": 200,
                 "a": 3.1415
 			}],
-			"direction": "whatever",
-			"priority": 89,
+			"direction": "backward",
+			"priority": 200,
 			"dependency": "",
 			"orders":[{
 				"dest": "gr",
