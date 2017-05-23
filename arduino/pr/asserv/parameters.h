@@ -63,13 +63,13 @@
 
 #define CONE_ALIGNEMENT (M_PI/2.0) 
 
-#define PID_P 0.1 //0.25
-#define PID_I 130 //130
-#define PID_D 0 //13
+#define PID_P 0.004 //0.25
+#define PID_I 0.0001 //130
+#define PID_D 0.005 //13
 #define PID_BIAS 0
 
 // Control feed-forward, pwm = a*spd + b
-#define SPD_TO_PWM_A 0
+#define SPD_TO_PWM_A 0.15
 #define SPD_TO_PWM_B 0
 
 #define LEFT_P (PID_P)
