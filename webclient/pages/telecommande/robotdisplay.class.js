@@ -15,7 +15,7 @@ class RobotDisplay {
         this.a = 0;
         this.x = 0;
         this.y = 0;
-        this.sens = "avant";
+        this.sens = "forward";
         this.set_x = 0;
         this.set_y = 0;
         this.set_a = 0;
