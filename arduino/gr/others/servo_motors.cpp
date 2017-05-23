@@ -22,7 +22,7 @@ Servo gr_loader;
 // INIT, OPEN and CLOSE are PWM values for position of the servo motor (0 - 180 max)
 uint8_t servoValues[4][4] = {
         {0, 180, 0, 100},       //GR_SWEEPER
-        {0, 70, 0, 100},        //GR_CANON
+        {0, 65, 0, 100},        //GR_CANON
         {49, 70, 49, 100},       //GR_ROCKET
         {100, 180, 100, 100},    //GR_LOADER
 };
