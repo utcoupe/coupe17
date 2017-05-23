@@ -27,6 +27,8 @@ class Factory {
         this.openedSerialPort = [];
         //flag to know if the factory is ready, if not, can't build any object
         this.factoryReady = false;
+        //ax12 object, child processed which launch the C++ ax12 program
+        this.ax12 = null;
 
         // Last step, detects devices
         this.detectArduino(() => {
@@ -34,6 +36,11 @@ class Factory {
             this.closeAllPorts();
 
             this.detectAx12(() => {
+                // First kill the ax12 process
+                if (this.ax12.connected) {
+                    this.ax12.kill();
+                }
+                // Then tell that the factory is ready to be used
                 if (this.factoryReadyCallback !== undefined) {
                     this.factoryReady = true;
                     this.factoryReadyCallback();
@@ -124,18 +131,19 @@ class Factory {
         }.bind(this));
     }
 
-    //todo
     detectAx12(callback) {
         this.logger.info("Detecting AX12...");
 
         var detectionTimeout = setTimeout(() => {
             this.logger.info("AX12 detection timeout");
+            // Kill the ax12 program, has to be started by the extension using the ax12 program
+
             callback();
         }, 3000);
 
-        var ax12 = Child_process.spawn(program);
+        this.ax12 = Child_process.spawn(program);
 
-        ax12.on('error', function(err) {
+        this.ax12.on('error', function(err) {
             if(err.code === 'ENOENT'){
                 this.logger.fatal("ax12 program executable not found! Is it compiled ? :) Was looking in \""+Path.resolve(program)+"\"");
                 process.exit();
@@ -143,36 +151,37 @@ class Factory {
             this.logger.error("c++ subprocess terminated with error:", err);
             console.log(err);
         }.bind(this));
-        ax12.on('exit', function(code, signal) {
+        this.ax12.on('exit', function(code, signal) {
             // this.logger.fatal("c++ subprocess terminated with code : "+code + " or signal " + signal);
         }.bind(this));
 
-        ax12.on('error', (code) => {
+        this.ax12.on('error', (code) => {
             this.logger.fatal("c++ subprocess error with code:"+code);
         });
 
         process.on('exit', function(){ //ensure child process is killed
-            if(ax12.connected){ //and was still connected (dont kill another process)
-                ax12.kill();
+            if(this.ax12.connected){ //and was still connected (dont kill another process)
+                this.ax12.kill();
             }
         });
 
-        var stdout = Byline.createStream(ax12.stdout);
-        stdout.setEncoding('utf8')
+        var stdout = Byline.createStream(this.ax12.stdout);
+        stdout.setEncoding('utf8');
         stdout.on('data', function(data) {
             // this.logger.debug("ax12 just gave : "+data);
             // If not connected, wait the ID of the arduino before doing something else
 
             if (data.indexOf("ax12") == 0) {
                 this.devicesPortMap["ax12"] = "I don't know";
-                clearTimeout(detectionTimeout)
-                ax12.kill();
+                clearTimeout(detectionTimeout);
+                // ax12 killed if detected or not
+                // this.ax12.kill();
                 this.logger.info("AX12 detection end");
                 callback();
             }
         }.bind(this));
 
-        ax12.stderr.on('data', function(data) {
+        this.ax12.stderr.on('data', function(data) {
             // this.logger.error("stderr :"+data.toString());
         }.bind(this));
     }
