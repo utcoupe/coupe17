@@ -80,6 +80,9 @@ class Robot extends Client{
 						//this.acts.clean();
 						this.orderInProgress = false;
 					break;
+					case "do_start_sequence":
+						this.asserv.doStartSequence(params);
+					break;
 					case "stop":
 						//TODO DO it with new actuators
 						//this.acts.clean();

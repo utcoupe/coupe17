@@ -39,6 +39,9 @@ angular.module('app').controller('IndexCtrl', ['$rootScope', '$scope', 'UTCoupe'
 	$scope.stop = function(u) {
 		Client.send(u, 'stop');
 	};
+	$scope.place = function(u) {
+		Client.send("ia", u + '.place');
+	};
 
 	$scope.jack = function() {
 		Client.send('ia', 'ia.jack', {});

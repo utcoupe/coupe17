@@ -43,6 +43,26 @@ class Pr extends Robot{
 				y: 175,
 				a: 1.5707,
 			}
+			this.startPos = {
+				x: 900,
+				y: 175,
+				a: 0,
+			}
+		} else {
+			this.initialPos = {
+				x: 2100,
+				y: 175,
+				a: 1.5707,
+			}
+			this.startPos = {
+				x: 2100,
+				y: 175,
+				a: 3.1415,
+			}
+		}
+
+		/** Place position */
+		if (this.ia.color == "blue") {
 		} else {
 			this.initialPos = {
 				x: 2100,

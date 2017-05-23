@@ -208,6 +208,10 @@ class AsservSimu extends Asserv{
         this.fifo.orderFinished();
 	}
 
+	doStartSequence(params){
+        this.fifo.orderFinished();
+	}
+
     simu_speed(speed, x, y, a, dt) {
         return function() {
             this.pos = {

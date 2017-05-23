@@ -75,7 +75,9 @@ class AsservReal extends Asserv{
      /********************************************************************/
 
     setPos(pos) {
-        this.ordersSerial.sendOrder(this.asservCommands.SET_POS, [parseInt(pos.x), parseInt(pos.y), this.myWriteFloat(pos.a)], function() { this.fifo.orderFinished(); }.bind(this));
+        if (!!this.ordersSerial) {
+            this.ordersSerial.sendOrder(this.asservCommands.SET_POS, [parseInt(pos.x), parseInt(pos.y), this.myWriteFloat(pos.a)], function() { this.fifo.orderFinished(); }.bind(this));
+        }
     }
 
     clean(){
@@ -112,8 +114,8 @@ class AsservReal extends Asserv{
     goxy(x, y, sens) {
         //todo sens in english
         var sensInt;
-        if(sens == "avant") sensInt = 1;
-        else if(sens == "arriere") sensInt = -1;
+        if(sens == "forward") sensInt = 1;
+        else if(sens == "backward") sensInt = -1;
         else sensInt = 0;
         this.ordersSerial.sendOrder(this.asservCommands.GOTO, [parseInt(x), parseInt(y), parseInt(sensInt)], function() { this.fifo.orderFinished(); }.bind(this));
     }
@@ -124,6 +126,11 @@ class AsservReal extends Asserv{
 
     setPid(p, i, d){
         this.ordersSerial.sendOrder(this.asservCommands.PIDALL, [this.myWriteFloat(p), this.myWriteFloat(i), this.myWriteFloat(d)], function() { this.fifo.orderFinished(); }.bind(this));
+    }
+
+    doStartSequence(params){
+        this.goxy(params.x, params.y, "forward");
+        this.goa(params.a, () => {});
     }
 
     /********************************************************************\

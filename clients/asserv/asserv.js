@@ -134,6 +134,8 @@ class Asserv{
 	 */
 	setPid(p, i, d){}
 
+	doStartSequence(params) {}
+
 	addOrderToFifo(name, params){
         this.logger.debug("Adding order to fifo : " + name);
         // this.logger.debug(order.params);

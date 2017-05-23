@@ -65,6 +65,8 @@ class Robot{
 		/** Robot actions */
 		this.actions = null;
 		this.Actions = require('./actions.class.js');
+
+		this.startPos = this.initialPos;
 	}
 
 	/**
@@ -178,9 +180,9 @@ class Robot{
 	 * Place robot before starting the match
 	 */
 	place () {
-		this.ia.client.send(this.name, "asserv.setpos", this.initialPos);
+		this.sendInitialPos ()
 
-		this.ia.client.send(this.name, "do_start_sequence", {});
+		this.ia.client.send(this.name, "do_start_sequence", this.startPos);
 	}
 
 	/**
