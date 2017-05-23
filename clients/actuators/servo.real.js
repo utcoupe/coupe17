@@ -52,6 +52,27 @@ class ServoReal extends Servo {
                 if (receivedCommand.indexOf("0;") == 0) {
                     this.serialPortConnected = true;
                     this.ordersSerial = require("../shared/orders.serial")(this.serialPort);
+
+
+                    this.logger.debug("INIT movements")
+                    this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.PR_MODULE_ARM_ROTATE], () => {
+                        this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, [this.actuatorCommands.PR_MODULE_ARM_ROTATE], () => {});
+                    });
+                    this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, [this.actuatorCommands.PR_MODULE_ARM], () => {
+                        this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.PR_MODULE_ARM], () => {});
+                    });
+
+                    this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.PR_MODULE_DROP_R], () => {
+                        this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, [this.actuatorCommands.PR_MODULE_DROP_R], () => {});
+                    });
+                    this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.PR_MODULE_DROP_L], () => {
+                        this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, [this.actuatorCommands.PR_MODULE_DROP_L], () => {});
+                        
+                    });
+
+
+
+
                 }
             }
         }

@@ -19,6 +19,8 @@ class Fifo {
 	constructor() {
 		this.logger = require('log4js').getLogger('Fifo');
 		this.clean();
+
+		this.current_order_name = null;
 	}
 
 	/**
@@ -29,12 +31,15 @@ class Fifo {
 		this.fifo = [];
 		/** @type {boolean} */
 		this.order_in_progress = false;
+		this.current_order_name = null;
 	}
 
 	/**
 	 * Fonction à appeler lorsque un ordre est terminé. Cette fonction invoque directement l'ordre suivant (si il existe)
 	 */
 	orderFinished () {
+		this.logger.info(this.current_order_name + " done !");
+		this.current_order_name = null;
 		this.order_in_progress = false;
 		this.nextOrder();
 	}
@@ -62,7 +67,8 @@ class Fifo {
 			// logger.debug(this.fifo.length);
 			this.order_in_progress = true;
 			var object = this.fifo.shift();
-			// logger.debug("Calling : "+object.name);
+			this.current_order_name = object.name;
+			this.logger.info("Doing "+this.current_order_name);
 			object.callback();
 		}
 	}

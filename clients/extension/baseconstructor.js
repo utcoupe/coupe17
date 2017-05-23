@@ -101,14 +101,14 @@ class BaseConstructor extends Extension {
                     this.nbModulesToDrop--;
                 } else {
                     this.logger.error("Aucun module à déposer !");
-                    this.fifo.orderFinished();
+                    // this.fifo.orderFinished();
                 }
                 this.servos.moduleDrop( () => {
-                    this.logger.fatal("Entering in moduleDrop callback");
                     this.fifo.orderFinished();
                 });
                 this.fifo.newOrder(() => {
                     this.sendDataToIA("pr.module--", {});
+                    this.fifo.orderFinished();
                 }, "sendModule--");
                 break;
             case "engage":
@@ -241,7 +241,7 @@ class BaseConstructor extends Extension {
         if (this.color != "null")
             this.fifo.newOrder(() => {
                 this.processFifoOrder("rotate", {color: this.color})
-            });
+            }, "rotate");
 
     }
 

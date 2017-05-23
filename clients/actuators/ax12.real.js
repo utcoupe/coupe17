@@ -81,8 +81,9 @@ class Ax12Real extends Ax12 {
                 }
                 // this.ordersSerial.sendOrder(this.actuatorCommands.PARAMETER, [], callback);
                 this.logger.debug("INIT movements")
-                this.ordersSerial.sendOrder(this.actuatorCommands.AX12_ONE, [this.actuatorCommands.PR_MODULE_GRABBER], () => {});
+                this.ordersSerial.sendOrder(this.actuatorCommands.AX12_ONE, [this.actuatorCommands.PR_MODULE_GRABBER], () => {
                     this.ordersSerial.sendOrder(this.actuatorCommands.AX12_INIT, [this.actuatorCommands.PR_MODULE_GRABBER], () => {});
+                });
                 
                 this.ordersSerial.sendOrder(this.actuatorCommands.AX12_ONE, [this.actuatorCommands.PR_MODULE_DUMMY], () => {
                    this.ordersSerial.sendOrder(this.actuatorCommands.AX12_INIT, [this.actuatorCommands.PR_MODULE_DUMMY], () => {});
@@ -140,7 +141,7 @@ class Ax12Real extends Ax12 {
 
     stop() {
         // this.logger.error("TODO: AX12 real stop()");
-        if (this.stdStreamConnected) {
+        if (this.stdStreamConnected && !!this.ordersSerial) {
             this.ordersSerial.sendOrder(this.actuatorCommands.HALT, []);
         } else {
             this.logger.error("TODO: AX12 real stop()");
