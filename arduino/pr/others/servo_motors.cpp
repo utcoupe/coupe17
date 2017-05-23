@@ -25,8 +25,8 @@ Servo pr_module_rotate;
 // INIT, OPEN and CLOSE are PWM values for position of the servo motor (0 - 180 max)
 uint16_t servoValues[5][4] = {
         {90, 0, 165, 1000},      //PR_MODULE_ARM
-        {10, 90, 5, 100},      //PR_MODULE_DROP_R
-        {180, 90, 180, 100},       //PR_MODULE_DROP_L
+        {10, 90, 5, 500},      //PR_MODULE_DROP_R
+        {180, 90, 180, 500},       //PR_MODULE_DROP_L
         {90, 180, 255, 200},       //PR_MODULE_ROTATE
         {0, 1, 0, 500}
 };

@@ -221,6 +221,10 @@ class BaseConstructor extends Extension {
         this.fifo.newOrder(() => {
             this.processFifoOrder("drop");
         }, "drop");
+        
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("engage");
+        }, "engage");
         if (params && params.color)
             this.color = params.color;
         if (this.color != "null")
