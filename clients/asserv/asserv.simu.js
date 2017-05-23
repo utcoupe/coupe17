@@ -212,6 +212,11 @@ class AsservSimu extends Asserv{
         this.fifo.orderFinished();
 	}
 
+    setEmergencyStop (activate) {
+        this.logger.info("Received emergency in asserv : " + activate);
+        super.setEmergencyStop(activate);
+    }
+
     simu_speed(speed, x, y, a, dt) {
         return function() {
             this.pos = {
