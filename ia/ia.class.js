@@ -200,23 +200,25 @@ module.exports = (function () {
 	/**
 	 * Stop the robots and stop the programm
 	 */
+	Ia.prototype.timeout = function() {
+		logger.fatal('Stop IA');
+		this.gr.funnyAction();
+		this.pr.stop();
+		this.lidar.stop();
+		if (!!this.jack) {
+			this.jack.stop();
+		}
+		setTimeout(function(){
+			this.gr.stop();
+		}.bind(this), 1000);
+	};
+
+	/**
+	 * Stop the robots and stop the programm
+	 */
 	Ia.prototype.stop = function() {
 		logger.debug("TODO: stop but don't kill AI !");
-		if (this.timer.match_started) {
-			logger.fatal('Stop IA');
-			this.gr.funnyAction();
-			this.pr.stop();
-			this.lidar.stop();
-			if (!!this.jack) {
-				this.jack.stop();
-			}
-			setTimeout(function(){
-				this.gr.stop();
-			}.bind(this), 1000);
-			setTimeout(process.exit, 4000);
-		} else {
-			process.exit();
-		}
+		process.exit();
 	};
 
 	return Ia;
