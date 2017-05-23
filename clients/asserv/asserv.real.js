@@ -112,7 +112,6 @@ class AsservReal extends Asserv{
     }
 
     goxy(x, y, sens) {
-        //todo sens in english
         var sensInt;
         if(sens == "forward") sensInt = 1;
         else if(sens == "backward") sensInt = -1;
