@@ -452,7 +452,7 @@
         "a": 3.1415
       }],
       "direction": "backward",
-      "priority": 200,
+      "priority": 250,
       "dependency": "",
       "orders":[{
         "dest": "gr",
@@ -477,16 +477,17 @@
         "dest": "gr",
         "name": "asserv.goa",
         "params": {
-          "a": -2.783,
+          "a":-2.6,
           "direction": "backward"
         }},{
         "dest": "gr",
         "name": "asserv.goxy",
         "params": {
-          "x": 1100,
-          "y": 300,
+          "x": 1070,
+	  "y": 360,
           "direction": "backward"
         }}
+
       ],
       "kill": null
     },
