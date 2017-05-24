@@ -41,25 +41,25 @@ class Pr extends Robot{
 			this.initialPos = {
 				x: 910,
                 y: 7,
-                // a: -Math.PI/2,
-                a: 0,
+                a: -Math.PI/2
 			}
 			this.startPos = {
 				x: 910,
                 y: 200,
-                // a: -Math.PI / 4,
-                a: 0,
+                a: - 3 * Math.PI / 4,
+				direction: "backward"
 			}
 		} else {
 			this.initialPos = {
 				x: 2090,
 				y: 7,
-				a: -Math.PI/2,
+				a: -Math.PI/2
 			}
 			this.startPos = {
 				x: 2090,
 				y: 200,
-				a: 3 * -Math.PI / 4,
+				a: -Math.PI / 4,
+				direction: "backward"
 			}
 		}
 

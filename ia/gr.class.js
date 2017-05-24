@@ -46,23 +46,25 @@ class Gr extends Robot{
 			this.initialPos = {
 				x: 175,
 				y: 175,
-				a: 0,
+				a: 0
 			}
 			this.startPos = {
 				x: 275,
 				y: 175,
 				a: 0,
+				direction: "backward"
 			}
 		} else {
 			this.initialPos = {
 				x: 2825,
 				y: 175,
-				a: 3.1415,
+				a: 3.1415
 			}
 			this.startPos = {
 				x: 2725,
 				y: 175,
 				a: 3.1415,
+				direction: "backward"
 			}
 		}
 

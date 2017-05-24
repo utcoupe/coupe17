@@ -146,7 +146,7 @@ class AsservReal extends Asserv{
     }
 
     doStartSequence(params){
-        this.goxy(params.x, params.y, "forward");
+        this.goxy(params.x, params.y, params.direction);
         this.goa(params.a, () => {});
     }
 
