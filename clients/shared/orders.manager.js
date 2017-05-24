@@ -70,6 +70,7 @@ class OrdersManager {
             var splittedCommand = receivedCommand.split(";");
             // Do not remove, mandatory to debug asserv
             if (splittedCommand[0] == "~") {
+		this.logger.info(splittedCommand[2], splittedCommand[3], splittedCommand[4], splittedCommand[5], splittedCommand[6], splittedCommand[7], splittedCommand[8], splittedCommand[9], splittedCommand[10], splittedCommand[11])
                 if (this.sendToIa !== undefined) {
                     this.sendToIa(splittedCommand[2], splittedCommand[3], splittedCommand[4]);
                 }
