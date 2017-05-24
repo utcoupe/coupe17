@@ -41,7 +41,7 @@ module.exports = (function () {
 			setTimeout(function() {
 				this.ia.stop();
 			}.bind(this), 5000);
-		}.bind(this), 89000); 	// the match ends at 1'29 (89 seconds)
+		}.bind(this), 89500); 	// the match ends at 1'30 (90 seconds)
 	};
 
 

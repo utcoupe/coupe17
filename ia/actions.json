@@ -483,11 +483,10 @@
         "dest": "gr",
         "name": "asserv.goxy",
         "params": {
-          "x": 1070,
-	  "y": 360,
+          "x": 1110,
+	  "y": 400,
           "direction": "backward"
         }}
-
       ],
       "kill": null
     },

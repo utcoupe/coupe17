@@ -204,7 +204,9 @@ module.exports = (function () {
 	 */
 	Ia.prototype.timeout = function() {
 		logger.fatal('Stop IA');
-		this.gr.funnyAction();
+		setTimeout(() => {
+			this.gr.funnyAction();
+		}, 2500);
 		this.pr.stop();
 		this.lidar.stop();
 		if (!!this.jack) {
@@ -212,7 +214,7 @@ module.exports = (function () {
 		}
 		setTimeout(function(){
 			this.gr.stop();
-		}.bind(this), 1000);
+		}.bind(this), 4000);
 	};
 
 	/**
