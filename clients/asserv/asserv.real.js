@@ -139,7 +139,7 @@ class AsservReal extends Asserv{
         else if(direction == "backward") directionInt = -1;
         else directionInt = 0;
         var posToArduino = this.robot.posIaToArduino({
-
+	    x: parseInt(x),
             y: parseInt(y)
         });
         if (dontDoNextOrder)
