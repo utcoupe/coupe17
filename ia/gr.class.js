@@ -44,26 +44,26 @@ class Gr extends Robot{
 		/** Initial position */
 		if (this.ia.color == "blue") {
 			this.initialPos = {
-				x: 175,
+				x: 56,
 				y: 175,
-				a: 0
+				a: Math.PI
 			}
 			this.startPos = {
-				x: 275,
+				x: 100,
 				y: 175,
-				a: 0,
+				a: Math.PI,
 				direction: "backward"
 			}
 		} else {
 			this.initialPos = {
-				x: 2825,
+				x: 2944,
 				y: 175,
-				a: 3.1415
+				a: 0
 			}
 			this.startPos = {
-				x: 2725,
+				x: 2900,
 				y: 175,
-				a: 3.1415,
+				a: 0,
 				direction: "backward"
 			}
 		}

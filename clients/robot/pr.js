@@ -50,6 +50,22 @@ class Tibot extends Robot{
         this.baseConstructor.stop();
 	}
 
+	posArduinoToIa(x, y, a) {
+		let pos = {};
+        pos.x = x;
+        pos.y = -y;
+        pos.a = -a;
+        return pos;
+    }
+
+	posIaToArduino(pos) {
+		let res = {};
+        res.x = pos.x;
+        res.y = -pos.y;
+        res.a = -pos.a;
+        return res;
+    }
+
 	// Exiting :
 	//do something when app is closing
 	// process.on('exit', quit);

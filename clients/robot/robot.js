@@ -238,6 +238,10 @@ class Robot extends Client{
 		this.client.send('ia', this.who+'.pos', this.asserv.sendPos());
 	}
 
+	posArduinoToIa(x, y, a) {}
+
+	posIaToArduino(pos) {}
+
 	sendDataToIA(destination, params) {
         this.client.send('ia', destination, params);
     }

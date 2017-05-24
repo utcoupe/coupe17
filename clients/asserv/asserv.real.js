@@ -56,9 +56,8 @@ class AsservReal extends Asserv{
                 if (receivedCommand.indexOf("0;") == 0) {
                     this.serialPortConnected = true;
                     this.ordersSerial = require("../shared/orders.serial")(this.serialPort, function(x, y, a) {
-                        x = x;
-                        y = -y;
                         a /= 1000;
+                        let pos = this.robot.posArduinoToIa(x, y, a);
                         if(a >= 0){
                             while(a > Math.PI)
                                 a -= 2.0*Math.PI;
@@ -92,7 +91,12 @@ class AsservReal extends Asserv{
 
     setPos(pos) {
         if (!!this.ordersSerial) {
-            this.ordersSerial.sendOrder(this.asservCommands.SET_POS, [parseInt(pos.x), -parseInt(pos.y), -this.myWriteFloat(pos.a)], function() { this.fifo.orderFinished(); }.bind(this));
+            var posToArduino = this.robot.posIaToArduino({
+                x: parseInt(pos.x),
+                y: parseInt(pos.y),
+                a: this.myWriteFloat(pos.a)
+            });
+            this.ordersSerial.sendOrder(this.asservCommands.SET_POS, [posToArduino.x, posToArduino.y, posToArduino.a], function() { this.fifo.orderFinished(); }.bind(this));
         } else {
             this.fifo.orderFinished();
         }
@@ -134,11 +138,18 @@ class AsservReal extends Asserv{
         if(sens == "forward") sensInt = 1;
         else if(sens == "backward") sensInt = -1;
         else sensInt = 0;
-        this.ordersSerial.sendOrder(this.asservCommands.GOTO, [parseInt(x), -parseInt(y), parseInt(sensInt)], function() { this.fifo.orderFinished(); }.bind(this));
+        var posToArduino = this.robot.posIaToArduino({
+            x: parseInt(x),
+            y: parseInt(y)
+        });
+        this.ordersSerial.sendOrder(this.asservCommands.GOTO, [posToArduino.x, posToArduino.y, parseInt(sensInt)], function() { this.fifo.orderFinished(); }.bind(this));
     }
 
     goa(a, callback){
-        this.ordersSerial.sendOrder(this.asservCommands.ROT, [-this.myWriteFloat(a)], function() { this.fifo.orderFinished(); }.bind(this));
+        var posToArduino = this.robot.posIaToArduino({
+            a: this.myWriteFloat(a)
+        });
+        this.ordersSerial.sendOrder(this.asservCommands.ROT, [posToArduino.a], function() { this.fifo.orderFinished(); }.bind(this));
     }
 
     setPid(p, i, d){
