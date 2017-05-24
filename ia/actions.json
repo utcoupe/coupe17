@@ -579,7 +579,7 @@
                 "a": 1.5707
 			}],
 			"direction": "forward",
-			"priority": 87,
+			"priority": 90,
 			"dependency": "",
 			"orders":[{
 				"dest": "sweeper",
@@ -607,6 +607,27 @@
 				}],
 			"kill": null
 		},
+		"throw_balls_left":{
+			"type": "throw_balls",
+			"owner": "gr",
+			"objectname": "balls__throw_left",
+			"startpoints": [{
+				"x": 300,
+                "y": 800,
+                "a": 1.570796
+			}],
+			"direction": "whatever",
+			"priority": 87,
+			"dependency": "",
+			"orders":[{
+				"dest": "canon",
+				"name": "throw_balls",
+				"params": {
+					"dist": 100
+				}
+				}],
+			"kill": null
+		},
 		"catch_balls_front_right":{
 			"type": "catch_balls",
 			"owner": "gr",
@@ -617,7 +638,7 @@
                 "a": 1.5707
 			}],
 			"direction": "forward",
-			"priority": 87,
+			"priority": 90,
 			"dependency": "",
 			"orders":[{
 				"dest": "sweeper",
@@ -642,6 +663,27 @@
 				"dest": "sweeper",
 				"name": "swallow_balls",
 				"params": {}
+				}],
+			"kill": null
+		},
+		"throw_balls_right":{
+			"type": "throw_balls",
+			"owner": "gr",
+			"objectname": "balls__throw_right",
+			"startpoints": [{
+				"x": 2700,
+                "y": 800,
+                "a": 1.570796
+			}],
+			"direction": "whatever",
+			"priority": 87,
+			"dependency": "",
+			"orders":[{
+				"dest": "canon",
+				"name": "throw_balls",
+				"params": {
+					"dist": 100
+				}
 				}],
 			"kill": null
 		},
