@@ -156,6 +156,10 @@ class Asserv{
         this.fifo.orderFinished();
     }
 
+    pause () {}
+
+    resume () {}
+
 	addOrderToFifo(name, params){
         this.logger.debug("Adding order to fifo : " + name);
         // this.logger.debug(order.params);

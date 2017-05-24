@@ -70,6 +70,12 @@ class Robot extends Client{
 					case "do_start_sequence":
 						this.asserv.doStartSequence(params);
 					break;
+                    case "pause":
+                        this.logger.fatal("Pause has not been implemented yet");
+                        this.asserv.addOrderToFifo(OrderSubname,params);
+                    case "resume":
+                        this.logger.fatal("Resume has not been implemented yet");
+                        this.asserv.addOrderToFifo(OrderSubname,params);
 					case "stop":
 						//TODO DO it with new actuators
 						//this.acts.clean();

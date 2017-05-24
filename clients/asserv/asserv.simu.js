@@ -217,6 +217,14 @@ class AsservSimu extends Asserv{
         super.setEmergencyStop(activate);
     }
 
+    pause () {
+        this.logger.info("Received a pause order");
+    }
+
+    resume () {
+        this.logger.info("Received a resume order");
+    }
+
     simu_speed(speed, x, y, a, dt) {
         return function() {
             this.pos = {
