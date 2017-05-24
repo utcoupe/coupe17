@@ -53,8 +53,26 @@ class Grobot extends Robot{
 	climbSeesaw(callback) {
         // this.asserv.pwm(125, 125, 500);
         //todo add timeout to wait the seesaw to seesaw
+        //TODO : color management
+        //TODO : ia ?
+        this.name = "climbSeesaw";
+        this.asserv.addOrderToFifo(this.name, "asserv.goxy", {
+			x: parseInt(780),
+			y: parseInt(180),
+            sens : "forward"
+		});
+		this.asserv.addOrderToFifo(this.name, "asserv.goa", {
+			a: parseFloat(-25)*Math.PI/180
+		});
+		this.asserv.addOrderToFifo(this.name, "asserv.goxy", {
+			x: parseInt(800),
+			y: parseInt(180),
+            sens : "forward"
+		});
         callback();
     }
+    
+
 
 	// Exiting :
 	//do something when app is closing
