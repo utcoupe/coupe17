@@ -37,6 +37,7 @@ class Pr extends Robot{
 		};
 
 		/** Initial position */
+		logger.info("Fucking ia color : " + this.ia.color);
 		if (this.ia.color == "blue") {
 			this.initialPos = {
 				x: 900,
@@ -51,23 +52,13 @@ class Pr extends Robot{
 		} else {
 			this.initialPos = {
 				x: 2100,
-				y: 175,
+				y: 5,
 				a: 1.5707,
 			}
 			this.startPos = {
 				x: 2100,
-				y: 175,
-				a: 3.1415,
-			}
-		}
-
-		/** Place position */
-		if (this.ia.color == "blue") {
-		} else {
-			this.initialPos = {
-				x: 2100,
-				y: 175,
-				a: 1.5707,
+				y: 105,
+				a: 1.8325,
 			}
 		}
 
