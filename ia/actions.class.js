@@ -351,8 +351,13 @@ class Actions{
 					a: 0
 				}
 			}
+			var objectpoint = {
+				x: action.object.pos.x,
+				y: action.object.pos.y,
+				a:0
+			}
 			this.logger.debug("Asking path to " + actionName + ' at [' + startpoint.x + ", " + startpoint.y + ']');
-			this.ia.pathfinding.getPath(this.robot.pos, startpoint, this.robot, function(path) {
+			this.ia.pathfinding.getPath(this.robot.pos, startpoint, this.robot, objectpoint, function(path) {
 				if (this.robot.paused) {
 					this.logger.warn("Path returned but robot has been paused meanwhile, abort");
 					return;

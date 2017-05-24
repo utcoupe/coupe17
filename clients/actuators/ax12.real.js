@@ -114,7 +114,7 @@ class Ax12Real extends Ax12 {
 
     sendDummyLeft(callback) {
         if (this.stdStreamConnected) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.AX12_ONE, [this.actuatorCommands.PR_MODULE_DUMMY], callback);
+            this.ordersSerial.sendOrder(this.actuatorCommands.AX12_TWO, [this.actuatorCommands.PR_MODULE_DUMMY], callback);
         } else {
             this.logger.error("TODO: AX12 real sendDummyLeft()");
             // this.logger.error("Serial port not connected...");
@@ -123,7 +123,7 @@ class Ax12Real extends Ax12 {
 
     sendDummyRight(callback) {
         if (this.stdStreamConnected) {
-            this.ordersSerial.sendOrder(this.actuatorCommands.AX12_TWO, [this.actuatorCommands.PR_MODULE_DUMMY], callback);
+            this.ordersSerial.sendOrder(this.actuatorCommands.AX12_ONE, [this.actuatorCommands.PR_MODULE_DUMMY], callback);
         } else {
             this.logger.error("TODO: AX12 real sendDummyRight()");
             // this.logger.error("Serial port not connected...");
