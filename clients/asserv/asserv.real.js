@@ -77,6 +77,8 @@ class AsservReal extends Asserv{
     setPos(pos) {
         if (!!this.ordersSerial) {
             this.ordersSerial.sendOrder(this.asservCommands.SET_POS, [parseInt(pos.x), parseInt(pos.y), this.myWriteFloat(pos.a)], function() { this.fifo.orderFinished(); }.bind(this));
+        } else {
+            this.fifo.orderFinished();
         }
     }
 
