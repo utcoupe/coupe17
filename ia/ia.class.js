@@ -207,7 +207,9 @@ module.exports = (function () {
 			this.gr.funnyAction();
 			this.pr.stop();
 			this.lidar.stop();
-			this.jack.stop();
+			if (!!this.jack) {
+				this.jack.stop();
+			}
 			setTimeout(function(){
 				this.gr.stop();
 			}.bind(this), 1000);
