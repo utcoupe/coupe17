@@ -7,12 +7,17 @@
 const Log4js = require('log4js');
 
 class OrdersManager {
-    constructor (communicationLine) {
+    constructor (communicationLine, callbackSendToIa) {
         // This is an abstract class, throw an error if it is directly instantiated or if missing virtual functions
         if (this.constructor === OrdersManager) {
             throw new TypeError("Cannot construct Abstract instances directly");
         }
         this.logger = Log4js.getLogger("orders_manager");
+        if (callbackSendToIa !== undefined) {
+            this.sendToIa = callbackSendToIa;
+        } else {
+            this.logger.warn("No callbackSendToIa given..." + callbackSendToIa);
+        }
         this.currentId = 1;
         this.ordersCallback = [];
         this.comLine = communicationLine;
@@ -64,8 +69,13 @@ class OrdersManager {
             // It's an order response
             var splittedCommand = receivedCommand.split(";");
             // Do not remove, mandatory to debug asserv
-            this.logger.debug("splitted command : " + splittedCommand);
-            this.callOrderCallback(parseInt(splittedCommand[0]), splittedCommand.slice(0, 2));
+            if (splittedCommand[0] == "~") {
+                if (this.sendToIa !== undefined) {
+                    this.sendToIa(splittedCommand[2], splittedCommand[3], splittedCommand[4]);
+                }
+            } else {
+                this.callOrderCallback(parseInt(splittedCommand[0]), splittedCommand.slice(0, 2));
+            }
         } else {
             // It's a debug string
             this.logger.debug(receivedCommand.toString());

@@ -7,6 +7,9 @@
 
 "use strict";
 
+// the asserv orientation is direct, but the node one is indirect (like the map of the coupe)
+// so the inversion is done in this file, for each data send and received
+
 const Asserv = require('./asserv');
 const defineParser = require('../shared/defineparser');
 const SerialPort = require('serialport');
@@ -52,7 +55,20 @@ class AsservReal extends Asserv{
                 // Trigger on reception of ack from arduino that it has started
                 if (receivedCommand.indexOf("0;") == 0) {
                     this.serialPortConnected = true;
-                    this.ordersSerial = require("../shared/orders.serial")(this.serialPort);
+                    this.ordersSerial = require("../shared/orders.serial")(this.serialPort, function(x, y, a) {
+                        x = x;
+                        y = -y;
+                        a /= 1000;
+                        if(a >= 0){
+                            while(a > Math.PI)
+                                a -= 2.0*Math.PI;
+                        } else {
+                            while(a <= -Math.PI)
+                                a += 2.0*Math.PI;
+                        }
+                        this.logger.debug("New pos : x=" + x + ", y=" + y + ", a=" + a);
+                        this.robot.client.send("ia", this.robotName + ".pos", {x: x, y: y, a: a});
+                    }.bind(this));
                 }
             }
         }
@@ -76,7 +92,7 @@ class AsservReal extends Asserv{
 
     setPos(pos) {
         if (!!this.ordersSerial) {
-            this.ordersSerial.sendOrder(this.asservCommands.SET_POS, [parseInt(pos.x), parseInt(pos.y), this.myWriteFloat(pos.a)], function() { this.fifo.orderFinished(); }.bind(this));
+            this.ordersSerial.sendOrder(this.asservCommands.SET_POS, [parseInt(pos.x), -parseInt(pos.y), -this.myWriteFloat(pos.a)], function() { this.fifo.orderFinished(); }.bind(this));
         } else {
             this.fifo.orderFinished();
         }
@@ -118,11 +134,11 @@ class AsservReal extends Asserv{
         if(sens == "forward") sensInt = 1;
         else if(sens == "backward") sensInt = -1;
         else sensInt = 0;
-        this.ordersSerial.sendOrder(this.asservCommands.GOTO, [parseInt(x), parseInt(y), parseInt(sensInt)], function() { this.fifo.orderFinished(); }.bind(this));
+        this.ordersSerial.sendOrder(this.asservCommands.GOTO, [parseInt(x), -parseInt(y), parseInt(sensInt)], function() { this.fifo.orderFinished(); }.bind(this));
     }
 
     goa(a, callback){
-        this.ordersSerial.sendOrder(this.asservCommands.ROT, [this.myWriteFloat(a)], function() { this.fifo.orderFinished(); }.bind(this));
+        this.ordersSerial.sendOrder(this.asservCommands.ROT, [-this.myWriteFloat(a)], function() { this.fifo.orderFinished(); }.bind(this));
     }
 
     setPid(p, i, d){

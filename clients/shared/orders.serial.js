@@ -7,8 +7,8 @@
 const OrdersManager = require('./orders.manager');
 
 class OrdersSerial extends OrdersManager {
-    constructor(communicationLine) {
-        super(communicationLine);
+    constructor(communicationLine, callbackToIa) {
+        super(communicationLine, callbackToIa);
 
         // We replace the callback set by the Servo class
         this.comLine.on("data", function(data){
@@ -22,6 +22,6 @@ class OrdersSerial extends OrdersManager {
 }
 
 // Exports an object to be sure to have a single instance in the system
-module.exports = function(communicationLine) {
-    return new OrdersSerial(communicationLine);
+module.exports = function(communicationLine, callbackToIa) {
+    return new OrdersSerial(communicationLine, callbackToIa);
 };
