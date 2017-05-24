@@ -151,7 +151,7 @@
 			},
 			"preparation_orders":[{
 				"dest": "unit_grabber",
-				"name": "open_arm",
+				"name": "openArm",
 				"params": {}
 			}],
 			"orders":[{
@@ -556,17 +556,22 @@
 			"owner": "gr",
 			"objectname": "seesaw__left",
 			"startpoints": [{
-				"x": 1300,
-                "y": 400,
-                "a": 0
+				"x": 1400,
+                "y": 300,
+                "a": 3.1415
 			}],
 			"direction": "backward",
 			"priority": 200,
 			"dependency": "",
 			"orders":[{
 				"dest": "gr",
-				"name": "climb_seesaw",
-				"params": {}
+				"name": "asserv.goxy",
+				"params": {
+						"x": 1700,
+		                "y": 400,
+		                "a": 3.1415,
+						"direction": "backward"
+					}
 				}],
 			"kill": null
 		},
@@ -594,8 +599,8 @@
 			"owner": "gr",
 			"objectname": "seesaw__right",
 			"startpoints": [{
-				"x": 1700,
-                "y": 400,
+				"x": 1400,
+                "y": 300,
                 "a": 0
 			}],
 			"direction": "backward",
@@ -603,8 +608,13 @@
 			"dependency": "",
 			"orders":[{
 				"dest": "gr",
-				"name": "climb_seesaw",
-				"params": {}
+				"name": "asserv.goxy",
+				"params": {
+						"x": 1700,
+		                "y": 400,
+		                "a": 0,
+						"direction": "backward"
+					}
 				}],
 			"kill": null
 		}
