@@ -37,28 +37,29 @@ class Pr extends Robot{
 		};
 
 		/** Initial position */
-		logger.info("Fucking ia color : " + this.ia.color);
 		if (this.ia.color == "blue") {
 			this.initialPos = {
-				x: 900,
-				y: 175,
-				a: 1.5707,
+				x: 910,
+                y: 7,
+                // a: -Math.PI/2,
+                a: 0,
 			}
 			this.startPos = {
-				x: 900,
-				y: 175,
-				a: 0,
+				x: 910,
+                y: 200,
+                // a: -Math.PI / 4,
+                a: 0,
 			}
 		} else {
 			this.initialPos = {
-				x: 2100,
-				y: 5,
-				a: 1.5707,
+				x: 2090,
+				y: 7,
+				a: -Math.PI/2,
 			}
 			this.startPos = {
-				x: 2100,
-				y: 105,
-				a: 1.8325,
+				x: 2090,
+				y: 200,
+				a: 3 * -Math.PI / 4,
 			}
 		}
 

@@ -41,8 +41,8 @@ class RobotDisplay {
     // Asserv
     setPWM () {
 		this.client.send(this.name, "asserv.pwm", {
-			left: this.pwm_right,
-			right: this.pwm_left,
+			left: this.pwm_left,
+			right: this.pwm_right,
 			ms: this.pwm_ms
 		});
 	}

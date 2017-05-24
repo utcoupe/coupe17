@@ -244,6 +244,8 @@ class Robot{
 			return x > max ? max : x < min ? min : x;
 		}
 
+		// logger.debug("New pos : x=" + params.x + ", y=" + params.y + ", a=" + params.a);
+
 		params.x = borne(params.x, 0, 3000);
 		params.y = borne(params.y, 0, 2000);
 		this.pos = params;
