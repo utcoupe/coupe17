@@ -158,11 +158,12 @@ module.exports = (function () {
 	 * @param end
 	 * @param callback
 	 */
-	Pathfinding.prototype.getPath = function (start, end, robot, callback) {
+	Pathfinding.prototype.getPath = function (start, end, robot, object, callback) {
 		var queryParams = {
 			start: start,
 			end: end,
 			robot: robot,
+			object : object,
 			callback: callback
 		};
 
@@ -189,7 +190,7 @@ module.exports = (function () {
 	Pathfinding.prototype.prepareAndDoQuery = function(params) {
 		this.busy = true;
 
-		this.ia.pathfinding.updateMap(params.robot, params.end);
+		this.ia.pathfinding.updateMap(params.robot, params.object);
 
 		// Leave 1000 ms to the C program to answer, then abort
 		this.timeout_getpath = setTimeout(function() {
@@ -268,8 +269,8 @@ module.exports = (function () {
 			}
 		}
 		objects = objects.concat(modulesArray);
-
-		// logger.debug(objects);
+		logger.debug("Exception :" + [except.x, except.y]);
+		logger.debug(objects);
 
 		this.sendDynamic( objects.map(function(val){
 			// logger.debug(val);
