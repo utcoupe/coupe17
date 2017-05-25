@@ -48,15 +48,18 @@ class Sweeper extends Extension {
                 break;
             case "swallow_balls":
                 // PWM is used to go through the table element because the asserv is currently not enough good
-                this.client.send("gr", "asserv.pwm", {left : -120, right : -120, ms : 2000});
-                setTimeout(() => {
-			this.client.send("gr", "asserv.pwm", {left : 150, right : 150, ms : 2000});
-		}, 500);
+                this.client.send("gr", "asserv.pwm", {left : -75, right : -100, ms : 2000});
+		this.client.send("gr", "asserv.pwm", {left : 75, right : 100, ms : 2000});
+                this.client.send("gr", "asserv.pwm", {left : -100, right : -75, ms : 2000});
+                this.client.send("gr", "asserv.pwm", {left : 100, right : 75, ms : 2000});
+
                 // Wait the action to be done
                 setTimeout(() => {
-                    this.servos.turnOffSweeper( function() {});
                     this.fifo.orderFinished();
-                },15000);
+		}, 9000);
+                setTimeout(() => {
+                    this.servos.turnOffSweeper( function() {});
+                }, 20000);
                 break;
             case "send_message":
                 this.sendDataToIA(param.name, param || {});

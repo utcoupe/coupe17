@@ -549,9 +549,9 @@
       "owner": "gr",
       "objectname": "balls__front_left",
       "startpoints": [{
-        "x": 400,
-                "y": 1300,
-                "a": -1.1781
+        "x": 600,
+                "y": 1400,
+                "a": -0.7853
       }],
       "direction": "backward",
       "priority": 120,
@@ -573,9 +573,9 @@
       "owner": "gr",
       "objectname": "balls__front_right",
       "startpoints": [{
-        "x": 2600,
-                "y": 1300,
-                "a": -1.96
+        "x": 2400,
+                "y": 1400,
+                "a": -2.356
       }],
       "direction": "backward",
       "priority": 120,
@@ -597,7 +597,7 @@
       "owner": "gr",
       "objectname": "balls__throw_left",
       "startpoints": [{
-        "x": 355,
+        "x": 300,
                 "y": 800,
                 "a": -1.570796
       }],
@@ -618,7 +618,7 @@
       "owner": "gr",
       "objectname": "balls__throw_right",
       "startpoints": [{
-        "x": 2750,
+        "x": 2700,
                 "y": 800,
                 "a": -1.570796
       }],
