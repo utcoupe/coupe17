@@ -4,5 +4,9 @@ cd build
 #rm -f CMakeCache.txt
 #rm -rf CMakeFiles
 cmake  ../ -DCMAKE_BUILD_TYPE=Release
-make -j4
+if [ "$ARCH" = "x86_64" ]; then
+	make -j4
+else
+	make
+fi
 
