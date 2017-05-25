@@ -52,6 +52,7 @@ class Sweeper extends Extension {
                 this.client.send("gr", "asserv.pwm", {left : 100, right : 100, ms : 1000});
                 // Wait the action to be done
                 setTimeout(() => {
+                    this.servos.turnOffSweeper( function() {});
                     this.fifo.orderFinished();
                 }, 2500);
                 break;
