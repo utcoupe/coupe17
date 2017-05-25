@@ -407,7 +407,7 @@
 			"objectname": "balls__small_left",
 			"startpoints": [{
 				"x": 1070,
-                "y": 540,
+                "y": 600,
                 "a": 0
 			}],
 			"direction": "whatever",
@@ -452,7 +452,7 @@
 			"objectname": "balls__small_right",
 			"startpoints": [{
 				"x": 1930,
-                "y": 540,
+                "y": 600,
                 "a": 3.1415
 			}],
 			"direction": "whatever",
@@ -515,8 +515,8 @@
 			"owner": "gr",
 			"objectname": "seesaw__left",
 			"startpoints": [{
-				"x": 1150,
-                "y": 360,
+				"x": 1300,
+                "y": 400,
                 "a": 3.1415
 			}],
 			"direction": "backward",
@@ -553,8 +553,8 @@
 			"owner": "gr",
 			"objectname": "seesaw__right",
 			"startpoints": [{
-				"x": 1850,
-                "y": 360,
+				"x": 1700,
+                "y": 400,
                 "a": 0
 			}],
 			"direction": "backward",
