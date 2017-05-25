@@ -203,6 +203,7 @@ module.exports = (function () {
 	Ia.prototype.stop = function() {
 		logger.debug("TODO: stop but don't kill AI !");
 		if (this.timer.match_started) {
+			this.timer.match_started = false;
 			logger.fatal('Stop IA');
 			this.gr.funnyAction();
 			this.pr.stop();
