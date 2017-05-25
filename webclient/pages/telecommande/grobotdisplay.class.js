@@ -47,4 +47,8 @@ class GrobotDisplay extends RobotDisplay {
     seesaw() {
         this.client.send(this.name, "climb_seesaw");
     }
+
+    swallowBalls() {
+        this.client.send("sweeper", "swallow_balls");
+    }
 }
