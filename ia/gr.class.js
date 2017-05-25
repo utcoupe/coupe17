@@ -44,7 +44,7 @@ class Gr extends Robot{
 				a: Math.PI
 			}
 			this.startPos = {
-				x: 100,
+				x: 60,
 				y: 180,
 				a: Math.PI,
 				direction: "backward"

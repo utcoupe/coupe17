@@ -152,10 +152,7 @@
 			"preparation_orders":[{
 				"dest": "unit_grabber",
 				"name": "open_arm",
-				"params": {
-					"color": "TO_BE_FILLED_BY_IA",
-					"push_toward": "right"
-				}
+				"params": {}
 			}],
 			"orders":[{
 				"dest": "unit_grabber",

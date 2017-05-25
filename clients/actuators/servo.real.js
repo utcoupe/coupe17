@@ -59,8 +59,8 @@ class ServoReal extends Servo {
                         this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.PR_MODULE_ARM_ROTATE], () => {
                             this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, [this.actuatorCommands.PR_MODULE_ARM_ROTATE], () => {});
                         });
-                        this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, [this.actuatorCommands.PR_MODULE_ARM], () => {
-                            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.PR_MODULE_ARM], () => {});
+                        this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.PR_MODULE_ARM], () => {
+                            this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_CLOSE, [this.actuatorCommands.PR_MODULE_ARM], () => {});
                         });
 
                         this.ordersSerial.sendOrder(this.actuatorCommands.SERVO_OPEN, [this.actuatorCommands.PR_MODULE_DROP_R], () => {
