@@ -48,6 +48,11 @@ class Canon extends Extension {
                     this.processFifoOrder (name, params);
                 });
                 break;
+            case "send_message":
+                this.fifo.newOrder(() => {
+                    this.processFifoOrder(name, params);
+                }, name);
+                break;
             default:
                 this.logger.error ("Order " + name + "does not exist!");
         }
