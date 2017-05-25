@@ -171,6 +171,14 @@ class AsservReal extends Asserv{
         super.setEmergencyStop(activate);
     }
 
+    pause () {
+        this.ordersSerial.sendOrder(this.asservCommands.PAUSE, [], function() { this.fifo.orderFinished(); }.bind(this));
+    }
+
+    resume () {
+        this.ordersSerial.sendOrder(this.asservCommands.RESUME, [], function() { this.fifo.orderFinished(); }.bind(this));
+    }
+
     /********************************************************************\
      *
      *  HELPERS FUNCTIONS
