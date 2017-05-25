@@ -11,7 +11,7 @@ const log4js = require('log4js');
 const logger = log4js.getLogger('ia.lidar');
 const EventEmitter = require('events');
 
-const SILENCE_TIMEOUT = 500;					// ms
+const SILENCE_TIMEOUT = 1000;					// ms
 const ROCKET_SECURITY_DIAM = 150;				// mm
 
 /**
