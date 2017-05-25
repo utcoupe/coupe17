@@ -293,7 +293,7 @@ class Controller {
         var blacklist = ["pr", "gr", "plateau"];
         this.objects3d.forEach((object3d) => {
             if (blacklist.indexOf(object3d.type) == -1) {
-                if (object3d.position.get2dDistance(pos) <= radius) {
+                if (object3d.position.get2dDistance(pos) <= radius && object3d.mesh) {
                     //console.log("Make invisible : " + object3d.name);
                     object3d.mesh.traverse( ( object ) => { object.visible = false; } );
                 }
