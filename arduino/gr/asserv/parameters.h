@@ -53,9 +53,9 @@
 
 #define ENC_RESOLUTION 1024 //resolution du codeur
 
-#define ENC_LEFT_RADIUS 31.38 //20.02 //REGLE PAR TEST - rayon de la roue codeuse
-#define ENC_RIGHT_RADIUS 31.38 //20.02 //REGLE PAR TEST - rayon de la roue codeuse
-#define ENTRAXE_ENC 307.0 //200.0 //REGLE PAR TES - Distance entre chaque roue codeuse en mm
+#define ENC_LEFT_RADIUS 31.91 //20.02 //REGLE PAR TEST - rayon de la roue codeuse
+#define ENC_RIGHT_RADIUS 31.91 //20.02 //REGLE PAR TEST - rayon de la roue codeuse
+#define ENTRAXE_ENC 303.7 //200.0 //REGLE PAR TES - Distance entre chaque roue codeuse en mm
 
 #define ERROR_ANGLE 0.015 //erreur en angle(radians) maximale pour considérer l'objectif comme atteint
 #define ERROR_POS 5 // erreur en position (mm)  maximale pour considérer l'objectif comme atteint
@@ -63,9 +63,9 @@
 
 #define CONE_ALIGNEMENT 100 // NEVER
 
-#define PID_P 0.0005 //1.5
-#define PID_I 0 //30
-#define PID_D 0 //5
+#define PID_P 0.001 //1.5
+#define PID_I 0.001 //30
+#define PID_D 0.001 //5
 #define PID_BIAS 0
 
 // Control feed-forward, pwm = a*spd + b
