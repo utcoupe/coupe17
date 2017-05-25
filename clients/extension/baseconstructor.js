@@ -266,24 +266,27 @@ class BaseConstructor extends Extension {
             }, "push");
             this.hasAPreparedModule = false;
         }*/
-        this.client.send("gr", "asserv.pwm", {left : 50, right : 50, ms : 1000});
+        this.client.send("pr", "asserv.pwm", {left : 50, right : 50, ms : 300});
                 // Wait the action to be done
                 setTimeout(() => {
                     this.fifo.orderFinished();
                 },1100);
 
-        this.fifo.newOrder(() => {
-            this.processFifoOrder("drop");
-        }, "drop");
-        this.fifo.newOrder(() => {
-            this.processFifoOrder("engage");
-        }, "engage");
-        this.fifo.newOrder(() => {
-            this.processFifoOrder("push", {towards: "left"});
-        }, "push");
-        this.fifo.newOrder(() => {
-            this.processFifoOrder("push", {towards: "right"});
-        }, "push");
+	setTimeout( () => {
+	        this.fifo.newOrder(() => {
+	            this.processFifoOrder("drop");
+	        }, "drop");
+	        this.fifo.newOrder(() => {
+	            this.processFifoOrder("engage");
+	        }, "engage");
+        	this.fifo.newOrder(() => {
+	            this.processFifoOrder("push", {towards: "left"});
+        	}, "push");
+	        this.fifo.newOrder(() => {
+        	    this.processFifoOrder("push", {towards: "right"});
+	        }, "push");
+
+	}, 300);
 
     }
 }
