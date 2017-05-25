@@ -135,8 +135,7 @@ class Asserv{
 	setPid(p, i, d){}
 
 	doStartSequence(params) {}
-
-<<<<<<< HEAD
+    
 	/**
 	 * Stops the robot + clean fifo
 	 * 
@@ -151,12 +150,11 @@ class Asserv{
 			this.logger.warn("Emergency stop disactivated!");
 		this.fifo.orderFinished();
 	}
-=======
+
     callCallback(callback) {
         callback();
         this.fifo.orderFinished();
     }
->>>>>>> 962823bea765a00429522a928933f5e0c7fa0120
 
 	addOrderToFifo(name, params){
         this.logger.debug("Adding order to fifo : " + name);
