@@ -126,7 +126,7 @@ class Object3d
         this.rotation = rotation;
         if ( this.mesh )
         {
-            this.mesh.rotation.set(rotation.x, rotation.y, rotation.z);
+            this.mesh.rotation.set(rotation.x, -rotation.y, rotation.z);
         }
     }
 
