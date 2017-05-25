@@ -190,7 +190,9 @@ module.exports = (function () {
 		if(!this.timer.match_started) {
 			this.timer.start();
 			this.pr.start();
-			this.gr.start();
+			setTimeout(function(){
+				this.gr.start();
+			}.bind(this), 10000);
 			// this.lidar.start();
 		} else {
 			logger.warn("Match déjà lancé");
