@@ -39,24 +39,24 @@ class Pr extends Robot{
 		/** Initial position */
 		if (this.ia.color == "blue") {
 			this.initialPos = {
-				x: 913,
+				x: 987,
                 y: 157,
                 a: - Math.PI / 2
 			}
 			this.startPos = {
-				x: 913,
+				x: 987,
                 y: 180,
                 a: - Math.PI / 2,
 				direction: "backward"
 			}
 		} else {
 			this.initialPos = {
-				x: 2087,
+				x: 2013,
 				y: 157,
 				a: - Math.PI / 2
 			}
 			this.startPos = {
-				x: 2087,
+				x: 2013,
 				y: 180,
 				a: - Math.PI / 2,
 				direction: "backward"
