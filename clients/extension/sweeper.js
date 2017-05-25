@@ -47,8 +47,7 @@ class Sweeper extends Extension {
                 });
                 break;
             case "swallow_balls":
-                //TODO
-                this.logger.warn("TODO: make swallow_balls work");
+                this.client.send("gr", "asserv.pwm", {left : -100, right : -100, ms : 1000});
                 this.fifo.orderFinished();
                 break;
             case "send_message":
