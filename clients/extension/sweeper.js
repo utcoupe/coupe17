@@ -51,7 +51,7 @@ class Sweeper extends Extension {
                 this.client.send("gr", "asserv.pwm", {left : -75, right : -100, ms : 2000});
 		this.client.send("gr", "asserv.pwm", {left : 75, right : 100, ms : 2000});
                 this.client.send("gr", "asserv.pwm", {left : -100, right : -75, ms : 2000});
-                this.client.send("gr", "asserv.pwm", {left : 100, right : 75, ms : 2000});
+                this.client.send("gr", "asserv.pwm", {left : 100, right : 75, ms : 1500});
 
                 // Wait the action to be done
                 setTimeout(() => {

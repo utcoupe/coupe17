@@ -147,7 +147,8 @@
                 "y": 600
             },
             "d": 63,
-            "color": "both",
+            "color": "blue",
+            "realColor": "both",
             "status": "initial"
         },
         "mod_lun09": {
@@ -177,7 +178,8 @@
                 "y": 600
             },
             "d": 63,
-            "color": "both",
+            "color": "yellow",
+            "realColor": "both",
             "status": "initial"
         }
     },

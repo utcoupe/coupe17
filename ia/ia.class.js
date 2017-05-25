@@ -192,7 +192,7 @@ module.exports = (function () {
 			this.pr.start();
 			setTimeout(function(){
 				this.gr.start();
-			}.bind(this), 10000);
+			}.bind(this), 15000);
 			// this.lidar.start();
 		} else {
 			logger.warn("Match déjà lancé");
