@@ -241,14 +241,26 @@
 			"type": "module",
 			"owner": "pr",
 			"objectname": "module__mod_lun08",
-			"startpoints": [],
-			"direction": "forward",
-			"priority": 94,
+			"startpoints": [{
+				"x": 984,
+                "y": 402,
+                "a": -0.510	
+			}],
+			"direction": "whatever",
+			"priority": 150,
 			"dependency": "",
 			"dependencyRobotContent": {
-				"supModule": 8,
+				"supModule": 1,
 				"infModule": 0
 			},
+			"preparation_orders":[{
+				"dest": "unit_grabber",
+				"name": "open_arm",
+				"params": {
+					"color": "TO_BE_FILLED_BY_IA",
+					"push_toward": "right"
+				}
+			}],
 			"orders":[{
 				"dest": "unit_grabber",
 				"name": "take_module",
@@ -334,11 +346,11 @@
                 "y": 1100,
                 "a": 3.1415
 			}],
-			"direction": "backward",
-			"priority": 93,
+			"direction": "whatever",
+			"priority": 149,
 			"dependency": "",
 			"dependencyRobotContent": {
-				"infModule": 3
+				"infModule": 1
 			},
 			"preparation_orders":[{
 				"dest": "base_constructor",
