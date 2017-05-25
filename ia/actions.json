@@ -139,8 +139,8 @@
       "objectname": "module__mod_lun08",
       "startpoints": [{
         "x": 1000,
-        "y": 340,
-        "a": 0
+        "y": 505,
+        "a": -0.8
       }],
       "direction": "backward",
       "priority": 150,
