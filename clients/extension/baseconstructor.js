@@ -276,16 +276,18 @@ class BaseConstructor extends Extension {
 	        this.fifo.newOrder(() => {
 	            this.processFifoOrder("drop");
 	        }, "drop");
-	        this.fifo.newOrder(() => {
-	            this.processFifoOrder("engage");
-	        }, "engage");
-        	this.fifo.newOrder(() => {
-	            this.processFifoOrder("push", {towards: "left"});
-        	}, "push");
-	        this.fifo.newOrder(() => {
-        	    this.processFifoOrder("push", {towards: "right"});
-	        }, "push");
-
+		setTimeout( () => {
+		        this.fifo.newOrder(() => {
+		            this.processFifoOrder("engage");
+		        }, "engage");
+        		this.fifo.newOrder(() => {
+		            this.processFifoOrder("push", {towards: "left"});
+        		}, "push");
+		        this.fifo.newOrder(() => {
+        		    this.processFifoOrder("push", {towards: "right"});
+		        }, "push");
+	
+		}, 2000);
 	}, 300);
 
     }
