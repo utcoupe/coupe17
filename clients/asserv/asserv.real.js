@@ -58,15 +58,15 @@ class AsservReal extends Asserv{
                     this.ordersSerial = require("../shared/orders.serial")(this.serialPort, function(x, y, a) {
                         a /= 1000;
                         let pos = this.robot.posArduinoToIa(x, y, a);
-                        if(a >= 0){
-                            while(a > Math.PI)
-                                a -= 2.0*Math.PI;
+                        if(pos.a >= 0){
+                            while(pos.a > Math.PI)
+                                pos.a -= 2.0*Math.PI;
                         } else {
-                            while(a <= -Math.PI)
-                                a += 2.0*Math.PI;
+                            while(pos.a <= -Math.PI)
+                                pos.a += 2.0*Math.PI;
                         }
-                        this.logger.debug("New pos : x=" + x + ", y=" + y + ", a=" + a);
-                        this.robot.client.send("ia", this.robotName + ".pos", {x: x, y: y, a: a});
+                        this.logger.debug("New pos : x=" + pos.x + ", y=" + pos.y + ", a=" + pos.a);
+                        this.robot.client.send("ia", this.robotName + ".pos", {x: pos.x, y: pos.y, a: pos.a});
                     }.bind(this));
                 }
             }
