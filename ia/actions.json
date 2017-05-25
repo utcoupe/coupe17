@@ -451,7 +451,7 @@
                 "y": 600,
                 "a": 0
 			}],
-			"direction": "whatever",
+			"direction": "backward",
 			"priority": 121,
 			"dependency": "",
 			"preparation_orders":[{
@@ -558,7 +558,7 @@
 			"startpoints": [{
 				"x": 1300,
                 "y": 400,
-                "a": 3.1415
+                "a": 0
 			}],
 			"direction": "backward",
 			"priority": 200,
