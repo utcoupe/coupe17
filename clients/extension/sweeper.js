@@ -47,8 +47,13 @@ class Sweeper extends Extension {
                 });
                 break;
             case "swallow_balls":
+                // PWM is used to go through the table element because the asserv is currently not enough good
                 this.client.send("gr", "asserv.pwm", {left : -100, right : -100, ms : 1000});
-                this.fifo.orderFinished();
+                this.client.send("gr", "asserv.pwm", {left : 100, right : 100, ms : 1000});
+                // Wait the action to be done
+                setTimeout(() => {
+                    this.fifo.orderFinished();
+                }, 2500);
                 break;
             case "send_message":
                 this.sendDataToIA(param.name, param || {});
