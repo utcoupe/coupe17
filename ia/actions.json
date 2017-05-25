@@ -151,7 +151,7 @@
 			},
 			"preparation_orders":[{
 				"dest": "unit_grabber",
-				"name": "open_arm",
+				"name": "openArm",
 				"params": {}
 			}],
 			"orders":[{
