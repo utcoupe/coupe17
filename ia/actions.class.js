@@ -469,16 +469,18 @@ class Actions{
 
 		// 1 order for 1 action -> not any more
 		let dest = this.robot.name;
-		this.inprogress.orders.forEach(function (order, index, array){
-			// this.ia.client.send(this.robot.name, action.orders[0].name, action.orders[0].params);
-			dest = !!order.dest ? order.dest : this.robot.name;
-			this.ia.client.send(dest, order.name, order.params);
-		}.bind(this));
+        if (this.inprogress != null) {
+            this.inprogress.orders.forEach(function (order, index, array){
+                // this.ia.client.send(this.robot.name, action.orders[0].name, action.orders[0].params);
+                dest = !!order.dest ? order.dest : this.robot.name;
+                this.ia.client.send(dest, order.name, order.params);
+            }.bind(this));
 
-		this.ia.client.send(dest, "send_message", {
-			name: this.robot.name + ".actions.action_finished",
-			action_name: this.inprogress.name
-		});
+            this.ia.client.send(dest, "send_message", {
+                name: this.robot.name + ".actions.action_finished",
+                action_name: this.inprogress.name
+            });
+        }
 	}
 
 	/**
