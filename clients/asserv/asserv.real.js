@@ -133,23 +133,29 @@ class AsservReal extends Asserv{
         this.ordersSerial.sendOrder(this.asservCommands.PWM, [parseInt(left), parseInt(right), parseInt(ms)], function() { this.fifo.orderFinished(); }.bind(this));
     }
 
-    goxy(x, y, direction) {
+    goxy(x, y, direction, dontDoNextOrder) {
         var directionInt;
         if(direction == "forward") directionInt = 1;
         else if(direction == "backward") directionInt = -1;
         else directionInt = 0;
         var posToArduino = this.robot.posIaToArduino({
-            x: parseInt(x),
+
             y: parseInt(y)
         });
-        this.ordersSerial.sendOrder(this.asservCommands.GOTO, [posToArduino.x, posToArduino.y, parseInt(directionInt)], function() { this.fifo.orderFinished(); }.bind(this));
+        if (dontDoNextOrder)
+            this.ordersSerial.sendOrder(this.asservCommands.GOTO, [posToArduino.x, posToArduino.y, parseInt(directionInt)], function() { this.fifo.orderFinished(); }.bind(this));
+        else
+            this.ordersSerial.sendOrder(this.asservCommands.GOTO, [posToArduino.x, posToArduino.y, parseInt(directionInt)], function() {} );
     }
 
-    goa(a, callback){
+    goa(a, callback, dontDoNextOrder){
         var posToArduino = this.robot.posIaToArduino({
             a: this.myWriteFloat(a)
         });
-        this.ordersSerial.sendOrder(this.asservCommands.ROT, [posToArduino.a], function() { this.fifo.orderFinished(); }.bind(this));
+        if (!dontDoNextOrder)
+            this.ordersSerial.sendOrder(this.asservCommands.ROT, [posToArduino.a], function() { this.fifo.orderFinished(); }.bind(this));
+        else
+            this.ordersSerial.sendOrder(this.asservCommands.ROT, [posToArduino.a], function() {} );
     }
 
     setPid(p, i, d){
@@ -157,8 +163,8 @@ class AsservReal extends Asserv{
     }
 
     doStartSequence(params){
-        this.goxy(params.x, params.y, params.direction);
-        this.goa(params.a, () => {});
+        this.goxy(params.x, params.y, params.direction, true);
+        this.goa(params.a, () => {}, true);
     }
 
     setEmergencyStop (activate) {
