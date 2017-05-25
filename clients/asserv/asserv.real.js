@@ -104,7 +104,7 @@ class AsservReal extends Asserv{
 
     clean(){
         //this.logger.debug('cleaning %d this.timeouts', this.timeouts.length);
-        this.ordersSerial.sendOrder(this.asservCommands.CLEANG, function() { this.fifo.orderFinished(); }.bind(this));
+        this.ordersSerial.sendOrder(this.asservCommands.CLEANG, [], function() { this.fifo.orderFinished(); }.bind(this));
     }
 
     setSpeed(v, r) {

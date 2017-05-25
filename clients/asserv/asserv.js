@@ -190,8 +190,10 @@ class Asserv{
             case "setpid":
                 callback = function() {this.setPid(params.p, params.i, params.d)}.bind(this);
                 break;
-			case "collision":
-				callback = () => {this.setEmergencyStop(params.activate);};
+            case "collision":
+				// When a collision, bypass the regular way to send orders to asserv
+                callback = function () {};
+                this.setEmergencyStop(params.activate);
 				break;
             default:
                 this.logger.fatal("This order is unknown for the " + this.robotName + " asserv : " + name);
