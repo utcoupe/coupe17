@@ -27,8 +27,8 @@ namespace vals{
     const int ONE = 1;
     const int TWO = 2;
     const std::map <int, int> paramValuesW = {
-        {32, 400},      //Moving speed
-        {34, 1023}      //Torque limit
+        {32, 1000},      //Moving speed
+        {34, 800}      //Torque limit
     };
     const int nbDetection = 300;
 };
