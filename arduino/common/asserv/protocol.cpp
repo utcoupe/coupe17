@@ -22,8 +22,8 @@ extern "C" {
 
 void autoSendStatus() {
     //todo auto_send ?
-    SerialSender::SerialSend(SERIAL_INFO, "%c;%i;%i;%i;%i;%i;%i;%i;%i;%i;%i;%i;", AUTO_SEND, control.last_finished_id, (int)current_pos.x, (int)current_pos.y,(int)(current_pos.angle*FLOAT_PRECISION),
-                             (int)control.speeds.pwm_left, (int)control.speeds.pwm_right, (int)(control.speeds.linear_speed), (int)wheels_spd.left, (int)wheels_spd.right, (int)analogRead(PIN_SHARP_FORWARD), (int)analogRead(PIN_SHARP_BACKWARD));
+    SerialSender::SerialSend(SERIAL_INFO, "%c;%i;%i;%i;%i;%i;%i;%i;%i;%i;%i;", AUTO_SEND, control.last_finished_id, (int)current_pos.x, (int)current_pos.y,(int)(current_pos.angle*FLOAT_PRECISION),
+                             (int)control.speeds.pwm_left, (int)control.speeds.pwm_right, (int)(control.speeds.linear_speed), (int)wheels_spd.left, (int)wheels_spd.right, (int)analogRead(PIN_SHARP_BACKWARD));
 #if DEBUG_TARGET_SPEED
 //    index += sprintf(message+index, ";%i;%i;%i;%i",
 //			(int)wheels_spd.left,

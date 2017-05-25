@@ -331,7 +331,7 @@
         "y": 1250,
         "a": 0
       }],
-      "direction": "forward",
+      "direction": "backward",
       "priority": 140,
       "dependency": "",
       "dependencyRobotContent": {
