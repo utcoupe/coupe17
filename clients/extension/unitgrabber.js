@@ -191,6 +191,12 @@ class UnitGrabber extends Extension {
             this.processFifoOrder("closeGrabber");
         }, "closeGrabber");
         this.fifo.newOrder(() => {
+            this.processFifoOrder("openGrabber");
+        }, "openGrabber");
+        this.fifo.newOrder(() => {
+            this.processFifoOrder("closeGrabber");
+        }, "closeGrabber");
+        this.fifo.newOrder(() => {
             this.processFifoOrder("closeArm");
         }, "closeArm");
         this.fifo.newOrder(() => {
