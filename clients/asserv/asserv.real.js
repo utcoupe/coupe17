@@ -162,9 +162,10 @@ class AsservReal extends Asserv{
     }
 
     setEmergencyStop (activate) {
+        var value = activate?1:0;
         this.ordersSerial.sendOrder (
             this.asservCommands.SETEMERGENCYSTOP,
-            [activate],
+            [value],
             () => {this.fifo.orderFinished();}
         );
         super.setEmergencyStop(activate);
