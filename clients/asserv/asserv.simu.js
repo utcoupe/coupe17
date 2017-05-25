@@ -138,9 +138,9 @@ class AsservSimu extends Asserv{
 	 *
 	 * @param {int} x
 	 * @param {int} y
-	 * @param {string} sens
+	 * @param {string} direction
 	 */
-	goxy(x, y, sens) {
+	goxy(x, y, direction) {
         var dx = x-this.pos.x;
         var dy = y-this.pos.y;
         var dist = Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
@@ -151,8 +151,8 @@ class AsservSimu extends Asserv{
         var angle_init;
 
         //todo english names
-        if(sens == "avant") angle_init = angle_front;
-        else if(sens == "arriere") angle_init = angle_left;
+        if(direction == "forward") angle_init = angle_front;
+        else if(direction == "backward") angle_init = angle_left;
         else if (Math.abs(angle_front) < Math.abs(angle_left)) angle_init = angle_front;
         else angle_init = angle_left;
 

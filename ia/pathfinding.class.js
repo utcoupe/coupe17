@@ -274,7 +274,7 @@ module.exports = (function () {
 
 		this.sendDynamic( objects.map(function(val){
 			// logger.debug(val);
-			return [borne(val.pos.x, 0, 2980), borne(val.pos.y, 0, 1980), 1*((val.d/2)+(robot.size.d/2))];
+			return [borne(val.pos.x, 0, 2980), borne(val.pos.y, 0, 1980), 0.7*((val.d/2)+(robot.size.d/2))]; // 1*((val.d/2)+(robot.size.d/2))
 		}.bind(this)) );
 	};
 

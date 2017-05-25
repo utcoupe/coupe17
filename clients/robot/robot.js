@@ -50,7 +50,7 @@ class Robot extends Client{
 			var OrderSubname = OrderName.join('.');
 
 			if(classe == "asserv"){
-				// this.logger.debug("order send to asserv : "+OrderSubname);
+				// this.logger.error("order send to asserv : "+OrderSubname);
 				if (!!this.asserv) {
 					this.asserv.addOrderToFifo(OrderSubname,params);
 				} else {
@@ -207,6 +207,7 @@ class Robot extends Client{
 					    break;
                     case "climb_seesaw":
                         this.climbSeesaw(() => {
+                        	this.logger.debug("Seesaw climbed !");
                             this.actionFinished();
                         });
                         break;
