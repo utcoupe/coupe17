@@ -42,6 +42,7 @@
 			<button type="button" class="btn" ng-click="tibot.ouvrirTout()">Ouvrir Tout</button>
 			<button type="button" class="btn" ng-click="tibot.clean()">Clean FiFo</button>
 			<button type="button" class="btn" ng-click="tibot.stop()">Stop</button>
+			<button type="button" class="btn colision" ng-class="{inColision: tibot.inColision}" ng-click="tibot.toggleColision()">Colision</button>
 		</p>
 		<div>
 			<h3>Asserv</h3>
@@ -135,6 +136,7 @@
 			<button type="button" class="btn" ng-click="grobot.clean()">Clean FiFo</button>
 			<button type="button" class="btn" ng-click="grobot.stop()">Stop</button>
             <button type="button" class="btn" ng-click="grobot.seesaw()">Climb seesaw</button>
+			<button type="button" class="btn colision" ng-class="{inColision: grobot.inColision}" ng-click="grobot.toggleColision()">Colision</button>
 		</p>
 		<div>
 			<h3>Asserv</h3>

@@ -161,6 +161,15 @@ class AsservReal extends Asserv{
         this.goa(params.a, () => {});
     }
 
+    setEmergencyStop (activate) {
+        this.ordersSerial.sendOrder (
+            this.asservCommands.SETEMERGENCYSTOP,
+            [activate],
+            () => {this.fifo.orderFinished();}
+        );
+        super.setEmergencyStop(activate);
+    }
+
     /********************************************************************\
      *
      *  HELPERS FUNCTIONS

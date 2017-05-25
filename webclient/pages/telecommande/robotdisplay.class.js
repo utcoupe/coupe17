@@ -25,6 +25,7 @@ class RobotDisplay {
         this.PID_I = 130;
         this.PID_D = 0;
         this.acc = 1500;
+		this.inColision = false;
     }
 
 
@@ -100,6 +101,13 @@ class RobotDisplay {
 			p: parseFloat(this.PID_P),
 			i: parseFloat(this.PID_I), 
 			d: parseFloat(this.PID_D)
+		});
+	}
+
+	toggleColision () {
+		this.inColision = !this.inColision;
+		this.client.send (this.name, "asserv.colision", {
+			activate: this.inColision
 		});
 	}
 }

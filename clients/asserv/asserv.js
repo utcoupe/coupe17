@@ -136,6 +136,21 @@ class Asserv{
 
 	doStartSequence(params) {}
 
+	/**
+	 * Stops the robot + clean fifo
+	 * 
+	 * @param {any} activate
+	 */
+	setEmergencyStop (activate) {
+		if (activate) {
+			this.clean();
+			this.logger.warn("Emergency stop activated!");
+		}
+		else
+			this.logger.warn("Emergency stop disactivated!");
+		this.fifo.orderFinished();
+	}
+
 	addOrderToFifo(name, params){
         this.logger.debug("Adding order to fifo : " + name);
         // this.logger.debug(order.params);
@@ -175,6 +190,9 @@ class Asserv{
             case "setpid":
                 callback = function() {this.setPid(params.p, params.i, params.d)}.bind(this);
                 break;
+			case "colision":
+				callback = () => {this.setEmergencyStop(params.activate);};
+				break;
             default:
                 this.logger.fatal("This order is unknown for the " + this.robotName + " asserv : " + name);
         }

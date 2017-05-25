@@ -21,3 +21,11 @@ hr{
 	color: gray;
 	margin-left: 0px;
 }
+
+.colision {
+	background-color: green;
+}
+
+.inColision {
+	background-color: red;
+}
