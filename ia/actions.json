@@ -598,11 +598,11 @@
 			"owner": "gr",
 			"objectname": "balls__small_left",
 			"startpoints": [{
-				"x": 650,
+				"x": 1070,
                 "y": 540,
                 "a": 0
 			}],
-			"direction": "backward",
+			"direction": "whatever",
 			"priority": 87,
 			"dependency": "",
 			"preparation_orders":[{
@@ -667,11 +667,11 @@
 			"owner": "gr",
 			"objectname": "balls__small_right",
 			"startpoints": [{
-				"x": 2350,
+				"x": 1930,
                 "y": 540,
-                "a": 0
+                "a": 3.1415
 			}],
-			"direction": "backward",
+			"direction": "whatever",
 			"priority": 87,
 			"dependency": "",
 			"preparation_orders":[{
