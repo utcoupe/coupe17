@@ -162,7 +162,7 @@ class Robot{
 	onCollision() {
 		logger.warn('Collision detected between an enemy and ' + this.name /* + ' at [' + pos[0] + ", " + pos[1] + ']'*/ );
 		this.path = [];
-		this.ia.client.send(this.name, "collision");
+		this.ia.client.send(this.name, "asserv.collision", {activate: true});
 
 		this.actions.collision();
 		this.loop();

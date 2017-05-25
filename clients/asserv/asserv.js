@@ -190,7 +190,7 @@ class Asserv{
             case "setpid":
                 callback = function() {this.setPid(params.p, params.i, params.d)}.bind(this);
                 break;
-			case "colision":
+			case "collision":
 				callback = () => {this.setEmergencyStop(params.activate);};
 				break;
             default:
