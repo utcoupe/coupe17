@@ -161,7 +161,7 @@
       "objectname": "mountedModules__middle_center",
       "startpoints": [{
         "x": 1445,
-        "y": 1250,
+        "y": 1350,
         "a": 0.01
       }],
       "direction": "backward",
@@ -191,7 +191,7 @@
       "objectname": "mountedModules__middle_center",
       "startpoints": [{
         "x": 1555,
-        "y": 1250,
+        "y": 1350,
         "a": 3.1415
       }],
       "direction": "backward",

@@ -59,7 +59,7 @@ class Sweeper extends Extension {
 		}, 9000);
                 setTimeout(() => {
                     this.servos.turnOffSweeper( function() {});
-                }, 20000);
+                }, 30000);
                 break;
             case "send_message":
                 this.sendDataToIA(param.name, param || {});
