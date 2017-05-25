@@ -416,16 +416,17 @@ class Actions{
 		if (!!action.preparation_orders) {
 
 			action.preparation_orders.forEach(function (order, index, array){
-				if (!!this.robot.modules_color
+				if (!!this.robot.content.modules_color
 					&& order.params.color == "TO_BE_FILLED_BY_IA") {
-					logger.warn("TODO: drop color depending on robot content");
-					if (this.robot.modules_color == this.ia.color) {
-						// If all the modules are of our color, it doesn't matter how we drop them
-						order.params.color = "null";
-					} else {
-						// Some modules are multicolor, we must rotate the modules
-						order.params.color = this.ia.color;
-					}
+					// this.logger.warn("TODO: drop color depending on robot content");
+					// if (this.robot.content.modules_color == this.ia.color) {
+					// 	// If all the modules are of our color, it doesn't matter how we drop them
+					// 	order.params.color = "null";
+					// } else {
+					// 	// Some modules are multicolor, we must rotate the modules
+					// 	order.params.color = this.ia.color;
+					// }
+					order.params.color = this.ia.color;
 				}
 				let dest = !!order.dest ? order.dest : this.robot.name;
 				this.ia.client.send(dest, order.name, order.params);
