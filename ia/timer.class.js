@@ -35,7 +35,12 @@ module.exports = (function () {
 		this.match_started = true; // le match commence
 		setTimeout(function() {
 			logger.fatal("TIME OVER");
-			this.ia.stop();
+			this.match_started = false;
+			this.ia.timeout();
+			
+			setTimeout(function() {
+				this.ia.stop();
+			}.bind(this), 5000);
 		}.bind(this), 89000); 	// the match ends at 1'29 (89 seconds)
 	};
 

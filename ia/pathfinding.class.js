@@ -269,8 +269,8 @@ module.exports = (function () {
 			}
 		}
 		objects = objects.concat(modulesArray);
-		logger.debug("Exception :" + [except.x, except.y]);
-		logger.debug(objects);
+		// logger.debug("Exception :" + [except.x, except.y]);
+		// logger.debug(objects);
 
 		this.sendDynamic( objects.map(function(val){
 			// logger.debug(val);
