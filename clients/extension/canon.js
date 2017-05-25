@@ -31,6 +31,22 @@ class Canon extends Extension {
                     this.fifo.newOrder (() => {
                         this.processFifoOrder("close_trunk", params);
                     });
+                    this.fifo.newOrder(() => {
+                        this.processFifoOrder("open_trunk", params);
+                    });
+                }, 1500);
+                setTimeout(() => {
+                    this.fifo.newOrder (() => {
+                        this.processFifoOrder("close_trunk", params);
+                    });
+                    this.fifo.newOrder(() => {
+                        this.processFifoOrder("open_trunk", params);
+                    });
+                }, 3000);
+                setTimeout(() => {
+                    this.fifo.newOrder (() => {
+                        this.processFifoOrder("close_trunk", params);
+                    });
                     this.fifo.newOrder (() => {
                         this.processFifoOrder("turn_off", params);
                     });
