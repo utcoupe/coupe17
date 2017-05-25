@@ -330,7 +330,10 @@ void applyPwm(void) {
 }
 
 float speedToPwm(float speed) {
-    return SPD_TO_PWM_A*speed + SPD_TO_PWM_B;
+    float pwm = SPD_TO_PWM_A*speed;
+    if     (speed > 0.001) pwm += SPD_TO_PWM_B;
+    else if(speed < -0.001) pwm -= SPD_TO_PWM_B;
+    return pwm;
 }
 
 void applyPID(void) {

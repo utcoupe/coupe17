@@ -9,7 +9,7 @@
 #include "encoder.h"
 #include <math.h>
 
-#define FC (2)
+#define FC (10)
 #define RC (1/(2*PI*FC))
 #define ALPHA (DT / (RC + DT))
 
