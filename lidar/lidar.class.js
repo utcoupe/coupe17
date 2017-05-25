@@ -151,7 +151,7 @@ module.exports = (function () {
 	};
 
 	Lidar.prototype.changeStatus = function(newStatus) {
-		logger.info(newStatus);
+		// logger.info(newStatus);
 		this.status = newStatus;
 		this.sendStatus(this.status, this.hokuyosWorking().length);
 	};
