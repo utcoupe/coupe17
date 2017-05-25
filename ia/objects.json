@@ -291,7 +291,7 @@
             "pos":
             {
                 "x": 650,
-                "y": 200
+                "y": 180
             },
             "color": "blue",
             "status": "initial"
@@ -300,7 +300,7 @@
             "pos":
             {
                 "x": 2350,
-                "y": 400
+                "y": 180
             },
             "color": "yellow",
             "status": "initial"

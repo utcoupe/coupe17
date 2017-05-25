@@ -707,13 +707,51 @@
 				}],
 			"kill": null
 		},
-		"seesaw_left":{
+		"seesaw_left_step_1":{
 			"type": "seesaw",
 			"owner": "gr",
 			"objectname": "seesaw__left",
 			"startpoints": [{
 				"x": 500,
-                "y": 200,
+                "y": 180,
+                "a": 3.1415
+			}],
+			"direction": "backward",
+			"priority": 200,
+			"dependency": "",
+			"orders":[{
+				"dest": "gr",
+				"name": "climb_seesaw",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"seesaw_left_step_2":{
+			"type": "seesaw",
+			"owner": "gr",
+			"objectname": "seesaw__left",
+			"startpoints": [{
+				"x": 1150,
+                "y": 360,
+                "a": 3.1415
+			}],
+			"direction": "backward",
+			"priority": 200,
+			"dependency": "",
+			"orders":[{
+				"dest": "gr",
+				"name": "climb_seesaw",
+				"params": {}
+				}],
+			"kill": null
+		},
+		"seesaw_right_step_1":{
+			"type": "seesaw",
+			"owner": "gr",
+			"objectname": "seesaw__right",
+			"startpoints": [{
+				"x": 2500,
+                "y": 180,
                 "a": 0
 			}],
 			"direction": "backward",
@@ -726,14 +764,14 @@
 				}],
 			"kill": null
 		},
-		"seesaw_right":{
+		"seesaw_right_step_2":{
 			"type": "seesaw",
 			"owner": "gr",
 			"objectname": "seesaw__right",
 			"startpoints": [{
-				"x": 2500,
-                "y": 200,
-                "a": 3.1415
+				"x": 1850,
+                "y": 360,
+                "a": 0
 			}],
 			"direction": "backward",
 			"priority": 200,

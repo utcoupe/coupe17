@@ -55,20 +55,20 @@ class Grobot extends Robot{
         //todo add timeout to wait the seesaw to seesaw
         //TODO : color management
         //TODO : ia ?
-        var orderName = "climbSeesaw";
-        this.asserv.addOrderToFifo("goxy", {
-			x: 780,
-			y: 180,
-            direction : "backward"
-		});
-		// this.asserv.addOrderToFifo("goa", {
-		// 	a: -7*Math.PI/8
+  //       var orderName = "climbSeesaw";
+  //       this.asserv.addOrderToFifo("goxy", {
+		// 	x: 780,
+		// 	y: 180,
+  //           direction : "backward"
 		// });
-		this.asserv.addOrderToFifo("goxy", {
-			x: 800,
-			y: 180,
-            direction : "backward"
-		});
+		// // this.asserv.addOrderToFifo("goa", {
+		// // 	a: -7*Math.PI/8
+		// // });
+		// this.asserv.addOrderToFifo("goxy", {
+		// 	x: 800,
+		// 	y: 180,
+  //           direction : "backward"
+		// });
 		this.asserv.addOrderToFifo("callCallback", {
         	callback: callback
 		});
