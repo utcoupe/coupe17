@@ -286,7 +286,6 @@ class Robot{
 			break;
 			default:
 				return false; // we have treated this message, let the child class deal with it
-			break;
 		}
 
 		return true; // we correctly treated this message
