@@ -550,7 +550,7 @@
       "objectname": "balls__front_left",
       "startpoints": [{
         "x": 350,
-                "y": 1650,
+                "y": 1300,
                 "a": -1.5707
       }],
       "direction": "backward",
@@ -574,7 +574,7 @@
       "objectname": "balls__front_right",
       "startpoints": [{
         "x": 2650,
-                "y": 1650,
+                "y": 1300,
                 "a": -1.5707
       }],
       "direction": "backward",
