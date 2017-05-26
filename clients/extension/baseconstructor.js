@@ -266,6 +266,11 @@ class BaseConstructor extends Extension {
             }, "push");
             this.hasAPreparedModule = false;
         }*/
+        this.client.send("gr", "asserv.pwm", {left : 50, right : 50, ms : 1000});
+                // Wait the action to be done
+                setTimeout(() => {
+                    this.fifo.orderFinished();
+                },1100);
 
         this.fifo.newOrder(() => {
             this.processFifoOrder("drop");
