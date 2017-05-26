@@ -34,7 +34,7 @@ class Canon extends Extension {
                     this.fifo.newOrder (() => {
                         this.processFifoOrder("turn_off", params);
                     });
-                }, 5000);
+                }, 15000);
                 break;
             case "open_trunk":
             case "close_trunk":

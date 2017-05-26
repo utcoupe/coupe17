@@ -240,7 +240,7 @@
         "a": 3.1415
       }],
       "direction": "whatever",
-      "priority": 149,
+      "priority": 80,
       "dependency": "",
       "dependencyRobotContent": {
         "infModule": 1
@@ -302,7 +302,7 @@
         "a": 2.3561
       }],
       "direction": "forward",
-      "priority": 92,
+      "priority": 80,
       "dependency": "",
       "dependencyRobotContent": {
         "infModule": 3
@@ -332,10 +332,10 @@
         "a": 0
       }],
       "direction": "forward",
-      "priority": 91,
+      "priority": 140,
       "dependency": "",
       "dependencyRobotContent": {
-        "infModule": 3
+        "infModule": 1
       },
       "preparation_orders":[{
         "dest": "base_constructor",
