@@ -549,7 +549,7 @@
       "owner": "gr",
       "objectname": "balls__front_left",
       "startpoints": [{
-        "x": 350,
+        "x": 400,
                 "y": 1300,
                 "a": -1.5707
       }],
@@ -573,7 +573,7 @@
       "owner": "gr",
       "objectname": "balls__front_right",
       "startpoints": [{
-        "x": 2650,
+        "x": 2600,
                 "y": 1300,
                 "a": -1.5707
       }],
