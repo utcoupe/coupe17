@@ -298,23 +298,24 @@ void stopRobot(void) {
 	int sign;
 	float speed;
 
-	sign = sign(control.speeds.angular_speed);
-	speed = abs(control.speeds.angular_speed);
-	speed -= control.max_acc * DT;
-	speed = max(0, speed);
-	control.speeds.angular_speed = speed;
-
-	sign = sign(control.speeds.linear_speed);
-	speed = abs(control.speeds.linear_speed);
-	speed -= control.max_acc * DT;
-	speed = max(0, speed);
-	control.speeds.linear_speed = sign*speed;
-
-	if (abs(wheels_spd.left) + abs(wheels_spd.right) < SPD_TO_STOP) {
-		allStop();
-	} else {
-		applyPID();
-	}
+//	sign = sign(control.speeds.angular_speed);
+//	speed = abs(control.speeds.angular_speed);
+//	speed -= control.max_acc * DT;
+//	speed = max(0, speed);
+//	control.speeds.angular_speed = speed;
+//
+//	sign = sign(control.speeds.linear_speed);
+//	speed = abs(control.speeds.linear_speed);
+//	speed -= control.max_acc * DT;
+//	speed = max(0, speed);
+//	control.speeds.linear_speed = sign*speed;
+//
+//	if (abs(wheels_spd.left) + abs(wheels_spd.right) < SPD_TO_STOP) {
+//		allStop();
+//	} else {
+//		applyPID();
+//	}
+    allStop();
 }
 
 void allStop(void) {
