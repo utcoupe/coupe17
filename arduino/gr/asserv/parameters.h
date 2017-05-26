@@ -64,8 +64,8 @@
 #define CONE_ALIGNEMENT 100 // NEVER
 
 #define PID_P 0.014 //1.5
-#define PID_I 3 //30
-#define PID_D 2 //5
+#define PID_I 0.003 //30
+#define PID_D 0.002 //5
 #define PID_BIAS 0
 
 // Control feed-forward, pwm = a*spd + b
