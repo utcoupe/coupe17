@@ -484,7 +484,7 @@
         "name": "asserv.goxy",
         "params": {
           "x": 1110,
-	  "y": 400,
+	        "y": 400,
           "direction": "backward"
         }}
       ],
@@ -514,8 +514,8 @@
       "owner": "gr",
       "objectname": "seesaw__right",
       "startpoints": [{
-        "x": 1400,
-        "y": 300,
+        "x": 2250,
+        "y": 180,
         "a": 0
       }],
       "direction": "backward",
@@ -523,14 +523,19 @@
       "dependency": "",
       "orders":[{
         "dest": "gr",
+        "name": "asserv.goa",
+        "params": {
+          "a":-1.03,
+          "direction": "backward"
+        }},{
+        "dest": "gr",
         "name": "asserv.goxy",
         "params": {
-          "x": 1700,
+          "x": 1890,
           "y": 400,
-          "a": 0,
           "direction": "backward"
-        }
-      }],
+        }}
+      ],
       "kill": null
     }
   }
