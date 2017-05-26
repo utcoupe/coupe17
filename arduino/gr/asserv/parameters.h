@@ -70,7 +70,7 @@
 
 // Control feed-forward, pwm = a*spd + b
 #define SPD_TO_PWM_A 0.2
-#define SPD_TO_PWM_B 7
+#define SPD_TO_PWM_B 5
 
 #define LEFT_P (PID_P)
 #define LEFT_I (PID_I)
