@@ -138,12 +138,12 @@
       "owner": "pr",
       "objectname": "module__mod_lun08",
       "startpoints": [{
-        "x": 998,
-        "y": 425,
-        "a": -1.100
+        "x": 1000,
+        "y": 340,
+        "a": 0
       }],
-      "direction": "whatever",
-      "priority": 0,
+      "direction": "backward",
+      "priority": 150,
       "dependency": "",
       "dependencyRobotContent": {
         "supModule": 1,
@@ -297,15 +297,15 @@
       "owner": "pr",
       "objectname": "mountedModules__middle_left",
       "startpoints": [{
-        "x": 1120,
-        "y": 1450,
+        "x": 1150,
+        "y": 1400,
         "a": 2.3561
       }],
-      "direction": "forward",
-      "priority": 80,
+      "direction": "backward",
+      "priority": 149,
       "dependency": "",
       "dependencyRobotContent": {
-        "infModule": 3
+        "infModule": 1
       },
       "preparation_orders":[{
         "dest": "base_constructor",
