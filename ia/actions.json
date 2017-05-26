@@ -556,20 +556,27 @@
 			"owner": "gr",
 			"objectname": "seesaw__left",
 			"startpoints": [{
-				"x": 1400,
-                "y": 300,
+				"x": 720,
+                "y": 180,
                 "a": 3.1415
 			}],
 			"direction": "backward",
 			"priority": 200,
 			"dependency": "",
 			"orders":[{
+              "dest": "gr",
+              "name": "asserv.goa",
+              "params": {
+                "a": 2.683,
+                "direction": "backward"
+              }
+            },{
 				"dest": "gr",
 				"name": "asserv.goxy",
 				"params": {
-						"x": 1700,
+						"x": 1200,
 		                "y": 400,
-		                "a": 3.1415,
+		                "a": 0,
 						"direction": "backward"
 					}
 				}],
