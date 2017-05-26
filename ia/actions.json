@@ -143,7 +143,7 @@
         "a": -1.100
       }],
       "direction": "whatever",
-      "priority": 150,
+      "priority": 0,
       "dependency": "",
       "dependencyRobotContent": {
         "supModule": 1,
@@ -335,7 +335,7 @@
       "priority": 140,
       "dependency": "",
       "dependencyRobotContent": {
-        "infModule": 1
+        "infModule": 0
       },
       "preparation_orders":[{
         "dest": "base_constructor",
@@ -468,25 +468,28 @@
       "startpoints": [{
         "x": 750,
         "y": 180,
-        "a": 3.1415
+        "a": -2.6
       }],
       "direction": "backward",
       "priority": 200,
       "dependency": "",
-      "orders":[{
-        "dest": "gr",
-        "name": "asserv.goa",
-        "params": {
-          "a":-2.6,
-          "direction": "backward"
-        }},{
-        "dest": "gr",
-        "name": "asserv.goxy",
-        "params": {
-          "x": 1110,
-	        "y": 400,
-          "direction": "backward"
-        }}
+      "orders":[   
+      ],
+      "kill": null
+    },
+      "seesaw_left_step_3":{
+      "type": "seesaw",
+      "owner": "gr",
+      "objectname": "seesaw__left",
+      "startpoints": [{
+        "x": 1110,
+        "y": 400,
+        "a": -2.6
+      }],
+      "direction": "backward",
+      "priority": 198,
+      "dependency": "",
+      "orders":[
       ],
       "kill": null
     },
@@ -516,25 +519,28 @@
       "startpoints": [{
         "x": 2250,
         "y": 180,
-        "a": 0
+        "a": -1.03
       }],
       "direction": "backward",
       "priority": 199,
       "dependency": "",
-      "orders":[{
-        "dest": "gr",
-        "name": "asserv.goa",
-        "params": {
-          "a":-1.03,
-          "direction": "backward"
-        }},{
-        "dest": "gr",
-        "name": "asserv.goxy",
-        "params": {
-          "x": 1890,
-          "y": 400,
-          "direction": "backward"
-        }}
+      "orders":[
+      ],
+      "kill": null
+    },
+    "seesaw_right_step_3":{
+      "type": "seesaw",
+      "owner": "gr",
+      "objectname": "seesaw__right",
+      "startpoints": [{
+        "x": 1890,
+        "y": 400,
+        "a": -1.03
+      }],
+      "direction": "backward",
+      "priority": 198,
+      "dependency": "",
+      "orders":[
       ],
       "kill": null
     },
