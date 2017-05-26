@@ -138,9 +138,9 @@
 			"owner": "pr",
 			"objectname": "module__mod_lun08",
 			"startpoints": [{
-				"x": 984,
-                "y": 402,
-                "a": -0.510	
+				"x": 998,
+		                "y": 425,
+                		"a": -1.100
 			}],
 			"direction": "whatever",
 			"priority": 150,
