@@ -41,18 +41,19 @@
 #define PIN_ENC_RIGHT_A 20
 #define PIN_ENC_RIGHT_B 21
 
-#define PIN_SHARP_FORWARD 15
+#define PIN_SHARP_FORWARD 14
+#define PIN_SHARP_BACKWARD 15
 
 #define INTERRUPT_ENC_LEFT_A 4
 #define INTERRUPT_ENC_LEFT_B 5
 #define INTERRUPT_ENC_RIGHT_A 3
 #define INTERRUPT_ENC_RIGHT_B 2
 
-#define PIN_JACK 52
-#define LED_JACK 51
-
-#define LED_DEBUG 14
-#define LED_BLOCKED 15
+//#define PIN_JACK 52
+//#define LED_JACK 51
+//
+#define LED_DEBUG 16
+#define LED_BLOCKED 16
 #define LED_MAINLOOP 16
 #endif
 

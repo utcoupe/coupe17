@@ -38,36 +38,41 @@ void ComputeEmergencyOnPin(int pin, emergency_status_t *status) {
 
 	now = timeMillis();
 	analog = analogRead(pin);
-	voltage = 5.0*analog/1023.0;
-	if (voltage == 0) {
-		distance = 1000;
-	} else {
-		distance = 0.123/voltage;
-	}
-	switch (status->phase) {
-		case NO_EMERGENCY:
-			if (distance < EMERGENCY_STOP_DISTANCE) {
-				if (status->start_detection_time < 0) {
-					status->start_detection_time = now;
-				} else if (now - status->start_detection_time > 300) {
-					status->start_detection_time = -1;
-					status->phase = FIRST_STOP;
-				}
-			}
-			break;
-		case FIRST_STOP:
-			status->total_time += DT;
-			if (distance > EMERGENCY_STOP_DISTANCE) {
-				status->phase = NO_EMERGENCY;
-			}
-			if ((status->total_time) > (EMERGENCY_WAIT_TIME)) {
-				status->phase = SLOW_GO;
-			}
-			break;
-		case SLOW_GO:
-			if (distance > EMERGENCY_STOP_DISTANCE) {
-				status->phase = NO_EMERGENCY;
-			}
-			break;
-	}
+//	voltage = 5.0*analog/1023.0;
+//	if (voltage == 0) {
+//		distance = 1000;
+//	} else {
+//		distance = 0.123/voltage;
+//	}
+//	switch (status->phase) {
+//		case NO_EMERGENCY:
+//			if (distance < EMERGENCY_STOP_DISTANCE) {
+//				if (status->start_detection_time < 0) {
+//					status->start_detection_time = now;
+//				} else if (now - status->start_detection_time > 300) {
+//					status->start_detection_time = -1;
+//					status->phase = FIRST_STOP;
+//				}
+//			}
+//			break;
+//		case FIRST_STOP:
+//			status->total_time += DT;
+//			if (distance > EMERGENCY_STOP_DISTANCE) {
+//				status->phase = NO_EMERGENCY;
+//			}
+//			if ((status->total_time) > (EMERGENCY_WAIT_TIME)) {
+//				status->phase = SLOW_GO;
+//			}
+//			break;
+//		case SLOW_GO:
+//			if (distance > EMERGENCY_STOP_DISTANCE) {
+//				status->phase = NO_EMERGENCY;
+//			}
+//			break;
+//	}
+    if (analog > 185) {
+        status->phase = FIRST_STOP;
+    } else {
+        status->phase = NO_EMERGENCY;
+    }
 }
