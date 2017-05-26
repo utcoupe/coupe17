@@ -209,7 +209,7 @@ class AsservSimu extends Asserv{
 	}
 
 	doStartSequence(params){
-        // this.fifo.orderFinished(); Never called by FiFo
+        this.fifo.orderFinished();
 	}
 
     setEmergencyStop (activate) {

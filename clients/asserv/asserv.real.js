@@ -133,29 +133,23 @@ class AsservReal extends Asserv{
         this.ordersSerial.sendOrder(this.asservCommands.PWM, [parseInt(left), parseInt(right), parseInt(ms)], function() { this.fifo.orderFinished(); }.bind(this));
     }
 
-    goxy(x, y, direction, dontDoNextOrder) {
+    goxy(x, y, direction) {
         var directionInt;
         if(direction == "forward") directionInt = 1;
         else if(direction == "backward") directionInt = -1;
         else directionInt = 0;
         var posToArduino = this.robot.posIaToArduino({
-	    x: parseInt(x),
+            x: parseInt(x),
             y: parseInt(y)
         });
-        if (dontDoNextOrder)
-            this.ordersSerial.sendOrder(this.asservCommands.GOTO, [posToArduino.x, posToArduino.y, parseInt(directionInt)], function() { this.fifo.orderFinished(); }.bind(this));
-        else
-            this.ordersSerial.sendOrder(this.asservCommands.GOTO, [posToArduino.x, posToArduino.y, parseInt(directionInt)], function() {} );
+        this.ordersSerial.sendOrder(this.asservCommands.GOTO, [posToArduino.x, posToArduino.y, parseInt(directionInt)], function() { this.fifo.orderFinished(); }.bind(this));
     }
 
-    goa(a, callback, dontDoNextOrder){
+    goa(a, callback){
         var posToArduino = this.robot.posIaToArduino({
             a: this.myWriteFloat(a)
         });
-        if (!dontDoNextOrder)
-            this.ordersSerial.sendOrder(this.asservCommands.ROT, [posToArduino.a], function() { this.fifo.orderFinished(); }.bind(this));
-        else
-            this.ordersSerial.sendOrder(this.asservCommands.ROT, [posToArduino.a], function() {} );
+        this.ordersSerial.sendOrder(this.asservCommands.ROT, [posToArduino.a], function() { this.fifo.orderFinished(); }.bind(this));
     }
 
     setPid(p, i, d){
@@ -163,8 +157,8 @@ class AsservReal extends Asserv{
     }
 
     doStartSequence(params){
-        this.goxy(params.x, params.y, params.direction, true);
-        this.goa(params.a, () => {}, true);
+        this.goxy(params.x, params.y, params.direction);
+        this.goa(params.a, () => {});
     }
 
     setEmergencyStop (activate) {
