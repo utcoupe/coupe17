@@ -537,6 +537,96 @@
         }}
       ],
       "kill": null
+    },
+    "catch_balls_front_left":{
+      "type": "catch_balls",
+      "owner": "gr",
+      "objectname": "balls__front_left",
+      "startpoints": [{
+        "x": 350,
+                "y": 1650,
+                "a": -1.5707
+      }],
+      "direction": "backward",
+      "priority": 120,
+      "dependency": "",
+      "preparation_orders":[{
+        "dest": "sweeper",
+        "name": "turn_on",
+        "params": {}
+      }],
+      "orders":[{
+        "dest": "sweeper",
+        "name": "swallow_balls",
+        "params": {}
+        }],
+      "kill": null
+    },
+    "catch_balls_front_right":{
+      "type": "catch_balls",
+      "owner": "gr",
+      "objectname": "balls__front_right",
+      "startpoints": [{
+        "x": 2650,
+                "y": 1650,
+                "a": -1.5707
+      }],
+      "direction": "backward",
+      "priority": 120,
+      "dependency": "",
+      "preparation_orders":[{
+        "dest": "sweeper",
+        "name": "turn_on",
+        "params": {}
+      }],
+      "orders":[{
+        "dest": "sweeper",
+        "name": "swallow_balls",
+        "params": {}
+        }],
+      "kill": null
+    },
+    "throw_balls_left":{
+      "type": "throw_balls",
+      "owner": "gr",
+      "objectname": "balls__throw_left",
+      "startpoints": [{
+        "x": 300,
+                "y": 800,
+                "a": -1.570796
+      }],
+      "direction": "forward",
+      "priority": 119,
+      "dependency": "",
+      "orders":[{
+        "dest": "canon",
+        "name": "throw_balls",
+        "params": {
+          "dist": 100
+        }
+        }],
+      "kill": null
+    },
+    "throw_balls_right":{
+      "type": "throw_balls",
+      "owner": "gr",
+      "objectname": "balls__throw_right",
+      "startpoints": [{
+        "x": 2700,
+                "y": 800,
+                "a": -1.570796
+      }],
+      "direction": "forward",
+      "priority": 119,
+      "dependency": "",
+      "orders":[{
+        "dest": "canon",
+        "name": "throw_balls",
+        "params": {
+          "dist": 100
+        }
+        }],
+      "kill": null
     }
   }
 }
