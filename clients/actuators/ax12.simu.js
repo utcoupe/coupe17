@@ -1,14 +1,23 @@
 /**
  * Created by michelme on 14/05/17.
+ * Create a simulated AX12 singleton
+ * 
+ * @module clients/actuators/ax12simu
+ * @requires clients/actuators/ax12
  */
 
 "use strict";
 
 const Ax12 = require('./ax12');
 
+/**
+ * Defines a simulated AX12. Does not need to be a singleton.
+ * 
+ * @extends module:clients/actuators/ax12.Ax12
+ */
 class Ax12Simu extends Ax12 {
     /**
-     * Creates an instance of Ax12.
+     * Creates an instance of  simulated Ax12.
      */
     constructor (robot) {
         super(robot);

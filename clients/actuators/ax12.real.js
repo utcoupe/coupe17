@@ -1,5 +1,13 @@
 /**
  * Created by michelme on 14/05/17.
+ * Create a real AX12 singleton
+ * 
+ * @module clients/actuators/ax12real
+ * @requires module:clients/actuators/ax12
+ * @requires module:path
+ * @requires module:child_process
+ * @requires module:byline
+ * @requires module:clients/shared/defineparser
  */
 
 "use strict";
@@ -12,6 +20,11 @@ const defineParser = require("../shared/defineparser");
 
 const program = Path.normalize("./bin/ax12");
 
+/**
+ * Defines a real AX12. It has to be a singleton to work properly !
+ * 
+ * @extends module:clients/actuators/ax12.Ax12
+ */
 class Ax12Real extends Ax12 {
     /**
      * Creates an instance of Ax12.
@@ -61,6 +74,11 @@ class Ax12Real extends Ax12 {
         }.bind(this));
     }
 
+    /**
+     * Parses a command from an AX12
+     * 
+     * @param {any} receivedCommand
+     */
     parseCommand(receivedCommand) {
         if (!this.stdStreamConnected) {
             // If not connected, wait the ID of the arduino before doing something else
