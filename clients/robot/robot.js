@@ -2,7 +2,7 @@
  * Module du robot de base
  *
  * @module clients/Robot/robot
- * @requires module:clients/client
+ * @requires module:clients/shared/client
  * @requires module:clients/fifo
  * @requires module:clients/Asserv/AsservSimu
  * @requires module:clients/Asserv/AsservReal
@@ -16,7 +16,7 @@ const Client = require('../shared/client');
  * Robot abstrait
  *
  * @memberof module:clients/Robot/robot
- * @extends module:clients/client.Client
+ * @extends module:clients/shared/client.Client
  */
 class Robot extends Client{
 /*	constructor(){
