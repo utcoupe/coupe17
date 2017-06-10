@@ -1,12 +1,28 @@
 /**
  * Created by tfuhrman on 13/05/17.
+ * 
+ * Exports an orders manager.
+ * 
+ * @module clients/shared/ordersmanager
+ * @requires log4js
  */
 
 "use strict";
 
 const Log4js = require('log4js');
 
+/**
+ * Define an orders manager.
+ * It uses the communication language between the node app and the actuators (Ax12, Arduino).
+ * 
+ * @memberof module:clients/shared/ordersmanager
+ */
 class OrdersManager {
+    /**
+     * Creates an instance of OrdersManager.
+     * @param {any} communicationLine 
+     * @param {any} callbackSendToIa 
+     */
     constructor (communicationLine, callbackSendToIa) {
         // This is an abstract class, throw an error if it is directly instantiated or if missing virtual functions
         if (this.constructor === OrdersManager) {
@@ -29,7 +45,12 @@ class OrdersManager {
         }
     }
 
-    //call the callback corresponding to the received order id, stored in ordersCallback
+    /**
+     * Call the callback corresponding to the received order id, stored in ordersCallback.
+     * 
+     * @param {Integer} orderId
+     * @param {Object} params
+     */
     callOrderCallback(orderId, params) {
         for (var index = 0; index < this.ordersCallback.length; index++) {
             if (this.ordersCallback[index][0] == orderId) {
@@ -46,6 +67,13 @@ class OrdersManager {
         }
     }
 
+    /**
+     * Sends an order using the communication language.
+     * 
+     * @param {string} orderType 
+     * @param {Array<String>|null} args 
+     * @param {function} callback
+     */
     sendOrder(orderType, args, callback) {
         if (this.comLineConnected) {
             this.logger.debug("args = " + args);
@@ -60,8 +88,12 @@ class OrdersManager {
         }
     }
 
-    // Automatically called by the super class
-    //todo find a way to reboot arduino if it doesn't send its ID (previously started)
+    /**
+     * Parses a received command. Automatically called by the super class
+     * @todo find a way to reboot arduino if it doesn't send its ID (previously started)
+     * 
+     * @param {String} receivedCommand
+    */
     parseCommand(receivedCommand) {
         // Check if the received command is a debug string or a response from an order
         // As the received command is a string, the ; index is depending on the number of digits of the order id received
@@ -84,6 +116,11 @@ class OrdersManager {
         }
     }
 
+    /**
+     * Command line send
+     * 
+     * @param {any} order 
+     */
     comLineSend(order) {}
 }
 
