@@ -1,7 +1,7 @@
 /**
  *  @file       Describes the client module.
  *  @date       01/04/2017
- *  @module     shared/client
+ *  @module     clients/shared/client
  *  @copyright  Copyright (c) 2017 UTCoupe All rights reserved.
  *  @licence    See licence.txt file
  */
@@ -9,21 +9,23 @@
 "use strict";
 
 /**
- * @constant Logger
+ * Logger
+ * @constant
  */
 const Log4js = require('log4js');
 /**
- * @constant Config file, containing IP and port of the server
+ * Config file, containing IP and port of the server
+ * @constant
  */
 const CONFIG = require('../../config.js');
 /**
- * @constant Socket client object for communication
+ * Socket client object for communication
+ * @constant
  * @type {SocketClient}
  */
 const SocketClient = require('../../server/socket_client.class.js');
 
 /**
- * @classdesc
  * Client is an abstract class defining the interface and the common functions to be a client in the UTCoupe system.
  * A client is the only object able to send and receive messages form the other clients of the system.
  */
@@ -32,7 +34,6 @@ class Client {
      * The constructor creates the logger and the socketClient object, mandatory for the communication.
      * The parameters of the socket (IP and port) are loaded from the config.js file.
      * When the object is created, it automatically binds the abstract reception callback.
-     * @class Client
      * @param clientName {string}   Name of the client, used to route messages
      */
     constructor(clientName) {
