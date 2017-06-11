@@ -4,11 +4,6 @@
  *  @module     clients/shared/client
  *  @copyright  Copyright (c) 2017 UTCoupe All rights reserved.
  *  @licence    See licence.txt file
- *
- * @module clients/shared/client
- * @requires module:server/socket_client
- * @requires module:config
- * @requires module:log4js
  */
 
 "use strict";
