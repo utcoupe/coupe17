@@ -23,6 +23,7 @@ const program = Path.normalize("./bin/ax12");
 /**
  * Defines a real AX12. It has to be a singleton to work properly !
  * 
+ * @memberof module:clients/actuators/ax12real
  * @extends module:clients/actuators/ax12.Ax12
  */
 class Ax12Real extends Ax12 {

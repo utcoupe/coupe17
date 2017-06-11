@@ -2,7 +2,7 @@
  * Module des extensions
  * 
  * @module clients/Extension/extension
- * @requires module:clients/client
+ * @requires module:clients/shared/client
  */
 
 "use strict";
@@ -14,7 +14,7 @@ const Fifo = require('../shared/fifo');
  * Classe abstraite représentant les extensions
  * 
  * @memberof module:clients/Extension/extension
- * @extends clients/client.Client
+ * @extends clients/shared/client.Client
  */
 class Extension extends Client {
     constructor(extensionName){

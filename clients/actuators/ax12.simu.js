@@ -13,6 +13,7 @@ const Ax12 = require('./ax12');
 /**
  * Defines a simulated AX12. Does not need to be a singleton.
  * 
+ * @memberof module:clients/actuators/ax12simu
  * @extends module:clients/actuators/ax12.Ax12
  */
 class Ax12Simu extends Ax12 {

@@ -4,6 +4,11 @@
  *  @module     clients/shared/client
  *  @copyright  Copyright (c) 2017 UTCoupe All rights reserved.
  *  @licence    See licence.txt file
+ *
+ * @module clients/shared/client
+ * @requires module:server/socket_client
+ * @requires module:config
+ * @requires module:log4js
  */
 
 "use strict";
@@ -25,6 +30,7 @@ const SocketClient = require('../../server/socket_client.class.js');
 /**
  * Client is an abstract class defining the interface and the common functions to be a client in the UTCoupe system.
  * A client is the only object able to send and receive messages form the other clients of the system.
+ * @memberof module:clients/shared/client
  */
 class Client {
     /**
