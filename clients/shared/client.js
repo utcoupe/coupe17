@@ -9,18 +9,15 @@
 "use strict";
 
 /**
- * Logger
- * @constant
+ * Logger.
  */
 const Log4js = require('log4js');
 /**
- * Config file, containing IP and port of the server
- * @constant
+ * Config file, containing IP and port of the server.
  */
 const CONFIG = require('../../config.js');
 /**
- * Socket client object for communication
- * @constant
+ * Socket client object for communication.
  * @type {SocketClient}
  */
 const SocketClient = require('../../server/socket_client.class.js');
