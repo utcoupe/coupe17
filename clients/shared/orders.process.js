@@ -29,7 +29,7 @@ class OrdersProcess extends OrdersManager {
         super(communicationLine);
 
         // We replace the callback set by the Servo class
-        this.comLine.out.on("data", function(data){
+        this.comLine.out.on("data", function (data) {
             this.parseCommand(data);
         }.bind(this));
     }
@@ -46,6 +46,6 @@ class OrdersProcess extends OrdersManager {
 }
 
 // Exports an object to be sure to have a single instance in the system
-module.exports = function(communicationLine) {
+module.exports = function (communicationLine) {
     return new OrdersProcess(communicationLine);
 };
