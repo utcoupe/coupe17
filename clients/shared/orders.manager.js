@@ -26,7 +26,7 @@ const Log4js = require('log4js');
  */
 class OrdersManager {
     /**
-     * Creates an instance of OrdersManager.
+     * Creates an instance of OrdersManager (the class is abstract, do not use it directly).
      * The order_id start from 1, because the id 0 is reserved for the device identification (done by the factory).
      * The OrdersManager works with a communication line, this stands for a stream which can be used by the OrdersManager
      * to send and receive data. As this communication line isn't created by the OrdersManager, be sure that the component
@@ -139,7 +139,7 @@ class OrdersManager {
     /**
      * This method effectively sends an order using the communication line way to send data.
      * The order is formatted by the sendOrder method.
-     * Please be sure to overload this method in inherited class.
+     * Please be sure to override this method in inherited class.
      * @abstract
      * @protected
      * @param {string} order    The formatted order to send
