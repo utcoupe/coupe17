@@ -17,14 +17,14 @@ const Servo = require('./servo');
 /**
  * Implement the Servo class for simulated robots.
  * As the servo motors are not simulated, this class just set timeouts before responding that the action has been made.
+ * The class ServoSimu is a singleton, there is only one instance of it in the system.
  * @augments Servo
  */
 class ServoSimu extends Servo {
-
     /**
-     * Instantiate the servo class for simulation.
-     * This object does nothing else, as servo motors are not simulated?
-     * @param robot
+     * Instantiate the Servo class for simulation.
+     * This object does nothing else, as servo motors are not simulated.
+     * @param robot {Robot} The robot to handle the servo motors
      */
     constructor(robot) {
         super(robot);

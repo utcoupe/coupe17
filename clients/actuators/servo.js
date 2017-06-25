@@ -23,7 +23,7 @@ class Servo {
     /**
      * Create the logger and build the Servo object.
      * This class is abstract,do not instantiate it directly.
-     * @param robot
+     * @param robot {Robot} The robot to handle the servo motors
      */
     constructor(robot) {
         // This is an abstract class, throw an error if it is directly instantiated or if missing virtual functions
