@@ -31,9 +31,9 @@ const SerialPort = require('serialport');
  * The orders list is parsed from the header file corresponding to the robot, using the defineParser object.
  * The response of the servo board can be of 2 types : an order response (beginning with order_id;) or a debug string.
  * The ServoReal class is unique in the system, all other class which need to deal with servo has to use this class to do it.
- * Before being able to send orders to the servo board, this class will check is the board is connected and responding,
+ * Before being able to send orders to the servo board, this class will check if the board is connected and responding,
  * so it may takes a few seconds before the ServoReal object is ready.
- * The orders received by the servo board are handled by the OrdersSerial object.
+ * The orders received from the servo board are handled by the OrdersSerial object.
  * @augments Servo
  */
 class ServoReal extends Servo {
@@ -74,6 +74,7 @@ class ServoReal extends Servo {
      * When an ack of start is received, initialize all the servo motors to know that they are all working fine.
      * The commands received are handled by the OrdersSerial object (this object changes the "data" callback to call,
      * so this function will only be called once when the servo board has started).
+     * @private
      * @param receivedCommand {string}  Command received, with respect to the servo board communication protocol
      */
     parseCommand(receivedCommand) {
