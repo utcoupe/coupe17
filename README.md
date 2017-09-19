@@ -5,7 +5,7 @@
 
 Un script d'installation automatique est disponible. Allez dans le dossier coupe17, et lancer simplement :
 ```
-source ./scripts/installation_utcoupe_setup.sh
+source ./scripts/install_utcoupe_setup.sh
 ```
 
 Si c'est votre première installation, répondez "y" à toutes les questions.
