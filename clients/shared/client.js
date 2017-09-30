@@ -1,67 +1,93 @@
 /**
- * Module du client de base
- * 
- * @module clients/client
- * @requires module:server/socket_client
- * @requires module:config
- * @requires module:log4js
+ *  @file       Describes the client module.
+ *  @date       01/04/2017
+ *  @module     clients/shared/client
+ *  @copyright  Copyright (c) 2017 UTCoupe All rights reserved.
+ *  @licence    See licence.txt file
  */
 
 "use strict";
 
+/**
+ * Logger.
+ */
 const Log4js = require('log4js');
+/**
+ * Config file, containing IP and port of the server.
+ */
 const CONFIG = require('../../config.js');
+/**
+ * Socket client object for communication.
+ * @type {SocketClient}
+ */
 const SocketClient = require('../../server/socket_client.class.js');
 
 /**
- * Client abstrait
- * 
- * @memberof module:clients/client
+ * Client is an abstract class defining the interface and the common functions to be a client in the UTCoupe system.
+ * A client is the only object able to send and receive messages form the other clients of the system.
+ * @abstract
  */
 class Client {
-	/**
-	 * Creates an instance of Client.
-	 * @param {any} status
-	 * @param {String} clientName
-	 */
-	constructor(clientName, status){
+    /**
+     * The constructor creates the logger and the socketClient object, mandatory for the communication.
+     * The parameters of the socket (IP and port) are loaded from the config.js file.
+     * When the object is created, it automatically binds the abstract reception callback.
+     * @param clientName {string}   Name of the client, used to route messages
+     */
+    constructor(clientName) {
         this.logger = Log4js.getLogger(clientName);
         this.clientName = clientName;
-		
-		var server = CONFIG.server;
-
+        this.parser = null;
+        var server = CONFIG.server;
         this.client = new SocketClient({
             server_ip: server,
             type: clientName
         });
-
-		this.parser = null;
-		this.status = status;
-        
+        // Bind the callback function, which has to be overloaded
         this.client.order(this.takeOrder.bind(this));
-	}
+    }
 
-    takeOrder (from, name, param) {
+    /**
+     * Abstract callback function called when a client receives a message.
+     * This function has to be used to parse and dispatch the received message.
+     * @abstract
+     * @protected
+     * @param from {string} Name of the client which has send the message
+     * @param name {string} Name of the order
+     * @param param {json}  Parameters of the order
+     */
+    takeOrder(from, name, param) {
         throw new TypeError("client:takeOrder is abstract !");
     }
 
-	sendDataToIA(name, params){
-		this.client.send('ia', name, params);
-	}
+    /**
+     * Send data to the IA client.
+     * @protected
+     * @param name {string} Name of the order
+     * @param params {json} Parameters of the order
+     */
+    sendDataToIA(name, params) {
+        this.client.send('ia', name, params);
+    }
 
-	start(){
-		this.client.unMute();
-	}
+    /**
+     * Start the client.
+     * When a client has started, it can send and receive messages.
+     * @protected
+     */
+    start() {
+        this.client.unMute();
+    }
 
-	stop(){
-		//todo stop the socket client
-		this.client.mute();
+    /**
+     * Stop a client
+     * When a client is stopped, it can't send and receive messages, but the client is still alive.
+     * @protected
+     */
+    stop() {
+        this.client.mute();
         this.logger.info(this.clientName + " has stopped.");
-	}
-
-	status(){
-
-	}
+    }
 }
 
 module.exports = Client;

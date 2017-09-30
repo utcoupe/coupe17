@@ -1,32 +1,31 @@
 /**
- * Module du robot de base
- *
- * @module clients/Robot/robot
- * @requires module:clients/client
- * @requires module:clients/fifo
- * @requires module:clients/Asserv/AsservSimu
- * @requires module:clients/Asserv/AsservReal
+ *  @file       Describes the robot module.
+ *  @date       01/04/2017
+ *  @module     clients/robot/robot
+ *  @copyright  Copyright (c) 2017 UTCoupe All rights reserved.
+ *  @licence    See licence.txt file
  */
 
 "use strict";
 
+/**
+ * The Client class to inherit from it
+ * @type {module:clients/shared/client}
+ */
 const Client = require('../shared/client');
 
 /**
- * Robot abstrait
+ * Robot is an abstract class defining the interface and the common function to be a robot in the UTCoupe system.
+ * It inherits from the Client class ({@link module:clients/shared/client.Client}).
  *
- * @memberof module:clients/Robot/robot
- * @extends module:clients/client.Client
+ * @memberof module:clients/robot/robot
+ * @extends module:clients/shared/client.Client
  */
 class Robot extends Client{
-/*	constructor(){
-		super();
-	}*/
-
 	/**
 	 * Creates an instance of Robot.
 	 *
-	 * @param {String} robotName Identifiant réseau du robot
+	 * @param {String} robotName Network name of the robot
 	 */
 	constructor(robotName){
 		// Requires
@@ -43,6 +42,7 @@ class Robot extends Client{
         this.starting = false;
 		this.orderInProgress = false;
 
+		// TODO Use takeOrder() inherited from Client
 		this.client.order( function (from, name, params){
 			// this.logger.info("Received an order "+name);
 			var OrderName = name.split('.');
@@ -93,12 +93,17 @@ class Robot extends Client{
 		}.bind(this));
 	}
 
+	/**
+	 * @returns {string} The network name of the robot
+	 * @protected
+	 */
 	getName() {
         return this.robotName;
     }
 
 	/**
 	 * Start the Robot
+	 * @protected
 	 */
 	start() {
 		if (this.started || this.starting) {
@@ -129,7 +134,8 @@ class Robot extends Client{
 	}
 
 	/**
-	 * Stops the robot
+	 * Stops the robot; asks the extensions and the asserv to stop too.
+	 * @protected
 	 */
 	stop() {
 		// Send struct to server
@@ -146,17 +152,27 @@ class Robot extends Client{
 		this.starting = false;
 	}
 
+	/**
+	 * Abstract function to open the extensions.
+	 * @abstract
+	 * @protected
+	 */
     openExtensions () {
         this.logger.fatal("This function openExtensions must be overriden");
     }
 
+	/**
+	 * Abstract function to close the extensions.
+	 * @abstract
+	 * @protected
+	 */
     closeExtensions () {
         this.logger.fatal("This function openExtensions must be overriden");
     }
 
 	/**
-	 * Tries to exit
-	 *
+	 * Tries to exit. This function closes the extensions and then stop the process.
+	 * @protected
 	 */
 	kill () {
 		this.logger.info("Please wait while exiting...");
@@ -165,8 +181,8 @@ class Robot extends Client{
 	}
 
 	/**
-	 * Sends status to server
-	 *
+	 * Sends the last status to the server. It can be used by the webclient.
+	 * @protected
 	 * @param {Object} status
 	 */
 	sendChildren(status){
@@ -176,7 +192,7 @@ class Robot extends Client{
 
 	/**
 	 * Push the order (enfiler)
-	 *
+	 * @protected
 	 * @param {string} f from
 	 * @param {string} n name
 	 * @param {Object} p parameters
@@ -194,6 +210,10 @@ class Robot extends Client{
 		}
 	}
 
+	/**
+	 * Executes the next order in the queue if no orders are in progress.
+	 * @protected
+	 */
 	executeNextOrder(){
 		if ((this.queue.length > 0) && (!this.orderInProgress)) {
 			var order = this.queue.shift();
@@ -227,7 +247,8 @@ class Robot extends Client{
 	}
 
 	/**
-	 * Launch the next order
+	 * Launch the next order if any order is in progress.
+	 * @protected
 	 */
 	actionFinished(){
 		if(this.orderInProgress !== false) {
@@ -239,20 +260,47 @@ class Robot extends Client{
 	}
 
 	/**
-	 * Sends Position
+	 * Sends the current position to IA
+	 * @protected
 	 */
 	sendPos() {
 		this.client.send('ia', this.who+'.pos', this.asserv.sendPos());
 	}
 
+	/**
+	 * Convert the postiion from the Arduino's coordinate system to IA coordinate system
+	 * @protected
+	 * @abstract
+	 * @param {Number} x X position
+	 * @param {Number} y Y position
+	 * @param {Number} a Angle
+	 */
 	posArduinoToIa(x, y, a) {}
 
+	/**
+	 * Convert the postiion from the Arduino's coordinate system to IA coordinate system
+	 * @protected
+	 * @abstract
+	 * @param {Object} pos Position to set
+	 */
 	posIaToArduino(pos) {}
 
+	/**
+	 * Send the data to the selected subprogram from IA
+	 * @protected
+	 * @param {string} destination Destination subprogram name
+	 * @param {json} params Parameters (data) to send
+	 */
 	sendDataToIA(destination, params) {
         this.client.send('ia', destination, params);
     }
 
+	/**
+	 * Send a PWM to the asserv to climb the seesaw.
+	 * @protected
+	 * @abstract
+	 * @param {function} callback 
+	 */
     climbSeesaw(callback) {}
 }
 
