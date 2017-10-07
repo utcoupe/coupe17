@@ -129,4 +129,10 @@ class RobotDisplay {
 			activate: this.inCollision
 		});
 	}
+
+	// Fête de la Science
+
+    demoFdlsWithoutMoving () {
+        this.client.send(this.name, "fdlswithoutmoving")
+    }
 }

@@ -73,15 +73,21 @@ class Robot extends Client{
                     case "pause":
                         this.logger.fatal("Pause has not been implemented yet");
                         this.asserv.addOrderToFifo(OrderSubname,params);
+                        break;
                     case "resume":
                         this.logger.fatal("Resume has not been implemented yet");
                         this.asserv.addOrderToFifo(OrderSubname,params);
+                        break;
 					case "stop":
 						//TODO DO it with new actuators
 						//this.acts.clean();
 						this.logger.fatal("Stop " + this.robotName);
 						this.stop();
 					break;
+                    case "fdlswithoutmoving":
+                        this.logger.fatal("demo fdls in robot");
+                        this.demoFdlsWithoutMoving();
+                        break;
 					case "kill":
 						this.kill();
 						break;
@@ -302,6 +308,14 @@ class Robot extends Client{
 	 * @param {function} callback 
 	 */
     climbSeesaw(callback) {}
+
+    /**
+     * Demonstration script for the Fete de la Science.
+     * The robot will show it's action without moving.
+     * @protected
+     * @abstract
+     */
+    demoFdlsWithoutMoving() {}
 }
 
 module.exports = Robot;

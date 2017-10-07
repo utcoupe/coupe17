@@ -89,8 +89,20 @@ class Grobot extends Robot{
         res.a = pos.a;
         return res;
     }
-    
 
+    demoFdlsWithoutMoving() {
+        this.client.send("canon", "close_trunk");
+        this.client.send("sweeper", "turn_on");
+        setTimeout(function() {
+            this.client.send("sweeper", "turn_off");
+            this.client.send("canon", "turn_on");
+            this.asserv.goa(parseFloat(150)*Math.PI/180);
+            setTimeout(function() {
+                this.client.send("canon", "open_trunk");
+                this.asserv.goa(parseFloat(180)*Math.PI/180);
+            }.bind(this), 1000);
+        }.bind(this), 5000);
+    }
 
 	// Exiting :
 	//do something when app is closing
