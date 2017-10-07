@@ -14,7 +14,9 @@ class RobotDisplay {
         this.speed_ms = 1000;
         this.a = 0;
         this.x = 0;
-        this.y = 0;
+		this.y = 0;
+		this.relativeX = 0;
+		this.relativeY = 0;
         this.direction = "forward";
         this.set_x = 0;
         this.set_y = 0;
@@ -39,7 +41,24 @@ class RobotDisplay {
 		this.client.send(this.name, "stop");
 	}
 
-    // Asserv
+	// Asserv
+
+	goRelativePos(direction) {
+		this.client.send(this.name, "asserv.goxyrelative", {
+			x: parseInt(this.relativeX),
+			y: parseInt(this.relativeY),
+			direction: direction
+		});
+	}
+
+	relativeForward() {
+		this.goRelativePos('forward');
+	}
+
+	relativeBackward() {
+		this.goRelativePos('backward');
+	}
+
     setPWM () {
 		this.client.send(this.name, "asserv.pwm", {
 			left: this.pwm_left,

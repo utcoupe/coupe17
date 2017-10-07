@@ -29,3 +29,7 @@ hr{
 .inCollision {
 	background-color: red;
 }
+
+.fdls {
+	border: 2px solid red;
+}
