@@ -118,6 +118,24 @@ class Asserv{
 	 */
 	goxy(x, y, direction){}
 
+	goxyrelative(x, y, direction){
+		x = Math.cos(this.pos.a)*x - Math.sin(this.pos.a)*y;
+		y = Math.sin(this.pos.a)*x + Math.cos(this.pos.a)*y;
+		var newPos = {}
+		newPos.x = this.pos.x;
+		newPos.y = this.pos.y;
+		if (direction == 'forward') {
+			newPos.x += x;
+			newPos.y += y;
+		}
+		else {
+			newPos.x -= x;
+			newPos.y -= y;
+		}
+		this.logger.debug("goxyrelative => " + x + ", " + y + ", " + this.pos.a);
+		this.goxy(newPos.x, newPos.y, direction);
+	}
+
 	/**
 	 * Simu Go Angle
 	 *
@@ -206,7 +224,10 @@ class Asserv{
 				break;
             case "callCallback":
                 callback = function() {this.callCallback(params.callback)}.bind(this);
-                break;
+				break;
+			case "goxyrelative":
+				callback = function() {this.goxyrelative(params.x, params.y, params.direction)}.bind(this);
+				break;
             default:
                 this.logger.fatal("This order is unknown for the " + this.robotName + " asserv : " + name);
         }
