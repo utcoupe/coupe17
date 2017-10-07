@@ -49,6 +49,11 @@
 			<div class="fdls">
 				<p>
 					<h3>Contrôles fête de la science</h3>
+					<span>
+						ATTENTION : Les coordonnées sont exprimées dans le repère du robot (symbolisé par une croix et 2 flèches sur son dessus).
+						Lors d'un déplacement en y, son repère est MODIFIE, ce qui signifie que la marche arrière ne fera pas ce que vous attendez !
+					</span>
+					<br/>
 					x : <input type="number" ng-model="tibot.relativeX" />
 					y : <input type="number" ng-model="tibot.relativeY" />
 					<button type="button" class="btn" ng-click="tibot.relativeForward()">Avancer</button>
@@ -151,6 +156,10 @@
 		<div>
 			<h3>Asserv</h3>
 			<div class="fdls">
+				<span>
+					ATTENTION : Les coordonnées sont exprimées dans le repère du robot (symbolisé par une croix et 2 flèches sur son dessus).
+					Lors d'un déplacement en y, son repère est MODIFIE, ce qui signifie que la marche arrière ne fera pas ce que vous attendez !
+				</span>
 				<p>
 					<h3>Contrôles fête de la science</h3>
 					x : <input type="number" ng-model="grobot.relativeX" />
