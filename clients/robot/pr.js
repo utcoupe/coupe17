@@ -66,6 +66,36 @@ class Tibot extends Robot{
         return res;
     }
 
+    demoFdlsWithoutMoving() {
+        this.client.send("unit_grabber", "open_arm");
+        setTimeout(function() {
+            this.client.send("unit_grabber", "open_grabber");
+            setTimeout(function() {
+                this.client.send("unit_grabber", "close_arm");
+                setTimeout(function() {
+                    this.client.send("unit_grabber", "open_arm");
+                    setTimeout(function() {
+                        this.client.send("unit_grabber", "close_grabber");
+                        setTimeout(function() {
+                            this.asserv.goa(parseFloat(180)*Math.PI/180);
+                            setTimeout(function() {
+                                this.client.send("base_constructor", "prepare_module", {
+                                    color: "null",
+                                    push_towards: "dont"
+                                });
+                                setTimeout(function() {
+                                    this.client.send("base_constructor", "drop_module", {
+                                        nb_modules_to_drop: 1
+                                    });
+                                }.bind(this), 2000);
+                            }.bind(this), 2000);
+                        }.bind(this), 5000);
+                    }.bind(this), 2000);
+                }.bind(this), 2000);
+            }.bind(this), 7000);
+        }.bind(this), 1000);
+    }
+
 	// Exiting :
 	//do something when app is closing
 	// process.on('exit', quit);
