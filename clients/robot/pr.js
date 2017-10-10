@@ -67,15 +67,15 @@ class Tibot extends Robot{
     }
 
     demoFdlsWithoutMoving() {
-        this.client.send("unit_grabber", "open_arm");
+        this.client.send("unit_grabber", "openArm");
         setTimeout(function() {
-            this.client.send("unit_grabber", "open_grabber");
+            this.client.send("unit_grabber", "openGrabber");
             setTimeout(function() {
-                this.client.send("unit_grabber", "close_arm");
+                this.client.send("unit_grabber", "closeArm");
                 setTimeout(function() {
-                    this.client.send("unit_grabber", "open_arm");
+                    this.client.send("unit_grabber", "openArm");
                     setTimeout(function() {
-                        this.client.send("unit_grabber", "close_grabber");
+                        this.client.send("unit_grabber", "closeGrabber");
                         setTimeout(function() {
                             this.asserv.goa(parseFloat(180)*Math.PI/180);
                             setTimeout(function() {
